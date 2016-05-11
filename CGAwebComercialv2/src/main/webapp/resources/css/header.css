@@ -1,0 +1,207 @@
+@charset "UTF-8";
+
+
+	.demoHeaders {
+		margin-top: 2em;
+	}
+	#dialog-link {
+		padding: .4em 1em .4em 20px;
+		text-decoration: none;
+		position: relative;
+	}
+	#dialog-link span.ui-icon {
+		margin: 0 5px 0 0;
+		position: absolute;
+		left: .2em;
+		top: 50%;
+		margin-top: -8px;
+	}
+	#icons {
+		margin: 0;
+		padding: 0;
+	}
+	#icons li {
+		margin: 2px;
+		position: relative;
+		padding: 4px 0;
+		cursor: pointer;
+		float: left;
+		list-style: none;
+	}
+	#icons span.ui-icon {
+		float: left;
+		margin: 0 4px;
+	}
+	.fakewindowcontain .ui-widget-overlay {
+		position: absolute;
+	}
+
+.salirF .salir{
+	float: right;
+    margin: 20px 19px;
+}
+.ui-widget-content a  .excel{
+	float: right;
+    
+}
+
+.ui-widget-content a  .cvs{
+	float: right;
+    
+}
+.excelF .excel{
+	float: right;
+    margin: 20px 19px;
+}
+
+.hir_body {
+	font-size: 11px;
+	font-family: Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-left: 0px;
+	margin-bottom: 0px;
+	background-color: #EEEEEE;
+}
+.hir_content {
+	bottom: 0;
+	top: 0;
+	margin: 0 auto;
+	display: block;
+        
+	
+}
+.hir_header {
+	background-color: #;
+	height: 60px;
+	width: 100%;
+	top: 0px;	
+	background-image: url("imagen/background.png");
+	background-position: right;
+	background-repeat: no-repeat;
+}
+.hir_footer {
+	background-color: #;
+	position: fixed;
+	height: 50px;
+	width: 100%;
+	bottom: 0px;
+	z-index: 5;
+	margin: auto;
+	display: block;
+	color: #FFFFFF;
+	font-weight: bold;
+	text-align: left;
+	text-decoration: none;
+	font-size: 12px;
+}
+
+.hir_section {
+	width: 100%;
+	margin-top:0px;
+        padding-bottom: 50px;
+	
+	
+}
+
+.hir_logo
+{
+	background-image: url(../resources/images/logo-actual1.png);
+	margin-left: 20px;
+	background-repeat: no-repeat;
+	background-position: center left;
+	width: 450px;
+	height: 50px;	
+}
+.hir_logoHir
+{
+	background-image: url(../resources/images/logo-actual1.png);
+	margin-left: 20px;
+	background-repeat: no-repeat;
+	background-position: center left;
+	width: 100px;
+	height: 50px;
+	float:left;
+}
+.hir_logoImex
+{
+	background-image: url(../resources/images/logo-actual1.png);
+	margin-right: 20px;
+	background-repeat: no-repeat;
+	background-position: center right;
+ 	width:200px;
+ 	height: 50px;
+	float:right;
+	cursor: pointer; 	
+}
+
+.hir_left
+{
+	margin-left: 15px;
+	margin-top:19px;
+	float : left;
+	font-size: 12px;
+    color: white;
+	
+}
+
+.hir_right
+{
+	margin-top:19px;
+	float:right;
+	font-size: 12px;
+    color: white;
+}
+
+.footer{
+	 height: 50px;
+	 background: #333d40;
+	 text-aling: center;
+}
+
+/*
+ * jQuery UI Menubar @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ */
+.ui-menubar {
+	list-style: none;
+	margin: 0; padding-left: 0;
+}
+
+.ui-menubar-item {
+	float: left;
+}
+
+.ui-menubar .ui-button {
+	float: left;
+	font-weight: normal;
+	border-top-width: 0 !important;
+	border-bottom-width: 0 !important;
+	margin: 0;
+	outline: none;
+}
+.ui-menubar .ui-menubar-link {
+	border-right: 1px solid transparent;
+	border-left: 1px solid transparent;
+}
+
+.ui-menubar .ui-menu {
+	width: 200px;
+	position: absolute;
+	z-index: 9999;
+	font-weight: normal;
+}
+
+/*quitar el scrollbar*/
+/*
+.ui-layout-center {
+overflow:hidden !important;
+}
+.ui-layout-center .ui-layout-unit-content {
+overflow:hidden !important;
+}*/
+	
+

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	<ui:define name="menu">
+		<ui:include src="/templates/menu.xhtml" />
+	</ui:define>
+	<ui:define name="contenido">
+		<f:metadata>
+			<f:viewParam name="index" value="#{autenticacionBean.index}"/>
+		</f:metadata>
+			
+		<h:form id="frmPlan">
+			<p:panel>
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					<h:commandLink >
+						<p:graphicImage library="images" name="excel.png" width="24" styleClass="excel"/>
+						<p:dataExporter type="xls" target="tblPlan" fileName="gerentes_comision" />
+					</h:commandLink>
+	
+					<h:commandLink>
+						<p:graphicImage library="images" name="csv.png" width="24" styleClass="cvs" />
+						<p:dataExporter type="csv" target="tblPlan" fileName="gerentes_comision" />
+					</h:commandLink>
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" paginator="true"
+					value="#{gerentesBean.listaGerentes}" var="gerente"
+					rows="10" paginatorPosition="bottom">
+
+					<f:facet name="header">
+						<h:outputText value="#{autenticacionBean.fechaActual}" /> Plan Gerentes
+			        </f:facet>
+					
+					<p:column headerText="Cedula" filterBy="#{gerente.cedula}"
+						sortBy="#{gerente.cedula}">
+						<h:outputText value="#{gerente.cedula}" />
+					</p:column>
+					
+					<p:column headerText="Codigo SAP">
+						<h:outputText value="#{gerente.codigoSap}" />
+					</p:column>
+
+					<p:column headerText="Nombre">
+						<h:outputText value="#{gerente.nombre}">
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Cargo">
+						<h:outputText value="#{gerente.cargo}">
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Cod sucursal">
+						<h:outputText value="#{gerente.codSucursal}">
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Sucursal">
+						<h:outputText value="#{gerente.sucursal}">
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Base comision">
+						<h:outputText value="#{gerente.basecomision}">
+							<f:convertNumber locale="pt_CO" maxFractionDigits="0" integerOnly="true"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Detalle" style="width:10%">
+						<p:button icon="ui-icon-search"
+							outcome="/pages/gh/planGerentes.xhtml?faces-redirect=true">
+						    <f:param name="perId" value="#{gerente.codSucursal}"/>	
+						    <f:param name="fecBus" value="#{gerente.basecomision}"/>
+						    <f:param name="ger" value="#{gerente.codigoSap}"/>						    						
+						</p:button>
+					</p:column>
+
+					<f:facet name="footer">
+						
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+</html>

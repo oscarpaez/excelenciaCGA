@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		<ui:define name="contenido">
+			<f:metadata>
+				<f:viewParam name="perId" value="#{comisionPlanBean.idFuncionario}"/>
+				<f:viewParam name="fecBus" value="#{comisionPlanBean.autenticacion.fechaBusqueda}"/>	
+				<f:viewParam name="fecYear" value="#{comisionPlanBean.autenticacion.fechaBusquedaYear}"/>
+				<f:event listener="#{comisionPlanBean.listarPlan()}" type="preRenderView" />	
+			</f:metadata>	
+			
+			<h:form id="frmPlan" >
+				<p:panel>
+					<f:facet name="header">
+						 <p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+						  <h:commandLink >
+								<p:graphicImage library="images" name="excel.png" width="24" styleClass="excel"/>
+								<p:dataExporter type="xls" target="tblPlan" fileName="Cartera_sucursal" />
+							</h:commandLink>
+			
+							<h:commandLink>
+								<p:graphicImage library="images" name="csv.png" width="24" styleClass="cvs" />
+								<p:dataExporter type="csv" target="tblPlan" fileName="Cartera_sucursal" />
+							</h:commandLink>
+			        </f:facet>
+				
+					<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="true" 
+						value="#{comisionPlanBean.listaplanV}" var="plan" rows="5"
+						paginatorPosition="bottom"	>
+					
+					<f:facet name="header">
+			            <h:outputText value="lista Detalle" /> 
+			        </f:facet>	
+			        
+			        <p:columnGroup type="header">
+		            <p:row>
+		                <p:column rowspan="2" headerText="Linea" />
+		                <p:column colspan="2" headerText="Presupuesto" />
+		                <p:column colspan="2" headerText="Real" />
+		                <p:column colspan="2" headerText="Cumplimiento %" />
+		                <p:column rowspan="2" headerText="Umbral" style="width:5%"/>
+		                <p:column rowspan="2" headerText="Comision" style="text-align: center; width:6%"/>
+		                <p:column rowspan="2" headerText="Valor Comision" />
+		               
+		            </p:row>
+		            <p:row>
+		                <p:column colspan="1" headerText="Ingreso" />		                
+		                <p:column colspan="1" headerText="Utilidad" />		                
+		                <p:column colspan="1" headerText="Ingreso" />
+		                <p:column colspan="1" headerText="Utilidad" />
+		                <p:column colspan="1" headerText="Ingreso" />
+		                <p:column colspan="1" headerText="Utilidad" />
+		            </p:row>
+		            
+		        </p:columnGroup>
+				
+					<p:column headerText="Linea" filterBy="#{plan.linea.nombre}" 
+						sortBy="#{plan.linea.nombre}">
+						<h:outputText value="#{plan.linea.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Ingreso P" >
+						<h:outputText value="#{plan.ingreso}" >
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad P" >
+						<h:outputText value="#{plan.utilidad}" >
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso R" >
+						<h:outputText value="#{plan.ingreso_Real}" >
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad R" >
+						<h:outputText value="#{plan.utilidad_Real}" >
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso C" >
+						<h:outputText value="#{plan.ingreso_Cumplimiento}%" >
+							<f:convertNumber locale="pt_CO"   maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad C" sortBy="#{plan.utilidad_Cumplimiento}">
+						<h:outputText value="#{plan.utilidad_Cumplimiento}%" >
+							<f:convertNumber locale="pt_CO"   maxFractionDigits="1"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Umbral" style="width:5%" >
+						<h:outputText value="#{plan.umbral}" />
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen}"  height="25" width="25" />
+					</p:column>					
+					
+					<p:column headerText="Valor Comision" >
+						<h:outputText value="#{plan.valor_Comision_Pagar}" >
+							<f:convertNumber locale="pt_CO"  maxFractionDigits="0" integerOnly="true" />
+						</h:outputText>
+					</p:column>
+					
+					
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column footerText="Totales" />
+			            	<p:column footerText="$ #{comisionPlanBean.totalPreIng}"  />		 
+			            	<p:column footerText="$ #{comisionPlanBean.totalPreUti}"  />		 
+			            	<p:column footerText="$ #{comisionPlanBean.totalRealIng}"  />		 
+			            	<p:column footerText="$ #{comisionPlanBean.totalRealUti}"  />		 
+			                <p:column colspan="4" style="text-align:right" footerText="Total Comision:" />
+			                <p:column footerText="$ #{comisionPlanBean.accion}"  />		 
+			            </p:row>
+			        </p:columnGroup>
+			        
+			        <f:facet name="footer">
+			        	<p:button value="Recaudo" outcome="/pages/recaudo.xhtml?faces-redirect=true" 
+			        	 rendered="#{autenticacionBean.tipoVendedor != 'I'}">
+							<f:param name="perIdR" value="#{comisionPlanBean.idFuncionario}"/>							
+						</p:button>
+						<p:commandButton  value="Volverr" onclick="history.back()" style="background: #acdd4a"/>
+						 <p:button  value="Volver" outcome="/pages/gh/comisiones.xhtml?faces-redirect=true" 
+						 	style="background: #acdd4a">
+						</p:button>
+						 	
+					</f:facet>	 
+					</p:dataTable>
+				</p:panel>
+				
+			</h:form>
+		<h:form>
+			<h:panelGrid columns="8">
+				
+				<p:outputLabel value="Umbral" />	
+				<p:selectOneMenu value="#{comisionPlanBean.umbral}" style="width:200px;" >
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione un valor" />
+					<f:selectItem itemValue="0.95" itemLabel="95%" />
+					<f:selectItem itemValue="0.85" itemLabel="85%" />
+					<f:selectItem itemValue="0.83" itemLabel="83%" />
+				</p:selectOneMenu>
+				
+				<p:commandButton value="Calcular" update=":frmPlan:tblPlan"
+					actionListener="#{comisionPlanBean.listarPlan()}" style="background: #b94a48"/>
+				
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+	
+	</ui:composition>
+</html>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.3.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.3.0
+               http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.0.xsd">
+	
+	<url-mapping id="login">
+	    <pattern value="/index" />
+	    <view-id value="/pages/login.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="bajarotacion">
+	    <pattern value="/gestionhumana" />
+	    <view-id value="/pages/gh/bajarotacion.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="cartera">
+	    <pattern value="/gestionhumana/cartera" />
+	    <view-id value="/pages/gh/cartera.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="carteraDetalle">
+	    <pattern value="/gestionhumana/detalle/cartera" />
+	    <view-id value="/pages/gh/carteraDetalle.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="comision">
+	    <pattern value="/gestionhumana/comision" />
+	    <view-id value="/pages/gh/comisiones.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="comisionSin">
+	    <pattern value="/gestionhumana/comision/slbr" />
+	    <view-id value="/pages/gh/comisionesSin.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="contadoA">
+	    <pattern value="/gestionhumana/pagoContado" />
+	    <view-id value="/pages/gh/contadoAnticipo.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="detallebajar">
+	    <pattern value="/gestionhumana/detalle/lbr" />
+	    <view-id value="/pages/gh/detallebajarotacion.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="comisionG">
+	    <pattern value="/gestionhumana/comision/gerentes" />
+	    <view-id value="/pages/gh/gerentes.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="planG2">
+	    <pattern value="/gestionhumana/detalle/comision" />
+	    <view-id value="/pages/gh/plan2.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="planGerentes">
+	    <pattern value="/gestionhumana/detalle/gerentes" />
+	    <view-id value="/pages/gh/planGerentes.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="planSin">
+	    <pattern value="/gestionhumana/detalle/slbr" />
+	    <view-id value="/pages/gh/planSin.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="detalleC">
+	    <pattern value="/comercial/detalle/comercial" />
+	    <view-id value="/pages/detalle.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="planC">
+	    <pattern value="/comercial/plan/comercial" />
+	    <view-id value="/pages/plan.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="recaudoC">
+	    <pattern value="/comercial/recaudo/comercial" />
+	    <view-id value="/pages/recaudo.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="modulo">
+	    <pattern value="/modulos" />
+	    <view-id value="/pages/vistaModulo.xhtml" />
+	</url-mapping>
+</pretty-config>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+	<ui:define name="contenido">
+		
+		<h:form id="frmlog" >
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Sistema CGA Comercial" />
+				</f:facet>
+			</p:toolbar>
+			<br />
+			<h:panelGrid columns="3"  style="margin: 0 auto;" >
+				<p:galleria panelWidth="400" panelHeight="350" autoPlay="true">
+					<p:graphicImage library="images" name="amoblamient.jpg"  width="100%" height="100%"/>
+					<p:graphicImage library="images" name="ing.jpg"  width="100%" height="100%" />
+					<p:graphicImage library="images" name="tanque.gif"  width="100%" height="100%" />
+					<p:graphicImage library="images" name="innovacion.jpg"  width="100%" height="100%"/>
+				</p:galleria>
+				
+				<h:panelGrid columns="5">
+					<p:outputLabel />
+					<p:outputLabel />
+					<p:outputLabel />
+					<p:outputLabel />
+					<p:outputLabel />
+				</h:panelGrid>
+				<p:panel id="gridlog" header="Login" style="width:100%;  ">
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Usuario" />
+						<p:selectOneMenu value="#{autenticacionBean.persona.cedula}"
+							filter="true" style="width:350px;" required="true"
+							requiredMessage="El campo Usuario es Obligatorio">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="Selecione Usuario" />
+							<f:selectItems value="#{autenticacionBean.listaPersona}"
+								var="item" itemValue="#{item.cedula}" itemLabel="#{item.nombre}" />
+
+						</p:selectOneMenu>
+
+
+						<p:outputLabel for="clave" value="Clave" />
+						<p:password id="clave" maxlength="10" size="32" required="true"
+							requiredMessage="El campo clave es obligatorio"
+							value="#{autenticacionBean.usuarioLogin.clave}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1">
+						<p:commandButton value="Entrar"
+							update=" :frmlog:gridlog :msgGlobal "
+							action="#{autenticacionBean.entrar()}">
+						</p:commandButton>
+					</h:panelGrid>
+				</p:panel>
+
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+</html>

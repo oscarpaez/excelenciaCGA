@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		<ui:define name="contenido">
+			
+			
+			<h:form id="frmPlan" >
+				<p:panel>
+					<p:outputLabel value="Estos datos son dinamicos y temporales debido al no cierre del periodo" />
+					<f:facet name="header">
+						 <p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+			        </f:facet>
+				
+					<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="true" 
+						value="#{planBean.listaplan}" var="plan" rows="5"
+						paginatorPosition="bottom"	>
+					
+					<f:facet name="header">
+			            <h:outputText value="#{autenticacionBean.fechaActual}" /> Plan Vendedores
+			        </f:facet>	
+			        
+			        <p:columnGroup type="header">
+		            <p:row>
+		                <p:column rowspan="2" headerText="Linea" />
+		                <p:column colspan="2" headerText="Presupuesto" />
+		                <p:column colspan="2" headerText="Real" />
+		                <p:column colspan="2" headerText="Cumplimiento %" />
+		                <p:column rowspan="2" headerText="Umbral" style="width:5%"/>
+		                <p:column rowspan="2" headerText="Comision" style="text-align: center; width:6%"/>
+		                <p:column rowspan="2" headerText="Valor Comision" />
+		                <p:column rowspan="2" headerText="Detalle" style="text-align: center; width:6%" />
+		            </p:row>
+		            <p:row>
+		                <p:column colspan="1" headerText="Ingreso" />		                
+		                <p:column colspan="1" headerText="Utilidad" />		                
+		                <p:column colspan="1" headerText="Ingreso" />
+		                <p:column colspan="1" headerText="Utilidad" />
+		                <p:column colspan="1" headerText="Ingreso" />
+		                <p:column colspan="1" headerText="Utilidad" />
+		            </p:row>
+		            
+		        </p:columnGroup>
+				
+					<p:column headerText="Linea" filterBy="#{plan.linea.nombre}" 
+						sortBy="#{plan.linea.nombre}">
+						<h:outputText value="#{plan.linea.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Ingreso P" >
+						<h:outputText value="#{plan.ingreso}" >
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad P" >
+						<h:outputText value="#{plan.utilidad}" >
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso R" >
+						<h:outputText value="#{plan.ingreso_Real}" >
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad R" >
+						<h:outputText value="#{plan.utilidad_Real}" >
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso C" >
+						<h:outputText value="#{plan.ingreso_Cumplimiento}%" >
+							<f:convertNumber locale="pt_CO"   maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad C" sortBy="#{plan.utilidad_Cumplimiento}">
+						<h:outputText value="#{plan.utilidad_Cumplimiento}%" >
+							<f:convertNumber locale="pt_CO"   maxFractionDigits="1"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Umbral" style="width:5%" >
+						<h:outputText value="#{plan.umbral}" />
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen}"  height="25" width="25" />
+					</p:column>					
+					
+					<p:column headerText="Valor Comision" >
+						<h:outputText value="#{plan.valor_Comision_Pagar}" >
+							<f:convertNumber locale="pt_CO" maxFractionDigits="0"  />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Detalle" style="width:5%">
+						<p:button icon="ui-icon-search" 
+							outcome="/pages/detalle.xhtml?faces-redirect=true">
+							<f:param name="linId" value="#{plan.linea.id}"/>
+							<f:param name="linNom" value="#{plan.linea.nombre}"/>
+							<f:param name="perId" value="#{plan.funcionario.id_funcionario}"/>							
+						</p:button>
+	
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column footerText="Totales" />
+			            	<p:column footerText="$ #{planBean.totalPreIng}"  />		 
+			            	<p:column footerText="$ #{planBean.totalPreUti}"  />		 
+			            	<p:column footerText="$ #{planBean.totalRealIng}"  />		 
+			            	<p:column footerText="$ #{planBean.totalRealUti}"  />		 
+			                <p:column colspan="4" style="text-align:right" footerText="Total Comision:" />
+			                <p:column footerText="$ #{planBean.accion}"  />		 
+			                <p:column footerText="" />	
+			            </p:row>
+			        </p:columnGroup>
+			        
+			        <f:facet name="footer">
+			        	<p:button value="Recaudo" outcome="/pages/recaudo.xhtml?faces-redirect=true" >
+							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>							
+						</p:button>
+						<p:commandButton value="Desempeño Recaudo" oncomplete="PF('dlgDesRec').show();"  
+							actionListener="#{planBean.desempenoVentas()}" style="background:#aa4200"/>
+						<p:commandButton value="Desempeño Ventas" oncomplete="PF('dlgDesVen').show();"  
+							actionListener="#{planBean.desempenoVentas()}" style="background:#01AB55"/>
+						<p:commandButton value="Promedio de Ventas" oncomplete="PF('dlgProVen').show();"  
+							actionListener="#{planBean.promedioVentas()}" style="background:#ff4136"
+								update="frmProVen:pnlProVen"/>
+						
+							
+					</f:facet>	 
+					</p:dataTable>
+				</p:panel>
+				
+			</h:form>
+		<h:form>
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Fecha:" />
+				<p:selectOneMenu value="#{planBean.fechaBusqueda}" filter="true"
+					style="width:180px;" required="true">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
+					<f:selectItems value="#{planBean.listaFechas}" var="item"
+						itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu value="#{planBean.fechaBusquedaYear}"
+					style="width:100px;" >
+					<f:selectItem itemValue="2016" itemLabel="2016" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Buscar" update=":frmPlan:tblPlan"
+					actionListener="#{planBean.listarPlanPorFechas}" style="background: #b94a48"/>
+				
+				
+				<p:outputLabel value="Umbral" />	
+				<p:selectOneMenu value="#{planBean.umbral}"
+					style="width:100px;" >
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione un valor" />
+					<f:selectItem itemValue="0.95" itemLabel="95%" />
+					<f:selectItem itemValue="0.85" itemLabel="85%" />
+					<f:selectItem itemValue="0.83" itemLabel="83%" />
+				</p:selectOneMenu>
+				
+				<p:commandButton value="Calcular" update=":frmPlan:tblPlan"
+					actionListener="#{planBean.listarPlan()}" style="background: #b94a48"/>
+				
+			</h:panelGrid>
+		</h:form>
+
+		<p:dialog header="Desempeño Recaudo" widgetVar="dlgDesRec"
+			 draggable="true" resizable="false">
+			<h:form id="frmDesRec" enctype="multipart/form-data">
+				<h:panelGrid columns="2" id="pnlDesRec">
+					 <p:chart type="line" model="#{planBean.desempenoVentas}" style="width:800px;"  
+					 	/>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog header="Desempeño Ventas" widgetVar="dlgDesVen"
+			 draggable="true" resizable="false">
+			<h:form id="frmDesVen" enctype="multipart/form-data">
+				<h:panelGrid columns="2" id="pnlDesVen">
+					 <p:chart type="line" model="#{planBean.desempenoRecaudo}" style="width:900px;"  
+					 	/>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog header="Promedio ventas" widgetVar="dlgProVen" draggable="false" resizable="false">
+		<h:form id="frmProVen" enctype="multipart/form-data">
+			<h:panelGrid columns="2" id="pnlProVen">
+			    <p:outputLabel  value="Promedio de venta del  #{planBean.promedioVenta.mes}" />
+			    <p:outputLabel  value="" />
+			    
+				<p:outputLabel  value="Valor Promedio de ventas " />
+				<p:inputText id="descripcion" size="30"  
+					value="#{planBean.promedioMes}"  disabled="true" >
+					<f:convertNumber pattern="#,##0;(#,##0)"/>
+					</p:inputText>
+				
+				<p:outputLabel value="Meta Venta Mes" />
+				<p:inputText id="cantidad" size="30" value="#{planBean.promedioVenta.meta}" disabled="true"> 
+					 <f:convertNumber pattern="#,##0;(#,##0)"/>
+				</p:inputText>
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+	</ui:define>
+	
+	</ui:composition>
+</html>

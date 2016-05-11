@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		<ui:define name="contenido">
+			<p:outputLabel value="Estos datos son dinamicos y temporales debido al no cierre del periodo" />
+			<f:metadata>
+				<f:viewParam name="linIdR" value="#{recaudoBean.codigo}"/>
+				<f:viewParam name="perIdR" value="#{recaudoBean.idPersona}"/>
+				<f:event listener="#{recaudoBean.listarRecaudo}" type="preRenderView" />	
+			</f:metadata>			
+			
+			<h:form id="frmPla" >
+				<p:panel>
+					<f:facet name="header">
+			            <p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+			        </f:facet>
+				
+					<p:dataTable styleClass="tblPla" id="tblPla" emptyMessage="No se encontraron registros" paginator="true" 
+						value="#{recaudoBean.listaRecaudo}" var="recaudo" rows="10"
+						paginatorPosition="bottom"	>
+					
+					<f:facet name="header">
+			             <h:outputText value="#{autenticacionBean.fechaActual} Recaudo" />  
+			        </f:facet>
+			        
+			    	<p:column headerText="Periodo" filterBy="#{recaudo.fecha}" >
+						<h:outputText value="#{recaudo.fecha}" />
+					</p:column>
+					
+					<p:column headerText="Presupuesto " >
+						<h:outputText value="#{recaudo.presupuesto}" >
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Real"  >
+						<h:outputText value="#{recaudo.real}" >
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Zona" >
+						<h:outputText value="#{recaudo.zonaVenta.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Cumplimiento" >
+						<h:outputText value="#{recaudo.cumplimiento} %" >
+						  <f:convertNumber maxIntegerDigits="2"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Umbral" >
+						<h:outputText value="#{recaudo.umbral}" />
+					</p:column>					
+					
+					<p:column headerText="comision" >
+						<p:graphicImage library="images" name="#{recaudo.imagen}"  height="25" width="25" />
+					</p:column>					
+					
+					<p:column headerText="Valor Comision" >
+						<h:outputText value="#{recaudo.valorComision}" >
+						  <f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>					
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			                	 
+			            </p:row>
+			        </p:columnGroup>
+			        
+			        <f:facet name="footer" >
+			        	<h:panelGroup style="display:block; text-align:left">
+				            <p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a"/>
+				         </h:panelGroup>						
+					</f:facet>
+					</p:dataTable>
+					
+				</p:panel>
+			</h:form>		
+		</ui:define>
+	
+	</ui:composition>
+</html>

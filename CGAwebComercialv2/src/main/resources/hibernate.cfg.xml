@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- Database connection settings  
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/CGA</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password"></property> -->
+        
+         <!-- Base servidor -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://192.168.0.15:3306/excelenciacga</property>
+        <property name="connection.username">excelenciacga</property>
+        <property name="connection.password">E1825cGA*-</property> 
+        
+		<!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop and re-create the database schema on startup -->
+        <property name="hbm2ddl.auto">update</property>
+        
+        <!--  hibernate c3p0 settings -->
+
+        <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+        <property name="hibernate.c3p0.acquire_increment">1</property>
+        <property name="hibernate.c3p0.idle_test_period">100</property>
+        <property name="hibernate.c3p0.min_size">3</property>
+        <property name="hibernate.c3p0.max_size">100</property>
+        <property name="hibernate.c3p0.max_statements">10</property>
+        <property name="hibernate.c3p0.timeout">200</property>
+        <property name="hibernate.c3p0.preferredTestQuery">select 1</property>
+        <property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
+        
+        <!-- Mapeo de las Entidades -->
+        <mapping class = "co.com.CGAwebComercial.entyties.Zona_venta"/> 
+        <mapping class = "co.com.CGAwebComercial.entyties.Ciudad"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Cliente"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Comision"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Detalle_venta"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Funcionario"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Linea"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Perfil"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Persona"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Plan"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Recaudo"/>        
+        <mapping class = "co.com.CGAwebComercial.entyties.Sucursal"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Usuario"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Presupuesto"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Detalle"/>  
+        <mapping class = "co.com.CGAwebComercial.entyties.PromedioVenta"/> 
+        <mapping class = "co.com.CGAwebComercial.entyties.bajaRotacion"/>
+		<mapping class = "co.com.CGAwebComercial.entyties.ContadoAnticipo"/>  
+		<mapping class = "co.com.CGAwebComercial.entyties.OficinaVendedorInterno"/>
+		<mapping class = "co.com.CGAwebComercial.entyties.Detallesin"/>
+		<mapping class = "co.com.CGAwebComercial.entyties.Gerentes"/>                
+        <mapping class = "co.com.CGAwebComercial.entyties.EsquemaGerentes"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Ajuste"/> 
+        <mapping class = "co.com.CGAwebComercial.entyties.Liquidacion"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.ClienteMora"/>
+        
+        
+	</session-factory>
+
+</hibernate-configuration>

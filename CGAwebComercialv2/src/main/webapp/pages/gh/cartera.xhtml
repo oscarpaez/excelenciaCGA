@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	<ui:define name="menu">
+		<ui:include src="/templates/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="contenido">
+	<f:metadata>
+		<f:viewParam name="index" value="#{autenticacionBean.index}"/>
+	</f:metadata>
+		
+		<h:form id="frmPlan">
+			<p:panel>
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					<h:commandLink >
+						<p:graphicImage library="images" name="excel.png" width="24" styleClass="excel"/>
+						<p:dataExporter type="xls" target="tblPlan" fileName="Recaudo Cartera" />
+					</h:commandLink>
+	
+					<h:commandLink>
+						<p:graphicImage library="images" name="csv.png" width="24" styleClass="cvs" />
+						<p:dataExporter type="csv" target="tblPlan" fileName="Recaudo Cartera" />
+					</h:commandLink>
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" paginator="true"
+					value="#{recaudoBean.listaCarteraInternos}" var="recaudo"
+					rows="10" paginatorPosition="bottom" style="margin-bottom:20px">
+
+					<f:facet name="header">
+						<h:outputText
+							value="Listado de Cartera" />
+					</f:facet>
+					
+
+					<p:column headerText="Id" filterBy="#{recaudo.id}"
+						sortBy="#{recaudo.id}">
+						<h:outputText value="#{recaudo.id}" />
+					</p:column>
+
+					<p:column headerText="Oficina" filterBy="#{recaudo.nombre}"
+						sortBy="#{recaudo.nombre}">
+						<h:outputText value="#{recaudo.nombre}" />
+					</p:column>
+
+					<p:column headerText="Presupuesto">
+						<h:outputText value="#{recaudo.presupuestoB}">
+							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Real">
+						<h:outputText value="#{recaudo.ingresoRealB}">
+							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="cumplimiento">
+						<h:outputText value="#{recaudo.comisionS}%">
+							<f:convertNumber locale="pt_CO" integerOnly="true" maxFractionDigits="2"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Umbral">
+						<h:outputText value="#{recaudo.umbralCV}%">
+							<f:convertNumber locale="en_US" integerOnly="true" maxFractionDigits="2"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Comision">
+						<p:graphicImage library="images" name="#{recaudo.imagen}"  height="25" width="25" />
+					</p:column>
+					
+					<p:column headerText="Detalle" style="width:5%">
+						<p:button icon="ui-icon-search"
+							outcome="/pages/gh/carteraDetalle.xhtml?faces-redirect=true">
+							<f:param name="idciu" value="#{recaudo.id}"/>
+							<f:param name="pre" value="#{recaudo.presupuestoB}"/>
+							<f:param name="real" value="#{recaudo.ingresoRealB}"/>
+							<f:param name="cum" value="#{recaudo.cumplimiento}"/>
+						</p:button>
+					</p:column>
+
+					<f:facet name="footer">
+
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		<h:form>
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Fecha:" />
+				<p:selectOneMenu value="#{recaudoBean.autenticacion.fechaBusqueda}" filter="true"
+					style="width:180px;" required="true">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
+					<f:selectItems value="#{recaudoBean.listaFechas}" var="item"
+						itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu value="#{recaudoBean.autenticacion.fechaBusquedaYear}"
+					style="width:100px;" >
+					<f:selectItem itemValue="2016" itemLabel="2016" />
+				</p:selectOneMenu>
+				
+				<p:commandButton value="Buscar" update=":frmPlan:tblPlan"
+					actionListener="#{recaudoBean.carteraInternos()}" style="background: #b94a48"/>
+				
+			</h:panelGrid>
+		</h:form>
+		
+		
+	</ui:define>
+</ui:composition>
+</html>

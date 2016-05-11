@@ -1,0 +1,76 @@
+@CHARSET "ISO-8859-1";
+
+/* ///despleguar el menu/// */
+.ui-layout-north {
+	z-index: 20 !important;
+	overflow: visible !important;;
+	border-width: 0px;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+	overflow: visible !important;
+}
+
+.ui-layout-south {
+	z-index: 20 !important;
+	overflow: visible !important;
+	border-width: 0px;
+}
+
+.ui-layout-south .ui-layout-unit-content {
+	overflow: visible !important;
+}
+
+.ui-layout-center{
+	
+	border-width: 0px;	
+}
+/*////////////////////////////*/
+
+/* ///tamaño de letra/// */
+.tblPla .ui-widget, .ui-widget .ui-widget {
+	/*font-size: 12px !important;*/
+}
+
+.tblPla {
+	font-size: 12px !important;
+}
+
+/*////////////////////////////*/
+
+.ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield 
+	.ui-datatable .ui-column-filter {
+ 	display: block;
+    width: 70px;
+    margin: auto;  
+}
+
+.header{
+	
+    height: 70px;
+    /*padding: 31px 0;*/
+    background: #333d40;
+    text-aling: center;
+    
+}
+
+.header .labheader{
+	text-align: center;
+	font-size: 30px !important;
+	padding: 0 31px ;
+	color: white;
+}
+
+/*////ocultar calendario/////*/
+
+.pnlVen td {
+    width: 25%;
+}
+
+.liquidar .ui-widget-header {
+	background: #4FC021;
+}
+
+
+ 
+      

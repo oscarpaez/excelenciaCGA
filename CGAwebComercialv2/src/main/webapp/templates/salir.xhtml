@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://xmlns.jcp.org/jsf/html"
+				xmlns:f="http://xmlns.jcp.org/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<p:idleMonitor  onidle="PF('sessionTimeOutDialog').show();" onactive="PF('sessionTimeOutDialog').show();"
+			 timeout="5000" />
+	<h:form>
+		<p:dialog header="Sesión Caducada" widgetVar="sessionTimeOutDialog" 
+			 modal="true" fixedCenter="true" closable="false" width="400" visible="false"
+			 >
+		     <h:outputText value="La Sesión ha caducado, Pulse el boton para aceder a la aplicación" />
+		     <p:commandButton actionListener="#{autenticacionBean.salir()}"
+				     	value="Volver a la aplicacion" />
+		</p:dialog>
+	</h:form>
+	   
+</ui:composition>

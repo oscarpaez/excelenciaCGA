@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://xmlns.jcp.org/jsf/html"
+				xmlns:f="http://xmlns.jcp.org/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	   <h:form>
+		<p:tabMenu activeIndex="#{autenticacionBean.index}">
+		    <p:menuitem value="Venta con LBR"  outcome="/pages/gh/comisiones.xhtml?faces-redirect=true" icon="ui-icon-document">
+		        <f:param name="index" value="0" />
+		    </p:menuitem>
+		    <p:menuitem value="Lenta y Baja Rotacion" outcome="/pages/gh/bajarotacion.xhtml?faces-redirect=true" icon="ui-icon-document">
+		        <f:param name="index" value="1" />
+		    </p:menuitem>
+		    
+		     <p:menuitem value="Venta sin LBR" outcome="/pages/gh/comisionesSin.xhtml?faces-redirect=true" icon="ui-icon-document">
+		        <f:param name="index" value="2" />		        
+		    </p:menuitem>
+		    
+		    <p:menuitem value="Contado y Anticipo" outcome="/pages/gh/contadoAnticipo.xhtml?faces-redirect=true" icon="ui-icon-document">
+		        <f:param name="index" value="3" />
+		    </p:menuitem>
+		    
+		    <p:menuitem value="Recaudo Cartera" outcome="/pages/gh/cartera.xhtml?faces-redirect=true" icon="ui-icon-document">
+		        <f:param name="index" value="4" />
+		    </p:menuitem>
+		    
+		    <p:menuitem value="Comision Gerentes" outcome="/pages/gh/gerentes.xhtml?faces-redirect=true" icon="ui-icon-document">
+		        <f:param name="index" value="5" />
+		    </p:menuitem>
+		    
+		    <p:menuitem value="Ajuste" outcome="/pages/gh/ajustes.xhtml?faces-redirect=true" icon="ui-icon-document">
+		        <f:param name="index" value="6" />
+		    </p:menuitem>
+		</p:tabMenu>
+	</h:form>
+</ui:composition>

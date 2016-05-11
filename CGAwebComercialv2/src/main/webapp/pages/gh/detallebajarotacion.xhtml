@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	<ui:define name="contenido">
+
+
+		<h:form id="frmPlan">
+			<p:panel>
+				<f:metadata>
+					<f:viewParam name="perId" value="#{bajaRotacionBean.idfuncionario}"/>
+					<f:event listener="#{bajaRotacionBean.listarDetalle}" type="preRenderView" />	
+				</f:metadata>	
+				<f:facet name="header">
+					<p:outputLabel
+						value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					<h:commandLink >
+						<p:graphicImage library="images" name="excel.png" width="24" styleClass="excel"/>
+						<p:dataExporter type="xls" target="tblPlan" fileName="facturas baja rotación #{bajaRotacionBean.nombreRegistro}" />
+					</h:commandLink>
+	
+					<h:commandLink>
+						<p:graphicImage library="images" name="csv.png" width="24" styleClass="cvs" />
+						<p:dataExporter type="csv" target="tblPlan" fileName="facturas baja rotación #{bajaRotacionBean.nombreRegistro}" />
+					</h:commandLink>	
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" paginator="true"
+					value="#{bajaRotacionBean.listaFacturas}" var="item"
+					rows="10" paginatorPosition="bottom">
+
+					<f:facet name="header">
+						<h:outputText value="Lista de facturas baja rotación #{bajaRotacionBean.nombreRegistro}" /> 
+			        </f:facet>
+
+					<p:column headerText="Factura" filterBy="#{item.factura}"
+						sortBy="#{item.factura}">
+						<h:outputText value="#{item.factura}" />
+					</p:column>
+					
+					<p:column headerText="Pos Factura" >
+						<h:outputText value="#{item.posfact}" />
+					</p:column>
+					
+					<p:column headerText="Pedido" width="7%">
+						<h:outputText value="#{item.pedido}" />
+					</p:column>
+					
+					<p:column headerText="Pos Pedido" width="7%" >
+						<h:outputText value="#{item.posPedido}" />
+					</p:column>
+					
+					<p:column headerText="Material">
+						<h:outputText value="#{item.material}">
+							
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Material Descripción" >
+						<h:outputText value="#{item.materialOriginal}" />
+					</p:column>
+					
+					<p:column headerText="Valor " style="text-align:right">
+						<h:outputText value="#{(item.valorNeto lt 0) ? -item.valorNeto : item.valorNeto}">
+							<f:convertNumber locale="en_US" integerOnly="true"  />
+						</h:outputText>
+					</p:column>		
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column colspan="6" style="text-align:right" footerText="Total:" />
+			                <p:column footerText="$ #{bajaRotacionBean.totalDetalle}" 
+			                	style="text-align:right"/>			                 	
+			            </p:row>
+			        </p:columnGroup>
+
+					<f:facet name="footer">
+						<p:button  value="Volver" outcome="/pages/gh/bajarotacion.xhtml?faces-redirect=true"
+							 style="background: #acdd4a">
+							 <f:param name="index" value="1"/>
+						</p:button>
+							 
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+</html>

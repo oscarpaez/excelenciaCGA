@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	
+	
+	<ui:define name="contenido">
+		
+				<br />
+		<f:metadata>
+				<f:viewParam name="ajuId" value="#{ajusteBean.cod}"/>
+				<f:event listener="#{ajusteBean.listarAjuste}" type="preRenderView" />	
+			</f:metadata>		
+		<h:form id="frmPlan">
+				<p:dataTable styleClass="tblPla" id="tblPlan" editable="true" editMode="cell"
+					emptyMessage="No se encontraron registros"
+					value="#{ajusteBean.listaAjuste}" var="ajuste"
+					 paginatorPosition="bottom">
+
+					<f:facet name="header"  >
+						<h:outputText value="Listado de Ajustes " /> 
+						
+			        </f:facet>
+			       
+			        
+			         <p:columnGroup type="header">
+			         	
+			         	<p:row>
+			         		 <p:column colspan="1"   headerText="Fecha Ajuste" />
+			         		 <p:column colspan="1"   headerText="Codigo Sap" width="6%"/>
+			         		 <p:column colspan="1"   headerText="Nombre" width="17%" />					         		
+				         	 <p:column colspan="1"  headerText="Periodo" />
+					         <p:column colspan="1"  headerText="Año" width="5%"/>
+					         <p:column colspan="1"  headerText="Concepto" />
+					         <p:column colspan="1"  headerText="Factura o Pedido" />
+					         <p:column colspan="1"  headerText="Nota" />
+					         <p:column colspan="1"  headerText="Valor Ajuste" />
+					    </p:row>     
+			         </p:columnGroup>
+					
+					<p:column>
+						
+						<h:outputText value="#{ajuste.fechaAjuste}">
+							
+						</h:outputText>
+					</p:column>
+							
+					<p:column>
+						<h:outputText value="#{ajuste.codSap}">
+							
+						</h:outputText>
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{ajuste.nombre}"
+							/>						 
+					</p:column>
+
+					<p:column >
+						<h:outputText value="#{ajuste.periodo}" />
+					</p:column>					
+					
+					<p:column >
+						<h:outputText value="#{ajuste.ejercicio}" />
+								 
+					</p:column>
+					
+					<p:column>
+						<h:outputText value="#{ajuste.concepto}" />
+					</p:column>
+					
+					<p:column>
+						<h:outputText value="#{ajuste.facturapedido}" />
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{ajuste.nota}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>	
+					
+					<p:column >
+						<h:outputText value="#{ajuste.valorajuste}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>		
+					
+					
+					 <f:facet name="footer">
+						 <p:commandButton  value="Volver" onclick="history.back()"  
+						 	style="background: #acdd4a" />	
+					 
+					 </f:facet>
+									
+				</p:dataTable>
+		</h:form>
+	
+	</ui:define>
+
+</ui:composition>
+</html>
