@@ -43,7 +43,12 @@ public class Ajuste implements Serializable {
 	private int facturapedido;
 	
 	private int valorajuste;
+	
+	@Column(length = 255)
+	private String  nombreUsuario;
 
+	private int codSapUsuario;
+	
 	public int getId() {
 		return id;
 	}
@@ -124,5 +129,20 @@ public class Ajuste implements Serializable {
 	public void setValorajuste(int valorajuste) {
 		this.valorajuste = valorajuste;
 	}
-	
+
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
+	public int getCodSapUsuario() {
+		return codSapUsuario;
+	}
+
+	public void setCodSapUsuario(int codSapUsuario) {
+		this.codSapUsuario = codSapUsuario;
+	}
 }

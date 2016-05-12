@@ -17,6 +17,7 @@ import org.hibernate.criterion.Restrictions;
 import co.com.CGAwebComercial.entyties.Ciudad;
 import co.com.CGAwebComercial.entyties.Comision;
 import co.com.CGAwebComercial.entyties.Detalle;
+import co.com.CGAwebComercial.entyties.Esquemas;
 import co.com.CGAwebComercial.entyties.Funcionario;
 import co.com.CGAwebComercial.entyties.OficinaVendedorInterno;
 import co.com.CGAwebComercial.entyties.Recaudo;
@@ -262,8 +263,9 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 					sucursales.setComisionS(new DecimalFormat("###.##").format(cumplimiento.multiply(new BigDecimal("100"))));
 					sucursales.setCumplimiento(cumplimiento.multiply(new BigDecimal("100")));
 				}
-				
-				sucursales.setUmbralCV(new BigDecimal("95.00"));
+				EsquemasDao daoE = new EsquemasDao();
+				Esquemas esquema = daoE.buscar(1);
+				sucursales.setUmbralCV(esquema.getUmbralRecaudo().multiply(new BigDecimal("100")));
 				int numero = sucursales.getUmbralCV().compareTo(sucursales.getCumplimiento());
 				if(numero == 1){
 					sucursales.setImagen("rojo.png");

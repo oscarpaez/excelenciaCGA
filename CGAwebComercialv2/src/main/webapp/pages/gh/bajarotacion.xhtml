@@ -172,6 +172,7 @@
 				        <p:column style="font-weight: bold;">
 				        	<p:outputLabel value="#{bajaRotacionBean.liquidacion.valorTotal} " /> 
 				        </p:column>
+				        
 				    </p:row>
 			  </p:panelGrid>
 			
@@ -188,8 +189,6 @@
 			</h:panelGrid>
 		</h:form>
 	</p:dialog>		
-	
-	
 	
 	<p:dialog header="Realizar Ajuste" widgetVar="dlgAjuste" width="1000" height="400"
 		modal="true" draggable="false" closable="false" appendTo="@(body)" styleClass="liquidar" >
@@ -270,7 +269,6 @@
 						<h:inputText value="#{vend.valorajuste}" style="width:90%"
 							/>
 					</p:column>
-					
 					
 					<p:column headerText="Acción" width="10%">
 						<p:commandButton icon="ui-icon-plus" actionListener="#{bajaRotacionBean.adicionarAjuste}"

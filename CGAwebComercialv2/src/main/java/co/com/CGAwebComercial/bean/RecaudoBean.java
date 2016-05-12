@@ -17,11 +17,13 @@ import org.omnifaces.util.Messages;
 
 import co.com.CGAwebComercial.dao.AjusteDao;
 import co.com.CGAwebComercial.dao.ComisionDao;
+import co.com.CGAwebComercial.dao.FuncionarioDao;
 import co.com.CGAwebComercial.dao.LiquidacionDao;
 import co.com.CGAwebComercial.dao.RecaudoDao;
 import co.com.CGAwebComercial.dao.SucursalDao;
 import co.com.CGAwebComercial.entyties.Ajuste;
 import co.com.CGAwebComercial.entyties.Comision;
+import co.com.CGAwebComercial.entyties.Funcionario;
 import co.com.CGAwebComercial.entyties.Liquidacion;
 import co.com.CGAwebComercial.entyties.OficinaVendedorInterno;
 import co.com.CGAwebComercial.entyties.Recaudo;
@@ -132,7 +134,7 @@ public class RecaudoBean implements Serializable{
 				vendedoresInt.setIngresoRealB(realB);
 				vendedoresInt.setCumplimiento(cumplimiento);
 				vendedoresInt.setLiquidar(liquidar);
-				numero = cumplimiento.compareTo(new BigDecimal("95.00"));
+				numero = cumplimiento.compareTo(new BigDecimal("85.00"));
 				if(numero == 1){
 					vendedoresInt.setComisionS(new DecimalFormat("###.##").format(cumplimiento));
 					vendedoresInt.setComision(cumplimiento.multiply(comision.getValorBaseRecaudo()).divide(new BigDecimal("100")).intValue());
@@ -169,6 +171,10 @@ public class RecaudoBean implements Serializable{
 			ajuste.setCodSap(vendedor.getId());
 			ajuste.setNombre(vendedor.getNombre());	
 			ajuste.setConcepto("Cartera");
+			FuncionarioDao daoF = new FuncionarioDao();
+			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
+			ajuste.setCodSapUsuario(funcionario.getId_funcionario());
+			ajuste.setNombreUsuario(funcionario.getPersona().getNombre());
 			listaVendedoresAjuste.add(ajuste);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
@@ -188,6 +194,8 @@ public class RecaudoBean implements Serializable{
 			ajuste1.setFacturapedido(0);
 			ajuste1.setNota("");
 			ajuste1.setValorajuste(0);
+			ajuste1.setCodSapUsuario(ajuste.getCodSapUsuario());
+			ajuste1.setNombreUsuario(ajuste.getNombreUsuario());
 			listaVendedoresAjuste.add(ajuste1); 
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();

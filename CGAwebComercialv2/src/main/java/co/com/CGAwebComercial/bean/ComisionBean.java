@@ -735,6 +735,10 @@ public class ComisionBean implements Serializable{
 			ajuste.setCodSap(vendedor.getId());
 			ajuste.setNombre(vendedor.getNombre());	
 			ajuste.setConcepto(vendedor.getConcepto());
+			FuncionarioDao daoF = new FuncionarioDao();
+			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
+			ajuste.setCodSapUsuario(funcionario.getId_funcionario());
+			ajuste.setNombreUsuario(funcionario.getPersona().getNombre());
 			listaVendedoresAjuste.add(ajuste);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
@@ -756,6 +760,8 @@ public class ComisionBean implements Serializable{
 			ajuste1.setFacturapedido(0);
 			ajuste1.setNota("");
 			ajuste1.setValorajuste(0);
+			ajuste1.setCodSapUsuario(ajuste.getCodSapUsuario());
+			ajuste1.setNombreUsuario(ajuste.getNombreUsuario());
 			listaVendedoresAjuste.add(ajuste1); 
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();

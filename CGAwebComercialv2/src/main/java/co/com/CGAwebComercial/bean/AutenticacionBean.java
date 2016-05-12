@@ -171,7 +171,6 @@ public class AutenticacionBean implements Serializable {
 			imagenes = new ArrayList<String>();
 			imagenes.add("amoblamient.jpg");
 			imagenes.add("ing.jpg");
-			imagenes.add("tanque.jpg");
 			imagenes.add("innovacion");
 		}
 		return imagenes;

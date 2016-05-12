@@ -14,9 +14,15 @@
         <property name="connection.username">root</property>
         <property name="connection.password"></property> -->
         
-         <!-- Base servidor -->
+         <!-- Base servidor Aplicacion en produccion 
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://192.168.0.15:3306/excelenciacga</property>
+        <property name="connection.username">excelenciacga</property>
+        <property name="connection.password">E1825cGA*-</property> -->
+        
+         <!-- Base servidor pruebas --> 
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://192.168.0.15:3306/copiaexcelenciacga</property>
         <property name="connection.username">excelenciacga</property>
         <property name="connection.password">E1825cGA*-</property> 
         
@@ -76,6 +82,7 @@
         <mapping class = "co.com.CGAwebComercial.entyties.Ajuste"/> 
         <mapping class = "co.com.CGAwebComercial.entyties.Liquidacion"/>
         <mapping class = "co.com.CGAwebComercial.entyties.ClienteMora"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.Esquemas"/>
         
         
 	</session-factory>

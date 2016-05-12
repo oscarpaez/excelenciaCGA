@@ -53,45 +53,51 @@
 				         	 <p:column colspan="1"  headerText="Valor Ajuste" />
 					         <p:column colspan="1"  headerText="Valor Comision" />
 					         <p:column colspan="1"  headerText="Total" />
+					         <p:column colspan="1"  headerText="Ajuste" width="6%" />
 					         <p:column colspan="1"  headerText="Detalle" width="6%" />
 					         
 					    </p:row>     
 			         </p:columnGroup>
 					
-					<p:column>
-						
+					<p:column headerText="Periodo">
 						<h:outputText value="#{liquidacion.fechaLiquidacion}">
 							
 						</h:outputText>
 					</p:column>
 							
-					<p:column>
+					<p:column headerText="Cod Sap">
 						<h:outputText value="#{liquidacion.codSap}">
 							
 						</h:outputText>
 					</p:column>
 					
-					<p:column >
-						<h:outputText value="#{liquidacion.nombre}"
-							/>						 
+					<p:column headerText="Nombre">
+						<h:outputText value="#{liquidacion.nombre}" />						 
 					</p:column>
 
-					<p:column style="text-align:right">
+					<p:column  headerText="Ajuste" style="text-align:right">
 						<h:outputText value="#{liquidacion.valorAjuste}" >
 							<f:convertNumber locale="en_US" />
 						</h:outputText>
 					</p:column>	
 					
-					<p:column style="text-align:right" >
+					<p:column headerText="Valor Comision" style="text-align:right" >
 						<h:outputText value="#{liquidacion.valorComision}" >
 							<f:convertNumber locale="en_US" />
 						</h:outputText>
 					</p:column>	
 					
-					<p:column style="text-align:right">
+					<p:column headerText="Total" style="text-align:right">
 						<h:outputText value="#{liquidacion.valorTotal}" >
 							<f:convertNumber locale="en_US" />
 						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Liquidar" style="width:10%; text-align:center">
+						<p:commandButton icon="ui-icon-clock" actionListener="#{ajusteBean.liquidar}"
+							oncomplete="PF('dlgNue').show();" update=" :frmNuePro:pnlNuePro">
+							<f:attribute name="vendedorSelecionado" value="#{liquidacion}" />						
+						</p:commandButton>
 					</p:column>	
 					
 					<p:column headerText="Detalle" style="width:10%">
@@ -129,8 +135,181 @@
 				
 			</h:panelGrid>
 		</h:form>
+		
+		<p:dialog header="Ajuste de liquidación" widgetVar="dlgNue" 
+			modal="true" draggable="false" closable="false" appendTo="@(body)" styleClass="liquidar" >
+		<h:form id="frmNuePro" enctype="multipart/form-data">
+			<h:panelGrid columns="1" id="pnlNuePro">
+				<p:panelGrid style="margin-top:20px">
+				    <f:facet name="header">
+				        <p:row>
+				            <p:column style="background: #17B903">Periodo</p:column>
+				            <p:column style="background: #17B903">Año</p:column>
+				            <p:column style="background: #17B903">Id</p:column>
+				            <p:column style="background: #17B903">Nombre</p:column>
+				            <p:column style="background: #17B903">Valor Ajuste</p:column>
+				            <p:column style="background: #17B903">Valor Comision</p:column>
+				            <p:column style="background: #17B903">Valor Apagar</p:column>
+				            
+				        </p:row>
+				   </f:facet>
+ 
+				    <p:row>
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value="#{ajusteBean.liquidacion.periodo} " />
+				        </p:column>
+				        
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value="#{ajusteBean.liquidacion.ejercicio}" />
+				        </p:column>
+				        
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value=" #{ajusteBean.liquidacion.codSap} " />
+				        </p:column>
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value=" #{ajusteBean.liquidacion.nombre}" />
+				        </p:column>
+				        
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value="#{ajusteBean.liquidacion.valorAjuste}" />
+				        </p:column>
+				        
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value="#{ajusteBean.liquidacion.valorComision} " />
+				        </p:column>
+				        
+				        <p:column style="font-weight: bold;">
+				        	<p:outputLabel value="#{ajusteBean.liquidacion.valorTotal} " /> 
+				        </p:column>
+				        
+				    </p:row>
+			  </p:panelGrid>
+			
+			  <h:panelGrid columns="7">
+				<p:commandButton value="Crear Ajuste"  oncomplete="PF('dlgAjuste').show(); PF('dlgNue').hide();" 
+					update=":frmNueAjuste:tblNueAjuste"  disabled="#{ajuste.habilitar}" >
+					<f:attribute name="vendedorSelecionado1" value="#{ajuste.vendedor.id}" />
+				</p:commandButton>		
+				<p:commandButton value="Liquidar" oncomplete="PF('dlgNue').hide();"
+					actionListener="#{ajusteBean.salvarLiquidacion}" update=":frmPlan:tblPlan" />
+				<p:commandButton value="Cerrar" oncomplete="PF('dlgNue').hide();"/>  	
+			  </h:panelGrid>	
+				
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+	
+	<p:dialog header="Realizar Ajuste" widgetVar="dlgAjuste" width="1000" height="400"
+		modal="true" draggable="false" closable="false" appendTo="@(body)" styleClass="liquidar" >
+		<h:form id="frmNueAjuste" enctype="multipart/form-data" >
+				<p:dataTable id="tblNueAjuste" editable="true" editMode="cell"
+					emptyMessage="No se encontraron registros"
+					value="#{ajusteBean.listaVendedoresAjuste}" var="vend"
+					 paginatorPosition="bottom">
+
+					<f:facet name="header"  style="background: #17B903">
+						<h:outputText value="Listado de Ajustes" /> 
+						
+			        </f:facet>
+			       
+			        
+			         <p:columnGroup type="header">
+			         	<p:row>
+			         		 <p:column colspan="3"  style="background: #17B903" headerText="Codigo Sap: #{ajusteBean.codSap}" />
+			         		 <p:column colspan="4"  style="background: #17B903" headerText="Nombre: #{ajusteBean.nombreRegistro}" 
+			         		 	 />	
+			         	</p:row>
+			         	<p:row>			         		
+				         	 <p:column colspan="1" style="background: #17B903" headerText="Periodo" />
+					         <p:column colspan="1" style="background: #17B903" headerText="Año" width="5%"/>
+					         <p:column colspan="1" style="background: #17B903" headerText="Concepto" />
+					         <p:column colspan="1" style="background: #17B903" headerText="Factura Pedido" />
+					         <p:column colspan="1" style="background: #17B903" headerText="Descripción" />
+					         <p:column colspan="1" style="background: #17B903" headerText="Valor" />
+					         <p:column colspan="1" style="background: #17B903" headerText="+"/>
+					    </p:row>     
+			         </p:columnGroup>
+					
+					<p:column>
+						<p:cellEditor>
+							<f:facet name="output"><h:outputText value="#{vend.periodo}" /></f:facet>
+			               <f:facet name="input">
+			                   <p:selectOneMenu value="#{vend.periodo}" filter="true"
+								style="width:180px;" >
+								<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
+								<f:selectItems value="#{ajusteBean.listaFechas}" var="item"
+								itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
+							  </p:selectOneMenu>
+			               </f:facet>
+							
+						</p:cellEditor>
+					</p:column>
+							
+					<p:column>
+						<p:cellEditor>
+							<f:facet name="output"><h:outputText value="#{vend.ejercicio}" /></f:facet>
+				            <f:facet name="input">
+				            	<p:selectOneMenu value="#{vend.ejercicio}" style="width:100px;"
+				            		 >
+				            		<f:selectItem noSelectionOption="true" itemLabel="Selecione Año" />
+									<f:selectItem itemValue="2016" itemLabel="2016" />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					
+					<p:column headerText="Concepto">
+						<p:cellEditor>
+							<f:facet name="output"><h:outputText value="#{vend.concepto}" /></f:facet>
+				            <f:facet name="input">
+				            	<p:selectOneMenu value="#{vend.concepto}" style="width:100px;" >
+				            		<f:selectItem noSelectionOption="true" itemLabel="Selecione Concepto" />
+									<f:selectItem itemValue="LBR" itemLabel="LBR" />
+									<f:selectItem itemValue="VentaSinLBR" itemLabel="VentaSinLBR" />
+									<f:selectItem itemValue="Contado y Anticipo" itemLabel="Contado y Anticipo" />
+									<f:selectItem itemValue="Cartera" itemLabel="Cartera" />
+								</p:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Factura/Pedido" filterBy="#{vend.facturapedido}"
+						sortBy="#{vend.facturapedido}">
+						<h:inputText value="#{vend.facturapedido}" style="width:90%"
+							/>
+					</p:column>					
+					
+					<p:column headerText="Descripción">
+						<h:inputTextarea value="#{vend.nota}" style="width:90%"
+							/>						 
+					</p:column>
+					
+					<p:column headerText="Valor">
+						<h:inputText value="#{vend.valorajuste}" style="width:90%"
+							/>
+					</p:column>
+					
+					<p:column headerText="Acción" width="10%">
+						<p:commandButton icon="ui-icon-plus" actionListener="#{ajusteBean.adicionarAjuste}"
+								update=" :frmNueAjuste:tblNueAjuste">
+								<f:attribute name="vendedorSelecionado2" value="#{vend}" />						
+							</p:commandButton>
+					</p:column>	
+						
+					 <f:facet name="footer">
+						<p:commandButton value="Guardar Ajustes" oncomplete="PF('dlgAjuste').hide(); PF('dlgNue').show();"
+						 actionListener="#{ajusteBean.guardarAjuste}" update=":frmNuePro:pnlNuePro" />
+						<p:commandButton value="Cerrar" oncomplete="PF('dlgAjuste').hide();"/>  	
+					 
+					</f:facet>
+									
+				</p:dataTable>
+			
+		</h:form>
+	</p:dialog>	
+					
 	
 	</ui:define>
-
 </ui:composition>
 </html>
