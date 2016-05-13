@@ -18,7 +18,7 @@
 			        </f:facet>
 				
 					<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="true" 
-						value="#{planBean.listaplan}" var="plan" rows="5"
+						value="#{planBean.listaplan}" var="plan" rows="15"
 						paginatorPosition="bottom"	>
 					
 					<f:facet name="header">
@@ -28,21 +28,17 @@
 			        <p:columnGroup type="header">
 		            <p:row>
 		                <p:column rowspan="2" headerText="Linea" />
-		                <p:column colspan="2" headerText="Presupuesto" />
-		                <p:column colspan="2" headerText="Real" />
-		                <p:column colspan="2" headerText="Cumplimiento %" />
+		                <p:column colspan="1" headerText="Presupuesto" />
+		                <p:column colspan="1" headerText="Real" />
+		                <p:column colspan="1" headerText="Cumplimiento %" />
 		                <p:column rowspan="2" headerText="Umbral" style="width:5%"/>
 		                <p:column rowspan="2" headerText="Comision" style="text-align: center; width:6%"/>
-		                <p:column rowspan="2" headerText="Valor Comision" />
 		                <p:column rowspan="2" headerText="Detalle" style="text-align: center; width:6%" />
 		            </p:row>
 		            <p:row>
 		                <p:column colspan="1" headerText="Ingreso" />		                
-		                <p:column colspan="1" headerText="Utilidad" />		                
 		                <p:column colspan="1" headerText="Ingreso" />
-		                <p:column colspan="1" headerText="Utilidad" />
 		                <p:column colspan="1" headerText="Ingreso" />
-		                <p:column colspan="1" headerText="Utilidad" />
 		            </p:row>
 		            
 		        </p:columnGroup>
@@ -52,39 +48,21 @@
 						<h:outputText value="#{plan.linea.nombre}" />
 					</p:column>
 					
-					<p:column headerText="Ingreso P" >
+					<p:column headerText="Ingreso P" style="text-align:right" >
 						<h:outputText value="#{plan.ingreso}" >
 							<f:convertNumber locale="pt_CO" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Utilidad P" >
-						<h:outputText value="#{plan.utilidad}" >
-							<f:convertNumber locale="pt_CO" />
-						</h:outputText>
-					</p:column>
-					
-					<p:column headerText="Ingreso R" >
+					<p:column headerText="Ingreso R" style="text-align:right" >
 						<h:outputText value="#{plan.ingreso_Real}" >
 							<f:convertNumber locale="pt_CO" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Utilidad R" >
-						<h:outputText value="#{plan.utilidad_Real}" >
-							<f:convertNumber locale="pt_CO" />
-						</h:outputText>
-					</p:column>
-					
-					<p:column headerText="Ingreso C" >
+					<p:column headerText="Ingreso C" style="text-align:right" >
 						<h:outputText value="#{plan.ingreso_Cumplimiento}%" >
 							<f:convertNumber locale="pt_CO"   maxFractionDigits="0"/>
-						</h:outputText>
-					</p:column>
-					
-					<p:column headerText="Utilidad C" sortBy="#{plan.utilidad_Cumplimiento}">
-						<h:outputText value="#{plan.utilidad_Cumplimiento}%" >
-							<f:convertNumber locale="pt_CO"   maxFractionDigits="1"/>
 						</h:outputText>
 					</p:column>
 					
@@ -96,13 +74,7 @@
 						<p:graphicImage library="images" name="#{plan.imagen}"  height="25" width="25" />
 					</p:column>					
 					
-					<p:column headerText="Valor Comision" >
-						<h:outputText value="#{plan.valor_Comision_Pagar}" >
-							<f:convertNumber locale="pt_CO" maxFractionDigits="0"  />
-						</h:outputText>
-					</p:column>
-					
-					<p:column headerText="Detalle" style="width:5%">
+					<p:column headerText="Detalle" style="width:5%; text-align: center" >
 						<p:button icon="ui-icon-search" 
 							outcome="/pages/detalle.xhtml?faces-redirect=true">
 							<f:param name="linId" value="#{plan.linea.id}"/>
@@ -114,14 +86,10 @@
 					
 					<p:columnGroup type="footer">
 			            <p:row>
-			            	<p:column footerText="Totales" />
-			            	<p:column footerText="$ #{planBean.totalPreIng}"  />		 
-			            	<p:column footerText="$ #{planBean.totalPreUti}"  />		 
-			            	<p:column footerText="$ #{planBean.totalRealIng}"  />		 
-			            	<p:column footerText="$ #{planBean.totalRealUti}"  />		 
-			                <p:column colspan="4" style="text-align:right" footerText="Total Comision:" />
-			                <p:column footerText="$ #{planBean.accion}"  />		 
-			                <p:column footerText="" />	
+			            	<p:column footerText="Totales"  style="text-align:right"/>
+			            	<p:column footerText="$ #{planBean.totalPreIng}"  style="text-align:right"/>		 
+			            	<p:column footerText="$ #{planBean.totalRealIng}"  style="text-align:right"/>		 
+			            	<p:column colspan="4" footerText="" />	
 			            </p:row>
 			        </p:columnGroup>
 			        
@@ -161,19 +129,6 @@
 				<p:commandButton value="Buscar" update=":frmPlan:tblPlan"
 					actionListener="#{planBean.listarPlanPorFechas}" style="background: #b94a48"/>
 				
-				
-				<p:outputLabel value="Umbral" />	
-				<p:selectOneMenu value="#{planBean.umbral}"
-					style="width:100px;" >
-					<f:selectItem noSelectionOption="true" itemLabel="Selecione un valor" />
-					<f:selectItem itemValue="0.95" itemLabel="95%" />
-					<f:selectItem itemValue="0.85" itemLabel="85%" />
-					<f:selectItem itemValue="0.83" itemLabel="83%" />
-				</p:selectOneMenu>
-				
-				<p:commandButton value="Calcular" update=":frmPlan:tblPlan"
-					actionListener="#{planBean.listarPlan()}" style="background: #b94a48"/>
-				
 			</h:panelGrid>
 		</h:form>
 
@@ -181,8 +136,7 @@
 			 draggable="true" resizable="false">
 			<h:form id="frmDesRec" enctype="multipart/form-data">
 				<h:panelGrid columns="2" id="pnlDesRec">
-					 <p:chart type="line" model="#{planBean.desempenoVentas}" style="width:800px;"  
-					 	/>
+					
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>
@@ -191,8 +145,7 @@
 			 draggable="true" resizable="false">
 			<h:form id="frmDesVen" enctype="multipart/form-data">
 				<h:panelGrid columns="2" id="pnlDesVen">
-					 <p:chart type="line" model="#{planBean.desempenoRecaudo}" style="width:900px;"  
-					 	/>
+				
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>
@@ -200,19 +153,7 @@
 		<p:dialog header="Promedio ventas" widgetVar="dlgProVen" draggable="false" resizable="false">
 		<h:form id="frmProVen" enctype="multipart/form-data">
 			<h:panelGrid columns="2" id="pnlProVen">
-			    <p:outputLabel  value="Promedio de venta del  #{planBean.promedioVenta.mes}" />
-			    <p:outputLabel  value="" />
-			    
-				<p:outputLabel  value="Valor Promedio de ventas " />
-				<p:inputText id="descripcion" size="30"  
-					value="#{planBean.promedioMes}"  disabled="true" >
-					<f:convertNumber pattern="#,##0;(#,##0)"/>
-					</p:inputText>
-				
-				<p:outputLabel value="Meta Venta Mes" />
-				<p:inputText id="cantidad" size="30" value="#{planBean.promedioVenta.meta}" disabled="true"> 
-					 <f:convertNumber pattern="#,##0;(#,##0)"/>
-				</p:inputText>
+			   
 			</h:panelGrid>
 		</h:form>
 	</p:dialog>

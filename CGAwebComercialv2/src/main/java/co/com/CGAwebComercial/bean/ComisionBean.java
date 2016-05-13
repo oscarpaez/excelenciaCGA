@@ -583,11 +583,15 @@ public class ComisionBean implements Serializable{
 								planLinea2_3 = listaplanV.get(k);
 						}
 						plan.setIngreso_Real(plan.getIngreso_Real().add(planLinea2_3.getIngreso_Real()));
-						plan.setUtilidad_Real(plan.getUtilidad_Real().add(planLinea2_3.getUtilidad_Real()));						
+						plan.setUtilidad_Real(plan.getUtilidad_Real().add(planLinea2_3.getUtilidad_Real()));
+						plan.setIngreso(plan.getIngreso().add(planLinea2_3.getIngreso()));
+						plan.setUtilidad(plan.getUtilidad().add(planLinea2_3.getUtilidad()));
 					}
 					else if(tipo == "funcionarioI" &&  plan.getLinea().getId() == 3){
-						plan.setIngreso_Real(new BigDecimal("0.00"));
-						plan.setUtilidad_Real(new BigDecimal("0.00"));
+							plan.setIngreso_Real(new BigDecimal("0.00"));
+							plan.setUtilidad_Real(new BigDecimal("0.00"));
+							plan.setIngreso(new BigDecimal("0.00"));
+							plan.setUtilidad(new BigDecimal("0.00"));
 					}
 					
 					totalPresupuesto = totalPresupuesto.add(plan.getIngreso());

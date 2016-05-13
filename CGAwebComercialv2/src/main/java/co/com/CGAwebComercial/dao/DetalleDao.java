@@ -181,7 +181,7 @@ public class DetalleDao extends GenericDao<Detalle> {
 			Date fechaFinal = fechaFinal();
 			Date fechaInicial = fechaInicial();
 			System.out.println("fecha" +fechaFinal + "fdf"+ fechaInicial);
-			Criteria consulta = session.createCriteria(Detalle.class);
+			Criteria consulta = session.createCriteria(Detallesin.class);
 			consulta.add(Restrictions.eq("linea", codigo));
 			consulta.add(Restrictions.eq("funcionario", idPersona));
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
@@ -197,17 +197,25 @@ public class DetalleDao extends GenericDao<Detalle> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Detalle> listarDetallePorFecha(int codigo, int idPersona,  String fecMes, String fecYear ){
+	public List<Detallesin> listarDetallePorFecha(String tipo, int codigo, int idPersona,  String fecMes, String fecYear ){
 
 		Session session = HibernateUtil.getSessionfactory().openSession();
-		List<Detalle> detalle = null;
+		List<Detallesin> detalle = null;
 		try{
-			Date fechaFinal = fechaFinal(fecMes, fecYear);
-			Date fechaInicial = fechaInicial(fecMes, fecYear);
+			Date fechaFinal;
+			Date fechaInicial;
+			if (fecMes.equals("") || fecMes == null || fecYear == null){
+				fechaFinal = fechaFinal();
+				fechaInicial = fechaInicial();	
+			}
+			else{
+				fechaFinal = fechaFinal(fecMes, fecYear);
+				fechaInicial = fechaInicial(fecMes, fecYear);
+			}
 			System.out.println("fecha" +fechaFinal + "fecha ini"+ fechaInicial);
-			Criteria consulta = session.createCriteria(Detalle.class);
+			Criteria consulta = session.createCriteria(Detallesin.class);
 			consulta.add(Restrictions.eq("linea", codigo));
-			consulta.add(Restrictions.eq("funcionario", idPersona));
+			consulta.add(Restrictions.eq(tipo, idPersona));
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			detalle = consulta.list();
 			return detalle;

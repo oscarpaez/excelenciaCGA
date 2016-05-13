@@ -3,7 +3,6 @@ package co.com.CGAwebComercial.bean;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,12 +22,13 @@ import co.com.CGAwebComercial.dao.DetalleDao;
 import co.com.CGAwebComercial.dao.FuncionarioDao;
 import co.com.CGAwebComercial.dao.PromedioVentaDao;
 import co.com.CGAwebComercial.dao.RecaudoDao;
-import co.com.CGAwebComercial.entyties.Detalle;
 import co.com.CGAwebComercial.entyties.Detalle_venta;
+import co.com.CGAwebComercial.entyties.Detallesin;
 import co.com.CGAwebComercial.entyties.Funcionario;
 import co.com.CGAwebComercial.entyties.Plan;
 import co.com.CGAwebComercial.entyties.PromedioVenta;
 import co.com.CGAwebComercial.entyties.Recaudo;
+import co.com.CGAwebComercial.resource.Recursos;
 import co.com.CGAwebComercial.util.Fechas;
 
 
@@ -41,9 +41,10 @@ public class PlanBean implements Serializable {
 	private AutenticacionBean autenticacion;
 
 	private List<Plan> listaplan;
+	private Recursos recurso;
 	private Plan plan;
 	private List<Detalle_venta> listadetalle;
-	private List<Detalle> listaDetalle1;
+	private List<Detallesin> listaDetalle1;
 	private List<Fechas> listaFechas;
 	
 	private LineChartModel desempenoVentas;
@@ -54,6 +55,7 @@ public class PlanBean implements Serializable {
 	private int codigo;
 	private int idPersona;
 	private String accion;
+	private String accionR;
 	private String totalPreIng;
 	private String totalPreUti;
 	private String totalRealIng;
@@ -62,6 +64,7 @@ public class PlanBean implements Serializable {
 	private Date fechaInicial;
 	private Date fechaFinal;
 	private BigDecimal total;
+	private BigDecimal totalR;
 	private BigDecimal umbral;
 	private int totalDetalle;
 	private String fechaActual;
@@ -70,22 +73,24 @@ public class PlanBean implements Serializable {
 	private Double promedioMes;
 	private String tipo;
 	
+	
+	//*Lista los datos del Plan del vendedor interno y externo *//
 	@PostConstruct
 	public void listarPlan(){
 		
 		try {
-			
+			recurso = new Recursos();
+			listaFechas = recurso.cargarFechas();
 			plan = new Plan();
+			tipo =(autenticacion.getUsuarioLogin().getId() == 1)? "funcionario" : "funcionarioI";
 			if(autenticacion.getFechaBusqueda() != null && autenticacion.getFechaBusquedaYear() != null){
-				cargarFechas();
+				System.out.println("dossin fechasssss" + autenticacion.getFechaBusqueda());
 				fechaBusqueda = autenticacion.getFechaBusqueda();
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();	
 				listarPlanPorFechas();
-				desempenoVentas();
 			}
 			else{
-				
-				cargarFechas();
+				System.out.println("sin fechasssss" + autenticacion.getFechaBusqueda());
 				total =  new BigDecimal("0.00");
 				BigDecimal totalPresupuesto = new BigDecimal("0.00");
 				BigDecimal totalPresupuestoUtilidad = new BigDecimal("0.00");
@@ -97,81 +102,31 @@ public class PlanBean implements Serializable {
 
 				FuncionarioDao daoF = new FuncionarioDao();
 				Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
-				DetalleDao daoD = new DetalleDao();		
-				listaplan = daoD.listarPlan(funcionario.getId_funcionario());
-
-				for (Plan planL : listaplan) {
-					totalPresupuesto = totalPresupuesto.add(planL.getIngreso());
-					totalPresupuestoUtilidad = totalPresupuestoUtilidad.add(planL.getUtilidad()); 
-					totalValorReal = totalValorReal.add(planL.getIngreso_Real());
-					totalValorUtilidad = totalValorUtilidad.add(planL.getUtilidad_Real());
-					valorReal = planL.getIngreso_Real().divide(planL.getIngreso(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
-					planL.setIngreso_Cumplimiento(valorReal);
-
-					valorReal = planL.getUtilidad_Real().divide(planL.getUtilidad(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
-					planL.setUtilidad_Cumplimiento(valorReal);
-					if(umbral != null){
-						planL.setUmbral(umbral);
-						numero = umbral.compareTo(planL.getUtilidad_Cumplimiento().divide(new BigDecimal("100.00")));
+				DetalleDao daoD = new DetalleDao();
+				listaplan = daoD.listarPlanSinPrueba(tipo, funcionario.getId_funcionario());
+				//listaplan = daoD.listarPlan(funcionario.getId_funcionario());
+			Plan planLinea2_3 = null;	
+			for (Plan plan : listaplan) {
+					
+					if(tipo == "funcionarioI" &&  plan.getLinea().getId() == 2){
+						planLinea2_3 = new Plan();
+						for(int k=0; k<listaplan.size(); k++){
+							
+							if(listaplan.get(k).getLinea().getId() == 3)
+								planLinea2_3 = listaplan.get(k);
+						}
+						plan.setIngreso_Real(plan.getIngreso_Real().add(planLinea2_3.getIngreso_Real()));
+						plan.setUtilidad_Real(plan.getUtilidad_Real().add(planLinea2_3.getUtilidad_Real()));
+						plan.setIngreso(plan.getIngreso().add(planLinea2_3.getIngreso()));
+						plan.setUtilidad(plan.getUtilidad().add(planLinea2_3.getUtilidad()));
 					}
-					else{
-						planL.setUmbral(planL.getFuncionario().getComision().getUmbralVenta());
-						numero = planL.getFuncionario().getComision().getUmbralVenta().compareTo(planL.getUtilidad_Cumplimiento().divide(new BigDecimal("100.00")));
+					else if(tipo == "funcionarioI" &&  plan.getLinea().getId() == 3){
+						plan.setIngreso_Real(new BigDecimal("0.00"));
+						plan.setUtilidad_Real(new BigDecimal("0.00"));
+						plan.setIngreso(new BigDecimal("0.00"));
+						plan.setUtilidad(new BigDecimal("0.00"));
 					}
 					
-					if(numero == 1 ){
-						plan.setValor_Comision_Pagar(new BigDecimal("0.00"));
-						total = total.add(plan.getValor_Comision_Pagar());
-						accion= new DecimalFormat("###,###").format(total);
-						planL.setImagen("rojo.png");
-					}
-					else{
-						valorUtilidad= planL.getDistribucion_Linea().multiply(planL.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
-						valorUtilidad= valorUtilidad.multiply(planL.getUtilidad_Cumplimiento()).divide(new BigDecimal("100.00")); 
-						planL.setValor_Comision_Pagar(valorUtilidad);
-						total = total.add(planL.getValor_Comision_Pagar());
-						accion= new DecimalFormat("###,###").format(total);
-						planL.setImagen("verde.png");
-					}
-				}
-				totalPreIng = new DecimalFormat("###,###").format(totalPresupuesto);
-				totalPreUti = new DecimalFormat("###,###").format(totalPresupuestoUtilidad);
-				totalRealIng = new DecimalFormat("###,###").format(totalValorReal);
-				totalRealUti = new DecimalFormat("###,###").format(totalValorUtilidad);
-				 desempenoVentas();
-			}
-		} catch (RuntimeException ex) {
-			ex.printStackTrace();
-			Messages.addGlobalError("Error no se Cargo la lista del Plan");
-		}
-	}
-	
-	public void listarPlanPorFechas(){
-		
-		try {
-			total =  new BigDecimal("0.00");
-			BigDecimal totalPresupuesto = new BigDecimal("0.00");
-			BigDecimal totalPresupuestoUtilidad = new BigDecimal("0.00");
-			BigDecimal totalValorReal = new BigDecimal("0.00");
-			BigDecimal totalValorUtilidad = new BigDecimal("0.00");
-			BigDecimal valorReal = new BigDecimal("0.00");
-			BigDecimal valorUtilidad = new BigDecimal("0.00");
-			int numero = 0;
-			
-			FuncionarioDao daoF = new FuncionarioDao();
-			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
-			
-			if(fechaBusqueda != null && fechaBusquedaYear != null){
-				DetalleDao daoD = new DetalleDao();	
-				if(autenticacion.getTipoVendedor().equals("I") ){
-					tipo = "funcionarioI";
-				}
-				else{
-					tipo= "funcionario";
-				}
-				listaplan = daoD.listarPlanPorFechas(funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
-				
-				for (Plan plan : listaplan) {
 					totalPresupuesto = totalPresupuesto.add(plan.getIngreso());
 					totalPresupuestoUtilidad = totalPresupuestoUtilidad.add(plan.getUtilidad()); 
 					totalValorReal = totalValorReal.add(plan.getIngreso_Real());
@@ -182,23 +137,158 @@ public class PlanBean implements Serializable {
 					totalRealUti = new DecimalFormat("###,###").format(totalValorUtilidad);
 					
 					if (plan.getIngreso() == null || plan.getIngreso().compareTo(BigDecimal.ZERO) == 0  ){
-						plan.setIngreso_Real(new BigDecimal("0"));
-						valorReal = plan.getIngreso_Real();
+						valorReal = new BigDecimal("0");
+						plan.setIngreso_Cumplimiento(valorReal.setScale(2, BigDecimal.ROUND_HALF_UP));
 					}
 					else{
-						valorReal = plan.getIngreso_Real().divide(plan.getIngreso(), 3, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
-						plan.setIngreso_Cumplimiento(valorReal);
+						valorReal = plan.getIngreso_Real().divide(plan.getIngreso(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+						plan.setIngreso_Cumplimiento(valorReal.setScale(2, BigDecimal.ROUND_HALF_UP));
 					}
-					valorReal = plan.getUtilidad_Real().divide(plan.getUtilidad(), 3, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
-					plan.setUtilidad_Cumplimiento(valorReal);
+					
+					if(plan.getUtilidad() == null || plan.getUtilidad().compareTo(BigDecimal.ZERO) == 0){
+						valorReal = new BigDecimal("0");
+						plan.setUtilidad_Cumplimiento(valorReal.setScale(2, BigDecimal.ROUND_HALF_UP));
+					}
+					else{
+						valorReal = plan.getUtilidad_Real().divide(plan.getUtilidad(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+						plan.setUtilidad_Cumplimiento(valorReal.setScale(2, BigDecimal.ROUND_HALF_UP));
+					}
+					
+					if(umbral != null){
+						plan.setUmbral(umbral);
+						numero = umbral.compareTo(plan.getIngreso_Cumplimiento().divide(new BigDecimal("100.00")));
+					}
+					else{
+					    plan.setUmbral(plan.getFuncionario().getComision().getUmbralVenta());
+					    numero = plan.getFuncionario().getComision().getUmbralVenta().compareTo(plan.getIngreso_Cumplimiento().divide(new BigDecimal("100.00")));
+					}
+					if(numero == 1 ){
+						plan.setValor_Comision_Pagar(new BigDecimal("0.00"));
+						total = total.add(plan.getValor_Comision_Pagar());
+						accion= new DecimalFormat("###,###").format(total);
+						plan.setImagen("rojo.png");
+					}
+					else{
+						
+						if(plan.getLinea().getId() == 15){
+							if(plan.getIngreso_Real().intValue() >= 137891000){
+								plan.setValor_Comision_Pagar(new BigDecimal("0.00"));
+								total = total.add(plan.getValor_Comision_Pagar());
+								accion= new DecimalFormat("###,###").format(total);
+								plan.setImagen("rojo.png");
+							}
+							else{
+								valorUtilidad= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
+								valorUtilidad= valorUtilidad.multiply(plan.getIngreso_Cumplimiento()); 
+								plan.setValor_Comision_Pagar(valorUtilidad);
+								total = total.add(plan.getValor_Comision_Pagar());
+								accion = new DecimalFormat("###,###").format(total);
+								plan.setImagen("verde.png");
+							}
+						}
+						else{
+							valorUtilidad= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
+							valorUtilidad= valorUtilidad.multiply(plan.getIngreso_Cumplimiento()); 
+							plan.setValor_Comision_PagarR(valorUtilidad);
+							total = total.add(plan.getValor_Comision_Pagar());
+							accion = new DecimalFormat("###,###").format(total);
+							plan.setImagen("verde.png");
+						}
+					}
+					plan.setDistribucion_Linea(plan.getDistribucion_Linea().multiply(new BigDecimal("100")));
+			}
+			autenticacion.setFechaBusqueda(fechaBusqueda);
+			autenticacion.setFechaBusquedaYear(fechaBusquedaYear);
+					
+					
+			}
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se Cargo la lista del Plan");
+		}
+	}
+	
+	//*Lista los datos del Plan del vendedor interno y externo  Por fecha de busqueda*//
+	public void listarPlanPorFechas(){
+		
+		try {
+			//tipo =(autenticacion.getUsuarioLogin().getId() == 4)? "funcionario" : "funcionarioI";
+			total =  new BigDecimal("0.00");
+			totalR =  new BigDecimal("0.00");
+			BigDecimal totalPresupuesto = new BigDecimal("0.00");
+			BigDecimal totalPresupuestoUtilidad = new BigDecimal("0.00");
+			BigDecimal totalValorReal = new BigDecimal("0.00");
+			BigDecimal totalValorUtilidad = new BigDecimal("0.00");
+			BigDecimal valorReal = new BigDecimal("0.00");
+			BigDecimal valorUtilidad = new BigDecimal("0.00");
+			BigDecimal valorUtilidadR = new BigDecimal("0.00");
+			int numero = 0;
+			int numero1 = 0;
+			//int i = 0;
+			
+			FuncionarioDao daoF = new FuncionarioDao();
+			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
+			DetalleDao daoD = new DetalleDao();
+			System.out.println("FechasSalir " + fechaBusquedaYear + fechaBusqueda);
+			if(fechaBusqueda != null && fechaBusquedaYear != null){
+				System.out.println(tipo + "Fechas " + fechaBusquedaYear + fechaBusqueda + funcionario.getId_funcionario());
+				listaplan = daoD.listarPlanPorFechasSinPrueba(tipo, funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
+				
+				//int progress1 = 100/listaplanV.size();
+				Plan planLinea2_3 = null;
+				for (Plan plan : listaplan) {
+					
+					if(tipo == "funcionarioI" &&  plan.getLinea().getId() == 2){
+						planLinea2_3 = new Plan();
+						for(int k=0; k<listaplan.size(); k++){
+							
+							if(listaplan.get(k).getLinea().getId() == 3)
+								planLinea2_3 = listaplan.get(k);
+						}
+						plan.setIngreso_Real(plan.getIngreso_Real().add(planLinea2_3.getIngreso_Real()));
+						plan.setUtilidad_Real(plan.getUtilidad_Real().add(planLinea2_3.getUtilidad_Real()));						
+					}
+					else if(tipo == "funcionarioI" &&  plan.getLinea().getId() == 3){
+						plan.setIngreso_Real(new BigDecimal("0.00"));
+						plan.setUtilidad_Real(new BigDecimal("0.00"));
+					}
+					System.out.println(plan.getIngreso_Real()+ "%%" + plan.getUtilidad_Real());
+					totalPresupuesto = totalPresupuesto.add(plan.getIngreso());
+					totalPresupuestoUtilidad = totalPresupuestoUtilidad.add(plan.getUtilidad()); 
+					totalValorReal = totalValorReal.add(plan.getIngreso_Real());
+					totalValorUtilidad = totalValorUtilidad.add(plan.getUtilidad_Real());
+					totalPreIng = new DecimalFormat("###,###").format(totalPresupuesto);
+					totalPreUti = new DecimalFormat("###,###").format(totalPresupuestoUtilidad);
+					totalRealIng = new DecimalFormat("###,###").format(totalValorReal);
+					totalRealUti = new DecimalFormat("###,###").format(totalValorUtilidad);
+					
+					if (plan.getIngreso() == null || plan.getIngreso().compareTo(BigDecimal.ZERO) == 0  ){
+						valorReal = new BigDecimal("0");
+						plan.setIngreso_Cumplimiento(valorReal.setScale(2, BigDecimal.ROUND_HALF_UP));
+					}
+					else{
+						valorReal = plan.getIngreso_Real().divide(plan.getIngreso(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+						plan.setIngreso_Cumplimiento(valorReal.setScale(2, BigDecimal.ROUND_HALF_UP));
+					}
+					
+					if(plan.getUtilidad() == null || plan.getUtilidad().compareTo(BigDecimal.ZERO) == 0){
+						valorReal = new BigDecimal("0");
+						plan.setUtilidad_Cumplimiento(valorReal.setScale(2, BigDecimal.ROUND_HALF_UP));
+					}
+					else{
+						valorReal = plan.getUtilidad_Real().divide(plan.getUtilidad(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+						plan.setUtilidad_Cumplimiento(valorReal.setScale(2, BigDecimal.ROUND_HALF_UP));
+					}
 					
 					if(umbral != null){
 						plan.setUmbral(umbral);
 						numero = umbral.compareTo(plan.getUtilidad_Cumplimiento().divide(new BigDecimal("100.00")));
+						numero1 = umbral.compareTo(plan.getIngreso_Cumplimiento().divide(new BigDecimal("100.00")));
 					}
 					else{
 					    plan.setUmbral(plan.getFuncionario().getComision().getUmbralVenta());
 					    numero = plan.getFuncionario().getComision().getUmbralVenta().compareTo(plan.getUtilidad_Cumplimiento().divide(new BigDecimal("100.00")));
+					    numero1 = plan.getFuncionario().getComision().getUmbralVenta().compareTo(plan.getIngreso_Cumplimiento().divide(new BigDecimal("100.00")));
 					}
 					
 					if(numero == 1 ){
@@ -208,15 +298,72 @@ public class PlanBean implements Serializable {
 						plan.setImagen("rojo.png");
 					}
 					else{
-						valorUtilidad= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
-						//valorUtilidad= valorUtilidad.multiply(plan.getUtilidad_Cumplimiento()).divide(new BigDecimal("100.00"));
-						valorUtilidad= valorUtilidad.multiply(plan.getUtilidad_Cumplimiento());
-						plan.setValor_Comision_Pagar(valorUtilidad);
-						total = total.add(plan.getValor_Comision_Pagar());
-						accion= new DecimalFormat("###,###").format(total);
-						plan.setImagen("verde.png");
+						
+						if(plan.getLinea().getId() == 15){
+							
+							if(plan.getUtilidad_Real().intValue() >= 137891000){
+								plan.setValor_Comision_Pagar(new BigDecimal("0.00"));
+								total = total.add(plan.getValor_Comision_Pagar());
+								accion= new DecimalFormat("###,###").format(total);
+								plan.setImagen("rojo.png");
+							}
+							else{
+								valorUtilidad= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
+								valorUtilidad= valorUtilidad.multiply(plan.getUtilidad_Cumplimiento()); 
+								plan.setValor_Comision_Pagar(valorUtilidad);
+								total = total.add(plan.getValor_Comision_Pagar());
+								accion= new DecimalFormat("###,###").format(total);
+								plan.setImagen("verde.png");
+							}
+						}
+						else{
+							valorUtilidad= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
+							valorUtilidad= valorUtilidad.multiply(plan.getUtilidad_Cumplimiento());
+							plan.setValor_Comision_Pagar(valorUtilidad);
+							total = total.add(plan.getValor_Comision_Pagar());
+							accion= new DecimalFormat("###,###").format(total);
+							plan.setImagen("verde.png");
+						}
 					}
-				}			
+					
+					if(numero1 == 1 ){
+						plan.setValor_Comision_PagarR(new BigDecimal("0.00"));
+						totalR = totalR.add(plan.getValor_Comision_PagarR());
+						accionR= new DecimalFormat("###,###").format(totalR);
+						plan.setImagen("rojo.png");
+					}
+					else{
+						
+						if(plan.getLinea().getId() == 15){
+							if(plan.getIngreso_Real().intValue() >= 137891000){
+								plan.setValor_Comision_PagarR(new BigDecimal("0.00"));
+								totalR = totalR.add(plan.getValor_Comision_PagarR());
+								accionR= new DecimalFormat("###,###").format(totalR);
+								plan.setImagen("rojo.png");
+							}
+							else{
+								valorUtilidadR= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
+								valorUtilidadR= valorUtilidadR.multiply(plan.getIngreso_Cumplimiento()); 
+								plan.setValor_Comision_PagarR(valorUtilidadR);
+								totalR = totalR.add(plan.getValor_Comision_PagarR());
+								accionR = new DecimalFormat("###,###").format(totalR);
+								plan.setImagen("verde.png");
+							}
+						}
+						else{
+							valorUtilidadR= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
+							valorUtilidadR= valorUtilidadR.multiply(plan.getIngreso_Cumplimiento()); 
+							plan.setValor_Comision_PagarR(valorUtilidadR);
+							totalR = totalR.add(plan.getValor_Comision_PagarR());
+							accionR = new DecimalFormat("###,###").format(totalR);
+							plan.setImagen("verde.png");
+						}
+					}
+					plan.setDistribucion_Linea(plan.getDistribucion_Linea().multiply(new BigDecimal("100")));
+//					plan.setDistribucion_Linea(plan.getDistribucion_Linea().setScale(2, BigDecimal.ROUND_HALF_UP));
+					
+				}
+				
 			}
 			autenticacion.setFechaBusqueda(fechaBusqueda);
 			autenticacion.setFechaBusquedaYear(fechaBusquedaYear);
@@ -231,9 +378,9 @@ public class PlanBean implements Serializable {
 		try{
 			if(autenticacion.getFechaBusqueda() != null && autenticacion.getFechaBusquedaYear() != null){
 				DetalleDao dao = new DetalleDao();
-				listaDetalle1 = dao.listarDetallePorFecha(codigo, idPersona, autenticacion.getFechaBusqueda(), autenticacion.getFechaBusquedaYear());
+				listaDetalle1 = dao.listarDetallePorFecha(tipo,codigo, idPersona, autenticacion.getFechaBusqueda(), autenticacion.getFechaBusquedaYear());
 				int i = 0;
-				for (Detalle detalle : listaDetalle1) {
+				for (Detallesin detalle : listaDetalle1) {
 					listaDetalle1.get(i).setValorNeto(listaDetalle1.get(i).getValorNeto()* -1);
 					totalDetalle += detalle.getValorNeto();
 					i++;
@@ -242,9 +389,9 @@ public class PlanBean implements Serializable {
 			}
 			else{
 				DetalleDao dao = new DetalleDao();
-				listaDetalle1 = dao.listarDetalle(codigo, idPersona);
+				listaDetalle1 = dao.listarDetallePorFecha(tipo,codigo, idPersona, autenticacion.getFechaBusqueda(), autenticacion.getFechaBusquedaYear());
 				int i = 0;
-				for (Detalle detalle : listaDetalle1) {
+				for (Detallesin detalle : listaDetalle1) {
 					listaDetalle1.get(i).setValorNeto(listaDetalle1.get(i).getValorNeto()* -1);
 					totalDetalle += detalle.getValorNeto();
 					i++;
@@ -371,69 +518,7 @@ public class PlanBean implements Serializable {
 		}
 	}
 
-	public void cargarFechas(){
-		   
-		   listaFechas = new ArrayList<>();	
-	       Fechas fechas = new Fechas();
-	       fechas.setValorMes("01");
-	       fechas.setMes( "Enero");
-	       listaFechas.add(0,fechas);
-	       
-	       fechas = new Fechas();
-	       fechas.setValorMes("02");
-	       fechas.setMes( "Febrero");
-	       listaFechas.add(1,fechas);
-	       
-	       fechas = new Fechas();
-	       fechas.setValorMes("03");
-	       fechas.setMes( "Marzo");
-	       listaFechas.add(fechas);
-	       
-	       fechas = new Fechas();
-	       fechas.setValorMes("04");
-	       fechas.setMes( "Abril");	       
-	       listaFechas.add(fechas);
-	       
-	       fechas = new Fechas();
-	       fechas.setValorMes("05");
-	       fechas.setMes( "Mayo");
-	       listaFechas.add(fechas);
-	       
-	       fechas = new Fechas();
-	       fechas.setValorMes("06");
-	       fechas.setMes( "Junio");
-	       listaFechas.add(fechas);
-	       
-	       fechas = new Fechas();
-	       fechas.setValorMes("07");
-	       fechas.setMes( "Julio");
-	       listaFechas.add(fechas);
-	       
-	       fechas = new Fechas();
-	       fechas.setValorMes("08");
-	       fechas.setMes( "Agosto");
-	       listaFechas.add(fechas);
-	       
-	       fechas = new Fechas();
-	       fechas.setValorMes("09");
-	       fechas.setMes( "Septiembre");
-	       listaFechas.add(fechas);
-	       
-	       fechas = new Fechas();
-	       fechas.setValorMes("10");
-	       fechas.setMes( "Octubre");
-	       listaFechas.add(fechas);
-	       
-	       fechas = new Fechas();
-	       fechas.setValorMes("11");
-	       fechas.setMes( "Noviembre");
-	       listaFechas.add(fechas);
-	       
-	       fechas = new Fechas();
-	       fechas.setValorMes("12");
-	       fechas.setMes( "Diciembre");
-	       listaFechas.add(fechas);
-		}
+	
 	
 	public List<Plan> getListaplan() {
 		return listaplan;
@@ -496,42 +581,25 @@ public class PlanBean implements Serializable {
 	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
-
-
-	public List<Detalle> getListaDetalle1() {
-		return listaDetalle1;
-	}
-
-
-	public void setListaDetalle1(List<Detalle> listaDetalle1) {
-		this.listaDetalle1 = listaDetalle1;
-	}
-
-
 	public Date getFechaInicial() {
 		return fechaInicial;
 	}
-
 
 	public void setFechaInicial(Date fechaInicial) {
 		this.fechaInicial = fechaInicial;
 	}
 
-
 	public Date getFechaFinal() {
 		return fechaFinal;
 	}
-
 
 	public void setFechaFinal(Date fechaFinal) {
 		this.fechaFinal = fechaFinal;
 	}
 
-
 	public AutenticacionBean getAutenticacion() {
 		return autenticacion;
 	}
-
 
 	public void setAutenticacion(AutenticacionBean autenticacion) {
 		this.autenticacion = autenticacion;
@@ -641,5 +709,36 @@ public class PlanBean implements Serializable {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	
+
+	public Recursos getRecurso() {
+		return recurso;
+	}
+
+	public void setRecurso(Recursos recurso) {
+		this.recurso = recurso;
+	}
+
+	public BigDecimal getTotalR() {
+		return totalR;
+	}
+
+	public void setTotalR(BigDecimal totalR) {
+		this.totalR = totalR;
+	}
+
+	public String getAccionR() {
+		return accionR;
+	}
+
+	public void setAccionR(String accionR) {
+		this.accionR = accionR;
+	}
+
+	public List<Detallesin> getListaDetalle1() {
+		return listaDetalle1;
+	}
+
+	public void setListaDetalle1(List<Detallesin> listaDetalle1) {
+		this.listaDetalle1 = listaDetalle1;
+	}
 }
