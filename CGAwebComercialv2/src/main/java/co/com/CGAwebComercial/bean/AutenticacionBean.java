@@ -68,6 +68,10 @@ public class AutenticacionBean implements Serializable {
 				Messages.addGlobalError("La el usuario o la cantraseña son incorrectas", "info");
 				return null;
 			}
+			else if(usuarioLogin.getPerfil().getId() == 1  || usuarioLogin.getPerfil().getId() == 6 ){
+				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
+				return "ve/vistaModulo.xhtml?faces-redirect=true";
+			}
 			else{
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
 				return "vistaModulo.xhtml?faces-redirect=true";

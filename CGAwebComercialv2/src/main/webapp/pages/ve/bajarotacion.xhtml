@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	
+	<ui:define name="contenido">
+	<f:metadata>
+		<f:viewParam name="perIdR" value="#{vendedorLBRBean.indexVIE}"/>
+		<f:viewParam name="tipo" value="#{vendedorLBRBean.tipo}"/>	
+		<f:event listener="#{vendedorLBRBean.vendedorLBR()}" type="preRenderView" />
+	</f:metadata>
+	
+		<h:form id="frmPlan">
+			<p:panel>
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" paginator="true"
+					value="#{vendedorLBRBean.listaVendedores}" var="vendedor"
+					rows="10" paginatorPosition="bottom">
+
+					<f:facet name="header">
+						<h:outputText value="Lenta y Baja rotación" /> 
+			        </f:facet>
+			        
+			        <p:column headerText="Cedula" >
+						<h:outputText value="#{vendedor.cedula}" />
+					</p:column>
+					
+					<p:column headerText="Cod SAP" >
+						<h:outputText value="#{vendedor.id}" />
+					</p:column>
+					
+					<p:column headerText="Nombre" width="30%">
+						<h:outputText value="#{vendedor.nombre}" />
+					</p:column>
+
+					<p:column headerText="Valor total" style="text-align:right">
+						<h:outputText value="#{vendedor.ingresoReal}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Detalle" style="width:10%; text-align:center">
+						<p:button icon="ui-icon-search"
+							outcome="/pages/ve/detallebajarotacion.xhtml?faces-redirect=true">
+							<f:param name="perId" value="#{vendedor.id}"/>
+							<f:param name="tipo" value="#{vendedorLBRBean.tipo}"/>
+						</p:button>
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a"/>
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+
+		</h:form>
+		<h:form>
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Fecha:" />
+				<p:selectOneMenu value="#{vendedorLBRBean.autenticacion.fechaBusqueda}" filter="true"
+					style="width:180px;" required="true">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
+					<f:selectItems value="#{vendedorLBRBean.listaFechas}" var="item"
+						itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu value="#{vendedorLBRBean.autenticacion.fechaBusquedaYear}"
+					style="width:100px;" >
+					<f:selectItem itemValue="2016" itemLabel="2016" />
+				</p:selectOneMenu>
+				
+				<p:commandButton value="Buscar" actionListener="#{vendedorLBRBean.vendedorLBR()}"
+				  update=":frmPlan:tblPlan" style="background: #b94a48"/>
+				
+			</h:panelGrid>
+		</h:form>
+		
+	</ui:define>
+
+</ui:composition>
+</html>

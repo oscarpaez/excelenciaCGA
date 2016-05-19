@@ -245,8 +245,10 @@ public class PlanBean implements Serializable {
 							if(listaplan.get(k).getLinea().getId() == 3)
 								planLinea2_3 = listaplan.get(k);
 						}
+						System.out.println(plan.getIngreso_Real());
 						plan.setIngreso_Real(plan.getIngreso_Real().add(planLinea2_3.getIngreso_Real()));
-						plan.setUtilidad_Real(plan.getUtilidad_Real().add(planLinea2_3.getUtilidad_Real()));						
+						plan.setUtilidad_Real(plan.getUtilidad_Real().add(planLinea2_3.getUtilidad_Real()));
+						System.out.println(plan.getIngreso_Real());
 					}
 					else if(tipo == "funcionarioI" &&  plan.getLinea().getId() == 3){
 						plan.setIngreso_Real(new BigDecimal("0.00"));
@@ -434,8 +436,8 @@ public class PlanBean implements Serializable {
 				FuncionarioDao daoF = new FuncionarioDao();
 				Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
 				
-				List<Long>  PV = dao.listarDetalleValorNeto(funcionario.getId_funcionario());
-				List<Long>  PPT = dao.listarDetalleCostoTotal(funcionario.getId_funcionario());
+				List<Long>  PV = dao.listarDetalleValorNeto(tipo,funcionario.getId_funcionario());
+				List<Long>  PPT = dao.listarDetalleCostoTotal(tipo, funcionario.getId_funcionario());
 				for (Recaudo recaudo : listaRecaudo) {
 					
 					P[i] = recaudo.getPresupuesto().intValue();

@@ -12,12 +12,11 @@
 			
 			<h:form id="frmPlan" >
 				<p:panel>
-					<p:outputLabel value="Estos datos son dinamicos y temporales debido al no cierre del periodo" />
 					<f:facet name="header">
 						 <p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 			        </f:facet>
 				
-					<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="true" 
+					<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="false" 
 						value="#{planBean.listaplan}" var="plan" rows="15"
 						paginatorPosition="bottom"	>
 					
@@ -94,18 +93,23 @@
 			        </p:columnGroup>
 			        
 			        <f:facet name="footer">
-			        	<p:button value="Recaudo" outcome="/pages/recaudo.xhtml?faces-redirect=true" >
+			        	
+						<p:button value="Lenta y Baja Rotación" outcome="/pages/ve/bajarotacion.xhtml?faces-redirect=true" 
+							style="height:30px; background:#914294">
+							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
+							<f:param name="tipo" value="#{planBean.tipo}"/>							
+						</p:button>
+						
+						<p:button value="Recaudo" outcome="/pages/recaudo.xhtml?faces-redirect=true" 
+							style="height:30px; background:#3f8507">
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>							
 						</p:button>
-						<p:commandButton value="Desempeño Recaudo" oncomplete="PF('dlgDesRec').show();"  
-							actionListener="#{planBean.desempenoVentas()}" style="background:#aa4200"/>
-						<p:commandButton value="Desempeño Ventas" oncomplete="PF('dlgDesVen').show();"  
-							actionListener="#{planBean.desempenoVentas()}" style="background:#01AB55"/>
-						<p:commandButton value="Promedio de Ventas" oncomplete="PF('dlgProVen').show();"  
-							actionListener="#{planBean.promedioVentas()}" style="background:#ff4136"
-								update="frmProVen:pnlProVen"/>
 						
-							
+						<p:button value="Contado y Anticipo" outcome="/pages/ve/contadoAnticipo.xhtml?faces-redirect=true"
+							style="height:30px; background:#ff0000" >
+							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>							
+						</p:button>
+						
 					</f:facet>	 
 					</p:dataTable>
 				</p:panel>

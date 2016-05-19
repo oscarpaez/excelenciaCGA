@@ -65,9 +65,9 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			Funcionario funcionario = dao.buscarPersona(idPersona);
 			Zona_ventaDao daoZ = new Zona_ventaDao();
 			List<Zona_venta> zona = daoZ.buscarZona(funcionario.getId_funcionario());
-
+			
 			ComisionDao daoC = new ComisionDao();
-			Comision comision = daoC.buscar(1);
+			Comision comision = daoC.buscar(funcionario.getComision().getIdComision());
 			for (Zona_venta zona_venta : zona) {
 				Criteria consulta = session.createCriteria(Recaudo.class);			
 				consulta.createAlias("zonaVenta", "z");
@@ -117,7 +117,7 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 
 	}
 
-	public List<Long> listarDetalleValorNeto(int idPersona){
+	public List<Long> listarDetalleValorNeto(String tipo, int idPersona){
 
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		List<Long> ValorNeto = new ArrayList<>();
@@ -126,15 +126,14 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			System.out.println(meses);
 			Date fechaFinal = null;
 			Date fechaInicial = null;
-			DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-			for (int i=1; i< meses; i++){
-				String fecFinal = "2016-0"+i+"-31";
-				fechaFinal = formatoFecha.parse(fecFinal);
-
-				String fecInicial = "2016-0"+i+"-01";
+			DateFormat formatoFecha = new SimpleDateFormat("yyyy/MM/dd");
+			for (int i=1; i<meses; i++){
+				String fecInicial = "2016/0"+i+"/01";
 				fechaInicial  = formatoFecha.parse(fecInicial);
+				String fecFinal = (i== 2)? "2016/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? "2016/0"+i+"/30" :"2016/0"+i+"/31";
+				fechaFinal = formatoFecha.parse(fecFinal);
 				Criteria consulta = session.createCriteria(Detalle.class);
-				consulta.add(Restrictions.eq("funcionario", idPersona));
+				consulta.add(Restrictions.eq(tipo, idPersona));
 				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("valorNeto"));
 				Long totalWages = (Long) consulta.uniqueResult();
@@ -153,8 +152,45 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 		}
 		return ValorNeto;	
 	}
+	
+	public List<Long> listarDetalleValorDescuento(String tipo,int idPersona){
 
-	public List<Long> listarDetalleCostoTotal(int idPersona){
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<Long> ValorDescuento = new ArrayList<>();
+		try{
+			int meses = fechaFinalR();
+			System.out.println(meses);
+			Date fechaFinal;
+			Date fechaInicial;
+			DateFormat formatoFecha = new SimpleDateFormat("yyyy/MM/dd");
+			for (int i=1; i<meses; i++){
+				String fecInicial = "2016/0"+i+"/01";
+				fechaInicial  = formatoFecha.parse(fecInicial);
+				String fecFinal = (i== 2)? "2016/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? "2016/0"+i+"/30" :"2016/0"+i+"/31";
+				fechaFinal = formatoFecha.parse(fecFinal);
+				
+				Criteria consulta = session.createCriteria(Detalle.class);
+				consulta.add(Restrictions.eq(tipo, idPersona));
+				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
+				consulta.setProjection(Projections.sum("valorDescuentos"));
+				long totalWages = (long) consulta.uniqueResult();
+				ValorDescuento.add(totalWages);
+			}
+			return ValorDescuento;
+
+		} catch (RuntimeException ex) {
+			throw ex;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally{
+			session.close();
+		}
+		return ValorDescuento;	
+	}
+
+	public List<Long> listarDetalleCostoTotal(String tipo, int idPersona){
 
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		List<Long> costoTotal = new ArrayList<>();
@@ -163,15 +199,14 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			System.out.println(meses);
 			Date fechaFinal = null;
 			Date fechaInicial = null;
-			DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-			for (int i=1; i< meses; i++){
-				String fecFinal = "2016-0"+i+"-31";
-				fechaFinal = formatoFecha.parse(fecFinal);
-
-				String fecInicial = "2016-0"+i+"-01";
+			DateFormat formatoFecha = new SimpleDateFormat("yyyy/MM/dd");
+			for (int i=1; i<meses; i++){
+				String fecInicial = "2016/0"+i+"/01";
 				fechaInicial  = formatoFecha.parse(fecInicial);
+				String fecFinal = (i== 2)? "2016/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? "2016/0"+i+"/30" :"2016/0"+i+"/31";
+				fechaFinal = formatoFecha.parse(fecFinal);
 				Criteria consulta = session.createCriteria(Detalle.class);
-				consulta.add(Restrictions.eq("funcionario", idPersona));
+				consulta.add(Restrictions.eq(tipo, idPersona));
 				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("costoTotal"));
 				Long totalWages = (Long) consulta.uniqueResult();
@@ -306,5 +341,91 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			session.close();
 		}
 	}
+	
+	//*Listar recaudo de internos para las graficas*//
+	@SuppressWarnings({ "unchecked" })
+	public List<Recaudo> carteraInternosGraficas(int codSap){
 
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<ComisionVendedores> listaoficinas = new ArrayList<>();
+		try{
+			
+			Criteria consulta = session.createCriteria(OficinaVendedorInterno.class);			
+			consulta.add(Restrictions.eq("codigosap", codSap));			
+			OficinaVendedorInterno listaVenInt = (OficinaVendedorInterno) consulta.uniqueResult();	
+			
+			Date fechaFinal;
+			Date fechaInicial;
+			ComisionVendedores sucursales = null;
+			
+			Recaudo itemSucursal = null ;
+			List<Recaudo> recaudo = null;
+			List<Recaudo> recaudoList = new ArrayList<>();
+			int ci = listaVenInt.getOficinadeventas();
+			//String c="";
+			System.out.println(ci);
+			int codCiudad = Integer.parseInt(""+Integer.toString(ci).charAt(0));
+			codCiudad = (codCiudad == 1)? codCiudad: codCiudad-1; 
+			CiudadDao daoC = new CiudadDao();
+			Ciudad ciudad = daoC.buscar(codCiudad);
+			Zona_ventaDao daoZ = new Zona_ventaDao();
+			List<Zona_venta> Listazona = daoZ.buscarZonaSucursal(ciudad.getId());
+				
+			
+			sucursales = new ComisionVendedores();
+			sucursales.setId(ciudad.getId());
+			sucursales.setNombre(ciudad.getNombre());
+			int meses = fechaFinalR();
+			DateFormat formatoFecha = new SimpleDateFormat("yyyy/MM/dd");
+			System.out.println(meses);
+			for (int i=1; i<meses; i++){
+				String fecInicial = "2016/0"+i+"/01";
+				fechaInicial  = formatoFecha.parse(fecInicial);
+				String fecFinal = (i== 2)? "2016/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? "2016/0"+i+"/30" :"2016/0"+i+"/31";
+				fechaFinal = formatoFecha.parse(fecFinal);
+				BigDecimal sumaR = new BigDecimal("0.00");
+				BigDecimal sumaP = new BigDecimal("0.00");
+				for (Zona_venta zona_venta : Listazona) {
+					System.out.println("zona" + zona_venta.getId_zona_venta());
+					consulta = session.createCriteria(Recaudo.class);			
+					consulta.createAlias("zonaVenta", "z");
+					consulta.add(Restrictions.eq("z.id_zona_venta", zona_venta.getId_zona_venta()));
+					consulta.add(Restrictions.between("fecha", fechaInicial, fechaFinal));
+					recaudo = consulta.list();
+					System.out.println("Tamaño recaudo" + recaudo.size());
+					for (Recaudo recaudo1 : recaudo ) {
+						itemSucursal = new Recaudo();
+						sumaR = sumaR.add(recaudo1.getReal());
+						itemSucursal.setReal(sumaR);
+						sumaP = sumaP.add(recaudo1.getPresupuesto());
+						itemSucursal.setPresupuesto(sumaP);
+
+						sucursales.setPresupuestoB(itemSucursal.getPresupuesto());
+						sucursales.setIngresoRealB(itemSucursal.getReal());
+						sucursales.setComision(itemSucursal.getPresupuesto().intValueExact());
+						//recaudo.add(itemSucursal);
+					}
+
+				}
+				System.out.println("Mwses"+ meses);
+				recaudoList.add(itemSucursal);
+				listaoficinas.add(sucursales);
+				sucursales = new ComisionVendedores();
+
+			}
+				
+			return recaudoList;
+		} catch (RuntimeException ex) {
+			throw ex;
+		}catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally{
+			session.close();
+		}
+		return null;
+		
+	
+	}
 }
