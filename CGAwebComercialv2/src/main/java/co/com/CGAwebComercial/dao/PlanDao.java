@@ -19,12 +19,8 @@ public class PlanDao extends GenericDao<Plan>{
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		List<Plan> plan = null;
 		try{
-			//Date fechaFinal = fechaFinal();
-			//Date fechaInicial = fechaInicial();
-			//System.out.println("El último día del mes es: " + fechaInicial + "--" +fechaFinal);
 			FuncionarioDao daof = new FuncionarioDao();
 			Funcionario funcionario = daof.buscarPersona(usuario.getPersona().getCedula());
-			System.out.println(funcionario.getId_funcionario()+ "fun");
 			int idF= funcionario.getId_funcionario();
 			Criteria consulta = session.createCriteria(Plan.class);
 			consulta.createAlias("funcionario", "f");

@@ -2,6 +2,7 @@ package co.com.CGAwebComercial.test;
 
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Ignore;
@@ -9,8 +10,9 @@ import org.junit.Test;
 
 import co.com.CGAwebComercial.dao.PresupuestoDao;
 import co.com.CGAwebComercial.dao.RecaudoDao;
+import co.com.CGAwebComercial.dao.Zona_ventaDao;
 import co.com.CGAwebComercial.entyties.Recaudo;
-import co.com.CGAwebComercial.util.ComisionVendedores;
+import co.com.CGAwebComercial.entyties.Zona_venta;
 
 public class RecaudoTest {
 
@@ -64,6 +66,7 @@ public class RecaudoTest {
 	}
 	
 	@Test
+	@Ignore
 	public void recaudoInternos() {
 		RecaudoDao dao = new RecaudoDao();
 		List<Recaudo> lista = dao.carteraInternosGraficas(116);
@@ -71,5 +74,37 @@ public class RecaudoTest {
 			System.out.println(lista.size() + "@@@@@+++" + long1.getPresupuesto());
 		}
 		
+	}
+	
+	@Test
+	@Ignore
+	public void sumalineasPais() {
+		PresupuestoDao daoP = new PresupuestoDao();
+		Date i = daoP.fechaInicial("04","2016");
+		Date f = daoP.fechaFinal("04","2016");
+		List<BigDecimal> l = daoP.datoPorLineaPais(1, 1000, i, f);
+		
+		for (BigDecimal long1 : l) {
+			System.out.println( "@@@@@+++" + long1);
+		}
+	}
+	
+	
+	@Test
+	@Ignore
+	public void listaDeZona(){
+		Zona_ventaDao daoZ = new Zona_ventaDao();
+		List <Zona_venta> listaV = daoZ.buscarZonaSucursal(1);
+		
+		for (Zona_venta zona_venta : listaV) {
+			System.out.println(zona_venta.getFuncionario().getId_funcionario());
+		}
+	}
+	
+	@Test
+	public void recaudoPaisPeriodosAn(){
+		
+		RecaudoDao dao = new RecaudoDao();
+		dao.recaudoPaisPeriodosAn();
 	}
 }

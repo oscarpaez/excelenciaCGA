@@ -64,19 +64,19 @@
 						<h:outputText value="#{autenticacionBean.fechaActual}" /> Plan Vendedores
 			        </f:facet>
 					
-					<p:column headerText="Cedula" filterBy="#{vendedor.cedula}"	sortBy="#{vendedor.cedula}" width="13%" >
+					<p:column headerText="Cedula" filterBy="#{vendedor.cedula}"	sortBy="#{vendedor.cedula}" width="10%" >
 						<h:outputText value="#{vendedor.cedula}" />
 					</p:column>
 					
-					<p:column headerText="cod Sap" filterBy="#{vendedor.id}" sortBy="#{vendedor.id}" width="13%" >
+					<p:column headerText="cod Sap" filterBy="#{vendedor.id}" sortBy="#{vendedor.id}" width="10%" >
 						<h:outputText value="#{vendedor.id}" />
 					</p:column>
 					
-					<p:column headerText="Nombre" filterBy="#{vendedor.nombre}" sortBy="#{vendedor.nombre}" width="13%">
+					<p:column headerText="Nombre" filterBy="#{vendedor.nombre}" sortBy="#{vendedor.nombre}" width="11%">
 						<h:outputText value="#{vendedor.nombre}" />
 					</p:column>
 
-					<p:column headerText="Tipo" width="10%">
+					<p:column headerText="Tipo" width="9%">
 						<h:outputText value="#{vendedor.tipo}">
 							<f:convertNumber locale="en_US" />
 						</h:outputText>
@@ -100,20 +100,14 @@
 						</h:outputText>
 					</p:column>
 
-					<p:column headerText="Comision Utilidad" width="9%" >
-						<h:outputText value="#{vendedor.comision}">
-							<f:convertNumber locale="en_US" />
-						</h:outputText>
-					</p:column>
-					
-					<p:column headerText="Liquidar" style="width:7%; text-align:center">
+					<p:column headerText="Liquidar" style="width:5%; text-align:center">
 						<p:commandButton icon="ui-icon-clock" actionListener="#{comisionBean.liquidar}"
 							oncomplete="PF('dlgNue').show();" update=" :frmNuePro:pnlNuePro" disabled="#{vendedor.liquidar}">
 							<f:attribute name="vendedorSelecionado" value="#{vendedor}" />						
 						</p:commandButton>
 					</p:column>
 					
-					<p:column headerText="Detalle" style="width:6%">
+					<p:column headerText="Detalle" style="width:5%">
 						<p:button icon="ui-icon-search"
 							outcome="/pages/gh/plan2.xhtml?faces-redirect=true">
 						    <f:param name="perId" value="#{vendedor.cedula}"/>	

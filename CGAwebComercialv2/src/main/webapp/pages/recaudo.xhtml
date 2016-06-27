@@ -63,11 +63,12 @@
 						<p:graphicImage library="images" name="#{recaudo.imagen}"  height="25" width="25" />
 					</p:column>					
 					
-					<p:column headerText="Valor Comision" >
+					<!-- <p:column headerText="Valor Comision" >
 						<h:outputText value="#{recaudo.valorComision}" >
 						  <f:convertNumber locale="pt_CO" />
 						</h:outputText>
-					</p:column>					
+						style="display:block; text-align:left"
+					</p:column> -->					
 					
 					<p:columnGroup type="footer">
 			            <p:row>
@@ -76,7 +77,7 @@
 			        </p:columnGroup>
 			        
 			        <f:facet name="footer" >
-			        	<h:panelGroup style="display:block; text-align:left">
+			        	<h:panelGroup >
 				            <p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a"/>
 				         </h:panelGroup>						
 					</f:facet>

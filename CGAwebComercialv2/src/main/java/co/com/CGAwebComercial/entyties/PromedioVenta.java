@@ -26,6 +26,8 @@ public class PromedioVenta implements Serializable {
 	
 	private int meta;
 	
+	private int metaD;
+	
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	private Funcionario funcionario;
@@ -79,5 +81,13 @@ public class PromedioVenta implements Serializable {
 
 	public void setValorPromedio(int valorPromedio) {
 		this.valorPromedio = valorPromedio;
+	}
+
+	public int getMetaD() {
+		return metaD;
+	}
+
+	public void setMetaD(int metaD) {
+		this.metaD = metaD;
 	} 
 }

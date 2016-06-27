@@ -1,7 +1,5 @@
 package co.com.CGAwebComercial.dao;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -82,11 +80,10 @@ public class ContadoAnticipoDao extends GenericDao<ContadoAnticipo>{
 					+ " AND  c.NoPersonal = :idFun" 
 					+ " AND  c.fecComp  BETWEEN :fecIni  AND  :fecFin ");
 			
-			DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-			String fecIni = formatoFecha.format(fechaInicial);
-			DateFormat formatoFechaFin = new SimpleDateFormat("yyyy-MM-dd");
-			String fecFin = formatoFechaFin.format(fechaFinal);
-			System.out.println(fecIni+"obj"+ fecFin);
+//			DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+//			String fecIni = formatoFecha.format(fechaInicial);
+//			DateFormat formatoFechaFin = new SimpleDateFormat("yyyy-MM-dd");
+//			String fecFin = formatoFechaFin.format(fechaFinal);
 			sql.setParameter("fecIni", fechaInicial);
 			sql.setParameter("fecFin", fechaFinal);
 			sql.setParameter("idFun", idFuncionario);
@@ -97,9 +94,7 @@ public class ContadoAnticipoDao extends GenericDao<ContadoAnticipo>{
 			
 			for (Iterator iterator = lista.iterator(); iterator.hasNext();) {
 				Object obj = (Object) iterator.next();
-				System.out.println("obj"+ obj);
 				ContadoAnticipo ca = (ContadoAnticipo) obj;
-				System.out.println("conA"+ ca.getVendedor());
 				listaCA.add(ca);
 			} 
 			return listaCA; 
@@ -134,11 +129,10 @@ public class ContadoAnticipoDao extends GenericDao<ContadoAnticipo>{
 					+ " AND  c.vendInterno = :idFun" 
 					+ " AND  c.fecComp  BETWEEN :fecIni  AND  :fecFin ");
 			
-			DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-			String fecIni = formatoFecha.format(fechaInicial);
-			DateFormat formatoFechaFin = new SimpleDateFormat("yyyy-MM-dd");
-			String fecFin = formatoFechaFin.format(fechaFinal);
-			System.out.println(fecIni+"obj"+ fecFin);
+//			DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+//			String fecIni = formatoFecha.format(fechaInicial);
+//			DateFormat formatoFechaFin = new SimpleDateFormat("yyyy-MM-dd");
+//			String fecFin = formatoFechaFin.format(fechaFinal);
 			sql.setParameter("fecIni", fechaInicial);
 			sql.setParameter("fecFin", fechaFinal);
 			sql.setParameter("idFun", idFuncionario);
@@ -147,9 +141,7 @@ public class ContadoAnticipoDao extends GenericDao<ContadoAnticipo>{
 			
 			for (Iterator iterator = lista.iterator(); iterator.hasNext();) {
 				Object obj = (Object) iterator.next();
-				System.out.println("obj"+ obj);
 				ContadoAnticipo ca = (ContadoAnticipo) obj;
-				System.out.println("conA"+ ca.getVendedor());
 				listaCA.add(ca);
 			} 
 			

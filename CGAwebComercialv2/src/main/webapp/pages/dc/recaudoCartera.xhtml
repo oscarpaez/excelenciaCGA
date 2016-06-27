@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+	<ui:define name="contenido">
+	
+		<f:metadata>
+			<f:viewParam name="perIdr" value="#{directorGBean.cod}" />
+		</f:metadata>
+		
+		<h:form id="frmPlan"  >
+			<p:panel>
+				<h:inputHidden value="#{directorGBean.tablaFun}" id="hiddenId" />
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" paginator="true"
+					value="#{directorGBean.listaComisionGerente}" var="gerente"
+					filteredValue="#{directorGBean.listaFiltrados}"
+					rows="10" paginatorPosition="bottom">
+
+					<f:facet name="header">
+						<h:outputText value="#{autenticacionBean.fechaActual}  Plan Gerente" />					</f:facet>
+					
+					<p:columnGroup type="header">
+			            <p:row>
+			                <p:column colspan="5" headerText="Cumplimiento de zonas a Cargo" />
+			            </p:row>
+			            
+			            <p:row>
+			                <p:column colspan="1" headerText="Plan Ingreso" />		                
+			                <p:column colspan="1" headerText="Real Ingreso" />		                
+			                <p:column colspan="1" headerText="Cumplimiento"  style="font-size: 10px;"/>
+			                <p:column colspan="1" headerText="Comision" />
+			            </p:row>
+					</p:columnGroup>
+					
+					<h:inputHidden id="cedula" value="gerente.cedula" />
+					<h:inputHidden id="codSap" value="gerente.id" />
+					<h:inputHidden id="nombre" value="gerente.nombre" />
+					
+					<p:column style="font-size: 11px;">
+						<h:outputText value="#{gerente.presupuestoB}">
+							<f:convertNumber locale="en_US" integerOnly="true" />
+						</h:outputText>
+					</p:column>
+
+					<p:column style="font-size: 11px;">
+						<h:outputText value="#{gerente.ingresoRealB }">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column style="font-size: 11px;">
+						<h:outputText value="#{gerente.cumplimiento} %">
+							<f:convertNumber locale="en_US"  maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column   style="text-align: center">
+						<p:graphicImage library="images" name="#{gerente.imagen1}"  height="25" width="25" />
+					</p:column>	
+					
+					<f:facet name="footer">
+						
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		
+		<h:form>
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Fecha:" />
+				<p:selectOneMenu value="#{directorGBean.autenticacion.fechaBusqueda}" filter="true"
+					style="width:180px;" required="true">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
+					<f:selectItems value="#{directorGBean.listaFechas}" var="item"
+						itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu value="#{directorGBean.autenticacion.fechaBusquedaYear}"
+					style="width:100px;">
+					<f:selectItem itemValue="2016" itemLabel="2016" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Buscar" update=":frmPlan:tblPlan"
+					actionListener="#{directorGBean.listarRecaudo()}"
+					style="background: #b94a48" 
+					 />
+			</h:panelGrid>
+		</h:form>
+		</ui:define>
+	</ui:composition>
+</html>

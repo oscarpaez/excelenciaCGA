@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		<ui:define name="contenido">
+			<div style="height: 40px">
+			<h:form>
+				<h:panelGrid columns="4" style="width:100%" styleClass="pnlVen">
+					<p:clock />
+					<p:progressBar widgetVar="pbAjax"  ajax="true" value="#{gerenteBean.progress}" 
+					         labelTemplate="{value}%" styleClass="animated" global="false"
+					         style="display:none; width:100%;" >
+					       <p:ajax event="complete" listener="#{gerenteBean.onComplete}" oncomplete="PF('pbAjax').hide();  PF('pbAjaxText').hide() " />
+					</p:progressBar>
+					
+					<h:outputText value="" />
+					
+					<p:button value="Mes de consulta: #{gerenteBean.fechaConsulta}" 
+						style="width:100%" disabled="true"/>	
+				</h:panelGrid>
+			</h:form>
+		</div>	
+			<h:form id="frmPlan" >
+				<p:panel>
+					<f:facet name="header">
+						 <p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+						 
+						 <p:button  icon="ui-icon-home" iconPos="right" styleClass="excel"
+								style="text-align: left; float:right; width:24px; height:24px; "
+							    outcome="/pages/gg/vistaInicial.xhtml?faces-redirect=true"/>
+			        </f:facet>
+			        
+			        <p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="false" 
+						value="#{gerenteBean.listaplan}" var="plan" rows="15"
+						paginatorPosition="bottom"	>
+					
+					<f:facet name="header">
+			            <h:outputText value="#{autenticacionBean.fechaActual}" /> 
+			        </f:facet>	
+			        
+			    <p:columnGroup type="header">
+		            <p:row>
+		                <p:column colspan="1" headerText="Presupuesto Ingreso" />
+		                <p:column colspan="1" headerText="Real Ingreso" />
+		                <p:column colspan="2" headerText="Cumplimiento %" />
+		                <p:column colspan="1" headerText="Presupuesto Utilidad" />
+		                <p:column colspan="1" headerText="Real Utilidad" />
+		                <p:column colspan="2" headerText="Cumplimiento %" />
+		                <p:column rowspan="2" headerText="Detalle" style="text-align: center; width:6%" />
+		            </p:row>
+		        </p:columnGroup>
+				
+					<p:column >
+						<h:outputText value="#{plan.ingreso}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column>
+						<h:outputText value="#{plan.ingreso_Real}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column  style="text-align:right">
+						<h:outputText value="#{plan.ingreso_Cumplimiento} %">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen1}"  height="25" width="25" />
+					</p:column>	
+					
+					<p:column>
+						<h:outputText value="#{plan.utilidad}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{plan.utilidad_Real}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column style="text-align:right">
+						<h:outputText value="#{plan.utilidad_Cumplimiento} %">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen}"  height="25" width="25" />
+					</p:column>
+
+					<p:column style="text-align:right">
+						<p:button icon="ui-icon-search"
+								outcome="/pages/gg/linea3.xhtml?faces-redirect=true">
+								<f:param name="frts" value="#{gerenteBean.fechaConsulta}"/>
+						</p:button>
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            
+			        </p:columnGroup>
+			        
+			        <f:facet name="footer">
+			        	<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a" />
+			        </f:facet>	 
+					</p:dataTable>
+				</p:panel>
+				
+			</h:form>
+		<h:form>
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Fecha:" />
+				<p:selectOneMenu value="#{gerenteBean.autenticacion.fechaBusqueda}" filter="true"
+					style="width:180px;" required="true">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
+					<f:selectItems value="#{gerenteBean.listaFechas}" var="item"
+						itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu value="#{gerenteBean.autenticacion.fechaBusquedaYear}"
+					style="width:100px;" >
+					<f:selectItem itemValue="2016" itemLabel="2016" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Buscar" update=":frmPlan:tblPlan"
+					actionListener="#{gerenteBean.listarPais1()}" style="background: #b94a48"
+					onclick="start(); PF('pbAjax').start(); PF('pbAjax').show();"/>
+			</h:panelGrid>
+		</h:form>
+
+		</ui:define>
+	
+	</ui:composition>
+</html>

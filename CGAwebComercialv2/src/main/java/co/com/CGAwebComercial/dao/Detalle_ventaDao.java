@@ -63,7 +63,6 @@ public class Detalle_ventaDao extends GenericDao<Detalle_venta>{
 					
 					linea = detalle_venta.getLinea().getId();
 					detalle = listarDetalleSuma(detalle_venta.getLinea().getId(), idPersona);
-					System.out.println( detalle_venta.getLinea().getId() +" XX " + detalle.get(0));
 				}
 			}
 			return listaPlan;

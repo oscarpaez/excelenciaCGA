@@ -19,8 +19,10 @@
 
 			<p:button value="Excelencia Comercial"
 				style="width:200px; height:100px"
-				outcome="/pages/plan.xhtml?faces-redirect=true"
-				disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}" />
+				outcome="#{autenticacionBean.usuarioLogin.perfil.id == 7 ? '/pages/dc/plandc.xhtml?faces-redirect=true' : autenticacionBean.usuarioLogin.perfil.id == 11 ? '/pages/gg/vistaModulo.xhtml?faces-redirect=true' : '/pages/plan.xhtml?faces-redirect=true'} "
+				disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}" >
+			</p:button>
+				
 			<p:button value="Excelencia de Costo" style="width:200px; height:100px"
 				disabled="#{autenticacionBean.usuarioLogin.perfil.costo}" />
 			<p:button value="Excelencia Compras"

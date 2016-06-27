@@ -20,6 +20,9 @@ public class Esquemas implements Serializable{
 	
 	@Column(scale = 2)
 	private BigDecimal umbralRecaudo;
+	
+	@Column(scale = 2)
+	private BigDecimal umbralComision;
 
 	public int getId() {
 		return id;
@@ -35,5 +38,13 @@ public class Esquemas implements Serializable{
 
 	public void setUmbralRecaudo(BigDecimal umbralRecaudo) {
 		this.umbralRecaudo = umbralRecaudo;
+	}
+
+	public BigDecimal getUmbralComision() {
+		return umbralComision;
+	}
+
+	public void setUmbralComision(BigDecimal umbralComision) {
+		this.umbralComision = umbralComision;
 	}
 }

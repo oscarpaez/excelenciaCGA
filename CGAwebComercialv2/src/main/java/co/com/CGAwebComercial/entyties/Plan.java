@@ -84,6 +84,9 @@ public class Plan implements Serializable {
 	
 	@Transient
 	private String imagen;
+	
+	@Transient
+	private String imagen1;
 
 	public int getId_plan() {
 		return id_plan;
@@ -259,5 +262,13 @@ public class Plan implements Serializable {
 
 	public void setValor_Comision_PagarR(BigDecimal valor_Comision_PagarR) {
 		this.valor_Comision_PagarR = valor_Comision_PagarR;
+	}
+
+	public String getImagen1() {
+		return imagen1;
+	}
+
+	public void setImagen1(String imagen1) {
+		this.imagen1 = imagen1;
 	}
 }

@@ -36,6 +36,8 @@ public class Presupuesto implements Serializable {
 	@Column(scale = 2)
 	private BigDecimal distribucionPorLinea;
 	
+	@Column(scale = 2)
+	private BigDecimal distribucionPorUtilidad;
 	
 	private int oficinaVentas;	
 	
@@ -45,6 +47,9 @@ public class Presupuesto implements Serializable {
 	private int funcionario;	
 	
 	private int linea;
+	
+	@Column(length = 10)
+	private String uen;
 
 	public int getIdPresupuesto() {
 		return idPresupuesto;
@@ -124,5 +129,13 @@ public class Presupuesto implements Serializable {
 
 	public void setLinea(int linea) {
 		this.linea = linea;
+	}
+
+	public String getUen() {
+		return uen;
+	}
+
+	public void setUen(String uen) {
+		this.uen = uen;
 	}
 }

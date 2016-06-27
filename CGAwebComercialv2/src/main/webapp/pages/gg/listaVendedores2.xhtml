@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	
+	
+	<ui:define name="contenido">
+		<f:metadata>
+			<f:viewParam name="frts" value="#{gerenteBean.fechaConsulta}"/>
+			<f:viewParam name="nomciu" value="#{gerenteBean.nombreOficina}"/>
+			<f:viewParam name="idciu" value="#{gerenteBean.idCiudad}" />
+			<f:event listener="#{gerenteBean.listarVendeoresPorCiudad}" type="preRenderView" />
+		</f:metadata>
+		
+		<div style="height: 40px">
+			<h:form>
+				<h:panelGrid columns="4" style="width:100%" styleClass="pnlVen">
+					<h:outputText value="" />
+						
+					<h:outputText value="" />
+						
+					<h:outputText value="" />
+						
+					<p:button value="Mes de consulta: #{gerenteBean.fechaConsulta}"  
+						style="width: 100%" disabled="true"/>	
+				</h:panelGrid>
+			</h:form>
+		</div>
+
+		<h:form id="frmPlan">
+			<p:panel>
+				
+				<f:facet name="header" styleClass="excelF">
+					<p:outputLabel
+						value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+						
+					<p:button  icon="ui-icon-home" iconPos="right" styleClass="excel"
+								style="text-align: left; float:right; width:24px; height:24px; "
+							    outcome="/pages/gg/vistaInicial.xhtml?faces-redirect=true"/>
+							    	
+					<h:commandLink >
+						<p:graphicImage library="images" name="excel.png" width="24"
+							styleClass="excel"/>
+						<p:dataExporter type="xls" target="tblPlan"
+							fileName="Comision_Vendedor_Interno_" />
+					</h:commandLink>
+	
+					<h:commandLink>
+						<p:graphicImage library="images" name="csv.png" width="24" styleClass="cvs" />
+						<p:dataExporter type="csv" target="tblPlan"
+							fileName="Comision_Vendedor_Interno_" />
+					</h:commandLink>	
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" paginator="true"
+					value="#{gerenteBean.listaComisionVendedores}" var="plan"
+					paginatorPosition="bottom">
+
+					<f:facet name="header">
+						<h:outputText value=" Consulta Pais por la Sucursal #{gerenteBean.nombreOficina} por Especialistas:"  />
+					</f:facet>
+					
+					 <p:columnGroup type="header">
+			            <p:row>
+			                <p:column colspan="1" headerText="Cedula" width="8%"/>
+			                <p:column colspan="1" headerText="CodSap" width="6%"/>
+			                <p:column colspan="1" headerText="Nombre"  width="10%"/>
+			                <p:column colspan="1" headerText="Presupuesto Ingreso" />
+			                <p:column colspan="1" headerText="Real Ingreso" />
+			                <p:column colspan="2" headerText="Cumplimiento %" width="15%" />
+			                <p:column colspan="1" headerText="Presupuesto Utilidad" />
+			                <p:column colspan="1" headerText="Real Utilidad" />
+			                <p:column colspan="2" headerText="Cumplimiento %" width="15%" />
+			                <p:column colspan="1" headerText="Umbral" width="6%"/>
+			                <p:column colspan="1" headerText="Detalle" width="6%"/>
+			            </p:row>
+			        </p:columnGroup>
+
+					<p:column headerText="Cedula" filterBy="#{plan.cedula}"
+						sortBy="#{plan.cedula}">
+						<h:outputText value="#{plan.cedula}" />
+					</p:column>
+					
+					<p:column headerText="CodSAP" filterBy="#{plan.id}"
+						sortBy="#{plan.id}">
+						<h:outputText value="#{plan.id}" />
+					</p:column>
+
+					<p:column headerText="Oficina" filterBy="#{plan.nombre}"
+						sortBy="#{plan.nombre}">
+						<h:outputText value="#{plan.nombre}" />
+					</p:column>
+
+					<p:column headerText="Presupuesto" style="text-align: right">
+						<h:outputText value="#{plan.presupuestoB}">
+							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Real" style="text-align: right">
+						<h:outputText value="#{plan.ingresoRealB}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>	
+					
+					<p:column headerText="cumplimiento" style="text-align: right">
+						<h:outputText value="#{plan.cumplimiento} %">
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen1}"  height="25" width="25" />
+					</p:column>
+					
+					<p:column headerText="Presupuesto" style="text-align: right">
+						<h:outputText value="#{plan.utilpresupuesto}">
+							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Real" style="text-align: right">
+						<h:outputText value="#{plan.utilidadReal}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>	
+					
+					<p:column headerText="cumplimiento" style="text-align: right">
+						<h:outputText value="#{plan.cumplimientoU} %">
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen}"  height="25" width="25" />
+					</p:column>
+					
+					<p:column headerText="Umbral">
+						<h:outputText value="#{plan.umbralCV}85%">
+							<f:convertNumber locale="en_US" integerOnly="true" maxFractionDigits="2"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Detalle" style="text-align:center">
+						<p:button icon="ui-icon-search"
+							outcome="/pages/gg/linea5.xhtml?faces-redirect=true">
+						    <f:param name="frts" value="#{gerenteBean.fechaConsulta}"/>
+							<f:param name="nomciu" value="#{gerenteBean.nombreOficina}"/>
+							<f:param name="nom" value="#{plan.nombre}"/>
+						    <f:param name="perId" value="#{plan.id}"/>	
+						    <f:param name="fecBus" value="#{gerenteBean.autenticacion.fechaBusqueda}"/>	
+						    <f:param name="fecYear" value="#{gerenteBean.autenticacion.fechaBusquedaYear}"/>							
+						</p:button>
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column colspan="3" footerText="Totales" style="text-align: right" />
+			            	<p:column footerText="$ #{gerenteBean.totalPresupuesto}" style="text-align:right" />		 
+			            	<p:column footerText="$ #{gerenteBean.totalReal}"  style="text-align:right"/>
+			            	<p:column footerText="#{gerenteBean.totalCumplimiento}%"  style="text-align:right"/>		 
+			            	<p:column footerText="" style="text-align: rigth" />		 
+			            	<p:column footerText="$ #{gerenteBean.totalPresupuestoU} " style="text-align:right" />		 
+			                <p:column footerText="$ #{gerenteBean.totalRealU}" style="text-align:right"/>
+			                <p:column footerText=" #{gerenteBean.totalCumplimientoU}%"  style="text-align:right"/>
+			                <p:column colspan="3" footerText="" />		 
+			            </p:row>
+			        </p:columnGroup>
+					
+					<f:facet name="footer">
+						<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a" />
+					</f:facet>
+				</p:dataTable>
+				
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

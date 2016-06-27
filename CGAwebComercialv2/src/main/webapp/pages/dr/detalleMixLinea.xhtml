@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+	<ui:define name="contenido">
+	
+		<f:metadata>
+			<f:viewParam name="frts" value="#{directorGBean.fechaConsulta}"/>
+			<f:viewParam name="perIdr" value="#{directorGBean.cod}" />
+			<f:event listener="#{directorGBean. listarCiudadPorMixLinea()}" type="preRenderView" />
+		</f:metadata>
+		
+		<div style="height: 50px">
+				<h:form style="padding: 6px">
+					<h:panelGrid columns="5" style="width:100%" styleClass="pnlVenG">
+						<p:outputLabel value="" />
+						<p:outputLabel value="" />
+						<p:outputLabel value="" />
+						<p:outputLabel value="" />
+						
+						<p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
+							style="width:100%" disabled="true"/>	
+						
+					</h:panelGrid>
+				</h:form>
+			</div>
+		
+		<h:form id="frmPlan"  >
+			<p:panel>
+				<h:inputHidden value="#{directorGBean.tablaFun}" id="hiddenId" />
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"
+								style="text-align: left; float:right; width:24px; height:24px; background: #ff0000;"
+								outcome="/pages/dr/pland.xhtml?faces-redirect=true" />
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" paginator="true"
+					value="#{directorGBean.listaComisionGerente}" var="plan"
+					filteredValue="#{directorGBean.listaFiltrados}"
+					paginatorPosition="bottom">
+
+					<f:facet name="header">
+						<h:outputText value="Cumplimiento Mix de linea Sucursal" />					</f:facet>
+					
+					<p:columnGroup type="header">
+			            
+			            <p:row>
+			                <p:column colspan="1" headerText="Lineas" />
+			                <p:column colspan="1" headerText="Presupuesto Ingreso" />
+			                <p:column colspan="1" headerText="Real Ingreso" />
+			                <p:column colspan="1" headerText="Cumplimiento %" />
+			             <!--  <p:column colspan="1" headerText="Presupuesto Utilidad" />
+			                <p:column colspan="1" headerText="Real Utilidad" />-->
+			                <p:column colspan="1" headerText="comision" />
+			                <p:column colspan="1" headerText="Umbral" /> 
+			            </p:row>
+					</p:columnGroup>
+					
+					<p:column headerText="Linea" filterBy="#{plan.nombre}" 
+						sortBy="#{plan.nombre}">
+						<h:outputText value="#{plan.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Ingreso P" style="text-align:right" >
+						<h:outputText value="#{plan.presupuestoB}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso R" style="text-align:right" >
+						<h:outputText value="#{plan.ingresoRealB}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso C" style="text-align:right">
+						<h:outputText value="#{plan.cumplimiento}%"  >
+							<f:convertNumber locale="en_US"  />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen1}"  height="25" width="25" />
+					</p:column>
+					
+			<!--   <p:column headerText="Utilidad P" >
+						<h:outputText value="#{plan.utilpresupuesto}" style="text-align:right">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad R" style="text-align:right" >
+						<h:outputText value="#{plan.utilidadReal}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad C" sortBy="#{plan.cumplimientoU}" style="text-align:right">
+						<h:outputText value="#{plan.cumplimientoU}%" >
+							<f:convertNumber locale="en_US"  />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen}"  height="25" width="25" />
+					</p:column>  -->
+					
+					<p:column headerText="Umbral" style="text-align:right" >
+						<h:outputText value="#{plan.umbralCV}85%" />
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column footerText="Totales"  style="text-align:right"/>
+			            	<p:column footerText="$ #{directorGBean.totalPre}"  style="text-align:right"/>		 
+			            	<p:column footerText="$ #{directorGBean.totalReA}"  style="text-align:right"/>
+			            	<p:column footerText="#{directorGBean.utilidad}% "  style="text-align:right"/>		 
+			            	<p:column colspan="2" footerText="" />	
+			            </p:row>
+			        </p:columnGroup>
+					
+					<f:facet name="footer">
+						<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a"/>
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		
+		
+		</ui:define>
+	</ui:composition>
+</html>

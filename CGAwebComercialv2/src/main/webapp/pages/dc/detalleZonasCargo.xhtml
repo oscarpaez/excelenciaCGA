@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+	<ui:define name="contenido">
+	
+		<f:metadata>
+			<f:viewParam name="perIdr" value="#{directorGBean.cod}" />
+			<f:event listener="#{directorGBean.listarLineasZonasCargo()}" type="preRenderView" />
+		</f:metadata>
+		
+		<h:form id="frmPlan"  >
+			<p:panel>
+				<h:inputHidden value="#{directorGBean.tablaFun}" id="hiddenId" />
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" paginator="true"
+					value="#{directorGBean.listaComisionGerente}" var="plan"
+					filteredValue="#{directorGBean.listaFiltrados}"
+					paginatorPosition="bottom">
+
+					<f:facet name="header">
+						<h:outputText value="#{autenticacionBean.fechaActual}  Plan Gerente" />					</f:facet>
+					
+					<p:columnGroup type="header">
+			            <p:row>
+			                <p:column colspan="5" headerText="Cumplimiento Mix de linea Sucursal" />
+			            </p:row>
+			            
+			            <p:row>
+			                <p:column colspan="1" headerText="Lineas" />
+			                <p:column colspan="1" headerText="Presupuesto Ingreso" />
+			                <p:column colspan="1" headerText="Real Ingreso" />
+			                <p:column colspan="2" headerText="Cumplimiento %" />
+			                <p:column colspan="1" headerText="Presupuesto Utilidad" />
+			                <p:column colspan="1" headerText="Real Utilidad" />
+			                <p:column colspan="2" headerText="Cumplimiento %" />
+			                <p:column colspan="1" headerText="Umbral" />
+			            </p:row>
+					</p:columnGroup>
+					
+					<p:column headerText="Linea" filterBy="#{plan.nombre}" 
+						sortBy="#{plan.nombre}">
+						<h:outputText value="#{plan.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Ingreso P" style="text-align:right" >
+						<h:outputText value="#{plan.presupuestoB}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso R" style="text-align:right" >
+						<h:outputText value="#{plan.ingresoRealB}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso C" style="text-align:right">
+						<h:outputText value="#{plan.cumplimiento}%"  >
+							<f:convertNumber locale="en_US"  />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen1}"  height="25" width="25" />
+					</p:column>
+					
+					<p:column headerText="Utilidad P" >
+						<h:outputText value="#{plan.utilpresupuesto}" style="text-align:right">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad R" style="text-align:right" >
+						<h:outputText value="#{plan.utilidadReal}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad C" sortBy="#{plan.cumplimientoU}" style="text-align:right">
+						<h:outputText value="#{plan.cumplimientoU}%" >
+							<f:convertNumber locale="en_US"  />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen}"  height="25" width="25" />
+					</p:column>
+					
+					<p:column headerText="Umbral" >
+						<h:outputText value="#{plan.umbralCV}" />
+					</p:column>
+					
+					<f:facet name="footer">
+						
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		
+		
+		</ui:define>
+	</ui:composition>
+</html>

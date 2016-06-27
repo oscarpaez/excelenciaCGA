@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		<ui:define name="contenido">
+			
+			<f:metadata>
+				<f:viewParam name="frst" value="#{directorGBean.fechaConsulta}"/>
+				<f:viewParam name="nomIn" value="#{directorGBean.nombreVendedor}"/>
+				<f:viewParam name="perId" value="#{directorGBean.idFuncionario}"/>
+				<f:event listener="#{directorGBean.listaLineasFuncionario()}" type="preRenderView" />	
+			</f:metadata>
+			
+			<div style="height: 50px">
+				<h:form style="padding: 6px">
+					<h:panelGrid columns="5" style="width:100%" styleClass="pnlVenG">
+						
+						<p:outputLabel value="" />
+						<p:outputLabel value="" />
+						<p:outputLabel value="" />
+						<p:outputLabel value="" />
+						
+						
+						<p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
+							style="width:100%" disabled="true"/>
+					</h:panelGrid>
+				</h:form>
+			</div>
+			
+			
+			<h:form id="frmPlan" >
+				<p:panel>
+					<f:facet name="header">
+						 <p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+						 	<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"
+								style="text-align: left; float:right; width:24px; height:24px; background: #ff0000;"
+								outcome="/pages/dr/pland.xhtml?faces-redirect=true" />
+					</f:facet>
+				
+					<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="false" 
+						value="#{directorGBean.listaComisionVendedores}" var="plan" rows="15"
+						paginatorPosition="bottom"	>
+					
+					<f:facet name="header">
+			            <h:outputText value="Plan Vendedor #{directorGBean.nombreVendedor}" /> 
+			        </f:facet>	
+			        
+			        <p:columnGroup type="header">
+		            <p:row>
+		                <p:column rowspan="2" headerText="Linea" />
+		                <p:column colspan="1" headerText="Presupuesto" />
+		                <p:column colspan="1" headerText="Real" />
+		                <p:column colspan="1" headerText="Cumplimiento %" />
+		                <p:column rowspan="2" headerText="Umbral" style="width:5%"/>
+		                <p:column rowspan="2" headerText="Comision" style="text-align: center; width:6%"/>
+		            </p:row>
+		            
+		            
+		        </p:columnGroup>
+				
+					<p:column headerText="Linea" filterBy="#{plan.nombre}" 
+						sortBy="#{plan.nombre}">
+						<h:outputText value="#{plan.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Ingreso P" style="text-align:right" >
+						<h:outputText value="#{plan.presupuestoB}" >
+							<f:convertNumber locale="pt_CO" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso R" style="text-align:right" >
+						<h:outputText value="#{plan.ingresoRealB}" >
+							<f:convertNumber locale="pt_CO" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso C" style="text-align:right" >
+						<h:outputText value="#{plan.cumplimiento}%" >
+							<f:convertNumber locale="pt_CO"   maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen1}"  height="25" width="25" />
+					</p:column>	
+					
+					<p:column headerText="Umbral" style="width:5%" >
+						<h:outputText value="#{plan.umbralCV}%" />
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column footerText="Totales"  style="text-align:right"/>
+			            	<p:column footerText="$ #{directorGBean.totalPre}"  style="text-align:right"/>		 
+			            	<p:column footerText="$ #{directorGBean.totalRe}"  style="text-align:right"/>
+			            	<p:column footerText="#{directorGBean.utilidad}% "  style="text-align:right"/>		 
+			            	<p:column colspan="2" footerText="" />	
+			            </p:row>
+			        </p:columnGroup>
+			        
+			        <f:facet name="footer">
+			        	<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a"/>
+					</f:facet>	 
+					</p:dataTable>
+				</p:panel>
+				
+			</h:form>
+<!-- 	<h:form>
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Fecha:" />
+				<p:selectOneMenu value="#{directorGBean.autenticacion.fechaBusqueda}" filter="true"
+					style="width:180px;" required="true">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
+					<f:selectItems value="#{directorGBean.listaFechas}" var="item"
+						itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu value="#{directorGBean.autenticacion.fechaBusquedaYear}"
+					style="width:100px;" >
+					<f:selectItem itemValue="2016" itemLabel="2016" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Buscar" update=":frmPlan:tblPlan"
+					actionListener="#{directorGBean.listaLineasFuncionario()}" style="background: #b94a48"/>
+				
+			</h:panelGrid>
+		</h:form>  -->
+
+		
+	</ui:define>
+	
+	</ui:composition>
+</html>

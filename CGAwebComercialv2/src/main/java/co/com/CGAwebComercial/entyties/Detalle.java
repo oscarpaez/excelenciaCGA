@@ -171,6 +171,13 @@ public class Detalle implements Serializable{
 	
 	@Column(scale = 2)
 	private float rentaReal;
+	
+	@Column(length = 50)
+	private String descSegmento;
+	
+	@Column(length = 50)
+	private String uenSegmento;
+	
 
 	public int getIdDetalle() {
 		return idDetalle;
@@ -686,5 +693,21 @@ public class Detalle implements Serializable{
 		this.linea = linea;
 	}
 
+	public String getDescSegmento() {
+		return descSegmento;
+	}
+
+	public void setDescSegmento(String descSegmento) {
+		this.descSegmento = descSegmento;
+	}
+
+	public String getUenSegmento() {
+		return uenSegmento;
+	}
+
+	public void setUenSegmento(String uenSegmento) {
+		this.uenSegmento = uenSegmento;
+	}
+	
 	
 }

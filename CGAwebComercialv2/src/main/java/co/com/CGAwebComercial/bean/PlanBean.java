@@ -82,15 +82,13 @@ public class PlanBean implements Serializable {
 			recurso = new Recursos();
 			listaFechas = recurso.cargarFechas();
 			plan = new Plan();
-			tipo =(autenticacion.getUsuarioLogin().getId() == 1)? "funcionario" : "funcionarioI";
+			tipo = (autenticacion.getUsuarioLogin().getPerfil().getId() == 1)? "funcionario" : "funcionarioI";
 			if(autenticacion.getFechaBusqueda() != null && autenticacion.getFechaBusquedaYear() != null){
-				System.out.println("dossin fechasssss" + autenticacion.getFechaBusqueda());
 				fechaBusqueda = autenticacion.getFechaBusqueda();
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();	
 				listarPlanPorFechas();
 			}
 			else{
-				System.out.println("sin fechasssss" + autenticacion.getFechaBusqueda());
 				total =  new BigDecimal("0.00");
 				BigDecimal totalPresupuesto = new BigDecimal("0.00");
 				BigDecimal totalPresupuestoUtilidad = new BigDecimal("0.00");
@@ -187,11 +185,11 @@ public class PlanBean implements Serializable {
 							}
 						}
 						else{
-							valorUtilidad= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
-							valorUtilidad= valorUtilidad.multiply(plan.getIngreso_Cumplimiento()); 
-							plan.setValor_Comision_PagarR(valorUtilidad);
-							total = total.add(plan.getValor_Comision_Pagar());
-							accion = new DecimalFormat("###,###").format(total);
+//							valorUtilidad= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
+//							valorUtilidad= valorUtilidad.multiply(plan.getIngreso_Cumplimiento()); 
+//							plan.setValor_Comision_PagarR(valorUtilidad);
+//							total = total.add(plan.getValor_Comision_Pagar());
+//							accion = new DecimalFormat("###,###").format(total);
 							plan.setImagen("verde.png");
 						}
 					}
@@ -228,10 +226,12 @@ public class PlanBean implements Serializable {
 			
 			FuncionarioDao daoF = new FuncionarioDao();
 			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
+			
+			tipo = (autenticacion.getUsuarioLogin().getPerfil().getId() == 1)? "funcionario" : "funcionarioI"; 
 			DetalleDao daoD = new DetalleDao();
-			System.out.println("FechasSalir " + fechaBusquedaYear + fechaBusqueda);
+			
 			if(fechaBusqueda != null && fechaBusquedaYear != null){
-				System.out.println(tipo + "Fechas " + fechaBusquedaYear + fechaBusqueda + funcionario.getId_funcionario());
+				
 				listaplan = daoD.listarPlanPorFechasSinPrueba(tipo, funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
 				
 				//int progress1 = 100/listaplanV.size();
@@ -245,16 +245,15 @@ public class PlanBean implements Serializable {
 							if(listaplan.get(k).getLinea().getId() == 3)
 								planLinea2_3 = listaplan.get(k);
 						}
-						System.out.println(plan.getIngreso_Real());
+						
 						plan.setIngreso_Real(plan.getIngreso_Real().add(planLinea2_3.getIngreso_Real()));
 						plan.setUtilidad_Real(plan.getUtilidad_Real().add(planLinea2_3.getUtilidad_Real()));
-						System.out.println(plan.getIngreso_Real());
+						
 					}
 					else if(tipo == "funcionarioI" &&  plan.getLinea().getId() == 3){
 						plan.setIngreso_Real(new BigDecimal("0.00"));
 						plan.setUtilidad_Real(new BigDecimal("0.00"));
 					}
-					System.out.println(plan.getIngreso_Real()+ "%%" + plan.getUtilidad_Real());
 					totalPresupuesto = totalPresupuesto.add(plan.getIngreso());
 					totalPresupuestoUtilidad = totalPresupuestoUtilidad.add(plan.getUtilidad()); 
 					totalValorReal = totalValorReal.add(plan.getIngreso_Real());

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+	<ui:define name="contenido">
+		
+		<div style="background-color: #dfe4e6; height: 50px">
+			<h:form style="padding: 6px">
+				<h:panelGrid columns="5" style="width:100%" styleClass="pnlVenG">
+					<p:outputLabel value="Tipo de vendedor" />
+					
+					<p:selectOneMenu  value="#{autenticacionBean.tipoVendedor}" style="width:200px;" >
+						<f:selectItem itemValue="E" itemLabel="Vendedor Externo" />
+						<f:selectItem itemValue="I" itemLabel="Vendedor Interno" />
+					</p:selectOneMenu>
+	
+					<p:commandButton value="Cargar" actionListener="#{directorGBean.listarVendedoresLinea()}"
+						update=" :frmPlan:tblPlan  :frmPlan:hiddenId" style="background: #b94a48; width:100px;"
+						oncomplete="toggle();"
+						onclick="start(); PF('pbAjax').start(); PF('pbAjax').show();"/>
+					
+					<p:progressBar widgetVar="pbAjax"  ajax="true" value="#{directorGBean.progress}" 
+					         labelTemplate="{value}%" styleClass="animated" global="false"
+					         style="display:none; width:100%;" >
+					       <p:ajax event="complete" listener="#{directorGBean.onComplete}" oncomplete="PF('pbAjax').hide();  PF('pbAjaxText').hide() " />
+					</p:progressBar>
+					
+					<p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
+						style="width:100%" disabled="true"/>	
+					
+				</h:panelGrid>
+			</h:form>
+		</div>
+		
+		<script type="text/javascript">
+	      function toggle() {
+	        
+	       	//alert(document.getElementById('frmPlan:hiddenId').value);
+	        if(document.getElementById('frmPlan:hiddenId').value == 'L'){
+	        	//alert("entro a script"); 
+	        	$("#frmPlan").hide();
+		        $("#frmPlanLin").show(); 
+			}
+	        else{
+	        	//alert(" script"); 
+	        	$("#frmPlan").show();
+	        	$("#frmPlanLin").hide();
+		    }
+
+	      }
+    </script>	
+		<h:form id="frmPlan"  >
+			<p:panel>
+				<h:inputHidden value="#{directorGBean.tablaFun}" id="hiddenId" />
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff0000;"
+						outcome="/pages/dl/vistaModulo.xhtml?faces-redirect=true" />
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" 
+					value="#{directorGBean.listaComisionVendedores}" var="vendedor"
+					filteredValue="#{directorGBean.listaFiltrados}"
+					>
+
+					<f:facet name="header">
+						<h:outputText value="#{autenticacionBean.fechaActual}" /> Plan Vendedores
+					</f:facet>
+					
+					<p:column headerText="Cedula" filterBy="#{vendedor.cedula}"
+						sortBy="#{vendedor.cedula}"  width="13%">
+						<h:outputText value="#{vendedor.cedula}" />
+					</p:column>
+					
+					<p:column headerText="cod Sap" filterBy="#{vendedor.id}"
+						sortBy="#{vendedor.id}"  width="10%">
+						<h:outputText value="#{vendedor.id}" />
+					</p:column>
+
+					<p:column headerText="Nombre" filterBy="#{vendedor.nombre}"
+						sortBy="#{vendedor.nombre}"  width="13%">
+						<h:outputText value="#{vendedor.nombre}" />
+					</p:column>
+
+					<p:column headerText="Tipo" width="14%">
+						<h:outputText value="#{vendedor.tipo}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Presupuesto"  width="10%" style="text-align:right;">
+						<h:outputText value="#{vendedor.presupuestoB}">
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Ingreso Real"  width="10%" style="text-align:right;">
+						<h:outputText value="#{vendedor.ingresoRealB}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Cumplimiento"  style="text-align:right">
+						<h:outputText value="#{vendedor.cumplimiento}%" >
+							<f:convertNumber locale="en_US"  />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{vendedor.imagen1}"  height="25" width="25" />
+					</p:column>
+					
+					<p:column headerText="Umbral" >
+						<h:outputText value="#{vendedor.umbralCV}85%" />
+					</p:column>
+					
+					<p:column headerText="Detalle" style="width:6%; text-align:center;">
+						<p:button icon="ui-icon-search"
+							outcome="/pages/dl/detalle.xhtml?faces-redirect=true">
+							<f:param name="frst" value="#{directorGBean.fechaConsulta}"/>
+						    <f:param name="linId" value="#{vendedor.ingresoReal}"/>
+							<f:param name="linNom" value="#{directorGBean.tipo}"/>
+							<f:param name="perId" value="#{vendedor.id}"/>
+						</p:button>
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column colspan="4" footerText="Totales"  style="text-align:right"/>
+			            	<p:column footerText="$ #{directorGBean.totalPre}"  style="text-align:right"/>		 
+			            	<p:column footerText="$ #{directorGBean.totalRe}"  style="text-align:right"/>		 
+			            	<p:column colspan="4" footerText="" />	
+			            </p:row>
+			        </p:columnGroup>
+
+					<f:facet name="footer">
+						<p:button value="Mix linea" outcome="/pages/dl/mixLinea.xhtml?faces-redirect=true" 
+							style="height:30px; background:#914294">
+							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
+							<f:param name="tipo" value="#{planBean.tipo}"/>							
+						</p:button>
+						
+						<p:button value="Cumplimiento Venta Pais" outcome="/pages/dl/cumplimientoPais.xhtml?faces-redirect=true" 
+							style="height:30px; background:#914294">
+							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
+							<f:param name="tipo" value="#{planBean.tipo}"/>							
+						</p:button>
+						
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		
+		<div  id="frmPlanLin"  style="display: none;">
+	<!-- <h:form id="frmPlanLin" >
+			<p:panel>
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlanLin"
+					emptyMessage="No se encontraron registros" paginator="true"
+					value="#{directorGBean.listaComisionVendedores}" var="linea"
+					filteredValue="#{directorGBean.listaFiltrados}"
+					paginatorPosition="bottom">
+
+					<f:facet name="header">
+						<h:outputText value="#{autenticacionBean.fechaActual} Registros Lineas" />
+					</f:facet>
+					
+					<p:column headerText="Nombre Linea" filterBy="#{linea.nombre}"
+						sortBy="#{linea.nombre}"  width="13%">
+						<h:outputText value="#{linea.nombre}" />
+					</p:column>
+
+					<p:column headerText="Presupuesto">
+						<h:outputText value="#{linea.presupuestoB}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Ingreso Real">
+						<h:outputText value="#{linea.ingresoRealB}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Umbral"  width="13%">
+						<h:outputText value="#{linea.cumplimiento}%" />
+					</p:column>
+
+					<p:column headerText="Semaforo" width="10%">
+						<p:graphicImage library="images" name="#{linea.imagen1}"  height="25" width="25" />
+					</p:column>
+					
+					
+					<p:column headerText="Detalle" style="width:6%">
+						<p:button icon="ui-icon-search"
+							>
+						    <f:param name="perId" value="#{vendedor.cedula}"/>	
+						    <f:param name="fecBus" value="#{directorGBean.autenticacion.fechaBusqueda}"/>	
+						    <f:param name="fecYear" value="#{directorGBean.autenticacion.fechaBusquedaYear}"/>						
+						</p:button>
+					</p:column>
+
+					<f:facet name="footer">
+						
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+
+		</h:form>  -->
+		</div>
+		<h:form>
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Fecha:" />
+				<p:selectOneMenu value="#{directorGBean.autenticacion.fechaBusqueda}" filter="true"
+					style="width:180px;" required="true">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
+					<f:selectItems value="#{directorGBean.listaFechas}" var="item"
+						itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu value="#{directorGBean.autenticacion.fechaBusquedaYear}"
+					style="width:100px;">
+					<f:selectItem itemValue="2016" itemLabel="2016" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Buscar" update=":frmPlan:tblPlan"
+					actionListener="#{directorGBean.listarVendedoresLinea()}"
+					style="background: #b94a48" onclick="start(); PF('pbAjax').start(); PF('pbAjax').show();"
+					 />
+			</h:panelGrid>
+		</h:form>
+		</ui:define>
+	</ui:composition>
+</html>

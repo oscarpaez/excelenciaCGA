@@ -67,10 +67,29 @@
     width: 25%;
 }
 
+.pnlVenG td {
+    width: 20%;
+}
+
 .liquidar .ui-widget-header {
 	background: #4FC021;
 }
 
+/*////ocultar calendario/////*/
+.promedio{
+	position:absolute;
+	left: 900px;
+}
 
- 
+/*////quita el color del header de la pagina/////*/
+.headerPage  .ui-layout-unit-header .ui-widget-header{
+	padding: 0;
+	background: none;	
+}
+
+.ui-panel {
+    /*padding: 2.0em;*/
+}
+
+
       

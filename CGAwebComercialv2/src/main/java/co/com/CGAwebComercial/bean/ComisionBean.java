@@ -143,7 +143,7 @@ public class ComisionBean implements Serializable{
 							sumaPresupuesto = (pre == null) ? new BigDecimal("0.00"): pre;
 							listaplanV = daoD.listarPlanPrueba(tipo, funcionario.getId_funcionario());
 						}
-						System.out.println(listaplanV.size()+ "Tamaño");
+						
 						for (Plan planL : listaplanV) {
 	
 							sumaIngresoR = (planL.getIngreso_Real() == null) ? new BigDecimal("0.00"): sumaIngresoR.add(planL.getIngreso_Real()); 
@@ -311,7 +311,7 @@ public class ComisionBean implements Serializable{
 						
 						Plan planLinea2_3 = null; 
 						for (Plan planL : listaplanV) {
-
+							
 							if(tipo == "funcionarioI" &&  planL.getLinea().getId() == 2){
 								planLinea2_3 = new Plan();
 								for(int k=0; k<listaplanV.size(); k++){
@@ -568,7 +568,7 @@ public class ComisionBean implements Serializable{
 				else{
 					funcionario = daoF.buscarPersona(idFuncionario);
 					nombreRegistro = funcionario.getPersona().getNombre();
-					System.out.println( "@@@@@?????????" + tipo);
+					
 					listaplanV = daoD.listarPlanPorFechasPrueba(tipo,funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
 				}
 				int progress1 = 100/listaplanV.size();
@@ -649,7 +649,7 @@ public class ComisionBean implements Serializable{
 								plan.setImagen("rojo.png");
 							}
 							else{
-								valorUtilidad= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
+								valorUtilidad= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100")));
 								valorUtilidad= valorUtilidad.multiply(plan.getUtilidad_Cumplimiento()); 
 								plan.setValor_Comision_Pagar(valorUtilidad);
 								total = total.add(plan.getValor_Comision_Pagar());
@@ -683,7 +683,7 @@ public class ComisionBean implements Serializable{
 								plan.setImagen("rojo.png");
 							}
 							else{
-								valorUtilidadR= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
+								valorUtilidadR= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100")));
 								valorUtilidadR= valorUtilidadR.multiply(plan.getIngreso_Cumplimiento()); 
 								plan.setValor_Comision_PagarR(valorUtilidadR);
 								totalR = totalR.add(plan.getValor_Comision_PagarR());
@@ -701,10 +701,13 @@ public class ComisionBean implements Serializable{
 						}
 					}
 					plan.setDistribucion_Linea(plan.getDistribucion_Linea().multiply(new BigDecimal("100")));
+					//BigDecimal valorD = plan.getDistribucion_Linea().divide(new BigDecimal("1"), );
+					plan.setDistribucion_Linea(plan.getDistribucion_Linea().setScale(2, BigDecimal.ROUND_HALF_UP));
+				
 //					plan.setDistribucion_Linea(plan.getDistribucion_Linea().setScale(2, BigDecimal.ROUND_HALF_UP));
 					i += progress1;
 					setProgress(i); 
-					System.out.println(progress);
+					
 				}
 				if(progress > 90){
 					setProgress(100);
@@ -754,7 +757,6 @@ public class ComisionBean implements Serializable{
 
 		try{
 			ajuste= (Ajuste) evento.getComponent().getAttributes().get("vendedorSelecionado2");
-			System.out.println(ajuste.getNombre() +" adicionarboton " +ajuste.getConcepto());
 			Ajuste ajuste1 = new Ajuste(); 
 			ajuste1.setCodSap(ajuste.getCodSap());
 			ajuste1.setNombre(ajuste.getNombre());

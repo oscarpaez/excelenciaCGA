@@ -64,13 +64,32 @@ public class AutenticacionBean implements Serializable {
 			usuarioLogin = dao.autenticar(persona.getCedula(), usuarioLogin.getClave());
 			
 			if(usuarioLogin == null){
-				System.out.println("usario no valido");
 				Messages.addGlobalError("La el usuario o la cantraseña son incorrectas", "info");
 				return null;
 			}
 			else if(usuarioLogin.getPerfil().getId() == 1  || usuarioLogin.getPerfil().getId() == 6 ){
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
 				return "ve/vistaModulo.xhtml?faces-redirect=true";
+			}
+			else if(usuarioLogin.getPerfil().getId() == 2 || usuarioLogin.getPerfil().getId() == 12){
+				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
+				return "dl/vistaModulo.xhtml?faces-redirect=true";
+			}
+			else if(usuarioLogin.getPerfil().getId() == 7 ){
+				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
+				return "dr/vistaModulo.xhtml?faces-redirect=true";
+			}
+			else if(usuarioLogin.getPerfil().getId() == 8 ){
+				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
+				return "dcB/vistaModulo.xhtml?faces-redirect=true";
+			}
+			else if(usuarioLogin.getPerfil().getId() == 9 ){
+				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
+				return "ji/vistaModulo.xhtml?faces-redirect=true";
+			}
+			else if(usuarioLogin.getPerfil().getId() == 11 ){
+				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
+				return "gg/vistaModulo.xhtml?faces-redirect=true";
 			}
 			else{
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
@@ -112,6 +131,11 @@ public class AutenticacionBean implements Serializable {
 		}
 	}
 
+	public void onComplete() {
+		//progress = 0;
+		Messages.addGlobalError("Proceso Completado");
+	}
+	
 	public void progreso(int valor){
 		this.progress = valor;
 	}

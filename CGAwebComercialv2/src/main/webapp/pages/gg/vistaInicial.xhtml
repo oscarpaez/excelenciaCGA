@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	
+	<ui:define name="contenido">
+		<br />
+		<p:panel style="margin:0  20%; text-align:center;" >
+			<f:facet name="header">
+				 <p:outputLabel value="Analisis de Gestion Comercial" />
+			</f:facet>
+			<br />
+			<p:button value="Analisis Por Pais - Especialista - Linea" icon="ui-icon-play" iconPos="right"
+					style="width:95%; height:50px; text-align: left;" 
+					outcome="/pages/gg/plan.xhtml?faces-redirect=true" >
+			</p:button>	
+			<br />
+			<br />
+				
+			<p:button value="Analisis Por Pais - UEN - Oficina - Linea " 
+				style="width:95%; height:50px; text-align: left;"
+				icon="ui-icon-play" iconPos="right"  
+				outcome="/pages/gg/plan4.xhtml?faces-redirect=true" />
+				 
+			<br />
+			<br />
+			<p:button value="Analisis Por Pais - Oficina - Lineas - Especialista " icon="ui-icon-play" iconPos="right"
+				style="width:95%; height:50px; text-align: left;"
+				outcome="/pages/gg/plan1.xhtml?faces-redirect=true" />
+			<br />
+			<br />
+			<p:button value="Analisis Por Pais - Oficina - Especialista - Lineas" icon="ui-icon-play" iconPos="right"
+				style="width:95%; height:50px; text-align: left;"
+				outcome="/pages/gg/plan2.xhtml?faces-redirect=true" />
+			<br />
+			<br />
+			<p:button value="Analisis Por Pais - Lineas - Oficina - Especialista" icon="ui-icon-play" iconPos="right"
+				style="width:95%; height:50px; text-align: left;"
+				outcome="/pages/gg/plan3.xhtml?faces-redirect=true"/>
+			<br />
+			<br />	
+		</p:panel>
+		
+	</ui:define>
+
+</ui:composition>
+
+</html>

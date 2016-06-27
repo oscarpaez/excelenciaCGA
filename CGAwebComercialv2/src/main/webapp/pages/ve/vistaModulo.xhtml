@@ -12,65 +12,91 @@
 		<f:metadata>
 			<f:event listener="#{vendedorLBRBean.desempenoVentas()}" type="preRenderView" />	
 		</f:metadata>	
-
+		
+		<f:facet name="header">
+			<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+		</f:facet>
+		
 		<br />
 		<div class="ui-grid ui-grid-responsive">
 			<div class="ui-grid-row">
 				<div class="ui-grid-col-8">
+					<div style="display:block; text-align:center; margin: 0 auto; ">	
+					  <p:button value="Excelencia Comercial"
+							style="width:200px; height:100px"
+							outcome="/pages/plan.xhtml?faces-redirect=true"
+							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}" />
+					</div>
+					<br />
 					<h:form id="frmDesRec" enctype="multipart/form-data">
-						<p:panel style="width: 95%">
+						<p:panel style="height:340px; width:850px">
 							<h:panelGrid  id="pnlDesRec">
-								 <p:chart type="line" model="#{vendedorLBRBean.desempenoVentas}" style="height:300px; width:800px" />
-							</h:panelGrid>
-						</p:panel>
-					</h:form>
-				</div>
-				<div class="ui-grid-col-4">
-				  <div style="display:block; text-align:center; margin: 0 auto; ">	
-				  <p:button value="Excelencia Comercial"
-						style="width:200px; height:100px"
-						outcome="/pages/plan.xhtml?faces-redirect=true"
-						disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}" />
-				  </div>
-				  <br /><br />		
-				  <p:panel style="width: 95%">
-				  		<h:form id="frmProVen" enctype="multipart/form-data">
-							<p:outputLabel  value="Promedio de venta del  #{vendedorLBRBean.promedioVenta.mes}" 
-							    	style="color: #0000ff; font-style: italic;"/> <br />
-							<h:panelGrid columns="2" id="pnlProVen">
-							    
-							    <p:outputLabel  value="Valor Promedio de ventas " 
-							    	style="font-size: 14px; " />
-								<p:inputText id="descripcion" size="15"  
-									value="#{vendedorLBRBean.promedioMes}"  disabled="true" >
-									<f:convertNumber pattern="#,##0;(#,##0)"/>
-									</p:inputText>
-								
-								<p:outputLabel value="Meta Venta Mes" style="font-size: 14px; " />
-								<p:inputText id="cantidad" size="15" value="#{vendedorLBRBean.promedioVenta.meta}" disabled="true"> 
-									 <f:convertNumber pattern="#,##0;(#,##0)"/>
-								</p:inputText>
-							</h:panelGrid>
-						</h:form>
-				  </p:panel>
-				</div>
-        	</div>
-        	<br />
-        	<div class="ui-grid-row">
-				<div class="ui-grid-col-8">
-					<h:form id="frmDesVen" enctype="multipart/form-data">
-						<p:panel style="width: 95%">
-							<h:panelGrid columns="2" id="pnlDesVen">
 								 <p:chart type="line" model="#{vendedorLBRBean.desempenoRecaudo}" style="height:300px; width:800px" />
 							</h:panelGrid>
 						</p:panel>
 					</h:form>
 				</div>
 				<div class="ui-grid-col-4">
+				   <p:panel style="width: 400px " styleClass="promedio">
+				  		<h:form id="frmProVen" enctype="multipart/form-data">
+							<p:outputLabel  value="Promedio de venta  #{vendedorLBRBean.mesActual}" 
+							    	style="color: #0000ff; font-style: italic;"/> <br />
+							<h:panelGrid columns="2" id="pnlProVen">
+							    
+							    <p:outputLabel  value="Valor Promedio de ventas " 
+							    	style="font-size: 14px; " />
+								<p:inputText id="descripcion" size="15"  style="color:#0000ff; opacity: .90;"
+									value="#{vendedorLBRBean.promedioMes}"  disabled="true" >
+									<f:convertNumber pattern="#,##0;(#,##0)"/>
+								</p:inputText>
+								
+								<p:outputLabel value="Meta Venta Mes" style="font-size: 14px; " />
+								<p:inputText id="cantidad" size="15" value="#{vendedorLBRBean.promedioVenta.meta}" 
+									style="color:#0000ff; opacity: .90;" disabled="true"> 
+									 <f:convertNumber pattern="#,##0;(#,##0)"/>
+								</p:inputText>
+							</h:panelGrid>
+						</h:form>
+						<br />
+						<p:chart type="metergauge" 	model="#{vendedorLBRBean.meterGaugeModel}"
+								style="width:350px;height:250px" />
+						
+						<h:form >
+							<h:panelGrid columns="2">
+								<p:outputLabel  value="Presupuesto Mes " 
+									    	style="font-size: 14px; " />
+								<p:inputText  size="15"  style="color:#0000ff; opacity: .90;"
+											value="#{vendedorLBRBean.presupuestoMes}"  disabled="true" >
+											<f:convertNumber pattern="#,##0;(#,##0)"/>
+								</p:inputText>
+								<p:outputLabel  value="Real Mes " 
+									    	style="font-size: 14px; " />
+								<p:inputText  size="15"  style="color:#0000ff; opacity: .90;"
+											value="#{vendedorLBRBean.realMes}"  disabled="true" >
+											<f:convertNumber pattern="#,##0;"/>
+								</p:inputText>
+							</h:panelGrid>
+						</h:form>			
+					</p:panel>
+				</div>
+        	</div>
+        	<br />
+        	<br />
+        	<div class="ui-grid-row">
+				<div class="ui-grid-col-8">
+					<h:form id="frmDesVen" enctype="multipart/form-data">
+						<p:panel style="height:370px; width:850px" >
+							<h:panelGrid columns="2" id="pnlDesVen">
+								<p:chart type="line" model="#{vendedorLBRBean.desempenoVentas}" style="height:300px; width:800px" /> 
+							</h:panelGrid>
+						</p:panel>
+					</h:form>
+				</div>
+				<div class="ui-grid-col-4" >
 				  <h:form id="frmDes" enctype="multipart/form-data">
-						<p:panel style="width: 95%">
+						<p:panel style="height:370px; width:400px" styleClass="promedio">
 							<h:panelGrid columns="2" id="pnlDes">
-								<p:chart type="bar" model="#{vendedorLBRBean.descuentoV}" style="width:400px;" />
+								<p:chart type="bar" model="#{vendedorLBRBean.descuentoV}" style="width:380px;" />
 							</h:panelGrid>
 						</p:panel>
 					</h:form>

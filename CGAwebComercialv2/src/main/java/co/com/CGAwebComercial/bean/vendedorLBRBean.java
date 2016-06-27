@@ -18,11 +18,13 @@ import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
+import org.primefaces.model.chart.MeterGaugeChartModel;
 
 import co.com.CGAwebComercial.dao.BajaRotacionDao;
 import co.com.CGAwebComercial.dao.ContadoAnticipoDao;
 import co.com.CGAwebComercial.dao.DetalleDao;
 import co.com.CGAwebComercial.dao.FuncionarioDao;
+import co.com.CGAwebComercial.dao.PresupuestoDao;
 import co.com.CGAwebComercial.dao.PromedioVentaDao;
 import co.com.CGAwebComercial.dao.RecaudoDao;
 import co.com.CGAwebComercial.entyties.ContadoAnticipo;
@@ -48,6 +50,7 @@ public class vendedorLBRBean implements Serializable{
 	
 	private LineChartModel desempenoVentas;
 	private LineChartModel desempenoRecaudo;
+	private MeterGaugeChartModel meterGaugeModel;
 	private BarChartModel descuentoV;
 	 
 	private PromedioVenta promedioVenta;
@@ -59,7 +62,9 @@ public class vendedorLBRBean implements Serializable{
 	private String fechaBusqueda ="";
 	private String fechaBusquedaYear= "";
 	private Double promedioMes;
-	
+	private String mesActual;
+	private BigDecimal presupuestoMes;
+	private BigDecimal realMes;	
 	
 	
 	public vendedorLBRBean(){
@@ -75,28 +80,19 @@ public class vendedorLBRBean implements Serializable{
 			listaVendedores = new ArrayList<>();
 			FuncionarioDao daoF = new FuncionarioDao();
 			Funcionario funcionario = daoF.buscarPersona(indexVIE);
-			System.out.println( "este t" + tipo );  
 			tipo = (tipo.equals("funcionario"))? "codEspecialista": (tipo.equals("codEspecialista"))? "codEspecialista": "codVendedorInt";
 			
 			ComisionVendedores vendedor = new ComisionVendedores();
 			BajaRotacionDao daoB = new BajaRotacionDao();
 			Long sumatotal;
 			if(autenticacion.getFechaBusqueda() == null || autenticacion.getFechaBusqueda().equals("")){
-				System.out.println(fechaBusqueda +" entro " +fechaBusquedaYear );
-				Messages.addGlobalInfo(tipo + " Fecha null " + indexVIE);
 				sumatotal = daoB.SumaTotalFechas( tipo, funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
 			}
 			else{
-				System.out.println(fechaBusqueda +" confec " +fechaBusquedaYear );
 				fechaBusqueda = autenticacion.getFechaBusqueda();
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
-				System.out.println(tipo + " Fecha null " + funcionario.getId_funcionario());
-				System.out.println(fechaBusqueda +" confec2 " +fechaBusquedaYear );
-				//Messages.addGlobalInfo("Fecha valida " + autenticacion.getFechaBusqueda());
 				sumatotal = daoB.SumaTotalFechas( tipo, funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
 			}	
-						
-				System.out.println("suma" + sumatotal);
 				if(sumatotal != null){
 					int total = (int) (long) sumatotal* -1;
 					vendedor.setCedula(funcionario.getPersona().getCedula());
@@ -184,7 +180,6 @@ public class vendedorLBRBean implements Serializable{
 				fechaBusqueda = autenticacion.getFechaBusqueda();
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
 			}
-			System.out.println("codigo " + codVen);
 			FuncionarioDao daoF = new FuncionarioDao();
 			Funcionario funcionario = daoF.buscarPersona(codVen);
 			ContadoAnticipoDao daoCA = new ContadoAnticipoDao();			
@@ -208,7 +203,8 @@ public class vendedorLBRBean implements Serializable{
 				BarChartModel model3 = new BarChartModel();
 				LineChartSeries presupuesto = new LineChartSeries();
 				LineChartSeries ventas = new LineChartSeries();
-
+				LineChartSeries leyenda = new LineChartSeries();
+				
 				LineChartSeries presupuestoI = new LineChartSeries();
 				LineChartSeries realI = new LineChartSeries();
 				LineChartSeries presupuestoU = new LineChartSeries();
@@ -226,8 +222,6 @@ public class vendedorLBRBean implements Serializable{
 					listaRecaudo = dao.listarPresupuesto(autenticacion.getUsuarioLogin().getPersona().getCedula());
 					tipo = "funcionario";
 				}
-				System.out.println( autenticacion.getUsuarioLogin().getPerfil().getId()+ "tipo :" + tipo );
-				
 				int i=0;
 				String[] periodo = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
 						"Julio", "Agosto", "Septiembre", "Octubre", "Noviembre",
@@ -238,31 +232,58 @@ public class vendedorLBRBean implements Serializable{
 				int[] PU = new int[listaRecaudo.size()];
 				int[] PT = new int[listaRecaudo.size()];
 				int[] D = new int[listaRecaudo.size()];
+				int escala = 0;
+				int escala1 = 0;
 				
+				mesActual = periodo[(listaRecaudo.size())];
 
 				List<Long>  PV = dao.listarDetalleValorNeto(tipo,funcionario.getId_funcionario());
 				List<Long>  PPT = dao.listarDetalleCostoTotal(tipo, funcionario.getId_funcionario());
 				List<Long>  PVD = dao.listarDetalleValorDescuento(tipo,funcionario.getId_funcionario());
-				System.out.println(PVD.size());
+				List<BigDecimal> PR= dao.presupuestoVendedor(tipo, funcionario.getId_funcionario());
+				
+				Long b;
+				BigDecimal tem = new BigDecimal("0");
+				
 				for (Recaudo recaudo : listaRecaudo) {
-					System.out.println(recaudo.getPresupuesto() + ", " + recaudo.getReal());
-					P[i] = recaudo.getPresupuesto().intValue();
-					R[i] = recaudo.getReal().intValue();
-					//PU[i] = recaudo.get
-					System.out.println(P[i] + " ** " + R[i] );
+					
+					tem = recaudo.getPresupuesto().divide(new BigDecimal("1000000")).abs();
+					b = tem.abs().longValue();
+					P[i] = b.intValue();
+					
+					tem = recaudo.getReal().divide(new BigDecimal("1000000")).abs();
+					b = tem.abs().longValue();
+					R[i] = b.intValue();
+					
+					int a = (P[i] >  R[i])? P[i] :R[i];
+					escala =( a > escala )? a:escala;
+					
 					presupuesto.set(periodo[i], P[i]);
 					ventas.set(periodo[i], R[i] );
 					
-					PI[i] =(int) (long) PV.get(i)* -1;					
+					b = PV.get(i) / 1000000;
+					
+					PI[i] =(int) (long) b* -1;
+					//PI[i] =(int) (long) PV.get(i)* -1;					
 					presupuestoI.set(periodo[i], PI[i] );
 
-					PT[i] =(int) (long) PPT.get(i);
+//					b = PPT.get(i) / 1000000;
+//					PT[i] =(int) (long) b;
+					
+					b = PR.get(i).longValue() / 1000000;
+					PT[i] =(int) (long) b;
+					
+					//PT[i] =(int) (long) PPT.get(i);
 					realI.set( periodo[i], PT[i] );
-
-					PU[i] =(int) (long) PPT.get(i);
+					
+					a = (PI[i]> PT[i] )? PI[i]:PT[i];
+					escala1 =( a > escala1 )? a:escala1;
+					
+					PU[i] =(int) (long) PPT.get(i) /1000000;
 					PU[i]= PU[i] - PI[i];
 					presupuestoU.set(periodo[i], PU[i]);
-					D[i] = (int) (long) PVD.get(i);
+					D[i] = (int) (long) PVD.get(i)/ 1000000;
+					
 					BigDecimal desc = new BigDecimal(D[i]); 
 					BigDecimal desc1 = new BigDecimal(PI[i]);
 					desc = desc.divide(desc1,  2, RoundingMode.HALF_UP).multiply(new BigDecimal("100"));
@@ -271,10 +292,12 @@ public class vendedorLBRBean implements Serializable{
 				}
 
 				ventas.setLabel("Real");
-				presupuesto.setLabel("Plan");			
+				presupuesto.setLabel("Presupuesto");
+				leyenda.setLabel("Escala de valores en MILLONES");
 
 				model.addSeries(presupuesto);
 				model.addSeries(ventas);
+				model.addSeries(leyenda);
 
 				desempenoVentas = model;
 				desempenoVentas.setTitle("Desempeño Recaudo");
@@ -282,19 +305,20 @@ public class vendedorLBRBean implements Serializable{
 				desempenoVentas.setLegendPosition("ne");
 
 				desempenoVentas.setShowPointLabels(true);
-				desempenoVentas.getAxes().put(AxisType.X, new CategoryAxis("Periodo"));
+				desempenoVentas.getAxes().put(AxisType.X, new CategoryAxis("Periodo    Escala de valores en MILLONES"));
 				Axis yAxis = desempenoVentas.getAxis(AxisType.Y);
 				yAxis.setMin(0);
-				yAxis.setMax(500000000);
-				//yAxis.setTickFormat("%'d");
+				yAxis.setMax(escala + 200);
+				yAxis.setTickFormat("%'d");
 
-				presupuestoI.setLabel("Presupuesto Ingresos");
+				presupuestoI.setLabel("Real Ingresos");
 				//presupuestoU.setLabel("Real utilidad");
-				realI.setLabel("Real Ingresos");
+				realI.setLabel("Presupuesto Ingresos");
 				
 
 				model2.addSeries(presupuestoI);
 				model2.addSeries(realI);
+				model2.addSeries(leyenda);
 				
 				desempenoRecaudo = model2;
 				desempenoRecaudo.setTitle("Desempeño Ventas");
@@ -304,7 +328,7 @@ public class vendedorLBRBean implements Serializable{
 				desempenoRecaudo.getAxes().put(AxisType.X, new CategoryAxis("Periodo"));
 				Axis xAxis = desempenoRecaudo.getAxis(AxisType.Y);
 				xAxis.setMin(0);
-				xAxis.setMax(1000000000);
+				xAxis.setMax(escala1 + 200);
 				xAxis.setTickFormat("%'d");
 				
 				descuento.setLabel("Descuentos");				
@@ -320,6 +344,28 @@ public class vendedorLBRBean implements Serializable{
 				xAxis.setMax(100);
 				xAxis.setTickFormat("%.0f%%");
 				
+				List<Number> interval = new ArrayList<Number>(){{
+		            add(60);
+		            add(85);
+		            add(100);
+		        }};
+		        
+		        PresupuestoDao daoD = new PresupuestoDao();
+		        List<BigDecimal> ventaMes = daoD.ventasMes(tipo, funcionario.getId_funcionario() );
+		        
+		        presupuestoMes = ventaMes.get(1).abs();
+		        realMes = ventaMes.get(0).abs(); 
+		        
+		        BigDecimal porV = ventaMes.get(0).divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+				int V = (porV.abs().intValue() > 100)? 100 : porV.abs().intValue();
+		        
+		        meterGaugeModel = new MeterGaugeChartModel(V, interval);
+		        meterGaugeModel.setTitle("Cumplimiento " + mesActual );
+		        meterGaugeModel.setGaugeLabel( V +"%");
+		        meterGaugeModel.setSeriesColors("ff0000, ffff00, 009933 ");
+				
+				promedioVentas();
+	
 				
 			}
 			else{
@@ -337,8 +383,13 @@ public class vendedorLBRBean implements Serializable{
 		try {
 			FuncionarioDao daoF = new FuncionarioDao();
 			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
-			DetalleDao dao = new DetalleDao();			
-			promedioMes = dao.promedioVentas(funcionario.getId_funcionario());
+			DetalleDao dao = new DetalleDao();
+			  if(tipo.equals("funcionario")){
+				  promedioMes = dao.promedioVentas(funcionario.getId_funcionario());
+		       }else{ 
+		    	   promedioMes = dao.promedioVentasI(funcionario.getId_funcionario()); 
+		       }
+			
 			promedioMes = promedioMes *-1;
 			PromedioVentaDao daoP = new PromedioVentaDao();
 			promedioVenta = daoP.listarMeta(funcionario.getId_funcionario());
@@ -444,5 +495,29 @@ public class vendedorLBRBean implements Serializable{
 	}
 	public void setPromedioMes(Double promedioMes) {
 		this.promedioMes = promedioMes;
+	}
+	public MeterGaugeChartModel getMeterGaugeModel() {
+		return meterGaugeModel;
+	}
+	public void setMeterGaugeModel(MeterGaugeChartModel meterGaugeModel) {
+		this.meterGaugeModel = meterGaugeModel;
+	}
+	public BigDecimal getPresupuestoMes() {
+		return presupuestoMes;
+	}
+	public void setPresupuestoMes(BigDecimal presupuestoMes) {
+		this.presupuestoMes = presupuestoMes;
+	}
+	public BigDecimal getRealMes() {
+		return realMes;
+	}
+	public void setRealMes(BigDecimal realMes) {
+		this.realMes = realMes;
+	}
+	public String getMesActual() {
+		return mesActual;
+	}
+	public void setMesActual(String mesActual) {
+		this.mesActual = mesActual;
 	}
 }

@@ -126,9 +126,7 @@ public class AjusteBean implements Serializable{
 			ajuste.setNombre(vendedor.getNombre());	
 			ajuste.setConcepto(concepto);
 			FuncionarioDao daoF = new FuncionarioDao();
-			System.out.println(autenticacion.getUsuarioLogin().getPersona().getCedula()+ "usuarioLogin");
 			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
-			System.out.println(funcionario.getId_funcionario()+ " Funcionario");
 			ajuste.setCodSapUsuario(funcionario.getId_funcionario());
 			ajuste.setNombreUsuario(funcionario.getPersona().getNombre());
 			listaVendedoresAjuste.add(ajuste);

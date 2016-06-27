@@ -14,8 +14,12 @@ public class ComisionVendedores {
 	private int ingresoReal;
 	private BigDecimal presupuestoB;
 	private BigDecimal ingresoRealB;
+	private BigDecimal utilpresupuesto;
+	private BigDecimal utilidadReal;
 	private BigDecimal umbralCV;
 	private BigDecimal cumplimiento;
+	private BigDecimal cumplimientoU;	
+	private String imagen1;
 	private String imagen;
 	private int comision;
 	private int comisionR;
@@ -133,6 +137,31 @@ public class ComisionVendedores {
 	public void setLiquidar(String liquidar) {
 		this.liquidar = liquidar;
 	}
+	
+	public BigDecimal getUtilpresupuesto() {
+		return utilpresupuesto;
+	}
+	public void setUtilpresupuesto(BigDecimal utilpresupuesto) {
+		this.utilpresupuesto = utilpresupuesto;
+	}
+	public BigDecimal getUtilidadReal() {
+		return utilidadReal;
+	}
+	public void setUtilidadReal(BigDecimal utilidadReal) {
+		this.utilidadReal = utilidadReal;
+	}
+	public String getImagen1() {
+		return imagen1;
+	}
+	public void setImagen1(String imagen1) {
+		this.imagen1 = imagen1;
+	}
+	public BigDecimal getCumplimientoU() {
+		return cumplimientoU;
+	}
+	public void setCumplimientoU(BigDecimal cumplimientoU) {
+		this.cumplimientoU = cumplimientoU;
+	}
 	@Override
 	public String toString() {
 		return "ComisionVendedores [id=" + id + ", cedula=" + cedula + ", nombre=" + nombre + ", tipo=" + tipo
@@ -142,6 +171,4 @@ public class ComisionVendedores {
 				+ comisionR + ", totalAjuste=" + totalAjuste + ", totalConAjuste=" + totalConAjuste + ", comisionS="
 				+ comisionS + "]";
 	}
-	
-	
 }
