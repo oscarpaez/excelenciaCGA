@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	<ui:define name="menu">
+		<ui:include src="/templates/menu.xhtml" />
+	</ui:define>
+	<ui:define name="contenido">
+		<f:metadata>
+			<f:viewParam name="index" value="#{autenticacionBean.index}" />
+		</f:metadata>
+
+		<p:panel>
+			<f:facet name="header">
+				<p:outputLabel value="Asignacion de Ventas" />
+			</f:facet>
+
+			<h:form id="frmSec" style="display:none">
+				<h:panelGrid columns="4" id="pnlSec">
+
+					<h:outputText value="Cod SAP" />
+					<p:selectOneMenu id="prio" filter="true" style="width:350px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo cod Sap es obligatorio"
+						value="#{bajaRotacionBean.vendedorA}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione cod SAP" />
+						<f:selectItems value="#{bajaRotacionBean.listaEspecialista}"
+							var="especialista" itemValue="#{especialista}"
+							itemLabel="#{especialista.id_funcionario} -- #{especialista.persona.nombre}" />
+					</p:selectOneMenu>
+
+					<p:graphicImage library="images" name="flechas.png" height="25"
+						width="25" />
+
+					<p:selectOneMenu id="prioridad" filter="true" style="width:350px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo cod Sap es obligatorio"
+						value="#{bajaRotacionBean.vendedorR}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione cod SAP" />
+						<f:selectItems value="#{bajaRotacionBean.listaEspecialistaD}"
+							var="cod" itemValue="#{cod}"
+							itemLabel="#{cod.id_funcionario}  -- #{cod.persona.nombre}" />
+							<p:ajax listener="#{bajaRotacionBean.listaCodClientes()}" update=":frmSec:clientes"/>	
+					</p:selectOneMenu>
+
+					<h:outputText value="Clientes" />
+					<p:selectOneMenu id="clientes" filter="true" style="width:350px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo cliente es obligatorio"
+						value="#{bajaRotacionBean.clienteD}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione Cliente" />
+						<f:selectItems value="#{bajaRotacionBean.listaClientes}"
+							var="cliente" itemValue="#{cliente}"
+							itemLabel="#{cliente.id_cliente} -- #{cliente.descripcion}" />
+					</p:selectOneMenu>
+					
+					<h:outputText />
+					<p:inputText value="#{bajaRotacionBean.observacion}" placeholder="Observacion"  size="32"/>
+					
+					<p:commandButton icon="ui-icon-plus"
+						update=" :frmAsv:tblNueAsv :msgGlobal :frmSec:pnlSec  :frmSecG:pnlSecG"
+						actionListener="#{bajaRotacionBean.cambioVendedor()}">
+						<f:attribute name="vendedorSelecionado2" value="#{vend}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-disk" value="Guardar"
+						style="background: #38b44a"
+						update=":msgGlobal :frmAsv:tblNueAsv"
+						actionListener="#{bajaRotacionBean.actualizarVendedorPorCliente()}"
+						oncomplete="showRequest(null);" 
+						disabled="#{bajaRotacionBean.disable}">
+						<f:attribute name="vendedorSelecionado2" value="#{vend}" />
+					</p:commandButton>
+
+				</h:panelGrid>
+			</h:form>
+			
+			<h:form id="frmSecG" style="display:none">
+				<h:panelGrid columns="4" id="pnlSecG">
+					<p:commandButton icon="ui-icon-disk" value="Guardar"
+						style="background: #38b44a"
+						update=":msgGlobal :frmAsv:tblNueAsv"
+						actionListener="#{bajaRotacionBean.actualizarVendedorPorCliente()}"
+						oncomplete="showRequest(null);" 
+						disabled="#{bajaRotacionBean.disable}">
+						<f:attribute name="vendedorSelecionado2" value="#{vend}" />
+					</p:commandButton>
+				
+				</h:panelGrid>
+			</h:form>	
+			
+			<h:form id="frmSecV" style="display:none">
+				<h:panelGrid columns="4" id="pnlSecV">
+					<h:outputText value="Cod SAP" />
+					<p:selectOneMenu id="prioV" filter="true" style="width:350px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo cod Sap es obligatorio"
+						value="#{bajaRotacionBean.vendedorA}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione cod SAP" />
+						<f:selectItems value="#{bajaRotacionBean.listaEspecialista}"
+							var="especialista" itemValue="#{especialista}"
+							itemLabel="#{especialista.id_funcionario} -- #{especialista.persona.nombre}" />
+					</p:selectOneMenu>
+
+					<p:graphicImage library="images" name="flechas.png" height="25"
+						width="25" />
+
+					<p:selectOneMenu id="prioridadV" filter="true" style="width:350px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo cod Sap es obligatorio"
+						value="#{bajaRotacionBean.vendedorR}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione cod SAP" />
+						<f:selectItems value="#{bajaRotacionBean.listaEspecialistaD}"
+							var="cod" itemValue="#{cod}"
+							itemLabel="#{cod.id_funcionario}  -- #{cod.persona.nombre}" />
+							<p:ajax listener="#{bajaRotacionBean.listaCodClientes()}" update=":frmSec:clientes"/>	
+					</p:selectOneMenu>
+
+					<h:outputText />
+					<p:inputText  value="#{bajaRotacionBean.observacion}" placeholder="Observacion"  size="32"/>
+					
+					<p:commandButton icon="ui-icon-plus"
+						update=" :frmAsvV:tblNueAsvV :msgGlobal :frmSecV:pnlSecV :frmSecVG:pnlSecVG"
+						actionListener="#{bajaRotacionBean.cambioVendedor()}">
+						<f:attribute name="vendedorSelecionado2" value="#{vend}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-disk" value="Guardar"
+						style="background: #38b44a" update=":msgGlobal :frmAsvV:tblNueAsvV"
+						actionListener="#{bajaRotacionBean.actualizarVendedor()}"
+						oncomplete="showRequestV(null);" 
+						disabled="#{bajaRotacionBean.disable}">
+						<f:attribute name="vendedorSelecionado2" value="#{vend}" />
+					</p:commandButton>
+
+				</h:panelGrid>
+			</h:form>
+			
+			<h:form id="frmSecVG" style="display:none">
+				<h:panelGrid columns="4" id="pnlSecVG">
+					<p:commandButton icon="ui-icon-disk" value="Guardar"
+						style="background: #38b44a" update=":msgGlobal :frmAsvV:tblNueAsvV"
+						actionListener="#{bajaRotacionBean.actualizarVendedor()}"
+						oncomplete="showRequestV(null);" 
+						disabled="#{bajaRotacionBean.disable}">
+						<f:attribute name="vendedorSelecionado2" value="#{vend}" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+			
+			<h:form id="frmSecL" style="display:none">
+				<h:panelGrid columns="4" id="pnlSecL">
+
+					<h:outputText value="Cod SAP" />
+					<p:selectOneMenu id="prioL" filter="true" style="width:350px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo cod Sap es obligatorio"
+						value="#{bajaRotacionBean.vendedorA}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione cod SAP" />
+						<f:selectItems value="#{bajaRotacionBean.listaEspecialista}"
+							var="especialista" itemValue="#{especialista}"
+							itemLabel="#{especialista.id_funcionario} -- #{especialista.persona.nombre}" />
+					</p:selectOneMenu>
+
+					<h:outputText />
+					<p:inputText  value="#{bajaRotacionBean.observacion}" placeholder="Observacion"  size="32"/>
+					
+					<h:outputText value="Lineas" />
+					<p:selectOneMenu id="linea" filter="true" style="width:350px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo linea es obligatorio"
+						value="#{bajaRotacionBean.linea}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione la Linea" />
+						<f:selectItems value="#{bajaRotacionBean.listaLinea}"
+							var="linea" itemValue="#{linea}"
+							itemLabel="#{linea.id} -- #{linea.nombre}" />
+					</p:selectOneMenu>
+					
+					<p:graphicImage library="images" name="flechas.png" height="25"
+						width="25" />
+						
+
+					<p:selectOneMenu id="prioridadL" filter="true" style="width:350px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo Linea es obligatorio"
+						value="#{bajaRotacionBean.lineaA}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione la Linea" />
+						<f:selectItems value="#{bajaRotacionBean.listaLinea}"
+							var="cod" itemValue="#{cod}"
+							itemLabel="#{cod.id}  -- #{cod.nombre}" />
+					</p:selectOneMenu>
+					
+					<p:commandButton icon="ui-icon-plus"
+						update=" :frmAsvL:tblNueAsvL :msgGlobal :frmSecL:pnlSecL :frmSecLG:pnlSecLG"
+						actionListener="#{bajaRotacionBean.cambioVendedor()}">
+						<f:attribute name="vendedorSelecionado2" value="#{vend}" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-disk" value="Guardar"
+						style="background: #38b44a" update=":msgGlobal :frmAsvL:tblNueAsvL"
+						actionListener="#{bajaRotacionBean.actualizarVendedorPorLinea()}"
+						oncomplete="showRequestL(null);" 
+						disabled="#{bajaRotacionBean.disable}" >
+						<f:attribute name="vendedorSelecionado2" value="#{vend}" />
+					</p:commandButton>
+
+				</h:panelGrid>
+			</h:form>
+			
+			<h:form id="frmSecLG" style="display:none">
+				<h:panelGrid columns="4" id="pnlSecLG">
+					<p:commandButton icon="ui-icon-disk" value="Guardar"
+						style="background: #38b44a" update=":msgGlobal :frmAsvL:tblNueAsvL"
+						actionListener="#{bajaRotacionBean.actualizarVendedorPorLinea()}"
+						oncomplete="showRequestL(null);" 
+						disabled="#{bajaRotacionBean.disable}" >
+						<f:attribute name="vendedorSelecionado2" value="#{vend}" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:form>
+			
+			<h:form id="frmAsv" style="display:none">
+				<p:dataTable id="tblNueAsv" editable="true" editMode="cell"
+					emptyMessage="No se encontraron registros"
+					value="#{bajaRotacionBean.listaAjusteVendedor}"
+					var="cambioVendedor" paginatorPosition="bottom"
+					scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="50" >
+					
+					<f:facet name="header" >
+						<h:outputText value="Listado de Asignacion de vendedores Por cliente" /> 
+					</f:facet>
+					
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column headerText="Cod Sap - Nombre "  />
+							<p:column headerText="" width="3%" />
+							<p:column headerText="Cod Sap - Nombre"  style="text-align:center" />
+							<p:column headerText="" width="3%"/>
+							<p:column headerText="Cod Sap - Cliente"  />
+							<p:column headerText="Accion" width="10%" />
+						</p:row>
+					</p:columnGroup>
+
+					<p:column>
+						<h:outputText value="#{cambioVendedor.codSap} - #{cambioVendedor.nombre}" />
+					</p:column>
+					
+					<p:column>
+						<p:graphicImage library="images" name="flechas.png" height="25"
+							width="25" />
+					</p:column>
+					
+					<p:column>
+						<h:outputText value="#{cambioVendedor.codSapA} - #{cambioVendedor.nombreA}" />
+					</p:column>
+
+					<p:column>
+						<p:graphicImage library="images" name="flechas.png" height="25"
+							width="25" />
+					</p:column>
+					
+					<p:column>
+						<h:outputText value="#{cambioVendedor.codCliente} - #{cambioVendedor.nombreCliente}" />
+					</p:column>
+
+					<p:column headerText="Acción" width="10%" style="text-align:center">
+						<p:commandButton icon="ui-icon-minus"
+							actionListener="#{bajaRotacionBean.borrarCambioVendedor(cambioVendedor)}"
+							update=":frmAsv:tblNueAsv :frmSec:pnlSec"
+							>							
+							<f:attribute name="vendedorSelecionado" value="#{cambioVendedor}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			
+			<h:form id="frmAsvV" style="display:none">
+				<p:dataTable id="tblNueAsvV" editable="true" editMode="cell"
+					emptyMessage="No se encontraron registros"
+					value="#{bajaRotacionBean.listaAjusteVendedor}"
+					var="cambioVendedor" paginatorPosition="bottom"
+					scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="50" >
+					
+					<f:facet name="header" >
+						<h:outputText value="Listado de Asignacion de vendedores Por Especialista" /> 
+					</f:facet>
+					
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column headerText="Cod Sap - Nombre "  />
+							<p:column headerText="" width="3%" />
+							<p:column headerText="Cod Sap - Nombre"  style="text-align:center" />
+							<p:column headerText="Accion" width="10%" />
+						</p:row>
+					</p:columnGroup>
+
+					<p:column>
+						<h:outputText value="#{cambioVendedor.codSap} - #{cambioVendedor.nombre}" />
+					</p:column>
+					
+					<p:column>
+						<p:graphicImage library="images" name="flechas.png" height="25"
+							width="25" />
+					</p:column>
+					
+					<p:column>
+						<h:outputText value="#{cambioVendedor.codSapA} - #{cambioVendedor.nombreA}" />
+					</p:column>
+
+					<p:column headerText="Acción" width="10%" style="text-align:center">
+						<p:commandButton icon="ui-icon-minus"
+							actionListener="#{bajaRotacionBean.borrarCambioVendedor(cambioVendedor)}"
+							update=":frmAsvV:tblNueAsvV :frmSecV:pnlSecV"
+							>							
+							<f:attribute name="vendedorSelecionado" value="#{cambioVendedor}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+			
+			<h:form id="frmAsvL" style="display:none">
+				<p:dataTable id="tblNueAsvL" editable="true" editMode="cell"
+					emptyMessage="No se encontraron registros"
+					value="#{bajaRotacionBean.listaAjusteVendedor}"
+					var="cambioVendedor" paginatorPosition="bottom"
+					scrollRows="20" scrollable="true" liveScroll="true"  >
+					
+					<f:facet name="header" >
+						<h:outputText value="Listado de Asignacion de vendedores Por Linea" /> 
+					</f:facet>
+					
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column headerText="Cod Sap - Nombre "  />
+							<p:column headerText="" width="3%" />
+							<p:column headerText="Cod - Linea"  style="text-align:center" />
+							<p:column headerText="" width="3%"/>
+							<p:column headerText="Cod - Linea"  />
+							<p:column headerText="Accion" width="10%" />
+						</p:row>
+					</p:columnGroup>
+
+					<p:column>
+						<h:outputText value="#{cambioVendedor.codSap} - #{cambioVendedor.nombre}" />
+					</p:column>
+					
+					<p:column>
+						<p:graphicImage library="images" name="flechas.png" height="25"
+							width="25" />
+					</p:column>
+					
+					<p:column>
+						<h:outputText value="#{cambioVendedor.codLinea} - #{cambioVendedor.nombreLinea}" />
+					</p:column>
+
+					<p:column>
+						<p:graphicImage library="images" name="flechas.png" height="25"
+							width="25" />
+					</p:column>
+					
+					<p:column>
+						<h:outputText value="#{cambioVendedor.codLineaA} - #{cambioVendedor.nombreLineaA}" />
+					</p:column>
+
+					<p:column headerText="Acción" width="10%" style="text-align:center">
+						<p:commandButton icon="ui-icon-minus"
+							actionListener="#{bajaRotacionBean.borrarCambioVendedor(cambioVendedor)}"
+							update=":frmAsvL:tblNueAsvL :frmSecL:pnlSecL"
+							>							
+							<f:attribute name="vendedorSelecionado" value="#{cambioVendedor}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+		
+		<h:form id="frmTip">
+		
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Tipo de vendedor" />
+				
+				<p:selectOneMenu value="#{autenticacionBean.tipoVendedor}" style="width:200px;" >
+					<f:selectItem itemValue="E" itemLabel="Vendedor Externo" />
+					<f:selectItem itemValue="I" itemLabel="Vendedor Interno" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="Fecha:" />
+				<p:selectOneMenu  id="mes" widgetVar="mes" value="#{autenticacionBean.fechaBusqueda}" filter="true"
+					style="width:180px;" required="true"
+					requiredMessage="Campo Mes es obligatorio">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
+					<f:selectItems value="#{bajaRotacionBean.listaFechas}" var="item"
+						itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu id="year" value="#{autenticacionBean.fechaBusquedaYear}"
+					style="width:100px;" >
+					<f:selectItem itemValue="2016" itemLabel="2016" />
+				</p:selectOneMenu>
+				
+				<p:commandButton value="Asignacion por Cliente"
+					update=" :msgGlobal :frmTip :frmSec:pnlSec :frmAsvV:tblNueAsvV :frmAsvL:tblNueAsvL"
+					actionListener="#{bajaRotacionBean.listaCodVededores()}"
+					oncomplete="showRequest(#{autenticacionBean.fechaBusqueda});"
+					style="background: #b94a48"/>
+				
+				<p:commandButton value="Asignacion por Vendedor" 
+					update=" :msgGlobal :frmTip :frmSecV:pnlSecV :frmAsv:tblNueAsv :frmAsvL:tblNueAsvL"
+					actionListener="#{bajaRotacionBean.listaCodVededores()}"
+					oncomplete="showRequestV(#{autenticacionBean.fechaBusqueda});"
+					style="background: #b94a48"/>	
+				
+				<p:commandButton value="Asignacion por Linea" 
+					update=" :msgGlobal :frmTip :frmSecL:pnlSecL :frmAsv:tblNueAsv :frmAsvV:tblNueAsvV"
+					actionListener="#{bajaRotacionBean.listaCodVededoresLinea()}"
+					oncomplete="showRequestL(#{autenticacionBean.fechaBusqueda});"
+					style="background: #b94a48"/>	
+				
+			</h:panelGrid>
+		</h:form>
+		<script type="text/javascript">
+			 
+		    function showRequest(args) {
+
+				if(PF('mes').getSelectedValue() == "")
+					return false;
+			    
+			    if(args !== null ) {
+		        	$('#frmSec').show();
+		        	$('#frmAsv').show();
+		        	$('#frmSecG').show();
+		        	$('#frmSecV').hide();
+		        	$('#frmSecL').hide();
+		        	$('#frmAsvV').hide();
+		        	$('#frmAsvL').hide();
+		        	$('#frmSecLG').hide();
+		        	$('#frmSecVG').hide();
+		        }
+		        else {
+		        	$('#frmSec').hide();
+		        	$('#frmAsv').hide();
+		        	$('#frmSecG').hide();		        	
+		        }
+		    }
+
+		    function showRequestV(args) {
+
+		    	if(PF('mes').getSelectedValue() == "")
+					return false;
+				
+			    if(args !== null ) {
+		        	$('#frmSecV').show();
+		        	$('#frmAsvV').show();
+		        	$('#frmSecVG').show();
+		        	$('#frmSec').hide();
+		        	$('#frmSecL').hide();
+		        	$('#frmAsv').hide();
+		        	$('#frmAsvL').hide();
+		        	$('#frmSecG').hide();	
+		        	$('#frmSecLG').hide();	        	
+		        }
+		        else {
+		        	$('#frmSecV').hide();
+		        	$('#frmAsvV').hide();
+		        	$('#frmSecVG').hide();
+		        }
+		    }
+		    function showRequestL(args) {
+
+		    	if(PF('mes').getSelectedValue() == "")
+					return false;
+				
+			    if(args !== null ) {
+		        	$('#frmSecL').show();
+		        	$('#frmAsvL').show();
+		        	$('#frmSecLG').show();
+		        	$('#frmSec').hide();
+		        	$('#frmSecV').hide();
+		        	$('#frmAsv').hide();
+		        	$('#frmAsvV').hide();
+		        	$('#frmSecG').hide();
+		        	$('#frmSecVG').hide();
+		        }
+		        else {
+		        	$('#frmSecL').hide();
+		        	$('#frmAsvL').hide();
+		        	$('#frmSecLG').hide();
+		        }
+		    }
+		  </script>   
+	</ui:define>
+
+</ui:composition>
+</html>

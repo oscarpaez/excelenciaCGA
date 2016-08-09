@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	<ui:define name="menu">
+		<ui:include src="/templates/menu.xhtml" />
+	</ui:define>
+	<ui:define name="contenido">
+		<f:metadata>
+			<f:viewParam name="index" value="#{autenticacionBean.index}"/>
+	<!-- 	<f:event listener="#{gerentesBean.listarDirectores()}" type="preRenderView" />  -->
+		</f:metadata>
+			
+		<h:form id="frmPlan">
+			<p:panel>
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					<h:commandLink >
+						<p:graphicImage library="images" name="excel.png" width="24" styleClass="excel"/>
+						<p:dataExporter type="xls" target="tblPlan" fileName="gerentes_comision" />
+					</h:commandLink>
+	
+					<h:commandLink>
+						<p:graphicImage library="images" name="csv.png" width="24" styleClass="cvs" />
+						<p:dataExporter type="csv" target="tblPlan" fileName="gerentes_comision" />
+					</h:commandLink>
+				</f:facet>
+
+	 		<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" value="#{gerentesBean.comisionDirectores}" var="director"
+					draggableColumns="true" rowKey="#{director.id}"  selection="#{gerentesBean.funcionario}"  selectionMode="single"
+					draggableRows="true" >
+					
+					<f:facet name="header">
+						<p:outputLabel value="Comision Directores"/>
+					</f:facet>
+					
+	 			    <p:columnGroup type="header">
+			            <p:row>
+			            	<p:column colspan="1" headerText="Cedula" width="7%" />
+			                <p:column colspan="1" headerText="Cod SAP" width="5%"  />
+			                <p:column colspan="1" headerText="Nombre" width="9%"/>
+			                <p:column colspan="1" headerText="Cargo" width="8%"/>
+			                <p:column colspan="2" headerText="Comision Venta Linea" />
+			                <p:column colspan="2" headerText="Comision Venta Pais" />
+			                <p:column colspan="2" headerText="Comision Mix de lineas" />
+			                <p:column colspan="2" headerText="Comision Zonas a Cargo" />
+			                <p:column colspan="2" headerText="Comision Recaudo" />
+			                <p:column colspan="1" headerText="Total comision" />
+				        </p:row>
+				    </p:columnGroup> 
+			        
+				    <p:column headerText="Cedula" >
+						<h:outputText value="#{director.cedula}" />
+					</p:column>
+					
+					<p:column headerText="Codigo SAP">
+						<h:outputText value="#{director.id}" />
+					</p:column>
+
+					<p:column headerText="Nombre">
+						<h:outputText value="#{director.nombre}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Cargo">
+						<h:outputText value="#{director.concepto}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Base comision" style="text-align:right">
+						<h:outputText value="#{(director.comisionVentaLinea == null)? 'N/A' : director.comisionVentaLinea}">
+							<f:convertNumber locale="en_US" maxFractionDigits="0" integerOnly="true"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Detalle" style="text-align:center;">
+						<p:button icon="ui-icon-search" disabled="#{director.detalleVL}"
+							outcome="/pages/gh/detalleVL.xhtml?faces-redirect=true">
+						    <f:param name="funid" value="#{director.id}"/>
+						    <f:param name="fecM" value="#{gerentesBean.fechaBusqueda}" />
+						    <f:param name="fecY" value="#{gerentesBean.fechaBusquedaYear}" />
+						</p:button>
+					</p:column>
+					
+					<p:column headerText="Base pais" style="text-align:right">
+						<h:outputText value="#{(director.comisionVentaPais == null)? 'N/A' : director.comisionVentaPais}">
+							<f:convertNumber locale="en_US" maxFractionDigits="0" integerOnly="true"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Detalle" style="text-align:center;">
+						<p:button icon="ui-icon-search" disabled="#{director.detalleVP}"
+							outcome="/pages/gh/detalleVP.xhtml?faces-redirect=true">
+						    <f:param name="funid" value="#{director.id}"/>
+						    <f:param name="fecM" value="#{gerentesBean.fechaBusqueda}" />
+						    <f:param name="fecY" value="#{gerentesBean.fechaBusquedaYear}" />
+						</p:button>
+					</p:column>
+					
+					<p:column headerText="Base ML" style="text-align:right">
+						<h:outputText value="#{(director.comisionMixLinea == null)? 'N/A' : director.comisionMixLinea}">
+							<f:convertNumber locale="en_US" maxFractionDigits="0" integerOnly="true"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Detalle" style="text-align:center;">
+						<p:button icon="ui-icon-search" disabled="#{director.detalleML}"
+							outcome="/pages/gh/detalleML.xhtml?faces-redirect=true">
+						    <f:param name="funid" value="#{director.id}"/>
+						    <f:param name="fecM" value="#{gerentesBean.fechaBusqueda}" />
+						    <f:param name="fecY" value="#{gerentesBean.fechaBusquedaYear}" />
+						</p:button>
+					</p:column>
+					
+					<p:column headerText="Base comision" style="text-align:right">
+						<h:outputText value="#{(director.comisionZonasCargo == null)? 'N/A' : director.comisionZonasCargo }">
+							<f:convertNumber locale="en_US" maxFractionDigits="0" integerOnly="true"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Detalle" style="text-align:center; width:30%" >
+						<p:button icon="ui-icon-search" disabled="#{director.detalleZC}"
+							outcome="/pages/gh/detalleZC.xhtml?faces-redirect=true">
+						    <f:param name="funid" value="#{director.id}"/>
+						    <f:param name="fecM" value="#{gerentesBean.fechaBusqueda}" />
+						    <f:param name="fecY" value="#{gerentesBean.fechaBusquedaYear}" />
+						</p:button>
+					</p:column>
+					
+					<p:column headerText="Base comision" style="text-align:right">
+						<h:outputText value="#{(director.comisionRecaudo == null)? 'N/A' : director.comisionRecaudo }">
+							<f:convertNumber locale="en_US" maxFractionDigits="0" integerOnly="true"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Detalle" style="text-align:center;">
+						<p:button icon="ui-icon-search"  disabled="#{director.detalleR}"
+							outcome="/pages/gh/detalleRecaudo.xhtml?faces-redirect=true">
+						    <f:param name="funid" value="#{director.id}"/>
+						    <f:param name="fecM" value="#{gerentesBean.fechaBusqueda}" />
+						    <f:param name="fecY" value="#{gerentesBean.fechaBusquedaYear}" />
+						</p:button>
+					</p:column>
+					
+					<p:column headerText="Base comision" style="text-align:right">
+						<h:outputText value="#{director.comisionTotal}">
+							<f:convertNumber locale="en_US" maxFractionDigits="0" integerOnly="true"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			                <p:column colspan="4" style="text-align:right" footerText="Total:" />
+			                <p:column footerText="$ #{gerentesBean.totalVLi} " style="text-align:right"  />
+			                <p:column colspan="1"  footerText=" " />
+			                <p:column footerText="$ #{gerentesBean.totalVPa}"  style="text-align:right" />
+			                <p:column colspan="1" footerText="" style="text-align:right"/>
+			                <p:column footerText="$ #{gerentesBean.totalMLi}"  style="text-align:right" />
+			                <p:column colspan="1" footerText="" style="text-align:right"/>
+			                <p:column footerText="$ #{gerentesBean.totalZCa}"  style="text-align:right" />
+			                <p:column colspan="1" footerText="" style="text-align:right"/>
+			                <p:column footerText="$ #{gerentesBean.totalRe}"  style="text-align:right" />
+			                <p:column colspan="1" footerText="" style="text-align:right"/>
+						    <p:column footerText="$ #{gerentesBean.totalComision} "  style="text-align:right" />
+			           </p:row>
+			        </p:columnGroup>
+					
+					<f:facet name="footer">
+						
+					</f:facet>
+				</p:dataTable> 
+			</p:panel>
+		</h:form>
+		
+		<h:form>
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Fecha:" />
+				<p:selectOneMenu value="#{autenticacionBean.fechaBusqueda}" filter="true"
+					style="width:180px;" required="true">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
+					<f:selectItems value="#{gerentesBean.listaFechas}" var="item"
+						itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu value="#{autenticacionBean.fechaBusquedaYear}"
+					style="width:100px;" >
+					<f:selectItem itemValue="2016" itemLabel="2016" />
+				</p:selectOneMenu>
+				
+				<p:commandButton value="Buscar" update=":frmPlan:tblPlan :msgGlobal"
+					actionListener="#{gerentesBean.listarDirectores()}" style="background: #b94a48"
+					onclick="start(); PF('pbAjax').start(); PF('pbAjax').show();"/>
+				
+				<p:progressBar widgetVar="pbAjax"  ajax="true" value="#{gerentesBean.progress}" 
+				         labelTemplate="{value}%" styleClass="animated" global="false"
+				         style="display:none; width:100px;" >
+				       <p:ajax event="complete" listener="#{gerentesBean.onComplete}"
+				       	 oncomplete="PF('pbAjax').hide();"  update=":frmPlan:tblPlan :msgGlobal"/>
+				</p:progressBar>	
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
+</html>

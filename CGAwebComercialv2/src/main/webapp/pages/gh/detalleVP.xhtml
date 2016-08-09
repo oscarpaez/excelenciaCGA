@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+	<ui:define name="contenido">
+	
+		<f:metadata>
+			<f:viewParam  name="funid" value="#{gerentesBean.idFuncionario}"/>
+			<f:viewParam name="fecM" value="#{gerentesBean.fechaBusqueda}" />
+			<f:viewParam name="fecY" value="#{gerentesBean.fechaBusquedaYear}" />
+			<f:event listener="#{gerentesBean.directorVP()}" type="preRenderView" />  
+		</f:metadata>
+		
+		<div style="height: 50px">
+				<h:form style="padding: 6px">
+					<h:panelGrid columns="5" style="width:100%" styleClass="pnlVenG">
+						<p:outputLabel value="" />
+						<p:outputLabel value="" />
+						<p:outputLabel value="" />
+						<p:outputLabel value="" />
+						
+						<p:button value="Mes de consulta: " 
+							style="width:100%" disabled="true"/>	
+						
+					</h:panelGrid>
+				</h:form>
+			</div>
+		
+		<h:form id="frmPlan"  >
+			<p:panel>
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					
+					
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" 
+					value="#{gerentesBean.comisionDirectores}" var="director"
+					draggableColumns="true" rowKey="#{director.id}"  selection="#{gerentesBean.funcionario}"  selectionMode="single"
+					draggableRows="true">
+					
+
+					<f:facet name="header">
+						<h:outputText value="#{autenticacionBean.fechaActual}" />					</f:facet>
+						
+						
+					<p:columnGroup type="header">
+			            <p:row>
+			                <p:column colspan="8" headerText="Detalle Venta linea de  " />
+			            </p:row>
+			            
+			            <p:row>
+			            	<p:column colspan="1" headerText="Sucursal" />
+			                <p:column colspan="1" headerText="Presupuesto Ingreso" />
+			                <p:column colspan="1" headerText="Real Ingreso" />
+			                <p:column colspan="2" headerText="Cumplimiento %" />
+			          		<p:column colspan="1" headerText="Umbral" />
+			                <p:column colspan="1" headerText="Valor Base 100%" />
+			                <p:column colspan="1" headerText="Valor Base 20%" />
+			   <!--         <p:column colspan="1" headerText="Distribucion de linea" />
+			                <p:column colspan="1" headerText="Valor comision" />    -->
+			                
+			            </p:row>
+					</p:columnGroup>
+					
+					<p:column headerText="sucursal" >
+						<h:outputText value="#{director.concepto}" />
+					</p:column>
+					
+					<p:column headerText="Ingreso P" style="text-align:right" >
+						<h:outputText value="#{director.presupuestoB}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso R" style="text-align:right" >
+						<h:outputText value="#{director.ingresoRealB}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Ingreso C" style="text-align:right">
+						<h:outputText value="#{director.cumplimiento}%"  >
+							<f:convertNumber locale="en_US"  />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{director.imagen1}"  height="25" width="25" />
+					</p:column>
+					
+			<!--   <p:column headerText="Utilidad P" style="text-align:right" >
+						<h:outputText value="#{plan.utilpresupuesto}" style="text-align:right">
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad R" style="text-align:right" >
+						<h:outputText value="#{plan.utilidadReal}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Utilidad C" sortBy="#{plan.cumplimientoU}" style="text-align:right">
+						<h:outputText value="#{plan.cumplimientoU}%" >
+							<f:convertNumber locale="en_US"  />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<p:graphicImage library="images" name="#{plan.imagen}"  height="25" width="25" />
+					</p:column>   -->
+					
+					<p:column headerText="Umbral" style="text-align:right">
+						<h:outputText value="#{director.umbralCV}%" />
+					</p:column>
+					
+					<p:column headerText="valor Base" style="text-align:right">
+						<h:outputText value="#{director.comisionRecaudo}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="valor Base" style="text-align:right">
+						<h:outputText value="#{director.comisionTotal}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+	<!-- 			<p:column headerText="dist Linea" style="text-align:right">
+						<h:outputText value="#{director.comisionMixLinea}%" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="valor Comision" style="text-align:right">
+						<h:outputText value="#{director.comisionVentaLinea}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>   -->	
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			                <p:column colspan="1" style="text-align:right" footerText="Total:" />
+			                <p:column footerText="$ #{gerentesBean.totalPresupuesto}" style="text-align:right"  />
+			                <p:column footerText="$ #{gerentesBean.totalIngreso}"  style="text-align:right" />
+			                <p:column colspan="1" footerText="#{gerentesBean.totalCumplimiento}%" style="text-align:right"/>
+			                <p:column colspan="2"  footerText=" " />		 
+			                <p:column colspan="1" footerText="$ Valor Comision" style="text-align:right"/>
+			                <p:column colspan="1" footerText="$ #{gerentesBean.totalComision}" style="text-align:right"/>	
+			            </p:row>
+			        </p:columnGroup>
+					
+					<f:facet name="footer">
+						<p:button  value="Volver"
+						outcome="/pages/gh/comisionD.xhtml?faces-redirect=true"
+						onclick="history.back()" style="background: #acdd4a"/>
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		
+		
+		</ui:define>
+	</ui:composition>
+</html>

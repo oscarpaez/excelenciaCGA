@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	
+	<ui:define name="contenido">
+		<p:growl id="menssage"/>
+		
+		<f:metadata>
+			<f:event listener="#{proyectoBean.listarA()}" type="preRenderView" />
+		</f:metadata>
+			
+		<h:form id="frmPlan">
+			<p:panel>
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					<h:commandLink >
+						<p:graphicImage library="images" name="excel.png" width="24" styleClass="excel"/>
+						<p:dataExporter type="xls" target="tblPlan" fileName="gerentes_comision" />
+					</h:commandLink>
+	
+					<h:commandLink>
+						<p:graphicImage library="images" name="csv.png" width="24" styleClass="cvs" />
+						<p:dataExporter type="csv" target="tblPlan" fileName="gerentes_comision" />
+					</h:commandLink>
+				</f:facet>
+
+	 		<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" value="#{proyectoBean.listaProyecto}" var="proyecto"
+					draggableColumns="true" rowKey="#{proyecto.nombre}"  selection="#{proyectoBean.proyecto}"  selectionMode="single"
+					draggableRows="true">
+					
+					<f:facet name="header">
+						Lista de Proyectos
+					</f:facet>
+					
+	 			    <p:columnGroup type="header">
+			            <p:row>
+			            	<p:column colspan="1" headerText="Item" width="3%" />
+			            	<p:column colspan="1" headerText="Nombre" />
+			            	<p:column colspan="1" headerText="Descripcion" />
+			            	<p:column colspan="1" headerText="Area" width="5%"/>
+			            	<p:column colspan="1" headerText="Respon." width="7%" />
+			            	<p:column colspan="1" headerText="Respon. IT" width="7%" />
+			            	<p:column colspan="1" headerText="Respon. EX" width="7%"/>
+			            	<p:column colspan="1" headerText="Valor" />
+			            	<p:column colspan="1" headerText="Fecha Inicio" />
+			            	<p:column colspan="1" headerText="Fechac Final" />
+			            	<p:column colspan="1" headerText="Avance" width="5%"/>
+			            	<p:column colspan="1" headerText="Plan de Avance" />
+			            	<p:column colspan="1" headerText="Prioridad" width="6%"/>
+			            	<p:column colspan="2" headerText="Estado" />
+			            	<p:column colspan="1" headerText="Acciones" />
+			           </p:row>
+			        </p:columnGroup> 
+			        
+			        <p:column headerText="Item" >
+						<h:outputText value="#{proyecto.item}" />
+					</p:column>
+			        
+				    <p:column headerText="nombre" >
+						<h:outputText value="#{proyecto.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Descripcion" >
+						<h:outputText value="#{proyecto.descripcion}" />
+					</p:column>
+					
+					<p:column headerText="Area" >
+						<h:outputText value="#{proyecto.area}" />
+					</p:column>
+					
+					<p:column headerText="Responsable" >
+						<h:outputText value="#{proyecto.responsable}" />
+					</p:column>
+					
+					<p:column headerText="Representante it" >
+						<h:outputText value="#{proyecto.representante}" />
+					</p:column>
+					
+					<p:column headerText="Representante ex" >
+						<h:outputText value="#{proyecto.representanteEx}" />
+					</p:column>
+					
+					<p:column headerText="valor" style="text-aling:right">
+						<h:outputText value="#{proyecto.valor}" > 
+							<f:convertNumber locale="en_US" maxFractionDigits="0" pattern="#,##0;(#,##0)" />							
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Fecha ini" >
+						<h:outputText value="#{proyecto.fechaInicio}" />
+					</p:column>
+					
+					<p:column headerText="Fecha fin" >
+						<h:outputText value="#{proyecto.fechaFin}" />
+					</p:column>
+					
+					<p:column headerText="Avance" >
+						<h:outputText value="#{proyecto.avance}" />
+					</p:column>
+					
+					<p:column headerText="Plan de Avance" >
+						<h:outputText value="#{proyecto.planDeAvance}" />
+					</p:column>
+					
+					<p:column headerText="Prioridad" >
+						<h:outputText value="#{proyecto.prioridad.nombre}" />
+					</p:column>
+					
+					<p:column headerText="Estado"  style="text-align: center">
+				    	<h:outputText value="#{proyecto.estado.nombre}" /> 
+					</p:column>
+					
+					<p:column headerText="Estado"  style="text-align: center">
+				    	<p:graphicImage library="images" name="#{proyecto.imagen}"  height="25" width="25" />
+					</p:column>
+					
+					<p:column headerText="Acciones">
+						<p:commandButton icon="ui-icon-pencil" title="Editar"
+							action ="#{proyectoBean.editar(proyecto)}"
+							update=":menssage :frmNuePro:pnlNuePro"
+							oncomplete="PF('dlgNue').show();">
+							<f:attribute name="proyectoSelecionado" value="#{proyecto}" />
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+						
+						<p:commandButton icon="ui-icon-trash" actionListener="#{proyectoBean.borrarA(proyecto)}"
+							update=" :menssage :frmNuePro:pnlNuePro  :frmPlan:tblPlan"  title="Borrar">
+							<p:confirm header="Confirmar"
+								message="Desea borrar El Proyecto?" icon="ui-icon-alert" />
+						</p:commandButton>	
+						
+						<p:link  href="http://192.168.0.15/gantt/gantt.php?item=#{proyecto.id}" 
+							target="_bank" >
+							<p:button icon="ui-icon-signal" title="Gantt">
+								<f:param name="item" value="#{proyecto.id}"/>
+							    <f:param name="nompro" value="#{proyecto.nombre}"/>	
+							</p:button>
+						</p:link>
+					</p:column>
+					
+					<f:facet name="footer">
+		<!--           <p:commandButton value="Nuevo Proyecto" style="height:35px" 
+							oncomplete="PF('dlgNue').show();" actionListener="#{proyectoBean.cargarEstados()}"
+							update=":frmNuePro:pnlNuePro" >
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton> -->
+						<p:commandButton  value="Volver" onclick="history.back()" 
+							style="background: #acdd4a; height:35px"/>
+					</f:facet>
+				</p:dataTable>
+				
+				<p:confirmDialog global="true">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" update=":frmPlan:tblPlan" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog> 
+			</p:panel>
+		</h:form>
+		
+		<p:dialog header="Crear Nueva Proyecto" widgetVar="dlgNue" draggable="false" 
+				resizable="false" closable="true" appendTo="@(body)" modal="true" height="400" >
+			<h:form id="frmNuePro" enctype="multipart/form-data">
+				<h:panelGrid columns="2" id="pnlNuePro">
+					
+					<p:outputLabel  value="Nombre:" />
+					<p:inputText  size="30" maxlength="50" 
+						value="#{proyectoBean.proyecto.nombre}" required="true" requiredMessage="Campo descripcion es obligatorio"/>
+					
+					<p:outputLabel  value="Descripcion" />
+					<p:inputTextarea  cols="31"  rows="3" autoResize="false"
+						value="#{proyectoBean.proyecto.descripcion}" required="true" requiredMessage="Campo descripcion es obligatorio"/>
+					
+					<p:outputLabel  value="Responsable" />
+					<p:inputText  size="30" maxlength="50" 
+						value="#{proyectoBean.proyecto.responsable}" required="true" requiredMessage="Campo descripcion es obligatorio"/>
+					
+					<p:outputLabel  value="Responsable IT" />
+					<p:inputText  size="30" maxlength="50" 
+						value="#{proyectoBean.proyecto.representante}" required="true" requiredMessage="Campo descripcion es obligatorio"/>
+					
+					<p:outputLabel value="Responsable EX" />
+					<p:inputText  size="30" maxlength="50" 
+						value="#{proyectoBean.proyecto.representanteEx}" required="true" requiredMessage="Campo descripcion es obligatorio"/>
+					
+					<p:outputLabel  value="valor: " />
+					<p:inputText  size="30" 
+						value="#{proyectoBean.proyecto.valor}" required="true" requiredMessage="Campo cantidad es obligatorio" 
+						converterMessage="Este valor es invalido para este campo" 
+						validatorMessage="Ingrese un valor entre 0 y 100000000000 para el campo" >
+						<f:convertNumber pattern="#,##0;(#,##0)" />
+						<f:validateLongRange minimum="0" maximum="100000000000" />
+						 
+					</p:inputText>
+					
+					<p:outputLabel  value="Fecha Inicial" />
+					<p:calendar  size="30" required="true" requiredMessage="El campo fecha inicial es Obligatorio"
+						value="#{proyectoBean.proyecto.fechaInicio}" />
+					
+					<p:outputLabel value="Fecha Final" />
+					<p:calendar  size="30" required="true"
+						    value="#{proyectoBean.proyecto.fechaFin}"/>
+						    
+					<p:outputLabel  value="Avance" />
+					<p:inputText  size="30" maxlength="50" 
+						value="#{proyectoBean.proyecto.avance}" required="true" requiredMessage="Campo descripcion es obligatorio"/>
+					
+					<p:outputLabel  value="Plan de Avance" />
+					<p:inputText  size="30" maxlength="50" 
+						value="#{proyectoBean.proyecto.planDeAvance}" required="true" requiredMessage="Campo descripcion es obligatorio"/>
+					
+					<p:outputLabel  for="prioridad" value="Prioridad: " />
+					<p:selectOneMenu id="prioridad" filter="true" style="width:322px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo fabricante es obligatorio" 
+						value="#{proyectoBean.proyecto.prioridad}">
+						<f:selectItem noSelectionOption="true" itemLabel="Seleccione la Prioridad"/>
+						<f:selectItems value="#{proyectoBean.listaPrioridad}" var="prioridad"
+							itemValue="#{prioridad}" itemLabel="#{prioridad.nombre}" />
+					</p:selectOneMenu>	
+					
+					<p:outputLabel for="estado" value="Estado: " />
+					<p:selectOneMenu id="estado" filter="true" style="width:322px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo fabricante es obligatorio" 
+						value="#{proyectoBean.proyecto.estado}">
+						<f:selectItem noSelectionOption="true" itemLabel="Seleccione el Estado"/>
+						<f:selectItems value="#{proyectoBean.listaEstado}" var="estado"
+							itemValue="#{estado}" itemLabel="#{estado.nombre}" />
+					</p:selectOneMenu>	
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">	
+					<p:commandButton value="Salvar" actionListener="#{proyectoBean.editarProyecto()}"
+						update=" :menssage :frmNuePro:pnlNuePro  :frmPlan:tblPlan" 
+						/>
+					<p:commandButton value="Cerrar" oncomplete="PF('dlgNue').hide();"
+						/>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>
+</html>
