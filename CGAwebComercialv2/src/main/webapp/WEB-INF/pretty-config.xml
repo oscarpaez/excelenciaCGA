@@ -223,7 +223,7 @@
 	</url-mapping>
 	
 	<url-mapping id="dirRegZon">
-	    <pattern value="/director/zonascargo/detalle" />
+	    <pattern value="/director/zonascargo" />
 	    <view-id value="/pages/dr/zonasCargo.xhtml" />
 	</url-mapping>
 	

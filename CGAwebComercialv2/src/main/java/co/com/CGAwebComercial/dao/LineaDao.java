@@ -1247,7 +1247,7 @@ public class LineaDao extends GenericDao<Linea> {
 					sucursales.setCumplimiento(new BigDecimal("0"));
 				}
 				else{
-					sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+					sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
 				}
 
 				String semaforo = (sucursales.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";
@@ -1406,7 +1406,7 @@ public class LineaDao extends GenericDao<Linea> {
 					sucursales.setCumplimiento(new BigDecimal("0"));
 				}
 				else{
-					sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+					sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
 				}
 
 				String semaforo = (sucursales.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";
@@ -1554,7 +1554,7 @@ public class LineaDao extends GenericDao<Linea> {
 				sucursales.setCumplimiento(new BigDecimal("0"));
 			}
 			else{
-				sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+				sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
 			}
 
 			String semaforo = (sucursales.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";
@@ -1913,7 +1913,7 @@ public class LineaDao extends GenericDao<Linea> {
 						vendedor.setCumplimiento(new BigDecimal("0"));
 					}
 					else{
-						vendedor.setCumplimiento(vendedor.getIngresoRealB().divide(vendedor.getPresupuestoB(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+						vendedor.setCumplimiento(vendedor.getIngresoRealB().divide(vendedor.getPresupuestoB(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
 					}
 
 					String semaforo = (vendedor.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";

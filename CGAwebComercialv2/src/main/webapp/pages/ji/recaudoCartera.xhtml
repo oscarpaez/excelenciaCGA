@@ -12,6 +12,7 @@
 	
 		<f:metadata>
 			<f:viewParam name="perIdr" value="#{directorGBean.cod}" />
+			<f:event listener="#{directorGBean.listarRecaudoI()}" type="preRenderView" />
 		</f:metadata>
 		
 		<h:form id="frmPlan"  >
@@ -33,10 +34,11 @@
 					
 					<p:columnGroup type="header">
 			            <p:row>
-			                <p:column colspan="4" headerText="Cumplimiento de zonas a Cargo" />
+			                <p:column colspan="5" headerText="Cumplimiento de zonas a Cargo" />
 			            </p:row>
 			            
 			            <p:row>
+			            	<p:column colspan="1" headerText="Mes" />	
 			                <p:column colspan="1" headerText="Presupuesto" />		                
 			                <p:column colspan="1" headerText="Real Ingreso" />		                
 			                <p:column colspan="1" headerText="Cumplimiento %"  style="font-size: 10px;"/>
@@ -47,6 +49,12 @@
 					<h:inputHidden id="cedula" value="gerente.cedula" />
 					<h:inputHidden id="codSap" value="gerente.id" />
 					<h:inputHidden id="nombre" value="gerente.nombre" />
+					
+					<p:column style="font-size: 11px; text-align: center;">
+						<h:outputText value="#{gerente.concepto}">
+							<f:convertNumber locale="en_US" integerOnly="true" />
+						</h:outputText>
+					</p:column>
 					
 					<p:column style="font-size: 11px; text-align: right;">
 						<h:outputText value="#{gerente.presupuestoB}">
@@ -76,7 +84,7 @@
 				</p:dataTable>
 			</p:panel>
 		</h:form>
-		
+		<!-- 
 		<h:form>
 			<h:panelGrid columns="8">
 				<p:outputLabel value="Fecha:" />
@@ -97,7 +105,7 @@
 					style="background: #b94a48" 
 					 />
 			</h:panelGrid>
-		</h:form>
+		</h:form>   -->
 		</ui:define>
 	</ui:composition>
 </html>

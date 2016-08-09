@@ -220,6 +220,7 @@ public class PlanBean implements Serializable {
 			BigDecimal valorReal = new BigDecimal("0.00");
 			BigDecimal valorUtilidad = new BigDecimal("0.00");
 			BigDecimal valorUtilidadR = new BigDecimal("0.00");
+			BigDecimal cumplimiento = new BigDecimal("0.00");
 			int numero = 0;
 			int numero1 = 0;
 			//int i = 0;
@@ -262,6 +263,8 @@ public class PlanBean implements Serializable {
 					totalPreUti = new DecimalFormat("###,###").format(totalPresupuestoUtilidad);
 					totalRealIng = new DecimalFormat("###,###").format(totalValorReal);
 					totalRealUti = new DecimalFormat("###,###").format(totalValorUtilidad);
+					cumplimiento = totalValorReal.divide(totalPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+					totalD = new DecimalFormat("###,###.##").format(cumplimiento);
 					
 					if (plan.getIngreso() == null || plan.getIngreso().compareTo(BigDecimal.ZERO) == 0  ){
 						valorReal = new BigDecimal("0");

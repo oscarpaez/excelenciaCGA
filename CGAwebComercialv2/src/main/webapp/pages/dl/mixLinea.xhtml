@@ -12,6 +12,7 @@
 	
 		<f:metadata>
 			<f:viewParam name="perIdr" value="#{directorGBean.cod}" />
+			<f:event listener="#{directorGBean.listarPresupuestoDirectorLinea()}" type="preRenderView" />
 		</f:metadata>
 		
 		<div style="height: 50px">

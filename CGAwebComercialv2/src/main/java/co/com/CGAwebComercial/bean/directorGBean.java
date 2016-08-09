@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -282,9 +283,11 @@ public class directorGBean implements Serializable{
 //				t=progress1;
 //				setProgress(t);
 //			}
+			
+			BigDecimal cumplimiento = totalReal.divide(totalPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100").setScale(2, BigDecimal.ROUND_HALF_UP));
 			totalPre = new DecimalFormat("###,###").format(totalPresupuesto);
 			totalRe = new DecimalFormat("###,###").format(totalReal);
-			
+			utilidad = new DecimalFormat("###,###.##").format(cumplimiento);
 			if(progress != 0){
 				setProgress(100);
 				try {
@@ -728,31 +731,46 @@ public class directorGBean implements Serializable{
 			Zona_ventaDao daoZo = new Zona_ventaDao();
 			List<Zona_venta> listaZona = daoZo.buscarZonaSucursal(zonaF.getCiudad().getId());
 
-			ComisionVendedores sucursales = new ComisionVendedores();
-			sucursales.setPresupuestoB(new BigDecimal("0.00"));
-			sucursales.setIngresoRealB(new BigDecimal("0.00"));
-			for (Zona_venta zona_venta : listaZona) {
-
-				RecaudoDao daoR = new RecaudoDao();
-				List<Recaudo> listaRecaudo = daoR.listarRecaudoDirector(zona_venta.getFuncionario().getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
-
-				for (Recaudo recaudo : listaRecaudo) {
-
-					sucursales.setPresupuestoB(sucursales.getPresupuestoB().add(recaudo.getPresupuesto()));
-					sucursales.setIngresoRealB(sucursales.getIngresoRealB().add(recaudo.getReal()));
+			int meses =  daoZ.fechaFinalR();
+			
+			Calendar fecha = Calendar.getInstance();
+			int year = fecha.get(Calendar.YEAR);
+			fechaBusquedaYear = (fechaBusquedaYear == null || fechaBusquedaYear.equals(""))?  String.valueOf(year) : fechaBusquedaYear;	       
+	        
+			for (int i=1; i<meses; i++){
+				
+				fechaBusqueda = "0"+i;
+				
+				ComisionVendedores sucursales = new ComisionVendedores();
+				sucursales.setPresupuestoB(new BigDecimal("0.00"));
+				sucursales.setIngresoRealB(new BigDecimal("0.00"));
+				sucursales.setConcepto((listaFechas.get(i-1).getValorMes().equals(fechaBusqueda))? listaFechas.get(i-1).getMes():null);
+				
+				for (Zona_venta zona_venta : listaZona) {
+	
+					RecaudoDao daoR = new RecaudoDao();
+					List<Recaudo> listaRecaudo = daoR.listarRecaudoDirector(zona_venta.getFuncionario().getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
+	
+					for (Recaudo recaudo : listaRecaudo) {
+						
+						//sucursales.setConcepto(recaudo.getFecha().toString());
+						sucursales.setPresupuestoB(sucursales.getPresupuestoB().add(recaudo.getPresupuesto()));
+						sucursales.setIngresoRealB(sucursales.getIngresoRealB().add(recaudo.getReal()));
+					}
 				}
+				if(sucursales.getIngresoRealB().intValue() == 0 ){
+					sucursales.setCumplimiento(new BigDecimal("0"));
+				}
+				else{
+					sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				}
+	
+				String semaforo = (sucursales.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";
+				sucursales.setImagen1(semaforo);
+				ListaComisionGerente.add(sucursales);
+				
 			}
-			if(sucursales.getIngresoRealB().intValue() == 0 ){
-				sucursales.setCumplimiento(new BigDecimal("0"));
-			}
-			else{
-				sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
-			}
-
-			String semaforo = (sucursales.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";
-			sucursales.setImagen1(semaforo);
-			ListaComisionGerente.add(sucursales);
-
+			
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se Cargo el Recaudo de cartera del Director.");
@@ -771,27 +789,38 @@ public class directorGBean implements Serializable{
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
 				
 				RecaudoDao dao = new RecaudoDao();
-				List <Recaudo> listaRecaudo = dao.recaudoPaisJefeI(fechaBusqueda, fechaBusquedaYear);
 				
-				ComisionVendedores sucursales = new ComisionVendedores();
-				sucursales.setPresupuestoB(new BigDecimal("0.00"));
-				sucursales.setIngresoRealB(new BigDecimal("0.00"));
-				for (Recaudo recaudo : listaRecaudo) {
-
-						sucursales.setPresupuestoB(sucursales.getPresupuestoB().add(recaudo.getPresupuesto()));
-						sucursales.setIngresoRealB(sucursales.getIngresoRealB().add(recaudo.getReal()));
+				int meses =  dao.fechaFinalR();
+				
+				
+				for (int i=1; i<meses; i++){
+					
+					fechaBusqueda = "0"+i;
+				
+					List <Recaudo> listaRecaudo = dao.recaudoPaisJefeI(fechaBusqueda, fechaBusquedaYear);
+					
+					ComisionVendedores sucursales = new ComisionVendedores();
+					sucursales.setPresupuestoB(new BigDecimal("0.00"));
+					sucursales.setIngresoRealB(new BigDecimal("0.00"));
+					sucursales.setConcepto((listaFechas.get(i-1).getValorMes().equals(fechaBusqueda))? listaFechas.get(i-1).getMes():null);
+					for (Recaudo recaudo : listaRecaudo) {
+	
+							sucursales.setPresupuestoB(sucursales.getPresupuestoB().add(recaudo.getPresupuesto()));
+							sucursales.setIngresoRealB(sucursales.getIngresoRealB().add(recaudo.getReal()));
+						
+					}
+					if(sucursales.getIngresoRealB().intValue() == 0 ){
+						sucursales.setCumplimiento(new BigDecimal("0"));
+					}
+					else{
+						sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
+					}
+	
+					String semaforo = (sucursales.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";
+					sucursales.setImagen1(semaforo);
+					ListaComisionGerente.add(sucursales);
 					
 				}
-				if(sucursales.getIngresoRealB().intValue() == 0 ){
-					sucursales.setCumplimiento(new BigDecimal("0"));
-				}
-				else{
-					sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
-				}
-
-				String semaforo = (sucursales.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";
-				sucursales.setImagen1(semaforo);
-				ListaComisionGerente.add(sucursales);
 				
 			} catch (RuntimeException ex) {
 				ex.printStackTrace();
