@@ -28,7 +28,7 @@
 						</p:progressBar>
 						
 						<p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
-							style="width:100%" disabled="true"/>	
+							style="width:100%; opacity: .90;" disabled="true"/>	
 						
 					</h:panelGrid>
 				</h:form>
@@ -40,8 +40,8 @@
 				<f:facet name="header">
 					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 					
-					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"
-						style="text-align: left; float:right; width:24px; height:24px; background: #ff0000; "
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666; "
 						outcome="/pages/dl/plandl.xhtml?faces-redirect=true" />
 				</f:facet>
 
@@ -59,10 +59,10 @@
 			            </p:row>
 			            
 			            <p:row>
-			                <p:column colspan="1" headerText="Plan Ingreso"  />		                
-			                <p:column colspan="1" headerText="Real Ingreso" />		                
+			                <p:column colspan="1" headerText="Presupuesto"  />		                
+			                <p:column colspan="1" headerText="Venta" />		                
 			                <p:column colspan="1" headerText="Cumplimiento" />
-			                <p:column colspan="1" headerText="Comision" />
+			                <p:column colspan="1" headerText="Desempeño de ventas" />
 			                <p:column colspan="1" headerText="Detalle"  />
 			            </p:row>
 					</p:columnGroup>
@@ -83,7 +83,7 @@
 						</h:outputText>
 					</p:column>
 					
-					<p:column style="text-align:center;" >
+					<p:column style="text-align:right;" >
 						<h:outputText value="#{(gerente.cumplimiento lt 0) ? -gerente.cumplimiento : gerente.cumplimiento}%">
 							<f:convertNumber locale="en_US"  maxFractionDigits="0"/>
 						</h:outputText>
@@ -102,7 +102,7 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<p:button  value="Volver" onclick="history.back()" style="background: #acdd4a"/>
+						<p:button  value="Volver" onclick="history.back()" style="background: #f0ad4e"/>
 					</f:facet>
 				</p:dataTable>
 			</p:panel>

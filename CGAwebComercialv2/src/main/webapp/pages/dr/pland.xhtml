@@ -32,7 +32,7 @@
 					</p:progressBar>
 					
 					<p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
-						style="width:100%" disabled="true"/>
+						style="width:100%; opacity: .90;" disabled="true"/>
 					
 				</h:panelGrid>
 			</h:form>
@@ -61,8 +61,8 @@
 				<f:facet name="header">
 					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 					
-					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"
-						style="text-align: left; float:right; width:24px; height:24px; background: #ff0000;"
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
 						outcome="/pages/dr/vistaModulo.xhtml?faces-redirect=true" />
 				</f:facet>
 
@@ -103,17 +103,17 @@
 						</h:outputText>
 					</p:column>
 
-					<p:column headerText="Ingreso Real" style="text-align:right;">
+					<p:column headerText="Venta" style="text-align:right;">
 						<h:outputText value="#{vendedor.ingresoReal}">
 							<f:convertNumber locale="en_US" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Cumplimiento"  width="13%" style="text-align:right;">
+					<p:column headerText="Cumplimiento %"  width="13%" style="text-align:right;">
 						<h:outputText value="#{vendedor.cumplimiento}%" />
 					</p:column>
 
-					<p:column headerText="Umbral" style="text-align:center; width:10%">
+					<p:column headerText="Desempeño de ventas" style="text-align:center; width:10%">
 						<p:graphicImage library="images" name="#{vendedor.imagen1}"  height="25" width="25" />
 					</p:column>
 					
@@ -140,19 +140,19 @@
 
 					<f:facet name="footer">
 						<p:button value="Mix linea" outcome="/pages/dr/mixLinea.xhtml?faces-redirect=true" 
-							style="height:30px; background:#914294">
+							style="height:30px; background:#f0ad4e">
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
 							<f:param name="tipo" value="#{planBean.tipo}"/>							
 						</p:button>
 						
 						<p:button value="Zonas Cargo" outcome="/pages/dr/zonasCargo.xhtml?faces-redirect=true" 
-							style="height:30px; background:#914294">
+							style="height:30px; background:#ff99ff">
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
 							<f:param name="tipo" value="#{planBean.tipo}"/>							
 						</p:button>
 						
 						<p:button value="Recaudo Cartera" outcome="/pages/dr/recaudoCartera.xhtml?faces-redirect=true" 
-							style="height:30px; background:#914294">
+							style="height:30px; background:#00e673">
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
 							<f:param name="tipo" value="#{planBean.tipo}"/>							
 						</p:button>

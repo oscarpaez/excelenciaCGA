@@ -14,6 +14,10 @@
 				<p:panel>
 					<f:facet name="header">
 						 <p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+						 
+						<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/plan.xhtml?faces-redirect=true" />
 			        </f:facet>
 				
 					<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="false" 
@@ -28,17 +32,13 @@
 		            <p:row>
 		                <p:column rowspan="2" headerText="Linea" />
 		                <p:column colspan="1" headerText="Presupuesto" />
-		                <p:column colspan="1" headerText="Real" />
+		                <p:column colspan="1" headerText="Venta" />
 		                <p:column colspan="1" headerText="Cumplimiento %" />
-		                <p:column rowspan="2" headerText="Umbral" style="width:5%"/>
+		                <!-- <p:column rowspan="2" headerText="Umbral" style="width:5%"/> -->
 		                <p:column rowspan="2" headerText="Comision" style="text-align: center; width:6%"/>
 		                <p:column rowspan="2" headerText="Detalle" style="text-align: center; width:6%" />
 		            </p:row>
-		            <p:row>
-		                <p:column colspan="1" headerText="Ingreso" />		                
-		                <p:column colspan="1" headerText="Ingreso" />
-		                <p:column colspan="1" headerText="Ingreso" />
-		            </p:row>
+		            
 		            
 		        </p:columnGroup>
 				
@@ -65,9 +65,9 @@
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Umbral" style="width:5%" >
+			<!-- 	<p:column headerText="Umbral" style="width:5%" >
 						<h:outputText value="#{plan.umbral}" />
-					</p:column>
+					</p:column>   -->
 					
 					<p:column headerText="comision"    style="text-align: center">
 						<p:graphicImage library="images" name="#{plan.imagen}"  height="25" width="25" />
@@ -88,27 +88,27 @@
 			            	<p:column footerText="Totales"  style="text-align:right"/>
 			            	<p:column footerText="$ #{planBean.totalPreIng}"  style="text-align:right"/>		 
 			            	<p:column footerText="$ #{planBean.totalRealIng}"  style="text-align:right"/>		 
-			            	<p:column colspan="4" footerText="" />	
+			            	<p:column colspan="3" footerText="" />	
 			            </p:row>
 			        </p:columnGroup>
 			        
 			        <f:facet name="footer">
 			        	
 						<p:button value="Lenta y Baja Rotación" outcome="/pages/ve/bajarotacion.xhtml?faces-redirect=true" 
-							style="height:30px; background:#b662b9">
+							style="height:30px; background:#f0ad4e">
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
 							<f:param name="tipo" value="#{planBean.tipo}"/>							
 						</p:button>
 						
 						<p:button value="Recaudo" outcome="/pages/recaudo.xhtml?faces-redirect=true" 
-							style="height:30px; background:#3f8507"  rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}">
+							style="height:30px; background:#5cb85c"  rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}">
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>							
 						</p:button>
 						
-						<p:button value="Contado y Anticipo" outcome="/pages/ve/contadoAnticipo.xhtml?faces-redirect=true"
+			<!--    	<p:button value="Contado y Anticipo" outcome="/pages/ve/contadoAnticipo.xhtml?faces-redirect=true"
 							style="height:30px; background:#ff0000" disabled="true">
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>							
-						</p:button>
+						</p:button>  -->
 						
 					</f:facet>	 
 					</p:dataTable>

@@ -889,8 +889,8 @@ public class DetalleDao extends GenericDao<Detalle> {
 		List<Plan> listaPlan = new ArrayList<>();
 		int valor = 0;
 		try{
-			Date fechaFinal = fechaFinal(fecMes, fecYear);
-			Date fechaInicial = fechaInicial(fecMes, fecYear);
+			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
 			LineaDao daoL = new LineaDao();
 			List<Linea> lineas = daoL.listar();
 			for (Linea linea1 : lineas) {

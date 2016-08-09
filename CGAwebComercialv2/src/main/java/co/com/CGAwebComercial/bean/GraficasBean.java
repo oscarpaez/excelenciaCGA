@@ -2,13 +2,18 @@ package co.com.CGAwebComercial.bean;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import org.omnifaces.util.Messages;
 import org.primefaces.model.chart.Axis;
@@ -21,6 +26,7 @@ import org.primefaces.model.chart.MeterGaugeChartModel;
 
 import co.com.CGAwebComercial.dao.CiudadDao;
 import co.com.CGAwebComercial.dao.FuncionarioDao;
+import co.com.CGAwebComercial.dao.GerentesDao;
 import co.com.CGAwebComercial.dao.LineaDao;
 import co.com.CGAwebComercial.dao.PresupuestoDao;
 import co.com.CGAwebComercial.dao.PromedioVentaDao;
@@ -60,10 +66,17 @@ public class GraficasBean implements Serializable{
 	private String totalPreO;
 	private String totolRealO;
 	private String totalCumO;
+	private String totalPreUO;
+	private String totolRealUO;
+	private String totalCumUO;
 	private String totalPreL;
 	private String totolRealL;
 	private String totalCumL;
+	private String totalPreUL;
+	private String totolRealUL;
+	private String totalCumUL;
 	private String mesActual;
+	private String mesInicial;
 
 	//*Carga la grafica de desempeño de las ventas y recaudo del "DL" *//
 
@@ -190,6 +203,7 @@ public class GraficasBean implements Serializable{
 				xAxis.setMax(escala1+2000);
 				xAxis.setTickFormat("%'d");
 
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Ultima Actualizacion "+ autenticacion.getFechaDiaAnterior()));
 				//promedioVentasNacional();
 				if(autenticacion.getUsuarioLogin().getPerfil().getId() == 8 || autenticacion.getUsuarioLogin().getPerfil().getId() == 7
 						|| autenticacion.getUsuarioLogin().getPerfil().getId() == 9	){
@@ -217,6 +231,7 @@ public class GraficasBean implements Serializable{
 
 			PromedioVentaDao daoP = new PromedioVentaDao();			
 			Double pro = daoP.promedioVentasNacional(idLinea);
+			pro = (pro == null)? 0 : pro;
 			promedioMes = new BigDecimal(pro.toString());
 			proDescuento =  daoP.promedioDescuentoNacional(idLinea);			
 			promedioMes = getPromedioMes().multiply(new BigDecimal("-1"));	
@@ -248,6 +263,7 @@ public class GraficasBean implements Serializable{
 			meterGaugeModel.setTitle("Cumplimiento Mes " + mesActual);
 			meterGaugeModel.setGaugeLabel( V +"%");
 			meterGaugeModel.setSeriesColors("ff0000, ffff00, 009933 ");
+			
 
 			presupuestoMes = listaPre.get(0).abs().longValue();
 			realMes = listaPre.get(1).abs().longValue();
@@ -273,6 +289,7 @@ public class GraficasBean implements Serializable{
 
 			PromedioVentaDao daoP = new PromedioVentaDao();			
 			Double pro = ( autenticacion.getUsuarioLogin().getPerfil().getId() == 9)? daoP.promedioVentasOficinaI():daoP.promedioVentasOficina(ciudad);
+			pro = (pro == null)? 0 : pro;
 			promedioMes = new BigDecimal(pro.toString());
 			proDescuento = ( autenticacion.getUsuarioLogin().getPerfil().getId() == 9)? daoP.promedioDescuentoOficinaI() :  daoP.promedioDescuentoOficina(ciudad);			
 			promedioMes = getPromedioMes().multiply(new BigDecimal("-1"));	
@@ -320,7 +337,8 @@ public class GraficasBean implements Serializable{
 	public void desempenoVentasGerentes(){
 
 		try{
-			
+			mesActual = mesActualG();
+			mesInicial = "Enero";
 			PresupuestoDao daoPr = new PresupuestoDao();
 			List<BigDecimal> listaPre = daoPr.listaPresupuestoPaisMes();
 			BigDecimal porV = listaPre.get(0).divide(listaPre.get(2), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
@@ -332,8 +350,9 @@ public class GraficasBean implements Serializable{
 				add(100);
 			}};
 
+			
 			meterGaugeModel = new MeterGaugeChartModel(V, interval);
-			meterGaugeModel.setTitle("Cumplimiento Mes");
+			meterGaugeModel.setTitle("Cumplimiento " + mesActual );
 			meterGaugeModel.setGaugeLabel( V +"%");
 			meterGaugeModel.setSeriesColors("ff0000, ffff00, 009933 ");
 			
@@ -345,12 +364,13 @@ public class GraficasBean implements Serializable{
 			V = (porV.abs().intValue() > 100)? 100 : porV.abs().intValue();
 			
 			descuentoP = new MeterGaugeChartModel(V, interval);
-			descuentoP.setTitle("Acumulado Año");
+			descuentoP.setTitle("Acumulado de " +  mesInicial + " a " + mesActual);
 			descuentoP.setGaugeLabel(V +"%");
 			descuentoP.setSeriesColors("ff0000, ffff00, 009933");
 			
 			realAcumulado = listaPreA.get(0).abs().longValue();
 			presupuestoAcumulado = listaPreA.get(2).abs().longValue();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Ultima Actualizacion "+ autenticacion.getFechaDiaAnterior()));
 			presupuestoOficina();
 			presupuestoLinea();
 
@@ -368,14 +388,23 @@ public class GraficasBean implements Serializable{
 			BigDecimal sumaReal = new BigDecimal("0.00");
 			BigDecimal cumplimiento = new BigDecimal("0.00");
 			BigDecimal sumaPresupuesto = new BigDecimal("0.00");
+			BigDecimal sumaRealU = new BigDecimal("0.00");
+			BigDecimal cumplimientoU = new BigDecimal("0.00");
+			BigDecimal sumaPresupuestoU = new BigDecimal("0.00");
 			for (ComisionVendedores oficina : ListaComisionVendedores) {
 				sumaPresupuesto = sumaPresupuesto.add(oficina.getPresupuestoB());
 				sumaReal = sumaReal.add(oficina.getIngresoRealB());
+				sumaPresupuestoU = sumaPresupuestoU.add(oficina.getUtilpresupuesto());
+				sumaRealU = sumaRealU.add(oficina.getUtilidadReal());
 			}
 			cumplimiento = sumaReal.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU = sumaRealU.divide(sumaPresupuestoU, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			totalPreO =  new DecimalFormat("###,###").format(sumaPresupuesto);
 			totolRealO =  new DecimalFormat("###,###").format(sumaReal);
 			totalCumO =  new DecimalFormat("###,###").format(cumplimiento);
+			totalPreUO =  new DecimalFormat("###,###").format(sumaPresupuestoU);
+			totolRealUO =  new DecimalFormat("###,###").format(sumaRealU);
+			totalCumUO =  new DecimalFormat("###,###").format(cumplimientoU);
 			
 			
 		} catch (RuntimeException ex) {
@@ -392,14 +421,24 @@ public class GraficasBean implements Serializable{
 			BigDecimal sumaReal = new BigDecimal("0.00");
 			BigDecimal cumplimiento = new BigDecimal("0.00");
 			BigDecimal sumaPresupuesto = new BigDecimal("0.00");
+			BigDecimal sumaRealU = new BigDecimal("0.00");
+			BigDecimal cumplimientoU = new BigDecimal("0.00");
+			BigDecimal sumaPresupuestoU = new BigDecimal("0.00");
 			for (ComisionVendedores linea : listaLineas) {
 				sumaPresupuesto = sumaPresupuesto.add(linea.getPresupuestoB());
 				sumaReal = sumaReal.add(linea.getIngresoRealB());
+				sumaPresupuestoU = sumaPresupuestoU.add(linea.getUtilpresupuesto());
+				sumaRealU = sumaRealU.add(linea.getUtilidadReal());
 			}
 			cumplimiento = sumaReal.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU = sumaRealU.divide(sumaPresupuestoU, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			totalPreL =  new DecimalFormat("###,###").format(sumaPresupuesto);
 			totolRealL =  new DecimalFormat("###,###").format(sumaReal);
 			totalCumL =  new DecimalFormat("###,###").format(cumplimiento);
+			totalPreUL =  new DecimalFormat("###,###").format(sumaPresupuestoU);
+			totolRealUL =  new DecimalFormat("###,###").format(sumaRealU);
+			totalCumUL =  new DecimalFormat("###,###").format(cumplimientoU);
+			
 			
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
@@ -407,23 +446,32 @@ public class GraficasBean implements Serializable{
 		}
 	}
 
-	//	public void promedioVentas(){
-	//
-	//		try {
-	//			FuncionarioDao daoF = new FuncionarioDao();
-	//			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
-	//			DetalleDao dao = new DetalleDao();			
-	//			promedioMes = dao.promedioVentas(funcionario.getId_funcionario());
-	//			promedioMes = promedioMes *-1;
-	//			PromedioVentaDao daoP = new PromedioVentaDao();
-	//			promedioVenta = daoP.listarMeta(funcionario.getId_funcionario());
-	//		} catch (RuntimeException ex) {
-	//			ex.printStackTrace();
-	//			Messages.addGlobalError("Error no se Cargo promedio de ventas");
-	//		}
-	//	}
-
-
+	public String mesActualG(){
+		
+		String periodoM = "";
+		try{
+			GerentesDao daoG = new GerentesDao();
+			Date fechaActual = daoG.fechaFinal();
+			DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+			String fechaConverdita = formatoFecha.format(fechaActual); 
+			String diaArray[] = fechaConverdita.split("-");
+			for (String string : diaArray) {
+				System.out.println(string);
+			}
+			int mes = Integer.parseInt("" + diaArray[1]);
+			System.out.println(mes);
+			String[] periodo = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+					"Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+			
+			periodoM = periodo[mes -1];
+			return periodoM;
+			
+		} catch (RuntimeException ex) {
+						ex.printStackTrace();
+						Messages.addGlobalError("Error no se Cargo el mes Actual");
+		}
+		return periodoM;
+	}
 	public AutenticacionBean getAutenticacion() {
 		return autenticacion;
 	}
@@ -568,5 +616,47 @@ public class GraficasBean implements Serializable{
 	}
 	public void setMesActual(String mesActual) {
 		this.mesActual = mesActual;
+	}
+	public String getMesInicial() {
+		return mesInicial;
+	}
+	public void setMesInicial(String mesInicial) {
+		this.mesInicial = mesInicial;
+	}
+	public String getTotalPreUO() {
+		return totalPreUO;
+	}
+	public void setTotalPreUO(String totalPreUO) {
+		this.totalPreUO = totalPreUO;
+	}
+	public String getTotolRealUO() {
+		return totolRealUO;
+	}
+	public void setTotolRealUO(String totolRealUO) {
+		this.totolRealUO = totolRealUO;
+	}
+	public String getTotalCumUO() {
+		return totalCumUO;
+	}
+	public void setTotalCumUO(String totalCumUO) {
+		this.totalCumUO = totalCumUO;
+	}
+	public String getTotalPreUL() {
+		return totalPreUL;
+	}
+	public void setTotalPreUL(String totalPreUL) {
+		this.totalPreUL = totalPreUL;
+	}
+	public String getTotolRealUL() {
+		return totolRealUL;
+	}
+	public void setTotolRealUL(String totolRealUL) {
+		this.totolRealUL = totolRealUL;
+	}
+	public String getTotalCumUL() {
+		return totalCumUL;
+	}
+	public void setTotalCumUL(String totalCumUL) {
+		this.totalCumUL = totalCumUL;
 	}
 }

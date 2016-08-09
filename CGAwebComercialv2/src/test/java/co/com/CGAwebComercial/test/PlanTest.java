@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import co.com.CGAwebComercial.bean.GraficasBean;
 import co.com.CGAwebComercial.dao.PlanDao;
 import co.com.CGAwebComercial.dao.RecaudoDao;
 import co.com.CGAwebComercial.dao.UsuarioDao;
@@ -65,9 +66,12 @@ public class PlanTest {
 					recaudo.getCumplimiento() +
 					recaudo.getValorComision() ); 
 		}*/
-		
-		
-		
+	}
+	
+	@Test
+	public void mes(){
+		GraficasBean a = new GraficasBean();
+		a.mesActualG();
 	}
 	
 	

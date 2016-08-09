@@ -16,7 +16,7 @@
 	</f:metadata>
 	<div style="background-color: #dfe4e6; height: 50px">
 		<h:form style="padding: 6px">
-			<h:panelGrid columns="3" style="width:40%">
+			<h:panelGrid columns="4" style="width:70%">
 				<p:outputLabel value="Tipo de vendedor" />
 				
 				<p:selectOneMenu value="#{autenticacionBean.tipoVendedor}" style="width:200px;" >
@@ -27,6 +27,10 @@
 
 				<p:commandButton value="Cargar" actionListener="#{bajaRotacionBean.listarVendedoresFechas()}"
 					update="frmPlan:tblPlan" style="background: #b94a48" />
+					
+				<p:commandButton value="Ajuste Vendedores" actionListener="#{bajaRotacionBean.listaCodVededores()}"
+					oncomplete="PF('dlgAsv').show();"
+					update=" :frmAsv:tblNueAsv  :frmSec:pnlSec" style="background: #38b44a" />	
 			</h:panelGrid>
 		</h:form>
 	</div>
@@ -288,7 +292,106 @@
 			
 		</h:form>
 	</p:dialog>	
+	
+	<p:dialog header="Asignacion de Cod Sap a la Venta"  widgetVar="dlgAsv" draggable="false"
+		resizable="false" closable="true" appendTo="@(body)" modal="true"
+		width="1200" height="400">
 		
+		<h:form id="frmSec">
+			<h:panelGrid columns="4" id="pnlSec" >
+			
+				<h:outputText value="Cod SAP" />			
+				<p:selectOneMenu id="prio" filter="true"  style="width:350px"
+							converter="omnifaces.SelectItemsConverter" required="true"
+							requiredMessage="Campo cod Sap es obligatorio" 
+							value="#{bajaRotacionBean.vendedorA}">
+							<f:selectItem noSelectionOption="true" itemLabel="Seleccione cod SAP"/>
+							<f:selectItems value="#{bajaRotacionBean.listaEspecialista}" var="especialista"
+								itemValue="#{especialista}" itemLabel="#{especialista.id_funcionario} -- #{especialista.persona.nombre}" />
+				</p:selectOneMenu>
+				
+				<p:graphicImage library="images" name="flechas.png"  height="25" width="25" />
+				
+				<p:selectOneMenu id="prioridad" filter="true" style="width:350px"
+							converter="omnifaces.SelectItemsConverter" required="true"
+							requiredMessage="Campo cod Sap es obligatorio" 
+							value="#{bajaRotacionBean.vendedorR}">
+							<f:selectItem noSelectionOption="true" itemLabel="Seleccione cod SAP"/>
+							<f:selectItems value="#{bajaRotacionBean.listaEspecialistaD}" var="cod"
+								itemValue="#{cod}" itemLabel="#{cod.id_funcionario}  -- #{cod.persona.nombre}" />
+				</p:selectOneMenu>
+				
+				<h:outputText value="Clientes" />			
+				<p:selectOneMenu id="clientes" filter="true"  style="width:350px"
+							converter="omnifaces.SelectItemsConverter" required="true"
+							requiredMessage="Campo cod Sap es obligatorio" 
+							value="#{bajaRotacionBean.vendedorA}">
+							<f:selectItem noSelectionOption="true" itemLabel="Seleccione Cliente"/>
+							<f:selectItems value="#{bajaRotacionBean.listaEspecialista}" var="especialista"
+								itemValue="#{especialista}" itemLabel="#{especialista.id_funcionario} -- #{especialista.persona.nombre}" />
+				</p:selectOneMenu>
+				
+				<h:outputText value="Observacion" />		
+				<p:inputText  value=""/>
+				
+				<p:commandButton icon="ui-icon-plus" 
+							update=" :frmAsv:tblNueAsv :msgGlobal" actionListener="#{bajaRotacionBean.cambioVendedor()}">
+							<f:attribute name="vendedorSelecionado2" value="#{vend}" />						
+				</p:commandButton>
+				
+				<p:commandButton icon="ui-icon-disk" value="Guardar" style="background: #38b44a"
+							update=" :frmAsv:tblNueAsv" actionListener="#{bajaRotacionBean.actualizarVendedor()}">
+							<f:attribute name="vendedorSelecionado2" value="#{vend}" />						
+				</p:commandButton>
+			</h:panelGrid>	
+		</h:form>
+		
+		<h:form id="frmAsv" >
+			<p:dataTable id="tblNueAsv" editable="true" editMode="cell"
+					emptyMessage="No se encontraron registros"
+					value="#{bajaRotacionBean.listaEspecialistaCambio}" var="cambioVendedor"
+					 paginatorPosition="bottom">
+					 
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column headerText="Cod Sap " width="10%"/>
+							<p:column headerText="Nombre"/>
+							<p:column headerText="" width="4%" style="text-align:center" />
+							<p:column headerText="Cod Sap " width="10%"/>
+							<p:column headerText="Nombre"/>
+							<p:column headerText="Accion" width="10%" />
+						</p:row>
+					</p:columnGroup>
+					
+					<p:column>
+						<h:outputText value="#{cambioVendedor.cedula}" />
+					</p:column> 
+					
+					<p:column>
+					    <h:outputText value="#{cambioVendedor.nombre}" />
+					</p:column> 
+					
+					<p:column>
+						<p:graphicImage library="images" name="flechas.png"  height="25" width="25" />
+					</p:column>
+					
+					<p:column>
+					   <h:outputText value="#{cambioVendedor.presupuesto}" />
+					</p:column> 
+					
+					<p:column>
+						<h:outputText value="#{cambioVendedor.concepto}" />
+					</p:column> 
+					
+					<p:column headerText="Acción" width="10%" style="text-align:center">
+						<p:commandButton icon="ui-icon-minus"  actionListener="#{bajaRotacionBean.borrarCambioVendedor(cambioVendedor)}"
+								update=":frmAsv:tblNueAsv "  >
+								<f:attribute name="vendedorSelecionado" value="#{cambioVendedor}" />						
+						</p:commandButton>
+					</p:column>	
+			</p:dataTable>
+		</h:form>
+	</p:dialog>	
 	</ui:define>
 
 </ui:composition>

@@ -46,8 +46,9 @@ public class BajaRotacionDao extends GenericDao<bajaRotacion>{
 
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		try{
-			Date fechaFinal = fechaFinal(fecMes, fecYear);
-			Date fechaInicial = fechaInicial(fecMes, fecYear);		
+			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
+	
 			Criteria consulta = session.createCriteria(bajaRotacion.class);			
 			consulta.add(Restrictions.eq( tipo, idFuncionario));
 			Criterion resul =Restrictions.or(Restrictions.eq("almacen", 1020),
@@ -76,8 +77,9 @@ public class BajaRotacionDao extends GenericDao<bajaRotacion>{
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		List<bajaRotacion> listaLBR; 
 		try{
-			Date fechaFinal = fechaFinal(fecMes, fecYear);
-			Date fechaInicial = fechaInicial(fecMes, fecYear);		
+			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
+			
 			Criteria consulta = session.createCriteria(bajaRotacion.class);			
 			consulta.add(Restrictions.eq(  tipo, idFuncionario));
 			Criterion resul =Restrictions.or(Restrictions.eq("almacen", 1020),
@@ -101,8 +103,8 @@ public class BajaRotacionDao extends GenericDao<bajaRotacion>{
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		List<bajaRotacion> listaFacturas;
 		try{
-			Date fechaFinal = fechaFinal(fecMes, fecYear);
-			Date fechaInicial = fechaInicial(fecMes, fecYear);	
+			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);	
 			Criteria consulta = session.createCriteria(bajaRotacion.class);	
 			Criterion resul =Restrictions.or(Restrictions.eq("almacen", 1020),
 					Restrictions.eq("almacen", 2020), Restrictions.eq("almacen", 3020),

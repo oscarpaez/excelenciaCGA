@@ -86,6 +86,10 @@
         <mapping class = "co.com.CGAwebComercial.entyties.Zona_Funcionario"/>
         <mapping class = "co.com.CGAwebComercial.entyties.codUEN" /> 
         <mapping class = "co.com.CGAwebComercial.entyties.PresupuestoE" />
+        <mapping class = "co.com.CGAwebComercial.entyties.PrioridadProyecto" />
+        <mapping class = "co.com.CGAwebComercial.entyties.EstadoProyecto" />
+        <mapping class = "co.com.CGAwebComercial.entyties.Proyecto" />
+        <mapping class = "co.com.CGAwebComercial.entyties.AjusteVendedor" />
         
 	</session-factory>
 

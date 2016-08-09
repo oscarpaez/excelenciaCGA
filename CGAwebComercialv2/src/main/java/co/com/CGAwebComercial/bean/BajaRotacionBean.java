@@ -15,12 +15,19 @@ import javax.faces.event.ActionEvent;
 import org.omnifaces.util.Messages;
 
 import co.com.CGAwebComercial.dao.BajaRotacionDao;
+import co.com.CGAwebComercial.dao.DetallesinDao;
 import co.com.CGAwebComercial.dao.FuncionarioDao;
+import co.com.CGAwebComercial.dao.LineaDao;
 import co.com.CGAwebComercial.dao.LiquidacionDao;
 import co.com.CGAwebComercial.dao.AjusteDao;
+import co.com.CGAwebComercial.dao.AjusteVendedorDao;
 import co.com.CGAwebComercial.entyties.Ajuste;
+import co.com.CGAwebComercial.entyties.AjusteVendedor;
+import co.com.CGAwebComercial.entyties.Cliente;
 import co.com.CGAwebComercial.entyties.Funcionario;
+import co.com.CGAwebComercial.entyties.Linea;
 import co.com.CGAwebComercial.entyties.Liquidacion;
+import co.com.CGAwebComercial.entyties.Persona;
 import co.com.CGAwebComercial.entyties.bajaRotacion;
 import co.com.CGAwebComercial.resource.Recursos;
 import co.com.CGAwebComercial.util.ComisionVendedores;
@@ -33,14 +40,31 @@ public class BajaRotacionBean implements Serializable {
 
 	@ManagedProperty("#{autenticacionBean}")
 	private AutenticacionBean autenticacion;	
-	
+
 	private Recursos recurso;
 
 	private List<ComisionVendedores> listaVendedores;
 	private List<Ajuste> listaVendedoresAjuste;
 	private List<bajaRotacion> listaFacturas;
 	private List<Fechas> listaFechas;
-	
+	private List<Cliente> listaClientes;
+	private List<AjusteVendedor> listaAjusteVendedor;
+
+	private List<Funcionario> listaEspecialista; 
+	private List<Funcionario> listaEspecialistaD;
+	private List<ComisionVendedores> listaEspecialistaCambio;
+	private List<Linea> listaLinea;
+
+
+	private AjusteVendedor ajusteVendedor;
+	private Funcionario vendedorA;
+	private Funcionario vendedorR;
+	private Cliente clienteD;
+	private Linea linea;
+	private Linea lineaA;
+
+	List<Integer> listaED;
+
 	private ComisionVendedores vendedor;
 	private Liquidacion liquidacion;
 	private Ajuste ajuste;
@@ -53,10 +77,13 @@ public class BajaRotacionBean implements Serializable {
 	private String totalDetalle= "";
 	private String habilitar; 
 	private String liquidar;
+	private String observacion;
+	private String disable= "true";
 	private int totalAjuste=0;
 	private int idfuncionario;
 	private int index = 0;
 	private int codSap= 0;
+
 
 	@PostConstruct
 	public void listarVendedoresEspecialistas(){
@@ -64,7 +91,7 @@ public class BajaRotacionBean implements Serializable {
 		try{
 			recurso = new Recursos();
 			habilitar = "false";
-			
+
 			if(autenticacion.getFechaBusqueda() != null && autenticacion.getFechaBusquedaYear() != null){
 				listaFechas = recurso.cargarFechas();
 				fechaBusqueda = autenticacion.getFechaBusqueda();
@@ -97,7 +124,7 @@ public class BajaRotacionBean implements Serializable {
 					List<Liquidacion> liquidacion = daoL.buscarLiquidacion("LBR", funcionario.getId_funcionario());
 					liquidar = (liquidacion.size() <= 0) ? "false" : "true";
 					if(sumatotal != null){
-						
+
 						int total = (int) (long) sumatotal* -1;
 						vendedor.setCedula(funcionario.getPersona().getCedula());
 						vendedor.setId(funcionario.getId_funcionario());
@@ -148,9 +175,9 @@ public class BajaRotacionBean implements Serializable {
 				listaVendedor = daoF.listarVendedores();
 				tipo = "codEspecialista";
 			}
-			
+
 			for (Funcionario funcionario : listaVendedor) {
-				
+
 				ComisionVendedores vendedor = new ComisionVendedores();
 				BajaRotacionDao daoB = new BajaRotacionDao();
 				Long sumatotal = daoB.SumaTotalFechas( tipo, funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
@@ -191,13 +218,13 @@ public class BajaRotacionBean implements Serializable {
 			Messages.addGlobalError("Error no se Cargo la lista de Vendedores Baja Rotación");
 		}
 	}
-	
+
 	//*LBR verificando  el estado de los vendedores *//	
 	public void listarVendedoresFechas(){
 
 		try{
 			List<Funcionario> listaVendedor = null;
-			
+
 			//int i=0;
 			listaVendedores = new ArrayList<>();
 			FuncionarioDao daoF = new FuncionarioDao();
@@ -212,14 +239,14 @@ public class BajaRotacionBean implements Serializable {
 				listaVendedor = daoF.listarVendedores();
 				tipo = "codEspecialista";
 			}
-			
+
 			for (Funcionario funcionario : listaVendedor) {
-				
+
 				ComisionVendedores vendedor = new ComisionVendedores();
 				LiquidacionDao daoL = new LiquidacionDao();
 				List<Liquidacion> liquidacion = daoL.buscarLiquidacion("LBR", funcionario.getId_funcionario());
 				liquidar = (liquidacion.size() <= 0) ? "false" : "true";
-				
+
 				if(funcionario.getEstado() == 1){
 					vendedor.setCedula(funcionario.getPersona().getCedula());
 					vendedor.setId(funcionario.getId_funcionario());
@@ -227,8 +254,9 @@ public class BajaRotacionBean implements Serializable {
 					vendedor.setConcepto("LBR");
 					BajaRotacionDao daoB = new BajaRotacionDao();
 					listaFacturas = daoB.listaLBR(tipo, funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
-					
+					System.out.println(tipo +  funcionario.getId_funcionario()+ fechaBusqueda + fechaBusquedaYear);
 					for ( bajaRotacion LBR : listaFacturas) {
+						System.out.println(LBR + "" +listaFacturas.size());
 						Funcionario fun = daoF.buscar(LBR.getCodVendedorInt());
 						if(  fun == null ||  fun.getEstado() != 1){
 							vendedor.setIngresoReal( vendedor.getIngresoReal() + LBR.getValorNeto());
@@ -255,7 +283,7 @@ public class BajaRotacionBean implements Serializable {
 			Messages.addGlobalError("Error no se Cargo la lista de Vendedores Baja Rotación");
 		}
 	}	
-	
+
 
 	public void listarDetalle(){
 
@@ -274,7 +302,7 @@ public class BajaRotacionBean implements Serializable {
 			else{
 				Messages.addGlobalError("No selecciono el mes");
 			}
-			
+
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se Cargo la lista de Vendedores Baja Rotación");
@@ -282,7 +310,7 @@ public class BajaRotacionBean implements Serializable {
 	}
 
 	public void directorNacional(){
-		
+
 		try{
 			listaVendedores = new ArrayList<>();
 			ComisionVendedores vendedor = new ComisionVendedores();
@@ -290,7 +318,7 @@ public class BajaRotacionBean implements Serializable {
 			Funcionario funcionario = daoF.buscar(1);
 			BajaRotacionDao dao = new BajaRotacionDao();
 			Long total = dao.SumaTotalDirector(funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
-			
+
 			if(total != null){
 				int sumatotal = (int) (long) total* -1;
 				vendedor.setId(funcionario.getId_funcionario());
@@ -304,9 +332,9 @@ public class BajaRotacionBean implements Serializable {
 			Messages.addGlobalError("Error no se Cargo la lista de Director nacional");
 		}
 	}
-	
+
 	public void liquidar(ActionEvent evento){
-		
+
 		try{
 			ajuste = new Ajuste();
 			listaVendedoresAjuste = new ArrayList<>();			
@@ -335,9 +363,9 @@ public class BajaRotacionBean implements Serializable {
 			Messages.addGlobalError("Error no se Cargo la liquidacion");
 		}
 	}
-	
+
 	public void adicionarAjuste(ActionEvent evento){
-		
+
 		try{
 			ajuste= (Ajuste) evento.getComponent().getAttributes().get("vendedorSelecionado2");
 			Ajuste ajuste1 = new Ajuste(); 
@@ -357,9 +385,9 @@ public class BajaRotacionBean implements Serializable {
 			Messages.addGlobalError("Error no se Cargo la vista Ajuste");
 		}
 	}
-	
+
 	public void guardarAguste(){
-		
+
 		try{
 			Date fecha = new Date();
 			totalAjuste = 0;
@@ -377,9 +405,9 @@ public class BajaRotacionBean implements Serializable {
 			Messages.addGlobalError("Error no se pudo guardar los Ajustes");
 		}
 	}
-	
+
 	public void salvarLiquidacion(){
-		
+
 		try{
 			Date fecha = new Date();
 			LiquidacionDao dao = new LiquidacionDao();
@@ -387,11 +415,11 @@ public class BajaRotacionBean implements Serializable {
 			dao.salvar(liquidacion);
 			habilitar = "false";
 			for( int i = 0 ; i  < listaVendedores.size(); i++){
-                if(listaVendedores.get(i).getId() ==liquidacion.getCodSap()){
-              	  listaVendedores.get(i).setLiquidar("true");
-                }   
-           }
-			
+				if(listaVendedores.get(i).getId() ==liquidacion.getCodSap()){
+					listaVendedores.get(i).setLiquidar("true");
+				}   
+			}
+
 			AjusteDao daoA = new AjusteDao();			
 			totalAjuste = 0;
 			for (Ajuste ajuste : listaVendedoresAjuste) {
@@ -407,6 +435,259 @@ public class BajaRotacionBean implements Serializable {
 		}
 	}
 
+	//*carga la lista de los Vendedores y Los Item de la tabla detalle *//
+
+	public void listaCodVededores(){
+
+		try{
+			listaEspecialistaCambio = new ArrayList<>();
+			if(listaAjusteVendedor != null){
+				System.out.println("listaAjusteVendedor");
+				listaAjusteVendedor.removeAll(listaAjusteVendedor);
+			}
+			listaAjusteVendedor = new ArrayList<>();
+			listaEspecialista = new ArrayList<>();
+			listaEspecialistaD = new ArrayList<>();
+			listaED  = new ArrayList<>();
+			fechaBusqueda = autenticacion.getFechaBusqueda();
+			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
+			tipo = (autenticacion.getTipoVendedor().equals("I") )? "funcionarioI" : "funcionario";
+
+			FuncionarioDao daoF = new FuncionarioDao();
+			listaEspecialista = (tipo.equals("funcionarioI"))? daoF.listarVendedoresInternos() : daoF.listarVendedores();
+
+			List<Object[]> listaE = daoF.listarVendedoresPaisD(tipo, fechaBusqueda, fechaBusquedaYear);
+
+			for (Object[] objects : listaE) {
+
+				Persona persona  = new Persona();		
+				persona.setNombre((String)objects[1]);
+				Funcionario fun = new Funcionario();
+				fun.setPersona(persona);
+				fun.setId_funcionario((int)objects[0]);				
+				listaEspecialistaD.add(fun);
+			}
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no Cargo la lista de vendedores");
+		}
+	}
+
+	//*carga la lista de los Vendedores y Las lineas de la tabla detalle *//
+
+	public void listaCodVededoresLinea(){
+
+		try{
+			listaEspecialistaCambio = new ArrayList<>();
+			if(listaAjusteVendedor != null){
+				System.out.println("listaAjusteVendedor");
+				listaAjusteVendedor.removeAll(listaAjusteVendedor);
+			}
+			listaAjusteVendedor = new ArrayList<>();
+			linea = new Linea();
+			lineaA = new Linea();
+			fechaBusqueda = autenticacion.getFechaBusqueda();
+			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
+			tipo = (autenticacion.getTipoVendedor().equals("I") )? "funcionarioI" : "funcionario";
+
+			FuncionarioDao daoF = new FuncionarioDao();
+			listaEspecialista = (tipo.equals("funcionarioI"))? daoF.listarVendedoresInternos() : daoF.listarVendedores();
+
+			LineaDao daoL = new LineaDao();
+			listaLinea = daoL.listar();
+
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no Cargo la lista de vendedores");
+		}
+	}
+
+	//*carga los Clientes de un Vendedores *//
+
+	public void listaCodClientes(){
+
+		try{
+			listaClientes = new ArrayList<>();
+			FuncionarioDao daoF = new FuncionarioDao();
+			if(vendedorR != null){
+				List<Object[]> listaE =	daoF.listarClientesPaisD(tipo, vendedorR.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
+
+				for (Object[] objects : listaE) {
+
+					Cliente cliente  = new Cliente();		
+					cliente.setDescripcion((String)objects[1]);
+					cliente.setId_cliente((int)objects[0]);				
+					listaClientes.add(cliente);
+				}
+			}
+			else{
+				listaClientes = new ArrayList<>();
+			}
+
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no Cargo la lista de vendedores");
+		}
+	}
+
+	public void cambioVendedor(){
+
+		try{
+			//			ComisionVendedores  cambioV = new ComisionVendedores(); 
+			//			cambioV.setCedula(vendedorA.getId_funcionario());
+			//			cambioV.setNombre(vendedorA.getPersona().getNombre());
+			//			cambioV.setPresupuesto(vendedorR.getId_funcionario());
+			//			cambioV.setConcepto(vendedorR.getPersona().getNombre());
+			//			cambioV.setTipo(clienteD.getDescripcion());
+			//			cambioV.setComision(clienteD.getId_cliente());
+			//			listaEspecialistaCambio.add(cambioV);
+
+			ajusteVendedor = new AjusteVendedor();
+			if (clienteD != null){
+				ajusteVendedor.setCodSap(vendedorA.getId_funcionario());
+				ajusteVendedor.setNombre(vendedorA.getPersona().getNombre());
+				ajusteVendedor.setCodSapA(vendedorR.getId_funcionario());
+				ajusteVendedor.setNombreA(vendedorR.getPersona().getNombre());
+				ajusteVendedor.setCodCliente(clienteD.getId_cliente());
+				ajusteVendedor.setNombreCliente(clienteD.getDescripcion());
+				ajusteVendedor.setObservacion(observacion);
+
+				System.out.println(clienteD.getDescripcion() + "Clientes");
+				listaAjusteVendedor.add(ajusteVendedor);
+				disable = "false";
+				clienteD = null;
+			}	
+			else if (vendedorA != null && vendedorR !=null){
+				ajusteVendedor.setCodSap(vendedorA.getId_funcionario());
+				ajusteVendedor.setNombre(vendedorA.getPersona().getNombre());
+				ajusteVendedor.setCodSapA(vendedorR.getId_funcionario());
+				ajusteVendedor.setNombreA(vendedorR.getPersona().getNombre());
+				ajusteVendedor.setObservacion(observacion);
+				System.out.println(vendedorR.getPersona().getNombre() + "Asesor");
+				//System.out.println(clienteD.getDescripcion() + "Asesor");
+				listaAjusteVendedor.add(ajusteVendedor);
+				vendedorA = null;
+				vendedorR = null; 
+				disable = "false";
+			}
+			else if (linea != null && lineaA != null){
+				ajusteVendedor.setCodSap(vendedorA.getId_funcionario());
+				ajusteVendedor.setNombre(vendedorA.getPersona().getNombre());
+				ajusteVendedor.setCodLinea(linea.getId());
+				ajusteVendedor.setNombreLinea(linea.getNombre());
+				ajusteVendedor.setCodLineaA(lineaA.getId());
+				ajusteVendedor.setNombreLineaA(lineaA.getNombre());
+				ajusteVendedor.setObservacion(observacion);	
+				System.out.println(lineaA.getNombre());
+				//System.out.println(clienteD.getDescripcion() + "Lineass");
+				listaAjusteVendedor.add(ajusteVendedor);
+				vendedorA = null;
+				linea = null;
+				lineaA = null;
+				disable = "false";
+			}
+
+
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no adiciono el Vendedor a la lista.");
+		}
+
+	}
+
+	public void borrarCambioVendedor(AjusteVendedor  vendedores){
+
+		try{
+			//ComisionVendedores  vendedores = (ComisionVendedores) event.getComponent().getAttributes().get("vendedorSelecionado");
+			int index = 0;
+			for (AjusteVendedor ven : listaAjusteVendedor) {
+
+				if(ven.getCodSap() == vendedores.getCodSap()){
+					listaAjusteVendedor.remove(index);
+					disable = (listaAjusteVendedor.size() <=0)? "true" : disable;
+					break;
+				}
+			}
+
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no borro el Vendedor a la lista.");
+		}
+	}
+
+	//*Actualiza el codigo del vendedor en la tabla detalleSin y en lenta y baja rotación *//
+	public void actualizarVendedor(){
+
+		try{
+			fechaBusqueda = autenticacion.getFechaBusqueda();
+			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
+			tipo = (autenticacion.getTipoVendedor().equals("I") )? "funcionarioI" : "funcionario";
+
+			DetallesinDao daoS = new DetallesinDao();
+			AjusteVendedorDao daoA = new AjusteVendedorDao();
+			for (AjusteVendedor ven : listaAjusteVendedor) {
+				daoS.listarDetallePorFecha(tipo, ven.getCodSap(), ven.getCodSapA(), fechaBusqueda, fechaBusquedaYear);
+				Date fecha = new Date();
+				ven.setFechaAjuste(fecha);
+				daoA.salvar(ven);
+			}
+			listaAjusteVendedor.removeAll(listaAjusteVendedor);
+			Messages.addGlobalInfo("Se actualizaron los datos de los Vendedores Correctamente");
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se actulizaron los Vendedores.");
+		}
+	}
+
+	//*Actualiza el codigo del vendedor Por cliente en la tabla detalleSin y en lenta y baja rotación *//
+	public void actualizarVendedorPorCliente(){
+
+		try{
+			fechaBusqueda = autenticacion.getFechaBusqueda();
+			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
+			tipo = (autenticacion.getTipoVendedor().equals("I") )? "funcionarioI" : "funcionario";
+
+			DetallesinDao daoS = new DetallesinDao();
+			AjusteVendedorDao daoA = new AjusteVendedorDao();
+			for (AjusteVendedor ven : listaAjusteVendedor) {
+				daoS.actualizarDetalle(tipo, ven.getCodSap(), ven.getCodSapA(),ven.getCodCliente() , fechaBusqueda, fechaBusquedaYear);
+				Date fecha = new Date();
+				ven.setFechaAjuste(fecha);
+				daoA.salvar(ven);
+			}
+			listaAjusteVendedor.removeAll(listaAjusteVendedor);
+			Messages.addGlobalInfo("Se actualizaron los datos de los Vendedores Correctamente");
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se actulizaron los Vendedores.");
+		}
+	}
+
+	
+	//*Se actualizan los datos del vendedor por linea*//
+	public void actualizarVendedorPorLinea(){
+
+		try{
+			fechaBusqueda = autenticacion.getFechaBusqueda();
+			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
+			tipo = (autenticacion.getTipoVendedor().equals("I") )? "funcionarioI" : "funcionario";
+
+			DetallesinDao daoS = new DetallesinDao();
+			AjusteVendedorDao daoA = new AjusteVendedorDao();
+			for (AjusteVendedor ven : listaAjusteVendedor) {
+				daoS.actualizarDetallePorLinea(tipo, ven.getCodSap(), ven.getCodLinea(), ven.getCodLineaA(), fechaBusqueda, fechaBusquedaYear );
+				Date fecha = new Date();
+				ven.setFechaAjuste(fecha);
+				daoA.salvar(ven);
+			}
+			listaAjusteVendedor.removeAll(listaAjusteVendedor);
+			Messages.addGlobalInfo("Se actualizaron los datos de los Vendedores Por linea Correctamente");
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se actulizaron los Vendedores por Linea.");
+		}
+	}
+	
 	public List<ComisionVendedores> getListaVendedores() {
 		return listaVendedores;
 	}
@@ -564,4 +845,123 @@ public class BajaRotacionBean implements Serializable {
 		this.habilitar = habilitar;
 	}
 
+	public List<Funcionario> getListaEspecialista() {
+		return listaEspecialista;
+	}
+
+	public void setListaEspecialista(List<Funcionario> listaEspecialista) {
+		this.listaEspecialista = listaEspecialista;
+	}
+
+	public List<Funcionario> getListaEspecialistaD() {
+		return listaEspecialistaD;
+	}
+
+	public void setListaEspecialistaD(List<Funcionario> listaEspecialistaD) {
+		this.listaEspecialistaD = listaEspecialistaD;
+	}
+
+	public List<Integer> getListaED() {
+		return listaED;
+	}
+
+	public void setListaED(List<Integer> listaED) {
+		this.listaED = listaED;
+	}
+
+	public List<ComisionVendedores> getListaEspecialistaCambio() {
+		return listaEspecialistaCambio;
+	}
+
+	public void setListaEspecialistaCambio(List<ComisionVendedores> listaEspecialistaCambio) {
+		this.listaEspecialistaCambio = listaEspecialistaCambio;
+	}
+
+	public Funcionario getVendedorA() {
+		return vendedorA;
+	}
+
+	public void setVendedorA(Funcionario vendedorA) {
+		this.vendedorA = vendedorA;
+	}
+
+	public Funcionario getVendedorR() {
+		return vendedorR;
+	}
+
+	public void setVendedorR(Funcionario vendedorR) {
+		this.vendedorR = vendedorR;
+	}
+
+	public List<Cliente> getListaClientes() {
+		return listaClientes;
+	}
+
+	public void setListaClientes(List<Cliente> listaClientes) {
+		this.listaClientes = listaClientes;
+	}
+
+	public Cliente getClienteD() {
+		return clienteD;
+	}
+
+	public void setClienteD(Cliente clienteD) {
+		this.clienteD = clienteD;
+	}
+
+	public List<AjusteVendedor> getListaAjusteVendedor() {
+		return listaAjusteVendedor;
+	}
+
+	public void setListaAjusteVendedor(List<AjusteVendedor> listaAjusteVendedor) {
+		this.listaAjusteVendedor = listaAjusteVendedor;
+	}
+
+	public AjusteVendedor getAjusteVendedor() {
+		return ajusteVendedor;
+	}
+
+	public void setAjusteVendedor(AjusteVendedor ajusteVendedor) {
+		this.ajusteVendedor = ajusteVendedor;
+	}
+
+	public List<Linea> getListaLinea() {
+		return listaLinea;
+	}
+
+	public void setListaLinea(List<Linea> listaLinea) {
+		this.listaLinea = listaLinea;
+	}
+
+	public Linea getLinea() {
+		return linea;
+	}
+
+	public void setLinea(Linea linea) {
+		this.linea = linea;
+	}
+
+	public Linea getLineaA() {
+		return lineaA;
+	}
+
+	public void setLineaA(Linea lineaA) {
+		this.lineaA = lineaA;
+	}
+
+	public String getObservacion() {
+		return observacion;
+	}
+
+	public void setObservacion(String observacion) {
+		this.observacion = observacion;
+	}
+
+	public String getDisable() {
+		return disable;
+	}
+
+	public void setDisable(String disable) {
+		this.disable = disable;
+	}
 }

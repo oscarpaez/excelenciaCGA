@@ -28,8 +28,8 @@
 					<h:outputText value="" />
 					<h:outputText value="" />
 					
-					<p:button value="Mes de consulta: #{gerenteBean.fechaConsulta}"  style="width:100%  "
-					 	disabled="true"/>
+					<p:button value="Mes de consulta: #{gerenteBean.fechaConsulta}"  
+						style="width:100%; opacity: .90;" disabled="true"/>
 				</h:panelGrid>
 				
 			</h:form>
@@ -40,8 +40,8 @@
 					<f:facet name="header">
 						 <p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 						 	
-						 	<p:button  icon="ui-icon-home" iconPos="right" styleClass="excel"
-								style="text-align: left; float:right; width:24px; height:24px; "
+						 	<p:button  icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+								style="text-align: left; float:right; width:24px; height:24px; background:#ff6666;"
 							    outcome="/pages/gg/vistaInicial.xhtml?faces-redirect=true"/>
 					
 							<h:commandLink >
@@ -66,13 +66,13 @@
 			       <p:columnGroup type="header">
 			            <p:row>
 			                <p:column colspan="1" headerText="Lineas" />
-			                <p:column colspan="1" headerText="Presupuesto Ingreso" />
-			                <p:column colspan="1" headerText="Real Ingreso" />
-			                <p:column colspan="2" headerText="Cumplimiento %" width="15%" />
-			                <p:column colspan="1" headerText="Presupuesto Utilidad" />
+			                <p:column colspan="1" headerText="Presupuesto " />
+			                <p:column colspan="1" headerText="Venta" />
+			                <p:column colspan="2" headerText="Cumplimiento %" width="20%" />
+			       <!--     <p:column colspan="1" headerText="Presupuesto Utilidad" />
 			                <p:column colspan="1" headerText="Real Utilidad" />
-			                <p:column colspan="2" headerText="Cumplimiento %" width="15%"/>
-			                <p:column colspan="1" headerText="Umbral" width="6%" />
+			                <p:column colspan="2" headerText="Cumplimiento %" width="15%"/>  
+			                <p:column colspan="1" headerText="Umbral" width="10%" /> -->
 			            </p:row>
 			       </p:columnGroup>
 		        
@@ -83,7 +83,7 @@
 					
 					<p:column headerText="Ingreso P" style="text-align:right" >
 						<h:outputText value="#{plan.ingreso}" >
-							<f:convertNumber locale="en_US" />
+							<f:convertNumber locale="en_US"  maxFractionDigits="0"/>
 						</h:outputText>
 					</p:column>
 					
@@ -102,10 +102,10 @@
 					<p:column headerText="comision"    style="text-align: center">
 						<p:graphicImage library="images" name="#{plan.imagen}"  height="25" width="25" />
 					</p:column>
-					
+					<!-- 
 					<p:column headerText="Utilidad P" style="text-align:right">
 						<h:outputText value="#{plan.utilidad}" >
-							<f:convertNumber locale="en_US" />
+							<f:convertNumber locale="en_US"  maxFractionDigits="0"/>
 						</h:outputText>
 					</p:column>
 					
@@ -127,7 +127,7 @@
 					
 					<p:column headerText="Umbral" >
 						<h:outputText value="#{plan.funcionario.comision.umbralVenta}%" />
-					</p:column>
+					</p:column>  -->
 					
 					<p:columnGroup type="footer">
 			            <p:row>
@@ -136,15 +136,15 @@
 			            	<p:column footerText="$ #{gerenteBean.totalReal}"  style="text-align:right"/>
 			            	<p:column footerText="#{gerenteBean.totalCumplimiento}%"  style="text-align:right"/>		 
 			            	<p:column footerText="" style="text-align: rigth" />		 
-			            	<p:column footerText="$ #{gerenteBean.totalPresupuestoU} " style="text-align:right" />		 
+			        <!--  	<p:column footerText="$ #{gerenteBean.totalPresupuestoU} " style="text-align:right" />		 
 			                <p:column footerText="$ #{gerenteBean.totalRealU}" style="text-align:right"/>
-			                <p:column footerText=" #{gerenteBean.totalCumplimientoU}%"  style="text-align:right"/>
-			                <p:column colspan="2" footerText="" />		 
+			                <p:column footerText=" #{gerenteBean.totalCumplimientoU}%"  style="text-align:right"/>  
+			                <p:column colspan="1" footerText="" />	-->	 
 			            </p:row>
 			        </p:columnGroup>
 					
 					<f:facet name="footer">
-				       	<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a" />
+				       	<p:commandButton  value="Volver" onclick="history.back()" style="background:#f0ad4e" />
 					</f:facet>	 
 					</p:dataTable>
 				</p:panel>

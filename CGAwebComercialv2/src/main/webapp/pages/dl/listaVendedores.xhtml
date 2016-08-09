@@ -39,7 +39,7 @@
 					</p:progressBar>
 				    	
 				    <p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
-							style="width:100%" disabled="true"/>	
+							style="width:100%; opacity: .90;" disabled="true"/>	
 				</h:panelGrid>
 			</h:form>
 		</div>	
@@ -48,8 +48,8 @@
 				<f:facet name="header">
 					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 					
-					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"
-						style="text-align: left; float:right; width:24px; height:24px; background: #ff0000; "
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666; "
 						outcome="/pages/dl/plandl.xhtml?faces-redirect=true" />
 				</f:facet>
 
@@ -60,7 +60,7 @@
 					paginatorPosition="bottom">
 
 					<f:facet name="header">
-						<h:outputText value="#{autenticacionBean.fechaActual}" /> Plan Vendedores
+						<h:outputText value="#{autenticacionBean.fechaActual} Ejecución de Ventas" /> 
 			        </f:facet>
 			        
 			         <p:columnGroup type="header">
@@ -74,8 +74,8 @@
 		                <p:column colspan="2" headerText="Cumplimiento %" />
 		            <!--<p:column colspan="1" headerText="Presupuesto Utilidad" />
 		                <p:column colspan="1" headerText="Real Utilidad" />
-		                <p:column colspan="2" headerText="Cumplimiento %" width="12%"/> -->
-		                <p:column colspan="1" headerText="Umbral" width="5%"/>
+		                <p:column colspan="2" headerText="Cumplimiento %" width="12%"/> 
+		                <p:column colspan="1" headerText="Umbral" width="5%"/> -->
 		           		<p:column colspan="1" headerText="Detalle" width="6%"/> 
 		            </p:row>
 		        </p:columnGroup>
@@ -138,17 +138,18 @@
 					
 					<p:column style="text-align: center">
 						<p:graphicImage library="images" name="#{vendedor.imagen}"  height="25" width="25" />
-					</p:column>  -->
+					</p:column>  
 					
 					<p:column headerText="comision"    style="text-align: center">
 						<h:outputText value="85%" />
-					</p:column>
+					</p:column> -->
 					
 					<p:column headerText="Detalle" style="width:5%">
 						<p:button icon="ui-icon-search"
 							outcome="/pages/dl/linea.xhtml?faces-redirect=true">
 						    <f:param name="frst" value="#{directorGBean.fechaConsulta}"/>
 						    <f:param name="perId" value="#{vendedor.id}"/>	
+						    <f:param name="perNom" value="#{vendedor.nombre}"/>	
 						    <f:param name="fecBus" value="#{gerenteBean.autenticacion.fechaBusqueda}"/>	
 						    <f:param name="fecYear" value="#{gerenteBean.autenticacion.fechaBusquedaYear}"/>
 						    <f:param name="tip" value="#{gerenteBean.autenticacion.tipoVendedor}"/>							
@@ -161,12 +162,12 @@
 			                <p:column footerText="$ #{gerenteBean.totalPresupuesto}" style="text-align:right" />
 			                <p:column footerText="$ #{gerenteBean.totalReal}"  style="text-align:right"/>
 			                <p:column footerText=" #{gerenteBean.totalCumplimiento}%"  style="text-align:right"/>		 
-			                <p:column colspan="3" footerText="" />	
+			                <p:column colspan="2" footerText="" />	
 			            </p:row>
 			        </p:columnGroup>
 
 					<f:facet name="footer">
-						<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a" />
+						<p:commandButton  value="Volver" onclick="history.back()" style="background: #f0ad4e" />
 					</f:facet>
 					
 				</p:dataTable>

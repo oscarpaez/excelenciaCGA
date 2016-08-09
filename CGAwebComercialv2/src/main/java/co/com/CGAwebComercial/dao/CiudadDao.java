@@ -514,13 +514,26 @@ public class CiudadDao extends GenericDao<Ciudad>{
 				valor = (valor == null)? new BigDecimal("0") : valor;
 				sucursales.setPresupuestoB(valor);
 				
+				consulta.setProjection(Projections.sum("utilidad"));
+				valor = (BigDecimal) consulta.uniqueResult();
+				valor = (valor == null)? new BigDecimal("0") : valor;
+				sucursales.setUtilpresupuesto(valor);
+				
 				consulta = session.createCriteria(Detalle.class);
 				consulta.add(Restrictions.eq("sucursal", oficina));
 				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("valorNeto"));
-				Long valorN = (Long) consulta.uniqueResult();
-				valor = (valorN == null)? new BigDecimal("0") : new BigDecimal(valorN);
-				sucursales.setIngresoRealB(valor.abs());
+				Long valN = (Long) consulta.uniqueResult();
+				valN = (valN == null)? 0 : valN;
+				valor = (valN == null)? new BigDecimal("0") : new BigDecimal(valN);
+				sucursales.setIngresoRealB(valor);
+				
+				consulta.setProjection(Projections.sum("costoTotal"));
+				Long cosT = (Long) consulta.uniqueResult();
+				cosT = (cosT == null)? 0 : cosT;
+				cosT = (valN > 0)? valN + cosT : valN + cosT;
+				//cosT = (valN < 0) ? (valN* -1) - (cosT) :(cosT < 0)? (valN) - (cosT* -1) : (valN) - (cosT) ;
+				sucursales.setUtilidadReal(new BigDecimal(cosT));
 				
 				if(sucursales.getIngresoRealB()== null ||  sucursales.getPresupuestoB() == null
 						|| sucursales.getIngresoRealB().longValue() == 0 ||  sucursales.getPresupuestoB().longValue() == 0){
@@ -531,12 +544,24 @@ public class CiudadDao extends GenericDao<Ciudad>{
 					sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
 					sucursales.setCumplimiento(sucursales.getCumplimiento().setScale(2, BigDecimal.ROUND_HALF_UP));
 				}
+				
+				if(sucursales.getUtilidadReal()== null ||  sucursales.getUtilpresupuesto() == null
+						|| sucursales.getUtilidadReal().longValue() == 0 ||  sucursales.getUtilpresupuesto().longValue() == 0){
+					sucursales.setCumplimientoU(new BigDecimal("0"));
+				}
+				else{
+					sucursales.setCumplimientoU(sucursales.getUtilidadReal().divide(sucursales.getUtilpresupuesto(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+					sucursales.setCumplimientoU(sucursales.getCumplimientoU().setScale(2, BigDecimal.ROUND_HALF_UP));
+				}
 				EsquemasDao daoE = new EsquemasDao();
 				Esquemas esquema = daoE.buscar(1);
 				sucursales.setUmbralCV(esquema.getUmbralComision());
 				
 				String semaforo = (sucursales.getCumplimiento().intValue() >= 85 )?"verde.png" : "rojo.png";
 				sucursales.setImagen1(semaforo);
+				
+				semaforo = (sucursales.getCumplimientoU().intValue() >= 85 )?"verde.png" : "rojo.png";
+				sucursales.setImagen(semaforo);
 				
 				listaoficinas.add(sucursales);
 				sucursales = new ComisionVendedores();

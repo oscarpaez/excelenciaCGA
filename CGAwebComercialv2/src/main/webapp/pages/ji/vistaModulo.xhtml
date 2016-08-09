@@ -13,6 +13,8 @@
 			<f:event listener="#{graficasBean.desempenoVentas()}"
 				type="preRenderView" />
 		</f:metadata>
+		
+		<p:messages id="msgData" showDetail="true" autoUpdate="true" closable="true" />
 		<f:facet name="header">
 			<p:outputLabel
 				value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
@@ -20,12 +22,63 @@
 		<br />
 		<div class="ui-grid ui-grid-responsive">
 			<div class="ui-grid-row">
+					<div class="ui-grid-col-4">
+						<p:panel style="width: 400px " styleClass="promedio">
+							
+							<h:form >
+								<h:panelGrid columns="2">
+									<p:outputLabel  value="Venta Mes " 
+										    	style="font-size: 14px; text-align: right; " />
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right;"
+												value="#{graficasBean.realMes}"  disabled="true" >
+												<f:convertNumber pattern="#,##0;"/>
+									</p:inputText>
+									<p:outputLabel  value="Presupuesto Mes " style="font-size: 14px; " />
+									<p:inputText  size="15"   style="color:#0000ff; opacity: .90; text-align: right;"
+												value="#{graficasBean.presupuestoMes}"  disabled="true" >
+												<f:convertNumber pattern="#,##0;(#,##0)"/>
+									</p:inputText>									
+								</h:panelGrid>
+							</h:form>
+							
+							<p:chart type="metergauge" 	model="#{graficasBean.meterGaugeModel}"
+								style="width:350px;height:250px" />
+							
+							<h:form id="frmProVen" enctype="multipart/form-data">
+								<p:outputLabel value="Promedio de venta #{graficasBean.mesActual}"
+									style="color: #0000ff; font-style: italic;" />
+								<br />
+								<br />
+								<h:panelGrid columns="2" id="pnlProVen">
+
+									<p:outputLabel value="Venta Promedio X pedido" style="font-size: 14px; " />
+									<p:inputText id="descripcion" size="15" style="color:#0000ff; opacity: .90; text-align: right;"
+										value="#{graficasBean.promedioMes}" disabled="true">
+										<f:convertNumber pattern="#,##0;(#,##0)" />
+									</p:inputText>
+
+									<p:outputLabel value="Meta Venta X pedido" style="font-size: 14px; " />
+									<p:inputText id="cantidad" size="15" style="color:#0000ff; opacity: .90; text-align: right;"
+										value="#{graficasBean.promedioVenta.meta}" disabled="true">
+										<f:convertNumber pattern="#,##0;(#,##0)" />
+									</p:inputText>
+								</h:panelGrid>
+							</h:form>
+						</p:panel>
+						<br />
+					</div>
 					<div class="ui-grid-col-8">
 						<div style="display: block; text-align: center; margin: 0 auto;">
 							<p:button value="Excelencia Comercial"
 								style="width:200px; height:100px"
 								outcome="/pages/ji/planji.xhtml?faces-redirect=true"
 								disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}" />
+							
+							<p:button value="Excelencia Proyectos"
+								style="width:200px; height:100px"
+								outcome="/pages/pro/proyectos.xhtml?faces-redirect=true"
+								disabled="#{autenticacionBean.usuarioLogin.perfil.gastos}">
+							</p:button>	
 						</div>
 						<br />
 						<h:form id="frmDesVen" enctype="multipart/form-data">
@@ -37,64 +90,10 @@
 							</p:panel>
 						</h:form>
 					</div>
-					<div class="ui-grid-col-4">
-						<p:panel style="width: 400px " styleClass="promedio">
-							<h:form id="frmProVen" enctype="multipart/form-data">
-								<p:outputLabel value="Promedio de venta #{graficasBean.mesActual}"
-									style="color: #0000ff; font-style: italic;" />
-								<br />
-								<br />
-								<h:panelGrid columns="2" id="pnlProVen">
-
-									<p:outputLabel value="Venta Promedio" style="font-size: 14px; " />
-									<p:inputText id="descripcion" size="15" style="color:#0000ff; opacity: .90;"
-										value="#{graficasBean.promedioMes}" disabled="true">
-										<f:convertNumber pattern="#,##0;(#,##0)" />
-									</p:inputText>
-
-									<p:outputLabel value="Meta Venta " style="font-size: 14px; " />
-									<p:inputText id="cantidad" size="15" style="color:#0000ff; opacity: .90;"
-										value="#{graficasBean.promedioVenta.meta}" disabled="true">
-										<f:convertNumber pattern="#,##0;(#,##0)" />
-									</p:inputText>
-								</h:panelGrid>
-							</h:form>
-							<br />
-							<p:chart type="metergauge" 	model="#{graficasBean.meterGaugeModel}"
-								style="width:350px;height:250px" />
-							<h:form >
-								<h:panelGrid columns="2">
-									<p:outputLabel  value="Presupuesto Mes " 
-										    	style="font-size: 14px; " />
-									<p:inputText  size="15"   style="color:#0000ff; opacity: .90;"
-												value="#{graficasBean.presupuestoMes}"  disabled="true" >
-												<f:convertNumber pattern="#,##0;(#,##0)"/>
-									</p:inputText>
-									<p:outputLabel  value="Real Mes " 
-										    	style="font-size: 14px; " />
-									<p:inputText  size="15"  style="color:#0000ff; opacity: .90;"
-												value="#{graficasBean.realMes}"  disabled="true" >
-												<f:convertNumber pattern="#,##0;"/>
-									</p:inputText>
-								</h:panelGrid>
-							</h:form>		
-						</p:panel>
-						<br />
-
-					</div>
+					
 			</div>
 			<br />
 			<div class="ui-grid-row">
-				<div class="ui-grid-col-8">
-					<h:form id="frmDesRec" enctype="multipart/form-data">
-						<p:panel style="height:370px; width:850px">
-							<h:panelGrid id="pnlDesRec">
-								<p:chart type="line" model="#{graficasBean.desempenoRecaudo}"
-									style="height:350px; width:800px" />
-							</h:panelGrid>
-						</p:panel>
-					</h:form>
-				</div>
 				<div class="ui-grid-col-4">
 					<p:panel style="width: 400px " styleClass="promedio">
 						<h:form id="frmProDes" enctype="multipart/form-data">
@@ -105,13 +104,13 @@
 
 								<p:outputLabel value="Descuento Promedio"
 									style="font-size: 14px; " />
-								<p:inputText id="descripcion" size="15" style="color:#0000ff; opacity: .90;"
+								<p:inputText id="descripcion" size="15" style="color:#0000ff; opacity: .90; text-align: right;"
 									value="#{graficasBean.proDescuento}%" disabled="true">
 									<f:convertNumber pattern="#,##0;(#,##0)" />
 								</p:inputText>
 
 								<p:outputLabel value="Meta Descuento " style="font-size: 14px; " />
-								<p:inputText id="cantidad" size="15" style="color:#0000ff; opacity: .90;"
+								<p:inputText id="cantidad" size="15" style="color:#0000ff; opacity: .90; text-align: right;"
 									value="#{graficasBean.promedioVenta.metaD}%" disabled="true">
 									<f:convertNumber pattern="#,##0;(#,##0)" />
 								</p:inputText>
@@ -122,6 +121,17 @@
 							style="width:350px;height:250px" />
 					</p:panel>
 				</div>
+				<div class="ui-grid-col-8">
+					<h:form id="frmDesRec" enctype="multipart/form-data">
+						<p:panel style="height:370px; width:850px">
+							<h:panelGrid id="pnlDesRec">
+								<p:chart type="line" model="#{graficasBean.desempenoRecaudo}"
+									style="height:350px; width:800px" />
+							</h:panelGrid>
+						</p:panel>
+					</h:form>
+				</div>
+				
 			</div>
 		</div>
 	</ui:define>

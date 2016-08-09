@@ -22,7 +22,7 @@
 					</p:progressBar>
 					
 					<p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
-							style="width:100%" disabled="true"/>
+							style="width:100%; opacity: .90;" disabled="true"/>
 
 				</h:panelGrid>
 			</h:form>
@@ -34,8 +34,8 @@
 					<p:outputLabel
 						value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 
-					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"
-						style="text-align: left; float:right; width:24px; height:24px; background: #ff0000; "
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"   title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666; "
 						outcome="/pages/dl/plandl.xhtml?faces-redirect=true" />
 				</f:facet>
 
@@ -51,25 +51,25 @@
 					<p:columnGroup type="header">
 						<p:row>
 							<p:column colspan="1" headerText="Presupuesto Ingreso" />
-							<p:column colspan="1" headerText="Real Ingreso" />
-							<p:column colspan="2" headerText="Cumplimiento %" />
+							<p:column colspan="1" headerText="Venta" />
+							<p:column colspan="2" headerText="Cumplimiento %" style="width:30%"/>
 					<!--	<p:column colspan="1" headerText="Presupuesto Utilidad" />
 							<p:column colspan="1" headerText="Real Utilidad" />
-							<p:column colspan="2" headerText="Cumplimiento %" />  -->
-							<p:column colspan="1" headerText="Umbral" />
+							<p:column colspan="2" headerText="Cumplimiento %" />  
+							<p:column colspan="1" headerText="Umbral" /> -->
 							<p:column rowspan="2" headerText="Detalle"
-								style="text-align: center; width:6%" />
+								style="text-align: center; width:10%" />
 						</p:row>
 					</p:columnGroup>
 
 
-					<p:column>
+					<p:column style="text-align: right;">
 						<h:outputText value="#{plan.ingreso}">
 							<f:convertNumber locale="en_US" maxFractionDigits="0" />
 						</h:outputText>
 					</p:column>
 
-					<p:column>
+					<p:column style="text-align: right;">
 						<h:outputText value="#{plan.ingreso_Real}">
 							<f:convertNumber locale="en_US" />
 						</h:outputText>
@@ -107,13 +107,13 @@
 					<p:column headerText="comision" style="text-align: center">
 						<p:graphicImage library="images" name="#{plan.imagen}" height="25"
 							width="25" />
-					</p:column>  -->
+					</p:column> 
 
 					<p:column headerText="umbral" style="text-align: center">
-						<h:outputText value="85%" />
-					</p:column>
+						<h:outputText value="85%" />   
+					</p:column>  -->
 
-					<p:column style="text-align:right">
+					<p:column style="text-align:center">
 						<p:button icon="ui-icon-search"
 							outcome="/pages/dl/listaVendedores.xhtml?faces-redirect=true">
 							<f:param name="frst" value="#{directorGBean.fechaConsulta}"/>
@@ -125,7 +125,7 @@
 					</p:columnGroup>
 
 					<f:facet name="footer">
-						<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a" />
+						<p:commandButton  value="Volver" onclick="history.back()" style="background: #f0ad4e" />
 					</f:facet>
 				</p:dataTable>
 			</p:panel>

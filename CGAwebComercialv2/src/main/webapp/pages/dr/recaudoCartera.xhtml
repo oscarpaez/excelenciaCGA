@@ -36,10 +36,10 @@
 			            </p:row>
 			            
 			            <p:row>
-			                <p:column colspan="1" headerText="Plan Ingreso" />		                
-			                <p:column colspan="1" headerText="Real Ingreso" />		                
-			                <p:column colspan="1" headerText="Cumplimiento"  style="font-size: 10px;"/>
-			                <p:column colspan="1" headerText="Comision" />
+			                <p:column colspan="1" headerText="Presupuesto" />		                
+			                <p:column colspan="1" headerText="Ingreso" />		                
+			                <p:column colspan="1" headerText="Cumplimiento %" />
+			                <p:column colspan="1" headerText="Desempeño Recaudo" />
 			            </p:row>
 					</p:columnGroup>
 					
@@ -47,19 +47,19 @@
 					<h:inputHidden id="codSap" value="gerente.id" />
 					<h:inputHidden id="nombre" value="gerente.nombre" />
 					
-					<p:column style="font-size: 11px;">
+					<p:column style="text-align:right;">
 						<h:outputText value="#{gerente.presupuestoB}">
 							<f:convertNumber locale="en_US" integerOnly="true" />
 						</h:outputText>
 					</p:column>
 
-					<p:column style="font-size: 11px;">
+					<p:column style="text-align:right;">
 						<h:outputText value="#{gerente.ingresoRealB }">
 							<f:convertNumber locale="en_US" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column style="font-size: 11px;">
+					<p:column style="text-align: right;">
 						<h:outputText value="#{gerente.cumplimiento} %">
 							<f:convertNumber locale="en_US"  maxFractionDigits="0"/>
 						</h:outputText>
@@ -70,7 +70,7 @@
 					</p:column>	
 					
 					<f:facet name="footer">
-						<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a"/>
+						<p:commandButton  value="Volver" onclick="history.back()" style="background: #f0ad4e"/>
 					</f:facet>
 				</p:dataTable>
 			</p:panel>

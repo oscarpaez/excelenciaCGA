@@ -78,7 +78,7 @@
 /*////ocultar calendario/////*/
 .promedio{
 	position:absolute;
-	left: 900px;
+	left: 5px;
 }
 
 /*////quita el color del header de la pagina/////*/
@@ -87,8 +87,15 @@
 	background: none;	
 }
 
-.ui-panel {
+.ui-panel .frmProVen .tituloVenta{
+	text-align: center;
     /*padding: 2.0em;*/
+}
+
+.ui-tabs .ui-tabs-panel {
+    border-width: 0;
+    padding: 0.2em 0.2em;
+    background: none;
 }
 
 

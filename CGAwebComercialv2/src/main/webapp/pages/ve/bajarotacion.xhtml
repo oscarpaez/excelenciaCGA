@@ -20,6 +20,10 @@
 				<f:facet name="header">
 					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 					
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/plan.xhtml?faces-redirect=true" />
+					
 				</f:facet>
 
 				<p:dataTable styleClass="tblPla" id="tblPlan"
@@ -58,7 +62,7 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a"/>
+						<p:commandButton  value="Volver" onclick="history.back()" style="background: #f0ad4e;"/>
 					</f:facet>
 				</p:dataTable>
 			</p:panel>

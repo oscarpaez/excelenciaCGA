@@ -39,7 +39,7 @@
 					</p:progressBar>
 					
 					<p:button value="Mes de consulta: #{gerenteBean.fechaConsulta}"  
-						style="width:100%" disabled="true"/>
+						style="width:100%; opacity: .90;" disabled="true"/>
 				</h:panelGrid>
 				
 			</h:form>
@@ -49,8 +49,8 @@
 				<f:facet name="header">
 					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 					
-					<p:button  icon="ui-icon-home" iconPos="right" styleClass="excel"
-								style="text-align: left; float:right; width:24px; height:24px; "
+					<p:button  icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+								style="text-align: left; float:right; width:24px; height:24px; background:#ff6666;"
 							    outcome="/pages/gg/vistaInicial.xhtml?faces-redirect=true"/>
 					
 									
@@ -79,15 +79,15 @@
 		            <p:row>
 		                <p:column colspan="1" headerText="Cedula" />
 		                <p:column colspan="1" headerText="CodSap" width="5%" sortBy="#{vendedor.id}"/>
-		                <p:column colspan="1" headerText="Nombre"  width="12%"/>
-		                <p:column colspan="1" headerText="Tipo" width="9%" />
-		                <p:column colspan="1" headerText="Presupuesto Ingreso" />
-		                <p:column colspan="1" headerText="Real Ingreso" />
-		                <p:column colspan="2" headerText="Cumplimiento %" width="12%"/>
-		                <p:column colspan="1" headerText="Presupuesto Utilidad" />
+		                <p:column colspan="1" headerText="Nombre"  width="15%"/>
+		                <p:column colspan="1" headerText="Tipo" width="12%" />
+		                <p:column colspan="1" headerText="Presupuesto" />
+		                <p:column colspan="1" headerText="Venta" />
+		          		<p:column colspan="2" headerText="Cumplimiento %" width="15%"/>
+		            <!--<p:column colspan="1" headerText="Presupuesto Utilidad" />
 		                <p:column colspan="1" headerText="Real Utilidad" />
 		                <p:column colspan="2" headerText="Cumplimiento %" width="12%"/>
-		                <p:column colspan="1" headerText="Umbral" width="5%"/>
+		                <p:column colspan="1" headerText="Umbral" width="5%"/>   -->
 		                <p:column colspan="1" headerText="Detalle" width="6%"/>
 		            </p:row>
 		        </p:columnGroup>
@@ -120,7 +120,7 @@
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="cumplimiento">
+					<p:column headerText="cumplimiento" style="text-align:right">
 						<h:outputText value="#{vendedor.cumplimiento} %">
 							<f:convertNumber locale="en_US" />
 						</h:outputText>
@@ -130,7 +130,7 @@
 						<p:graphicImage library="images" name="#{vendedor.imagen1}"  height="25" width="25" />
 					</p:column>
 					
-					<p:column headerText="Presupuesto">
+		<!-- 		<p:column headerText="Presupuesto">
 						<h:outputText value="#{vendedor.utilpresupuesto}">
 							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
 						</h:outputText>
@@ -154,10 +154,10 @@
 					
 					<p:column headerText="comision"    style="text-align: center">
 						<h:outputText value="85%" />
-					</p:column>
+					</p:column>   -->
 					
 					
-					<p:column headerText="Detalle" style="width:5%">
+					<p:column headerText="Detalle" style="width:5%; text-align:center">
 						<p:button icon="ui-icon-search"
 							outcome="/pages/gg/linea.xhtml?faces-redirect=true">
 							<f:param name="frts" value="#{gerenteBean.fechaConsulta}"/>
@@ -172,19 +172,19 @@
 					<p:columnGroup type="footer">
 			            <p:row>
 			            	<p:column colspan="4" footerText="Totales" style="text-align: right" />
-			            	<p:column footerText="$ #{gerenteBean.totalPresupuesto}"  />		 
-			            	<p:column footerText="$ #{gerenteBean.totalReal}"  />
-			            	<p:column footerText="#{gerenteBean.totalCumplimiento}%"  />		 
-			            	<p:column footerText="" style="text-align: rigth" />		 
-			            	<p:column footerText="$ #{gerenteBean.totalPresupuestoU} "  />		 
+			            	<p:column footerText="$ #{gerenteBean.totalPresupuesto}"  style="text-align:right" />		 
+			            	<p:column footerText="$ #{gerenteBean.totalReal}"  style="text-align:right"/>
+			            	<p:column footerText="#{gerenteBean.totalCumplimiento}%"  style="text-align:right"/>		 
+			        <!--   	<p:column footerText="" style="text-align: rigth" />		 
+			          		<p:column footerText="$ #{gerenteBean.totalPresupuestoU} "  />		 
 			                <p:column footerText="$ #{gerenteBean.totalRealU}"/>
-			                <p:column footerText=" #{gerenteBean.totalCumplimientoU}%"  />
-			                <p:column colspan="3" footerText="" />		 
+			                <p:column footerText=" #{gerenteBean.totalCumplimientoU}%"  />  -->
+			                <p:column colspan="2" footerText="" />		 
 			            </p:row>
 			        </p:columnGroup>
 			        
 					<f:facet name="footer">
-						<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a" />
+						<p:commandButton  value="Volver" onclick="history.back()" style="background: #f0ad4e" />
 					</f:facet>
 					
 				</p:dataTable>

@@ -33,13 +33,13 @@
 						<h:outputText value="#{recaudo.fecha}" />
 					</p:column>
 					
-					<p:column headerText="Presupuesto " >
+					<p:column headerText="Presupuesto " style="text-align:right">
 						<h:outputText value="#{recaudo.presupuesto}" >
 							<f:convertNumber locale="pt_CO" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Real"  >
+					<p:column headerText="Real" style="text-align:right" >
 						<h:outputText value="#{recaudo.real}" >
 							<f:convertNumber locale="pt_CO" />
 						</h:outputText>
@@ -49,17 +49,17 @@
 						<h:outputText value="#{recaudo.zonaVenta.nombre}" />
 					</p:column>
 					
-					<p:column headerText="Cumplimiento" >
+		 		<p:column headerText="Cumplimiento"  style="text-align:right">
 						<h:outputText value="#{recaudo.cumplimiento} %" >
 						  <f:convertNumber maxIntegerDigits="2"/>
 						</h:outputText>
-					</p:column>
+					</p:column> 	
 					
-					<p:column headerText="Umbral" >
+		<!--			<p:column headerText="Umbral" >
 						<h:outputText value="#{recaudo.umbral}" />
-					</p:column>					
+					</p:column>	 -->				
 					
-					<p:column headerText="comision" >
+					<p:column headerText="comision" style="text-align:center" >
 						<p:graphicImage library="images" name="#{recaudo.imagen}"  height="25" width="25" />
 					</p:column>					
 					
@@ -78,7 +78,7 @@
 			        
 			        <f:facet name="footer" >
 			        	<h:panelGroup >
-				            <p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a"/>
+				            <p:commandButton  value="Volver" onclick="history.back()" style="background:#f0ad4e;"/>
 				         </h:panelGroup>						
 					</f:facet>
 					</p:dataTable>

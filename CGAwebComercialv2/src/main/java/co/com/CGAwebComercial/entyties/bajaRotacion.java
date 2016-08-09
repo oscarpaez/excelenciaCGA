@@ -149,7 +149,7 @@ public class bajaRotacion implements Serializable{
 	private BigDecimal descValorSub;
 	
 	@Column(scale = 2)
-	private BigDecimal desc;
+	private BigDecimal descu;
 	
 	private int flete;
 
@@ -573,12 +573,12 @@ public class bajaRotacion implements Serializable{
 		this.descValorSub = descValorSub;
 	}
 
-	public BigDecimal getDesc() {
-		return desc;
+	public BigDecimal getDescu() {
+		return descu;
 	}
 
-	public void setDesc(BigDecimal desc) {
-		this.desc = desc;
+	public void setDescu(BigDecimal descu) {
+		this.descu = descu;
 	}
 
 	public int getFlete() {

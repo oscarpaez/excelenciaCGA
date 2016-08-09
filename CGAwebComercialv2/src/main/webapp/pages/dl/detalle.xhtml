@@ -13,6 +13,7 @@
 				<f:viewParam name="linId" value="#{directorGBean.idLinea}"/>
 				<f:viewParam name="linNom" value="#{directorGBean.tipo}"/>
 				<f:viewParam name="perId" value="#{directorGBean.idFuncionario}"/>
+				<f:viewParam name="perNom" value="#{directorGBean.nombreVendedor}"/>
 				<f:event listener="#{directorGBean.listarDetalleVendedoresLinea()}" type="preRenderView" />	
 			</f:metadata>			
 			
@@ -25,7 +26,7 @@
 						<p:outputLabel value="" />
 						
 						<p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
-							style="width:100%" disabled="true"/>	
+							style="width:100%; opacity: .90;" disabled="true"/>	
 						
 					</h:panelGrid>
 				</h:form>
@@ -35,8 +36,8 @@
 					<f:facet name="header">
 			            <p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 			            
-			            <p:button icon="ui-icon-home" iconPos="right" styleClass="excel"
-						style="text-align: left; float:right; width:24px; height:24px; background: #ff0000;"
+			            <p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
 						outcome="/pages/dl/plandl.xhtml?faces-redirect=true" />
 			        </f:facet>
 				
@@ -45,7 +46,7 @@
 						paginatorPosition="bottom"	>
 					
 					<f:facet name="header">
-			            <p:outputLabel value="Detalle  linea #{directorGBean.idLinea}" />
+			            <p:outputLabel value="Detalle #{directorGBean.nombreVendedor}" />
 			        </f:facet>
 			        
 			    	<p:column headerText="Factura" filterBy="#{detalle.numeroFactura}" >
@@ -91,7 +92,7 @@
 			        </p:columnGroup>				
 					
 					<f:facet name="footer">
-						<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a"/>
+						<p:commandButton  value="Volver" onclick="history.back()" style="background: #f0ad4e"/>
 					</f:facet>
 					</p:dataTable>
 					

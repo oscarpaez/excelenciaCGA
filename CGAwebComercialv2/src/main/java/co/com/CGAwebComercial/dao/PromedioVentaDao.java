@@ -81,9 +81,12 @@ public class PromedioVentaDao extends GenericDao<PromedioVenta> {
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorNeto"));
 			Long totalWages = (Long) consulta.uniqueResult();
+			totalWages  = (totalWages == null) ? 0: totalWages;
 			consulta.setProjection(Projections.sum("valorFacturaBruto"));
 			Long totalWages1 = (Long) consulta.uniqueResult();
+			totalWages1  = (totalWages1 == null) ? 0: totalWages1;
 			
+			//Long pro = (totalWages > 0)? totalWages + totalWages1 : totalWages1 - totalWages ;
 			Long pro = (totalWages > totalWages1)? Math.abs(totalWages1) - Math.abs(totalWages) : Math.abs(totalWages) - Math.abs(totalWages1) ;
 			Double pr = (Double) pro.doubleValue()/totalWages1.doubleValue();
 			pr = Math.abs(pr *100);
@@ -160,9 +163,10 @@ public class PromedioVentaDao extends GenericDao<PromedioVenta> {
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorNeto"));
 			Long totalWages = (Long) consulta.uniqueResult();
+			totalWages = (totalWages == null)? 0 : totalWages;
 			consulta.setProjection(Projections.sum("valorFacturaBruto"));
 			Long totalWages1 = (Long) consulta.uniqueResult();
-
+			totalWages1 = (totalWages1 == null)? 0 : totalWages1;
 			Long pro = totalWages - totalWages1;
 
 			Double pr = (Double) pro.doubleValue()/totalWages1.doubleValue();
@@ -194,8 +198,10 @@ public class PromedioVentaDao extends GenericDao<PromedioVenta> {
 				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("valorNeto"));
 				Long totalWages = (Long) consulta.uniqueResult();
+				totalWages = (totalWages == null)? 0 : totalWages;
 				consulta.setProjection(Projections.sum("valorFacturaBruto"));
 				Long totalWages1 = (Long) consulta.uniqueResult();
+				totalWages1 = (totalWages1 == null)? 0 : totalWages1;
 
 				Long pro = totalWages - totalWages1;
 

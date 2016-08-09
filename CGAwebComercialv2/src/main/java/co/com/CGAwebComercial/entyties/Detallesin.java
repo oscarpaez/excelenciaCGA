@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @SuppressWarnings("serial")
 @Entity
@@ -164,12 +165,12 @@ public class Detallesin implements Serializable{
 	
 	private int utilidadPlan;
 	
-	@Column(scale = 2)
+	@Transient
 	private float utilPlan;
 	
 	private int utilReal;
 	
-	@Column(scale = 2)
+	@Transient
 	private float rentaReal;
 
 	public int getIdDetalle() {

@@ -66,58 +66,90 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 		List<Recaudo> recaudo = null;
 		List<Recaudo> listaRecaudo = new ArrayList<>();		
 		try{
+			Date fechaFinal;
+			Date fechaInicial;
+			int meses = fechaFinalR();
+			DateFormat formatoFecha = new SimpleDateFormat("yyyy/MM/dd");
 			FuncionarioDao dao = new FuncionarioDao();
 			Funcionario funcionario = dao.buscarPersona(idPersona);
 			Zona_ventaDao daoZ = new Zona_ventaDao();
 			List<Zona_venta> zona = daoZ.buscarZona(funcionario.getId_funcionario());
+			
+			
 
 			ComisionDao daoC = new ComisionDao();
 			Comision comision = daoC.buscar(funcionario.getComision().getIdComision());
-			for (Zona_venta zona_venta : zona) {
-				Criteria consulta = session.createCriteria(Recaudo.class);			
-				consulta.createAlias("zonaVenta", "z");
-				consulta.add(Restrictions.eq("z.id_zona_venta", zona_venta.getId_zona_venta()));
-				recaudo = consulta.list();
-
-			}
-			for (Recaudo recaudo1 : recaudo ) {
-
-
-				int real = recaudo1.getReal().compareTo(new BigDecimal("0.00"));
-				if(real == 0){
-					recaudo1.setCumplimiento(new BigDecimal("0.00"));
-					recaudo1.setUmbral(comision.getUmbralRecaudo());
-					recaudo1.setImagen("rojo.png");
-					recaudo1.setValorComision(new BigDecimal("0.00"));
+			for (int i=1; i<meses; i++){
+				Recaudo recaudoA = new Recaudo();
+				String fecInicial = "2016/0"+i+"/01";
+				fechaInicial  = formatoFecha.parse(fecInicial);
+				String fecFinal = (i== 2)? "2016/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? "2016/0"+i+"/30" :"2016/0"+i+"/31";
+				fechaFinal = formatoFecha.parse(fecFinal);
+			
+				for (Zona_venta zona_venta : zona) {
+					Criteria consulta = session.createCriteria(Recaudo.class);			
+					consulta.createAlias("zonaVenta", "z");
+					consulta.add(Restrictions.eq("z.id_zona_venta", zona_venta.getId_zona_venta()));
+					consulta.add(Restrictions.between("fecha", fechaInicial, fechaFinal));
+					recaudo = consulta.list();
+	
+				}
+				System.out.println(recaudo.size());
+				if(recaudo.size() >0){
+					for (Recaudo recaudo1 : recaudo ) {
+		
+		
+						int real = recaudo1.getReal().compareTo(new BigDecimal("0.00"));
+						if(real == 0){
+							recaudo1.setCumplimiento(new BigDecimal("0.00"));
+							recaudo1.setUmbral(comision.getUmbralRecaudo());
+							recaudo1.setImagen("rojo.png");
+							recaudo1.setValorComision(new BigDecimal("0.00"));
+						}
+						else{
+		
+							double cum =  recaudo1.getReal().doubleValue();
+							double pre = recaudo1.getPresupuesto().doubleValue();
+							cum= cum / pre *100  ; 
+		
+							BigDecimal cumplimiento =recaudo1.getReal().divide(recaudo1.getPresupuesto(), 2, BigDecimal.ROUND_HALF_UP);  
+							recaudo1.setCumplimiento(cumplimiento.multiply(new BigDecimal("100")));
+							recaudo1.setUmbral(comision.getUmbralRecaudo());
+							int numero = recaudo1.getUmbral().compareTo(recaudo1.getCumplimiento().divide(new BigDecimal("100")));
+							if(numero == 1){
+								recaudo1.setImagen("rojo.png");
+								recaudo1.setValorComision(new BigDecimal("0.00"));
+							}
+							else{
+								recaudo1.setImagen("verde.png");
+								recaudo1.setValorComision(recaudo1.getCumplimiento().multiply(comision.getValorBaseRecaudo()).divide(new BigDecimal("100")));
+							}
+						}	
+						listaRecaudo.add(recaudo1);
+					}
 				}
 				else{
-
-					double cum =  recaudo1.getReal().doubleValue();
-					double pre = recaudo1.getPresupuesto().doubleValue();
-					cum= cum / pre *100  ; 
-
-					BigDecimal cumplimiento =recaudo1.getReal().divide(recaudo1.getPresupuesto(), 2, BigDecimal.ROUND_HALF_UP);  
-					recaudo1.setCumplimiento(cumplimiento.multiply(new BigDecimal("100")));
-					recaudo1.setUmbral(comision.getUmbralRecaudo());
-					int numero = recaudo1.getUmbral().compareTo(recaudo1.getCumplimiento().divide(new BigDecimal("100")));
-					if(numero == 1){
-						recaudo1.setImagen("rojo.png");
-						recaudo1.setValorComision(new BigDecimal("0.00"));
-					}
-					else{
-						recaudo1.setImagen("verde.png");
-						recaudo1.setValorComision(recaudo1.getCumplimiento().multiply(comision.getValorBaseRecaudo()).divide(new BigDecimal("100")));
-					}
-				}	
-				listaRecaudo.add(recaudo1);
+					recaudoA.setPresupuesto(new BigDecimal("0.00"));
+					recaudoA.setReal(new BigDecimal("0.00"));
+					recaudoA.setCumplimiento(new BigDecimal("0.00"));
+					recaudoA.setUmbral(comision.getUmbralRecaudo());
+					recaudoA.setImagen("rojo.png");
+					recaudoA.setValorComision(new BigDecimal("0.00"));
+					listaRecaudo.add(recaudoA);
+				}
 			}
 			return listaRecaudo;
 		} catch (RuntimeException ex) {
 			throw ex;
 		}
+		catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		finally{
 			session.close();
 		}
+		return listaRecaudo;
 
 	}
 
@@ -437,18 +469,27 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 					consulta.add(Restrictions.eq("z.id_zona_venta", zona_venta.getId_zona_venta()));
 					consulta.add(Restrictions.between("fecha", fechaInicial, fechaFinal));
 					recaudo = consulta.list();
-					
-					for (Recaudo recaudo1 : recaudo ) {
+					System.out.println(recaudo.size() + " recuado" + fechaFinal);
+					if(recaudo.size() >0){
+						for (Recaudo recaudo1 : recaudo ) {
+							itemSucursal = new Recaudo();
+							sumaR = sumaR.add(recaudo1.getReal());
+							itemSucursal.setReal(sumaR);
+							sumaP = sumaP.add(recaudo1.getPresupuesto());
+							itemSucursal.setPresupuesto(sumaP);
+	
+							sucursales.setPresupuestoB(itemSucursal.getPresupuesto());
+							sucursales.setIngresoRealB(itemSucursal.getReal());
+							//sucursales.setComision(itemSucursal.getPresupuesto().intValue());
+							//recaudo.add(itemSucursal);
+						}
+					}
+					else{
 						itemSucursal = new Recaudo();
-						sumaR = sumaR.add(recaudo1.getReal());
+						sumaR = new BigDecimal("0");
 						itemSucursal.setReal(sumaR);
-						sumaP = sumaP.add(recaudo1.getPresupuesto());
+						sumaP = new BigDecimal("0");
 						itemSucursal.setPresupuesto(sumaP);
-
-						sucursales.setPresupuestoB(itemSucursal.getPresupuesto());
-						sucursales.setIngresoRealB(itemSucursal.getReal());
-						//sucursales.setComision(itemSucursal.getPresupuesto().intValue());
-						//recaudo.add(itemSucursal);
 					}
 
 				}

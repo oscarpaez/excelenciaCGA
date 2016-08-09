@@ -11,6 +11,7 @@
 			<f:metadata>
 				<f:viewParam name="frst" value="#{directorGBean.fechaConsulta}"/>
 				<f:viewParam name="perId" value="#{directorGBean.idFuncionario}"/>
+				<f:viewParam name="perNom" value="#{directorGBean.nombreVendedor}"/>
 				<f:viewParam name="fecBus" value="#{directorGBean.autenticacion.fechaBusqueda}"/>	
 				<f:viewParam name="fecYear" value="#{directorGBean.autenticacion.fechaBusquedaYear}"/>
 				<f:viewParam name="tip" value="#{directorGBean.tipo}"/>	
@@ -27,7 +28,7 @@
 				    <p:outputLabel value=""  />
 				    	
 				    <p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
-							style="width:100%" disabled="true"/>	
+							style="width:100%; opacity: .90;" disabled="true"/>	
 				</h:panelGrid>
 			</h:form>
 		</div>
@@ -37,8 +38,8 @@
 					<f:facet name="header">
 						 <p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 						 	
-						 	<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"
-								style="text-align: left; float:right; width:24px; height:24px; background: #ff0000; "
+						 	<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666; "
 								outcome="/pages/dl/plandl.xhtml?faces-redirect=true" />
 			        </f:facet>
 				
@@ -47,7 +48,7 @@
 						paginatorPosition="bottom"	>
 					
 					<f:facet name="header">
-			            <h:outputText value="lista Detalle " /> 
+			            <h:outputText value="lista Detalle #{directorGBean.nombreVendedor}" /> 
 			        </f:facet>	
 			        
 			       <p:columnGroup type="header">
@@ -58,8 +59,8 @@
 			                <p:column colspan="2" headerText="Cumplimiento %" />
 			            <!--<p:column colspan="1" headerText="Presupuesto Utilidad" />
 			                <p:column colspan="1" headerText="Real Utilidad" />
-			                <p:column colspan="2" headerText="Cumplimiento %" />  -->
-			                <p:column colspan="1" headerText="Umbral" />
+			                <p:column colspan="2" headerText="Cumplimiento %" />  
+			                <p:column colspan="1" headerText="Umbral" /> -->
 			            </p:row>
 			       </p:columnGroup>
 		        
@@ -110,11 +111,11 @@
 					
 					<p:column headerText="comision"    style="text-align: center">
 						<p:graphicImage library="images" name="#{plan.imagen}"  height="25" width="25" />
-					</p:column>   -->
+					</p:column>   
 					
 					<p:column headerText="Umbral" >
-						<h:outputText value="#{plan.umbralCV}85%" />
-					</p:column>
+						<h:outputText value="#{plan.umbralCV}%" />
+					</p:column> -->
 					
 					<p:columnGroup type="footer">
 			            <p:row>
@@ -122,12 +123,12 @@
 			                <p:column footerText="$ #{directorGBean.totalPre}" style="text-align:right" />
 			                <p:column footerText="$ #{directorGBean.totalRe}"  style="text-align:right"/>
 			                <p:column footerText=" #{directorGBean.utilidad}%"  style="text-align:right"/>		 
-			                <p:column colspan="2" footerText="" />	
+			                <p:column colspan="1" footerText="" />	
 			            </p:row>
 			        </p:columnGroup>
 					
 					<f:facet name="footer">
-				       	<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a" />
+				       	<p:commandButton  value="Volver" onclick="history.back()" style="background: #f0ad4e" />
 					</f:facet>	 
 					</p:dataTable>
 				</p:panel>

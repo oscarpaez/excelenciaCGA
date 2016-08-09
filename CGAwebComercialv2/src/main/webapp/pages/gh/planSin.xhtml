@@ -69,13 +69,13 @@
 					
 					<p:column headerText="Ingreso P" style="text-align:right" >
 						<h:outputText value="#{plan.ingreso}" >
-							<f:convertNumber locale="en_US" />
+							<f:convertNumber locale="en_US"  maxFractionDigits="0"/>
 						</h:outputText>
 					</p:column>
 					
 					<p:column headerText="Utilidad P" style="text-align:right">
 						<h:outputText value="#{plan.utilidad}" >
-							<f:convertNumber locale="en_US" />
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
 						</h:outputText>
 					</p:column>
 					

@@ -137,6 +137,71 @@ public class FuncionarioDao extends GenericDao<Funcionario> {
 		}
 	}
 
+	//*Lista todos los funcionarios de la tabla detalle con el nombre *//
+	@SuppressWarnings({ "unchecked" })
+	public List<Object[]>  listarVendedoresPaisD(String tipo, String fecMes, String fecYear){
+
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		//List<Integer> listaFuncionarios = new ArrayList<>();
+		try{
+			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
+
+			String nombre = (tipo.equals("funcionario"))? "nombreEspecialista" : "nombreVendedorInt";
+			System.out.println(tipo + "@@" + nombre);
+			System.out.println(fechaFinal + "###" + fechaInicial); 
+			Criteria consulta = session.createCriteria(Detalle.class);
+			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
+			//consulta.setProjection(Projections.groupProperty("nombreEspecialista"));
+			consulta.setProjection(Projections.projectionList().add(
+					Projections.groupProperty(tipo)).add(Projections.groupProperty(nombre)));				
+			List<Object[]> results = consulta.list();
+			
+			System.out.println(results.size());
+			for (Object[] objects : results) {
+				System.out.println(objects[0] + "EEEEE" + objects[1]);
+			}
+			return results; 
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
+
+	//*Lista todos los clientes de la tabla detalle por un vendedor *//
+	@SuppressWarnings({ "unchecked" })
+	public List<Object[]>  listarClientesPaisD(String tipo, int idPersona, String fecMes, String fecYear){
+
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		//List<Integer> listaFuncionarios = new ArrayList<>();
+		try{
+			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
+
+			//String nombre = (tipo.equals("funcionario"))? "nombreEspecialista" : "nombreVendedorInt";
+
+			Criteria consulta = session.createCriteria(Detalle.class);
+			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
+			//consulta.setProjection(Projections.groupProperty("nombreEspecialista"));
+			consulta.setProjection(Projections.projectionList().add(
+					Projections.groupProperty("cliente")).add(Projections.groupProperty("nombreCliente")));
+			consulta.add(Restrictions.eq(tipo, idPersona));
+			List<Object[]> results = consulta.list();
+
+			for (Object[] objects : results) {
+				System.out.println(objects[0] + "EEEEE" + objects[1]);
+			}
+			return results; 
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
+
 	//*Lista todos los funcionarios de la tabla detalle por oficina y linea "gg" "/gg/listaVendedores1"*//
 	@SuppressWarnings("rawtypes")
 	public List<Integer>  listarVendedoresOficinaLinea(int linea, int oficina, String tipo, String fecMes, String fecYear){
@@ -168,7 +233,7 @@ public class FuncionarioDao extends GenericDao<Funcionario> {
 			session.close();
 		}
 	}
-	
+
 	//*Lista todos los funcionarios de la tabla detalle por oficina "gg" "/gg/listaVendedores2"*//
 	@SuppressWarnings("rawtypes")
 	public List<Integer>  listarVendedoresOficina(int oficina, String tipo, String fecMes, String fecYear){
@@ -197,8 +262,8 @@ public class FuncionarioDao extends GenericDao<Funcionario> {
 			session.close();
 		}
 	}
-	
-	
+
+
 
 	//*Lista todos los funcionarios de la tabla detalle para UEN*//
 	@SuppressWarnings("rawtypes")
@@ -239,36 +304,64 @@ public class FuncionarioDao extends GenericDao<Funcionario> {
 			session.close();
 		}
 	}
-	
+
 	//*Lista todos los funcionarios de la tabla detalle por oficina y linea "gg" "/gg/listaVendedores1"*//
-		@SuppressWarnings("rawtypes")
-		public List<Integer>  listarVendedoresDirectorLinea(int linea, String tipo, String fecMes, String fecYear){
+	@SuppressWarnings("rawtypes")
+	public List<Integer>  listarVendedoresDirectorLinea(int linea, String tipo, String fecMes, String fecYear){
 
-			Session session = HibernateUtil.getSessionfactory().openSession();
-			List<Integer> listaFuncionarios = new ArrayList<>();
-			try{
-				Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
-				Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<Integer> listaFuncionarios = new ArrayList<>();
+		try{
+			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
 
 
-				Criteria consulta = session.createCriteria(Detalle.class);
-				consulta.add(Restrictions.eq("linea", linea));
-				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
-				consulta.setProjection(Projections.groupProperty(tipo));
-				List results = consulta.list();
-				for (Iterator iterator = results.iterator(); iterator.hasNext();) {
-					Object object = (Object) iterator.next();
-					int d = (int) object;
-					listaFuncionarios.add(d);
-				}
-
-				return listaFuncionarios; 
-			} catch (RuntimeException ex) {
-				throw ex;
+			Criteria consulta = session.createCriteria(Detalle.class);
+			consulta.add(Restrictions.eq("linea", linea));
+			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
+			consulta.setProjection(Projections.groupProperty(tipo));
+			List results = consulta.list();
+			for (Iterator iterator = results.iterator(); iterator.hasNext();) {
+				Object object = (Object) iterator.next();
+				int d = (int) object;
+				listaFuncionarios.add(d);
 			}
-			finally{
-				session.close();
-			}
+
+			return listaFuncionarios; 
+		} catch (RuntimeException ex) {
+			throw ex;
 		}
+		finally{
+			session.close();
+		}
+	}
+
+
+	//*Lista todos los Directores del pais "gh" "/gh/comisionD"*//
+	@SuppressWarnings({ "unchecked" })
+	public List<Funcionario> listarDirectorPais(){
+
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<Funcionario> resultado = new ArrayList<>();
+		try{
+			Criteria consulta = session.createCriteria(Funcionario.class);
+			consulta.createAlias("comision", "c");
+			consulta.createAlias("persona", "p");
+			Criterion resul =Restrictions.or(Restrictions.eq("c.idComision", 9),
+					Restrictions.eq("c.idComision", 10), Restrictions.eq("c.idComision", 11),
+					Restrictions.eq("c.idComision", 12), Restrictions.eq("c.idComision", 13),
+					Restrictions.eq("c.idComision", 14));
+
+			consulta.add(resul);
+			consulta.addOrder(Order.asc("p.nombre"));
+			resultado = consulta.list();
+			return resultado;
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
 
 }

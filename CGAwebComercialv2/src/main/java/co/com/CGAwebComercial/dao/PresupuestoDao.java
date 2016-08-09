@@ -115,6 +115,7 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorNeto"));
 			Long valorN = (Long) consulta.uniqueResult();
+			valorN = (valorN == null)? 0 : valorN; 
 			valor = new BigDecimal(valorN);
 			lista.add(valor);
 			return lista;
@@ -148,6 +149,7 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorNeto"));
 			Long valorN = (Long) consulta.uniqueResult();
+			valorN = (valorN == null)? 0 : valorN;
 			valor = new BigDecimal(valorN);
 
 			lista.add(valor);
@@ -185,10 +187,9 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorNeto"));
 			Long valorN = (Long) consulta.uniqueResult();
+			valorN = (valorN == null)? 0 : valorN;
 			valor = new BigDecimal(valorN);
-
 			lista.add(valor);
-
 
 			return lista;
 		} catch (RuntimeException ex) {
@@ -569,9 +570,12 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorNeto"));
 			Long  totalWages = (Long) consulta.uniqueResult();
+			totalWages = (totalWages == null)? 0: totalWages;
 			listaTotal.add(new BigDecimal(totalWages));
+			
 			consulta.setProjection(Projections.sum("costoTotal"));
 			totalWages = (Long) consulta.uniqueResult();
+			totalWages = (totalWages == null)? 0: totalWages;
 			listaTotal.add(new BigDecimal(totalWages));
 
 			consulta = session.createCriteria(PresupuestoE.class);			

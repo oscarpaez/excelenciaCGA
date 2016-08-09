@@ -37,9 +37,11 @@
 		<br />
 		<h:panelGroup columns="4" id="content" 
 				style="display:block; text-align:center;">
-				<p:button value="Excelencia de Gastos"
+				<p:button value="Excelencia Gestion"
 					style="width:200px; height:100px"
-					disabled="#{autenticacionBean.usuarioLogin.perfil.gastos}" />
+					disabled="#{autenticacionBean.usuarioLogin.perfil.gastos}" 
+					outcome="/pages/pro/proyectos.xhtml?faces-redirect=true;"/>
+				
 				<p:button value="Excelencia Gestion Humana" 
 					style="width:200px; height:100px" outcome="/pages/gh/comisiones.xhtml?faces-redirect=true;"
 					disabled="#{autenticacionBean.usuarioLogin.perfil.gh}"

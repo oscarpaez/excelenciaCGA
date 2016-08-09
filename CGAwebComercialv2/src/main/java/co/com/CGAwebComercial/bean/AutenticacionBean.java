@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+
 import org.omnifaces.util.Faces;
 //import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
@@ -33,7 +34,8 @@ public class AutenticacionBean implements Serializable {
 	private Usuario usuarioLogin;
     private List<Persona> listaPersona;
     private Persona persona;
-    private String fechaActual;  
+    private String fechaActual;
+    private String fechaDiaAnterior;
     private String fechaBusqueda;
 	private String fechaBusquedaYear;
 	private String tipoVendedor;
@@ -60,6 +62,7 @@ public class AutenticacionBean implements Serializable {
 	public String entrar() {
 		try {
 			
+			
 			UsuarioDao dao = new UsuarioDao();
 			usuarioLogin = dao.autenticar(persona.getCedula(), usuarioLogin.getClave());
 			
@@ -84,7 +87,7 @@ public class AutenticacionBean implements Serializable {
 				return "dcB/vistaModulo.xhtml?faces-redirect=true";
 			}
 			else if(usuarioLogin.getPerfil().getId() == 9 ){
-				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
+				//Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
 				return "ji/vistaModulo.xhtml?faces-redirect=true";
 			}
 			else if(usuarioLogin.getPerfil().getId() == 11 ){
@@ -126,10 +129,14 @@ public class AutenticacionBean implements Serializable {
 			SimpleDateFormat formateador = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy", new Locale("es_ES"));
 			Date fechaDate = new Date();
 			fechaActual=formateador.format(fechaDate);
+			
+			Date ayer = new Date( fechaDate.getTime()-86400000);
+			fechaDiaAnterior = formateador.format(ayer);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
+	}	
+	
 
 	public void onComplete() {
 		//progress = 0;
@@ -139,6 +146,8 @@ public class AutenticacionBean implements Serializable {
 	public void progreso(int valor){
 		this.progress = valor;
 	}
+	
+	
 	
 	public Usuario getUsuarioLogin() {
 		if(usuarioLogin == null){
@@ -187,6 +196,9 @@ public class AutenticacionBean implements Serializable {
 	}
 
 	public String getFechaBusquedaYear() {
+		if(fechaBusquedaYear == null){
+			fechaBusquedaYear = "";
+		}
 		return fechaBusquedaYear;
 	}
 
@@ -242,5 +254,12 @@ public class AutenticacionBean implements Serializable {
 	public void setProgress(Integer progress) {
 		this.progress = progress;
 	}
-	
+
+	public String getFechaDiaAnterior() {
+		return fechaDiaAnterior;
+	}
+
+	public void setFechaDiaAnterior(String fechaDiaAnterior) {
+		this.fechaDiaAnterior = fechaDiaAnterior;
+	}
 }

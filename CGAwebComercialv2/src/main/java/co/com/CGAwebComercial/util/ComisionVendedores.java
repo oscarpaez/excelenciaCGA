@@ -18,7 +18,18 @@ public class ComisionVendedores {
 	private BigDecimal utilidadReal;
 	private BigDecimal umbralCV;
 	private BigDecimal cumplimiento;
-	private BigDecimal cumplimientoU;	
+	private BigDecimal cumplimientoU;
+	private BigDecimal comisionVentaLinea;
+	private BigDecimal cumplimientoVL;
+	private BigDecimal comisionVentaPais;
+	private BigDecimal cumplimientoVP;
+	private BigDecimal comisionMixLinea;
+	private BigDecimal cumplimientoML;
+	private BigDecimal comisionZonasCargo;
+	private BigDecimal cumplimientoZC;
+	private BigDecimal comisionRecaudo;
+	private BigDecimal cumplimientoR;
+	private BigDecimal comisionTotal;	
 	private String imagen1;
 	private String imagen;
 	private int comision;
@@ -27,6 +38,11 @@ public class ComisionVendedores {
 	private int totalConAjuste;
 	private String comisionS;
 	private String liquidar;
+	private String detalleVL;
+	private String detalleVP;
+	private String detalleML;
+	private String detalleZC;
+	private String detalleR;
 	
 	public String getNombre() {
 		return nombre;
@@ -161,6 +177,103 @@ public class ComisionVendedores {
 	}
 	public void setCumplimientoU(BigDecimal cumplimientoU) {
 		this.cumplimientoU = cumplimientoU;
+	}
+	
+	public BigDecimal getComisionVentaLinea() {
+		return comisionVentaLinea;
+	}
+	public void setComisionVentaLinea(BigDecimal comisionVentaLinea) {
+		this.comisionVentaLinea = comisionVentaLinea;
+	}
+	public BigDecimal getComisionVentaPais() {
+		return comisionVentaPais;
+	}
+	public void setComisionVentaPais(BigDecimal comisionVentaPais) {
+		this.comisionVentaPais = comisionVentaPais;
+	}
+	public BigDecimal getComisionMixLinea() {
+		return comisionMixLinea;
+	}
+	public void setComisionMixLinea(BigDecimal comisionMixLinea) {
+		this.comisionMixLinea = comisionMixLinea;
+	}
+	public BigDecimal getComisionZonasCargo() {
+		return comisionZonasCargo;
+	}
+	public void setComisionZonasCargo(BigDecimal comisionZonasCargo) {
+		this.comisionZonasCargo = comisionZonasCargo;
+	}
+	public BigDecimal getComisionRecaudo() {
+		return comisionRecaudo;
+	}
+	public void setComisionRecaudo(BigDecimal comisionRecaudo) {
+		this.comisionRecaudo = comisionRecaudo;
+	}
+	public BigDecimal getCumplimientoVL() {
+		return cumplimientoVL;
+	}
+	public void setCumplimientoVL(BigDecimal cumplimientoVL) {
+		this.cumplimientoVL = cumplimientoVL;
+	}
+	public BigDecimal getCumplimientoVP() {
+		return cumplimientoVP;
+	}
+	public void setCumplimientoVP(BigDecimal cumplimientoVP) {
+		this.cumplimientoVP = cumplimientoVP;
+	}
+	public BigDecimal getCumplimientoML() {
+		return cumplimientoML;
+	}
+	public void setCumplimientoML(BigDecimal cumplimientoML) {
+		this.cumplimientoML = cumplimientoML;
+	}
+	public BigDecimal getCumplimientoZC() {
+		return cumplimientoZC;
+	}
+	public void setCumplimientoZC(BigDecimal cumplimientoZC) {
+		this.cumplimientoZC = cumplimientoZC;
+	}
+	public BigDecimal getCumplimientoR() {
+		return cumplimientoR;
+	}
+	public void setCumplimientoR(BigDecimal cumplimientoR) {
+		this.cumplimientoR = cumplimientoR;
+	}
+	public String getDetalleVL() {
+		return detalleVL;
+	}
+	public void setDetalleVL(String detalleVL) {
+		this.detalleVL = detalleVL;
+	}
+	public String getDetalleVP() {
+		return detalleVP;
+	}
+	public void setDetalleVP(String detalleVP) {
+		this.detalleVP = detalleVP;
+	}
+	public String getDetalleML() {
+		return detalleML;
+	}
+	public void setDetalleML(String detalleML) {
+		this.detalleML = detalleML;
+	}
+	public String getDetalleZC() {
+		return detalleZC;
+	}
+	public void setDetalleZC(String detalleZC) {
+		this.detalleZC = detalleZC;
+	}
+	public String getDetalleR() {
+		return detalleR;
+	}
+	public void setDetalleR(String detalleR) {
+		this.detalleR = detalleR;
+	}
+	public BigDecimal getComisionTotal() {
+		return comisionTotal;
+	}
+	public void setComisionTotal(BigDecimal comisionTotal) {
+		this.comisionTotal = comisionTotal;
 	}
 	@Override
 	public String toString() {

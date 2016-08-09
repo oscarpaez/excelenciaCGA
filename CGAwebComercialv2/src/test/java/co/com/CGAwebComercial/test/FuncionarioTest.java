@@ -61,10 +61,24 @@ public class FuncionarioTest {
 	}
 	
 	@Test
+	@Ignore
 	public void busPersona(){
 		
 		FuncionarioDao dao = new FuncionarioDao();
 		Funcionario fun = dao.buscar(2591);
 		System.out.println("###"  +fun);
+	}
+	
+	@Test
+	@Ignore
+	public void listarPersonas(){
+		FuncionarioDao dao = new FuncionarioDao();
+		dao.listarVendedoresPaisD("funcionario", "06", "2016");
+	}
+	
+	@Test
+	public void listarClientes(){
+		FuncionarioDao dao = new FuncionarioDao();
+		dao.listarClientesPaisD("funcionario", 40, "06", "2016");
 	}
 }
