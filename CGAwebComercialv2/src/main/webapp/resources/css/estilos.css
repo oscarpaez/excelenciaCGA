@@ -34,16 +34,19 @@
 
 .tblPla {
 	font-size: 12px !important;
+	
 }
 
-/*////////////////////////////*/
 
+
+/*////////////////////////////*/
+/*
 .ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield 
 	.ui-datatable .ui-column-filter {
  	display: block;
-    width: 70px;
+    width: 90%;
     margin: auto;  
-}
+}*/
 
 .header{
 	
@@ -97,6 +100,12 @@
     padding: 0.2em 0.2em;
     background: none;
 }
+
+/*/////tamaño del filtro de busqueda de la tabla/////*/
+
+
+.tblPla .ui-datatable .ui-column-filter{display:block;width:10px;margin:auto;}
+
 
 
       

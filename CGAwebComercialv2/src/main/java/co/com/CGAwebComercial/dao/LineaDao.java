@@ -49,7 +49,7 @@ public class LineaDao extends GenericDao<Linea> {
 				int valN = (lista.get(0) == null)? 0 : (int) (long) lista.get(0);
 				int cosT = (lista.get(1) == null)? 0 : (int) (long) lista.get(1) ;
 				valor = (cosT == 0) ? 0 : (valN < 0) ? (valN* -1) - (cosT) : (valN) - (cosT) ; 
-
+				
 				plan.setIngreso_Real(new BigDecimal(valN* -1));
 				plan.setUtilidad_Real(new BigDecimal(valor ));
 
@@ -150,6 +150,9 @@ public class LineaDao extends GenericDao<Linea> {
 			vendedor.setUtilidadReal(new BigDecimal(valor ));
 			plan.setIngreso_Real(new BigDecimal(valN* -1));
 			plan.setUtilidad_Real(new BigDecimal(valor ));
+			
+			FuncionarioDao daoF = new FuncionarioDao();
+			Funcionario funcionario = daoF.buscar(idfuncionario);
 
 			PresupuestoDao dao = new PresupuestoDao();
 			List<BigDecimal> pre = dao.sumaLineaPorFuncionario(linea, idfuncionario, fechaInicial, fechaFinal);
@@ -188,14 +191,21 @@ public class LineaDao extends GenericDao<Linea> {
 
 				semaforo = (vendedor.getCumplimientoU().intValue() >= 85)? "verde.png" : "rojo.png";
 				plan.setImagen(semaforo);
-				vendedor.setImagen(semaforo);
-				FuncionarioDao daoF = new FuncionarioDao();
-				Funcionario funcionario = daoF.buscar(idfuncionario);
+				vendedor.setImagen(semaforo);				
 
 				vendedor.setCedula(funcionario.getPersona().getCedula());
 				vendedor.setNombre(funcionario.getPersona().getNombre());
 				vendedor.setId(funcionario.getId_funcionario());
-				vendedor.setTipo(funcionario.getComision().getNombre());
+				//vendedor.setTipo(funcionario.getComision().getNombre());
+				
+				vendedor.setTipo((funcionario.getDescripcion() != null)? funcionario.getDescripcion(): " --N/A-- ");
+				vendedor.setConcepto((funcionario.getSucursal() != null )? funcionario.getSucursal():" --N/A-- ");
+				
+				/*
+				Zona_ventaDao daoZ = new Zona_ventaDao();
+				List<Zona_venta> zona = daoZ.buscarZona(idfuncionario);
+				System.out.println(zona.size() + "DDD");
+				vendedor.setConcepto((zona.size() > 0 )? zona.get(0).getCiudad().getNombre(): " --N/A-- ");*/	
 
 				return vendedor;
 			}
@@ -208,7 +218,98 @@ public class LineaDao extends GenericDao<Linea> {
 		}
 		return null;	
 	}
+	
+	//*Lista el presupuesto y el real de la linea en una oficina  *//
+		public ComisionVendedores  listarVendedoresPorSucursalPorLinea (String tipo, int linea, int idfuncionario, int idCiudad, String fecMes, String fecYear){
 
+			Session session = HibernateUtil.getSessionfactory().openSession();
+			Plan  plan = new Plan();
+			ComisionVendedores vendedor = new ComisionVendedores();
+			int valor = 0;
+			//int idPlan =1;
+			try{
+				Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+				Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
+
+				List <Long> lista = sumaSucursalPorLineaPorVendedor( tipo,  linea, idfuncionario, idCiudad, fechaInicial, fechaFinal);
+
+				int valN = (lista.get(0) == null)? 0 : (int) (long) lista.get(0);
+				int cosT = (lista.get(1) == null)? 0 : (int) (long) lista.get(1) ;
+				valor = (cosT == 0) ? 0 : (valN < 0) ? (valN* -1) - (cosT) : (valN) - (cosT) ; 
+
+				vendedor.setIngresoRealB(new BigDecimal(valN* -1));
+				vendedor.setUtilidadReal(new BigDecimal(valor ));
+				plan.setIngreso_Real(new BigDecimal(valN* -1));
+				plan.setUtilidad_Real(new BigDecimal(valor ));
+				
+				FuncionarioDao daoF = new FuncionarioDao();
+				Funcionario funcionario = daoF.buscar(idfuncionario);
+
+				PresupuestoDao dao = new PresupuestoDao();
+				List<BigDecimal> pre = dao.sumaLineaPorFuncionario(linea, idfuncionario, fechaInicial, fechaFinal);
+
+				if(pre != null){
+					vendedor.setPresupuestoB(pre.get(0));
+					vendedor.setUtilpresupuesto(pre.get(1));
+					plan.setIngreso(pre.get(0));
+					plan.setUtilidad(pre.get(1));
+
+					if(vendedor.getPresupuestoB() == null || vendedor.getPresupuestoB().intValue() == 0
+							||	vendedor.getIngresoRealB() == null  || vendedor.getIngresoRealB().intValue() == 0){
+						vendedor.setPresupuestoB((vendedor.getPresupuestoB() == null)? new BigDecimal("0"):vendedor.getPresupuestoB());
+						vendedor.setCumplimiento(new BigDecimal("0.00"));
+						plan.setIngreso_Cumplimiento(new BigDecimal("0.00"));
+					}
+					else{
+						vendedor.setCumplimiento(vendedor.getIngresoRealB().divide(vendedor.getPresupuestoB(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+						plan.setIngreso_Cumplimiento(plan.getIngreso_Real().divide(plan.getIngreso(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+					}
+
+					String semaforo = (vendedor.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";
+					vendedor.setImagen1(semaforo);
+					plan.setImagen1(semaforo);
+
+					if(vendedor.getUtilidadReal() == null || vendedor.getUtilidadReal().intValue() == 0
+							||	vendedor.getUtilpresupuesto() == null  || vendedor.getUtilpresupuesto().intValue() == 0){
+						vendedor.setUtilpresupuesto((vendedor.getUtilpresupuesto() == null)? new BigDecimal("0.00") : vendedor.getUtilpresupuesto());  
+						vendedor.setCumplimientoU(new BigDecimal("0.00"));
+						plan.setUtilidad_Cumplimiento(new BigDecimal("0.00"));
+					}
+					else{
+						vendedor.setCumplimientoU(vendedor.getUtilidadReal().divide(vendedor.getUtilpresupuesto(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+						plan.setUtilidad_Cumplimiento(plan.getUtilidad_Real().divide(plan.getUtilidad(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+					}	
+
+					semaforo = (vendedor.getCumplimientoU().intValue() >= 85)? "verde.png" : "rojo.png";
+					plan.setImagen(semaforo);
+					vendedor.setImagen(semaforo);
+					
+
+					vendedor.setCedula(funcionario.getPersona().getCedula());
+					vendedor.setNombre(funcionario.getPersona().getNombre());
+					vendedor.setId(funcionario.getId_funcionario());
+					//vendedor.setTipo(funcionario.getComision().getNombre());
+					
+					vendedor.setTipo((funcionario.getDescripcion() != null)? funcionario.getDescripcion(): " --N/A-- ");
+					vendedor.setConcepto((funcionario.getSucursal() != null )? funcionario.getSucursal():" --N/A-- ");
+					/*
+					Zona_ventaDao daoZ = new Zona_ventaDao();
+					List<Zona_venta> zona = daoZ.buscarZona(idfuncionario);
+					System.out.println(zona.size() + "DDD");
+					vendedor.setConcepto((zona.size() > 0 )? zona.get(0).getCiudad().getNombre(): " --N/A-- ");*/	
+
+					return vendedor;
+				}
+
+			} catch (RuntimeException ex) {
+				throw ex;
+			}
+			finally{
+				session.close();
+			}
+			return null;	
+		}
+	
 	//*Suma el real y la utilidad por linea de un vendedor *//
 	public List <Long> sumaLineaPorVendedor(String tipo, int linea, int idPersona, Date fechaInicial, Date fechaFinal){
 
@@ -236,7 +337,36 @@ public class LineaDao extends GenericDao<Linea> {
 			session.close();
 		}	
 	}
+	
+	//*Suma el real y la utilidad por linea y ciudad de un vendedor *//
+		public List <Long> sumaSucursalPorLineaPorVendedor(String tipo, int linea, int idPersona, int idCiudad, Date fechaInicial, Date fechaFinal){
 
+			Session session = HibernateUtil.getSessionfactory().openSession();
+			List <Long> lista = new ArrayList<>();
+			try{
+
+				Criteria consulta = session.createCriteria(Detalle.class);
+				consulta.add(Restrictions.eq("linea", linea));
+				consulta.add(Restrictions.eq(tipo, idPersona));
+				consulta.add(Restrictions.eq("sucursal", idCiudad));
+				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
+				consulta.setProjection(Projections.sum("valorNeto"));
+				Long  totalWages = (Long) consulta.uniqueResult();
+				lista.add(totalWages);
+				consulta.setProjection(Projections.sum("costoTotal"));
+				totalWages = (Long) consulta.uniqueResult();
+				lista.add(totalWages);
+				return lista;
+
+
+			} catch (RuntimeException ex) {
+				throw ex;
+			}
+			finally{
+				session.close();
+			}	
+		}
+	
 	//*Lista el presupuesto y el real de los Vendedores por ciudad *//
 	public ComisionVendedores  listarVendedoresPorCiudad (int idCiudad, String tipo, int idfuncionario, String fecMes, String fecYear){
 
@@ -258,6 +388,16 @@ public class LineaDao extends GenericDao<Linea> {
 			vendedor.setUtilidadReal(new BigDecimal(valor ));
 			plan.setIngreso_Real(new BigDecimal(valN* -1));
 			plan.setUtilidad_Real(new BigDecimal(valor ));
+			
+			FuncionarioDao daoF = new FuncionarioDao();
+			Funcionario funcionario = daoF.buscar(idfuncionario);
+			
+			vendedor.setTipo((funcionario.getDescripcion() != null)? funcionario.getDescripcion(): " --N/A-- ");
+			vendedor.setConcepto((funcionario.getSucursal() != null )? funcionario.getSucursal():" --N/A-- ");
+			
+			/*Zona_ventaDao daoZ = new Zona_ventaDao();
+			List<Zona_venta> zona = daoZ.buscarZona(idfuncionario);				
+			vendedor.setConcepto((zona.size() > 0 )? zona.get(0).getCiudad().getNombre(): " --N/A-- ");*/	
 
 			PresupuestoDao dao = new PresupuestoDao();
 			List<BigDecimal> pre = dao.sumaPresupuestoVendedorPorCiudad(idCiudad, idfuncionario, fechaInicial, fechaFinal);
@@ -289,14 +429,13 @@ public class LineaDao extends GenericDao<Linea> {
 				semaforo = (vendedor.getCumplimientoU().intValue() >= 85)? "verde.png" : "rojo.png";
 				plan.setImagen(semaforo);
 				vendedor.setImagen(semaforo);
-				FuncionarioDao daoF = new FuncionarioDao();
-				Funcionario funcionario = daoF.buscar(idfuncionario);
+				
 
 				vendedor.setCedula(funcionario.getPersona().getCedula());
 				vendedor.setNombre(funcionario.getPersona().getNombre());
 				vendedor.setId(funcionario.getId_funcionario());
-				vendedor.setTipo(funcionario.getComision().getNombre());
-
+				//vendedor.setTipo(funcionario.getComision().getNombre());
+				
 				return vendedor;
 			}
 			else{
@@ -323,7 +462,7 @@ public class LineaDao extends GenericDao<Linea> {
 					vendedor.setNombre(detalle.get(0).getNombreVendedorInt());
 				}
 				vendedor.setId(idfuncionario);
-				vendedor.setTipo("No especialista");
+				//vendedor.setTipo("No especialista");
 				return vendedor;
 			}
 
@@ -375,6 +514,14 @@ public class LineaDao extends GenericDao<Linea> {
 			consulta.setProjection(Projections.sum("utilidad"));
 			valorp = (BigDecimal) consulta.uniqueResult();
 			vendedor.setUtilpresupuesto((valorp== null)? new BigDecimal("0"):valorp);
+			/*
+			Zona_ventaDao daoZ = new Zona_ventaDao();
+			List<Zona_venta> zona = daoZ.buscarZona(idfuncionario);*/
+			
+			FuncionarioDao daoF = new FuncionarioDao();
+			Funcionario funcionario = daoF.buscar(idfuncionario);
+			
+					
 
 			if(vendedor.getIngresoRealB().intValue() == 0 || vendedor.getPresupuestoB().intValue() ==0){
 				vendedor.setCumplimiento(new BigDecimal("0"));
@@ -395,14 +542,14 @@ public class LineaDao extends GenericDao<Linea> {
 
 			semaforo = (vendedor.getCumplimientoU().intValue() >= 85)? "verde.png" : "rojo.png";
 			vendedor.setImagen(semaforo);
-			FuncionarioDao daoF = new FuncionarioDao();
-			Funcionario funcionario = daoF.buscar(idfuncionario);
+			
 
 			if(funcionario != null){
 				vendedor.setCedula(funcionario.getPersona().getCedula());
 				vendedor.setNombre(funcionario.getPersona().getNombre());
 				vendedor.setId(funcionario.getId_funcionario());
-				vendedor.setTipo(funcionario.getComision().getNombre());
+				vendedor.setTipo((funcionario.getDescripcion() != null)? funcionario.getDescripcion(): " --N/A-- ");
+				vendedor.setConcepto((funcionario.getSucursal() != null )? funcionario.getSucursal():" --N/A-- ");
 			}
 			else{
 				DetalleDao daoD = new DetalleDao();
@@ -422,7 +569,10 @@ public class LineaDao extends GenericDao<Linea> {
 					vendedor.setNombre(detalle.get(0).getNombreVendedorInt());
 				}
 				vendedor.setId(idfuncionario);
-				vendedor.setTipo("No especialista");
+				vendedor.setTipo(" --N/A-- ");
+				vendedor.setConcepto(" --N/A-- ");
+				
+				//vendedor.setTipo("No especialista");
 			}
 			return vendedor;
 		} catch (RuntimeException ex) {
@@ -727,7 +877,11 @@ public class LineaDao extends GenericDao<Linea> {
 			else{
 				pre = dao.sumaPresupuestoVendedor(tipo, idfuncionario, fechaInicial, fechaFinal);
 			}
-
+//			Zona_ventaDao daoZ = new Zona_ventaDao();
+//			List<Zona_venta> zona = daoZ.buscarZona(idfuncionario);
+			FuncionarioDao daoF = new FuncionarioDao();
+			Funcionario funcionario = daoF.buscar(idfuncionario);
+			
 			if(pre.get(0) != null || pre.get(1) != null){
 				vendedor.setPresupuestoB(pre.get(0));
 				vendedor.setUtilpresupuesto(pre.get(1));
@@ -744,13 +898,14 @@ public class LineaDao extends GenericDao<Linea> {
 				semaforo = (vendedor.getCumplimientoU().intValue() >= 85)? "verde.png" : "rojo.png";
 				plan.setImagen(semaforo);
 				vendedor.setImagen(semaforo);
-				FuncionarioDao daoF = new FuncionarioDao();
-				Funcionario funcionario = daoF.buscar(idfuncionario);
-
+				
+				
 				vendedor.setCedula(funcionario.getPersona().getCedula());
 				vendedor.setNombre(funcionario.getPersona().getNombre());
 				vendedor.setId(funcionario.getId_funcionario());
-				vendedor.setTipo(funcionario.getComision().getNombre());
+				//vendedor.setTipo(funcionario.getComision().getNombre());
+				vendedor.setTipo((funcionario.getDescripcion() != null)? funcionario.getDescripcion(): " --N/A-- ");
+				vendedor.setConcepto((funcionario.getSucursal() != null )? funcionario.getSucursal():" --N/A-- ");	
 
 				return vendedor;
 			}
@@ -778,7 +933,15 @@ public class LineaDao extends GenericDao<Linea> {
 					vendedor.setNombre(detalle.get(0).getNombreVendedorInt());
 				}
 				vendedor.setId(idfuncionario);
-				vendedor.setTipo("No especialista");
+				//vendedor.setTipo("No especialista");
+				if(funcionario != null){
+					vendedor.setTipo((funcionario.getDescripcion() != null)? funcionario.getDescripcion(): " --N/A-- ");
+					vendedor.setConcepto((funcionario.getSucursal() != null )? funcionario.getSucursal():" --N/A-- ");	
+				}
+				else{
+					vendedor.setTipo(" --N/A-- ");
+					vendedor.setConcepto(" --N/A-- ");
+				}
 				return vendedor;
 			}
 
@@ -1897,7 +2060,7 @@ public class LineaDao extends GenericDao<Linea> {
 
 				PresupuestoDao dao = new PresupuestoDao();
 				List<BigDecimal> pre = new ArrayList<>();
-
+				
 				if (tipo.equals("funcionarioI")){
 					pre = dao.sumaLineaPorFuncionario(linea1.getId(), idfuncionario, fechaInicial, fechaFinal);
 				}	
@@ -1931,13 +2094,13 @@ public class LineaDao extends GenericDao<Linea> {
 
 					semaforo = (vendedor.getCumplimientoU().intValue() >= 85)? "verde.png" : "rojo.png";
 					vendedor.setImagen(semaforo);
-
+					
 					vendedor.setNombre(linea1.getNombre());
 					vendedor.setId(linea1.getId());
 					EsquemasDao daoE = new EsquemasDao();
 					Esquemas esquema = daoE.buscar(1);
 					vendedor.setUmbralCV(esquema.getUmbralComision());
-
+					
 					listaLineas.add(vendedor);
 				}
 
@@ -1992,7 +2155,7 @@ public class LineaDao extends GenericDao<Linea> {
 				consulta.setProjection(Projections.sum("valorNeto"));
 				Long valN = (Long) consulta.uniqueResult();
 				valN = (valN == null)? 0 : valN;
-				valor = (valN == null)? new BigDecimal("0") : new BigDecimal(valN);
+				valor = (valN == null)? new BigDecimal("0") : new BigDecimal(valN).multiply(new BigDecimal("-1"));
 				sucursales.setIngresoRealB(valor);
 				
 				consulta.setProjection(Projections.sum("costoTotal"));

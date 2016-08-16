@@ -3,6 +3,7 @@ package co.com.CGAwebComercial.bean;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -70,17 +71,42 @@ public class PlanBean implements Serializable {
 	private String fechaActual;
 	private String fechaBusqueda;
 	private String fechaBusquedaYear;
+	private String fechaConsulta;
 	private Double promedioMes;
 	private String tipo;
 	
 	
-	//*Lista los datos del Plan del vendedor interno y externo *//
 	@PostConstruct
+	public void inicioVista(){
+
+		try{
+			recurso = new Recursos();
+			listaFechas = recurso.cargarFechas();
+			if(fechaConsulta == null){
+
+				Calendar fechas = Calendar.getInstance();
+				int month = fechas.get(Calendar.MONTH)+1;
+				for (Fechas fecha: listaFechas) {
+					fechaConsulta  = (fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes(): fechaConsulta;
+				}
+				listarPlan();
+			}
+
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se Cargo La vista de Inicio");
+		}
+	}
+	
+	
+	//*Lista los datos del Plan del vendedor interno y externo *//
+	
 	public void listarPlan(){
 		
 		try {
-			recurso = new Recursos();
-			listaFechas = recurso.cargarFechas();
+			for (Fechas fecha: listaFechas) {
+				fechaConsulta = (fecha.getValorMes().equals(autenticacion.getFechaBusqueda()))? fecha.getMes() : fechaConsulta;
+			}
 			plan = new Plan();
 			tipo = (autenticacion.getUsuarioLogin().getPerfil().getId() == 1)? "funcionario" : "funcionarioI";
 			if(autenticacion.getFechaBusqueda() != null && autenticacion.getFechaBusquedaYear() != null){
@@ -210,6 +236,11 @@ public class PlanBean implements Serializable {
 	public void listarPlanPorFechas(){
 		
 		try {
+			for (Fechas fecha: listaFechas) {
+				fechaConsulta = (fecha.getValorMes().equals(autenticacion.getFechaBusqueda()))? fecha.getMes() : fechaConsulta;
+			}
+			fechaBusqueda = autenticacion.getFechaBusqueda();
+			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();	
 			//tipo =(autenticacion.getUsuarioLogin().getId() == 4)? "funcionario" : "funcionarioI";
 			total =  new BigDecimal("0.00");
 			totalR =  new BigDecimal("0.00");
@@ -263,7 +294,7 @@ public class PlanBean implements Serializable {
 					totalPreUti = new DecimalFormat("###,###").format(totalPresupuestoUtilidad);
 					totalRealIng = new DecimalFormat("###,###").format(totalValorReal);
 					totalRealUti = new DecimalFormat("###,###").format(totalValorUtilidad);
-					cumplimiento = totalValorReal.divide(totalPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+					cumplimiento =(totalValorReal.longValue() == 0 || totalPresupuesto.longValue() == 0)? new BigDecimal("0") :  totalValorReal.divide(totalPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
 					totalD = new DecimalFormat("###,###.##").format(cumplimiento);
 					
 					if (plan.getIngreso() == null || plan.getIngreso().compareTo(BigDecimal.ZERO) == 0  ){
@@ -744,5 +775,13 @@ public class PlanBean implements Serializable {
 
 	public void setListaDetalle1(List<Detallesin> listaDetalle1) {
 		this.listaDetalle1 = listaDetalle1;
+	}
+
+	public String getFechaConsulta() {
+		return fechaConsulta;
+	}
+
+	public void setFechaConsulta(String fechaConsulta) {
+		this.fechaConsulta = fechaConsulta;
 	}
 }

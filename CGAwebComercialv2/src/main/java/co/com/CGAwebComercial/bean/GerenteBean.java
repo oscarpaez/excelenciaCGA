@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -233,7 +235,7 @@ public class GerenteBean implements Serializable{
 			BigDecimal sumaIngresoR = new BigDecimal("0.00");
 			BigDecimal cumplimiento = new BigDecimal("0.00");
 			BigDecimal cumplimientoU = new BigDecimal("0.00");
-			tipo = (autenticacion.getTipoVendedor().equals("I"))? "funcionarioI" : "funcionario";
+			tipo = (autenticacion.getTipoVendedor().equals("I"))? "funcionario" : "funcionario";
 
 			//idCiudad = (idCiudad== 1000 )? 1 : (idCiudad == 7000 )? 2 : (idCiudad/1000)-1 ;
 			FuncionarioDao daoF = new FuncionarioDao();
@@ -242,7 +244,7 @@ public class GerenteBean implements Serializable{
 			for (Integer integer : listaF) {
 				ComisionVendedores plan = new ComisionVendedores();
 				LineaDao daoL = new LineaDao();
-				plan = daoL.listarVendedoresPorLinea(tipo, idLinea, integer, fechaBusqueda, fechaBusquedaYear);
+				plan = daoL.listarVendedoresPorSucursalPorLinea(tipo, idLinea, integer, idCiudad, fechaBusqueda, fechaBusquedaYear);
 				sumaPresupuesto = sumaPresupuesto.add(plan.getPresupuestoB());
 				sumaIngresoR = sumaIngresoR.add(plan.getIngresoRealB());
 				sumaUtilidadP = sumaUtilidadP.add(plan.getUtilpresupuesto());
@@ -349,7 +351,7 @@ public class GerenteBean implements Serializable{
 			BigDecimal sumaIngresoR = new BigDecimal("0.00");
 			BigDecimal cumplimiento = new BigDecimal("0.00");
 			BigDecimal cumplimientoU = new BigDecimal("0.00");
-			tipo = (tipo.equals("I"))? "funcionarioI" : "funcionario";
+			tipo = (tipo.equals("I"))? "funcionario" : "funcionario";
 			
 			int oficina = (idCiudad == 1 )? 1000 : (idCiudad == 7 )? 2000 : (idCiudad+1)*1000 ;
 			FuncionarioDao daoF = new FuncionarioDao();			
@@ -813,6 +815,25 @@ public class GerenteBean implements Serializable{
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se Cargo la lista de Comision de Vendedores");
 		}	
+	}
+	
+	@PostConstruct
+	public void inicioVista(){
+		
+		try{
+			if(fechaConsulta == null){
+
+				Calendar fechas = Calendar.getInstance();
+				int month = fechas.get(Calendar.MONTH)+1;
+				for (Fechas fecha: listaFechas) {
+					fechaConsulta  = (fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes(): fechaConsulta;
+				}
+				listarPais1();
+			}
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se Cargo la vista Inicial");
+		}
 	}
 
 	//*Lista pais total*//

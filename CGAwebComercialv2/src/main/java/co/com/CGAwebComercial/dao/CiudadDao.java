@@ -525,7 +525,7 @@ public class CiudadDao extends GenericDao<Ciudad>{
 				consulta.setProjection(Projections.sum("valorNeto"));
 				Long valN = (Long) consulta.uniqueResult();
 				valN = (valN == null)? 0 : valN;
-				valor = (valN == null)? new BigDecimal("0") : new BigDecimal(valN);
+				valor = (valN == null)? new BigDecimal("0") : new BigDecimal(valN).multiply(new BigDecimal("-1"));
 				sucursales.setIngresoRealB(valor);
 				
 				consulta.setProjection(Projections.sum("costoTotal"));

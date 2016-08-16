@@ -188,6 +188,27 @@ public class directorGBean implements Serializable{
 			Messages.addGlobalError("Error no se Cargo el Recaudo de cartera del Director.");
 		}
 	}
+	
+	public void inicioVistaDirL(){
+
+		try{
+
+			if(fechaConsulta == null){
+
+				Calendar fechas = Calendar.getInstance();
+				int month = fechas.get(Calendar.MONTH)+1;
+				for (Fechas fecha: listaFechas) {
+					fechaConsulta  = (fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes(): fechaConsulta;
+				}
+				listarVendedoresLinea();
+			}
+
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se Cargo La vista de Inicio");
+		}
+	}
+
 
 	//*Lista Vendedores para el director Linea Nacional "DL DA" "vista /dl/plandl" *//
 	public void listarVendedoresLinea(){
@@ -284,7 +305,7 @@ public class directorGBean implements Serializable{
 //				setProgress(t);
 //			}
 			
-			BigDecimal cumplimiento = totalReal.divide(totalPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100").setScale(2, BigDecimal.ROUND_HALF_UP));
+			BigDecimal cumplimiento = (totalReal.intValue() == 0 && totalPresupuesto.intValue() == 0)? new BigDecimal("0") : totalReal.divide(totalPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100").setScale(2, BigDecimal.ROUND_HALF_UP));
 			totalPre = new DecimalFormat("###,###").format(totalPresupuesto);
 			totalRe = new DecimalFormat("###,###").format(totalReal);
 			utilidad = new DecimalFormat("###,###.##").format(cumplimiento);
@@ -326,13 +347,35 @@ public class directorGBean implements Serializable{
 			Messages.addGlobalError("Error no se Cargo La lista del vendedor");
 		}
 	}
+	
+	public void inicioVista(){
+
+		try{
+
+			if(fechaConsulta == null){
+
+				Calendar fechas = Calendar.getInstance();
+				int month = fechas.get(Calendar.MONTH)+1;
+				for (Fechas fecha: listaFechas) {
+					fechaConsulta  = (fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes(): fechaConsulta;
+				}
+				listarVendedores();
+			}
+
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se Cargo La vista de Inicio");
+		}
+	}
 
 	public void listarVendedores(){
 
 		try{
+			
 			for (Fechas fecha: listaFechas) {
-				fechaConsulta = (fecha.getValorMes().equals(autenticacion.getFechaBusqueda()))? fecha.getMes() : fechaConsulta;
+					fechaConsulta = (fecha.getValorMes().equals(autenticacion.getFechaBusqueda()))? fecha.getMes() : fechaConsulta;
 			}
+			
 			
 			if(autenticacion.getUsuarioLogin().getPerfil().getId() == 9)
 				autenticacion.setTipoVendedor("I");

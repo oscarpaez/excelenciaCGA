@@ -33,6 +33,7 @@ public class AutenticacionBean implements Serializable {
 	
 	private Usuario usuarioLogin;
     private List<Persona> listaPersona;
+    private List<Usuario> listaUsuario;
     private Persona persona;
     private String fechaActual;
     private String fechaDiaAnterior;
@@ -51,7 +52,10 @@ public class AutenticacionBean implements Serializable {
 			fechaActual();
 			persona = new Persona();
 			PersonaDao dao = new PersonaDao();
-			listaPersona = dao.listar();			
+			listaPersona = dao.listar();		
+			
+			UsuarioDao daoU = new UsuarioDao();
+			listaUsuario = daoU.listar();
 			
 		}catch (RuntimeException ex) {
 			ex.printStackTrace();
@@ -126,7 +130,13 @@ public class AutenticacionBean implements Serializable {
 	public void fechaActual(){
 
 		try {
-			SimpleDateFormat formateador = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy", new Locale("es_ES"));
+			/*
+			Locale[] locales = Locale.getAvailableLocales();
+			for (Locale local:locales){
+			   System.out.println(local.getLanguage() + ", "+local.getCountry());
+			}*/
+			
+			SimpleDateFormat formateador = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy", new Locale("es", "CO"));
 			Date fechaDate = new Date();
 			fechaActual=formateador.format(fechaDate);
 			
@@ -261,5 +271,13 @@ public class AutenticacionBean implements Serializable {
 
 	public void setFechaDiaAnterior(String fechaDiaAnterior) {
 		this.fechaDiaAnterior = fechaDiaAnterior;
+	}
+
+	public List<Usuario> getListaUsuario() {
+		return listaUsuario;
+	}
+
+	public void setListaUsuario(List<Usuario> listaUsuario) {
+		this.listaUsuario = listaUsuario;
 	}
 }

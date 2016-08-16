@@ -317,7 +317,16 @@ public class FuncionarioDao extends GenericDao<Funcionario> {
 
 
 			Criteria consulta = session.createCriteria(Detalle.class);
-			consulta.add(Restrictions.eq("linea", linea));
+			Criterion resul;
+			if(linea == 6){
+				resul =Restrictions.or(Restrictions.eq("linea", 6),
+				Restrictions.eq("linea", 10));
+			}
+			else{
+				resul =Restrictions.or(Restrictions.eq("linea", linea));
+			}
+			consulta.add(resul);
+			//consulta.add(Restrictions.eq("linea", linea));
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.groupProperty(tipo));
 			List results = consulta.list();

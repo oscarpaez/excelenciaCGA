@@ -15,7 +15,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
@@ -406,10 +405,7 @@ public class vendedorLBRBean implements Serializable{
 			PromedioVentaDao daoP = new PromedioVentaDao();
 			promedioVenta = daoP.listarMeta(funcionario.getId_funcionario());
 			
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Ultima Actualizacion "+ autenticacion.getFechaDiaAnterior()));
-			
-			//Messages.addGlobalInfo("Ultima Actualizacion "+ autenticacion.getFechaDiaAnterior());
-			Faces.getMessageBundle();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ultima Actualización "+ autenticacion.getFechaDiaAnterior(), ""));
 			
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();

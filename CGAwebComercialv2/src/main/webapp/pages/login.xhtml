@@ -38,8 +38,8 @@
 							requiredMessage="El campo Usuario es Obligatorio">
 							<f:selectItem noSelectionOption="true"
 								itemLabel="Selecione Usuario" />
-							<f:selectItems value="#{autenticacionBean.listaPersona}"
-								var="item" itemValue="#{item.cedula}" itemLabel="#{item.nombre}" />
+							<f:selectItems value="#{autenticacionBean.listaUsuario}"
+								var="item" itemValue="#{item.persona.cedula}" itemLabel="#{item.persona.nombre}" />
 
 						</p:selectOneMenu>
 

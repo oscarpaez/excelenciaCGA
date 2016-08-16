@@ -10,6 +10,10 @@
 		
 	<ui:define name="contenido">
 		
+		<f:metadata>
+			 <f:event listener="#{directorGBean.listarVendedores()}" type="preRenderView" />  	
+		</f:metadata>
+		
 		<div style="background-color: #dfe4e6; height: 50px">
 			<h:form style="padding: 6px">
 				<h:panelGrid columns="5" style="width:100%" styleClass="pnlVenG">

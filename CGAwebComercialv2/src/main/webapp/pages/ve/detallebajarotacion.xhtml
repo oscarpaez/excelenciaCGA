@@ -72,7 +72,7 @@
 					</p:column>
 					
 					<p:column headerText="Valor " style="text-align:right">
-						<h:outputText value="#{(item.valorNeto lt 0) ? -item.valorNeto : item.valorNeto}">
+						<h:outputText value="#{(item.valorNeto lt 0) ? -item.valorNeto : -item.valorNeto}">
 							<f:convertNumber locale="en_US" integerOnly="true"  />
 						</h:outputText>
 					</p:column>		

@@ -9,6 +9,21 @@
 	<ui:composition template="/templates/modeloGeneral.xhtml">
 		<ui:define name="contenido">
 			
+			<div style="background-color: #dfe4e6; height: 50px">
+				<h:form id="frmheader" style="padding: 6px">
+					<h:panelGrid columns="4" style="width:100%" styleClass="pnlVenG">
+						<p:outputLabel value="" />
+						<p:outputLabel value="" />
+						<p:outputLabel value="" />
+	
+											
+						<p:button  id="mes" value="Mes de consulta: #{planBean.fechaConsulta}" 
+							style="width:100%; opacity: .90;" disabled="true"/>
+						
+					</h:panelGrid>
+				</h:form>
+			</div>
+			
 			
 			<h:form id="frmPlan" >
 				<p:panel>
@@ -17,7 +32,7 @@
 						 
 						<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
 						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
-						outcome="/pages/plan.xhtml?faces-redirect=true" />
+						outcome="/pages/ve/vistaModulo.xhtml?faces-redirect=true" />
 			        </f:facet>
 				
 					<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="false" 
@@ -119,19 +134,19 @@
 		<h:form>
 			<h:panelGrid columns="8">
 				<p:outputLabel value="Fecha:" />
-				<p:selectOneMenu value="#{planBean.fechaBusqueda}" filter="true"
+				<p:selectOneMenu value="#{autenticacionBean.fechaBusqueda}" filter="true"
 					style="width:180px;" required="true">
 					<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
 					<f:selectItems value="#{planBean.listaFechas}" var="item"
 						itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
 				</p:selectOneMenu>
 
-				<p:selectOneMenu value="#{planBean.fechaBusquedaYear}"
+				<p:selectOneMenu value="#{autenticacionBean.fechaBusquedaYear}"
 					style="width:100px;" >
 					<f:selectItem itemValue="2016" itemLabel="2016" />
 				</p:selectOneMenu>
 
-				<p:commandButton value="Buscar" update=":frmPlan:tblPlan"
+				<p:commandButton value="Buscar" update=":frmPlan:tblPlan  :frmheader:mes"
 					actionListener="#{planBean.listarPlanPorFechas}" style="background: #b94a48"/>
 				
 			</h:panelGrid>

@@ -203,7 +203,7 @@ public class GraficasBean implements Serializable{
 				xAxis.setMax(escala1+2000);
 				xAxis.setTickFormat("%'d");
 
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Ultima Actualizacion "+ autenticacion.getFechaDiaAnterior()));
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ultima Actualización "+ autenticacion.getFechaDiaAnterior(), ""));
 				//promedioVentasNacional();
 				if(autenticacion.getUsuarioLogin().getPerfil().getId() == 8 || autenticacion.getUsuarioLogin().getPerfil().getId() == 7
 						|| autenticacion.getUsuarioLogin().getPerfil().getId() == 9	){
@@ -370,7 +370,7 @@ public class GraficasBean implements Serializable{
 			
 			realAcumulado = listaPreA.get(0).abs().longValue();
 			presupuestoAcumulado = listaPreA.get(2).abs().longValue();
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Ultima Actualizacion "+ autenticacion.getFechaDiaAnterior()));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ultima Actualización "+ autenticacion.getFechaDiaAnterior(), ""));
 			presupuestoOficina();
 			presupuestoLinea();
 

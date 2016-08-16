@@ -20,6 +20,9 @@ public class Funcionario implements Serializable {
 	
 	@Column (length = 50)
 	private String descripcion;
+	
+	@Column (length = 50)
+	private String sucursal;
 
 	private int estado;
 
@@ -47,6 +50,14 @@ public class Funcionario implements Serializable {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public String getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(String sucursal) {
+		this.sucursal = sucursal;
 	}
 
 	public int getEstado() {

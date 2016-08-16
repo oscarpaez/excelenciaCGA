@@ -64,7 +64,7 @@
 					emptyMessage="No se encontraron registros" paginator="true"
 					value="#{gerenteBean.listaComisionVendedores}" var="plan"
 					filteredValue="#{gerenteBean.listaFiltrados}"
-					rows="10" paginatorPosition="bottom">
+					paginatorPosition="bottom">
 
 					<f:facet name="header">
 						<h:outputText value="Consulta Pais por la Sucursal #{gerenteBean.nombreOficina} por la linea #{gerenteBean.linea} "  />
@@ -72,9 +72,11 @@
 					
 					<p:columnGroup type="header">
 			            <p:row>
-			                <p:column colspan="1" headerText="Cedula" width="15%"/>
-			                <p:column colspan="1" headerText="CodSap" width="10%"/>
-			                <p:column colspan="1" headerText="Nombre"  />
+			                <p:column colspan="1" headerText="Cedula" width="10%" filterBy="#{vendedor.cedula}"	sortBy="#{vendedor.cedula}"/>
+			                <p:column colspan="1" headerText="CodSap" width="10%" sortBy="#{vendedor.id}" filterBy="#{vendedor.id}"/>
+			                <p:column colspan="1" headerText="Nombre" filterBy="#{vendedor.nombre}" sortBy="#{vendedor.nombre}" />
+			                 <p:column colspan="1" headerText="Tipo"  />
+			                <p:column colspan="1" headerText="Regional" filterBy="#{vendedor.concepto}" sortBy="#{vendedor.concepto}" />
 			                <p:column colspan="1" headerText="Presupuesto" />
 			                <p:column colspan="1" headerText="Venta" />
 			                <p:column colspan="2" headerText="Cumplimiento %" width="20%" />
@@ -93,9 +95,18 @@
 						<h:outputText value="#{plan.id}" />
 					</p:column>
 
-					<p:column headerText="Oficina" filterBy="#{plan.nombre}"
+					<p:column headerText="nombre" filterBy="#{plan.nombre}"
 						sortBy="#{plan.nombre}">
 						<h:outputText value="#{plan.nombre}" />
+					</p:column>
+					
+					<p:column headerText="tipo" >
+						<h:outputText value="#{plan.tipo}" />
+					</p:column>
+					
+					<p:column headerText="Oficina" filterBy="#{plan.concepto}"
+						sortBy="#{plan.concepto}">
+						<h:outputText value="#{plan.concepto}" />
 					</p:column>
 
 					<p:column headerText="Presupuesto" style="text-align:right">
@@ -148,11 +159,11 @@
 					
 					<p:columnGroup type="footer">
 			            <p:row>
-			            	<p:column colspan="3" footerText="Totales" style="text-align: right" />
+			            	<p:column colspan="5" footerText="Totales" style="text-align: right" />
 			            	<p:column footerText="$ #{gerenteBean.totalPresupuesto}" style="text-align:right"  />		 
 			            	<p:column footerText="$ #{gerenteBean.totalReal}"  style="text-align:right"/>
-			            	<p:column footerText="#{gerenteBean.totalCumplimiento}%"  style="text-align:right"/>		 
-			       <!--    	<p:column footerText="" style="text-align: rigth" />		 
+			            	<p:column footerText="#{gerenteBean.totalCumplimiento}%"  style="text-align:right"/>
+			       <!--     <p:column footerText="" style="text-align: rigth" />				 
 			            	<p:column footerText="$ #{gerenteBean.totalPresupuestoU} "  style="text-align:right"/>		 
 			                <p:column footerText="$ #{gerenteBean.totalRealU}" style="text-align:right"/>
 			                <p:column footerText=" #{gerenteBean.totalCumplimientoU}%"  style="text-align:right"/> -->

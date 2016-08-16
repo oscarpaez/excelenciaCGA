@@ -77,10 +77,11 @@
 			        
 			         <p:columnGroup type="header">
 		            <p:row>
-		                <p:column colspan="1" headerText="Cedula" />
-		                <p:column colspan="1" headerText="CodSap" width="5%" sortBy="#{vendedor.id}"/>
-		                <p:column colspan="1" headerText="Nombre"  width="15%"/>
+		                <p:column colspan="1" headerText="Cedula" filterBy="#{vendedor.cedula}"	sortBy="#{vendedor.cedula}"/>
+		                <p:column colspan="1" headerText="CodSap" width="5%" sortBy="#{vendedor.id}" filterBy="#{vendedor.id}" />
+		                <p:column colspan="1" headerText="Nombre"  width="15%" filterBy="#{vendedor.nombre}" sortBy="#{vendedor.nombre}"/>
 		                <p:column colspan="1" headerText="Tipo" width="12%" />
+		                <p:column colspan="1" headerText="Regional" width="12%" filterBy="#{vendedor.concepto}" sortBy="#{vendedor.concepto}" />
 		                <p:column colspan="1" headerText="Presupuesto" />
 		                <p:column colspan="1" headerText="Venta" />
 		          		<p:column colspan="2" headerText="Cumplimiento %" width="15%"/>
@@ -92,22 +93,26 @@
 		            </p:row>
 		        </p:columnGroup>
 					
-					<p:column headerText="Cedula" filterBy="#{vendedor.cedula}"	sortBy="#{vendedor.cedula}" width="10%" >
+					<p:column headerText="Cedula"  width="10%" >
 						<h:outputText value="#{vendedor.cedula}" />
 					</p:column>
 					
-					<p:column headerText="cod Sap" filterBy="#{vendedor.id}" sortBy="#{vendedor.id}" width="10%" >
+					<p:column headerText="cod Sap"  width="10%" >
 						<h:outputText value="#{vendedor.id}" />
 					</p:column>
 					
-					<p:column headerText="Nombre" filterBy="#{vendedor.nombre}" sortBy="#{vendedor.nombre}" width="11%">
+					<p:column headerText="Nombre"  width="11%">
 						<h:outputText value="#{vendedor.nombre}" />
 					</p:column>
 					
-					<p:column headerText="Nombre" filterBy="#{vendedor.nombre}" sortBy="#{vendedor.nombre}" width="11%">
+					<p:column headerText="Tipo"  width="11%">
 						<h:outputText value="#{vendedor.tipo}" />
 					</p:column>
 
+					<p:column headerText="Regional" width="11%">
+						<h:outputText value="#{vendedor.concepto}" />
+					</p:column>
+					
 					<p:column headerText="Presupuesto" style="text-align:right">
 						<h:outputText value="#{vendedor.presupuestoB}">
 							<f:convertNumber locale="en_US" maxFractionDigits="0" />
@@ -171,7 +176,7 @@
 
 					<p:columnGroup type="footer">
 			            <p:row>
-			            	<p:column colspan="4" footerText="Totales" style="text-align: right" />
+			            	<p:column colspan="5" footerText="Totales" style="text-align: right" />
 			            	<p:column footerText="$ #{gerenteBean.totalPresupuesto}"  style="text-align:right" />		 
 			            	<p:column footerText="$ #{gerenteBean.totalReal}"  style="text-align:right"/>
 			            	<p:column footerText="#{gerenteBean.totalCumplimiento}%"  style="text-align:right"/>		 

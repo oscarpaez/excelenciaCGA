@@ -9,7 +9,11 @@
 	<ui:composition template="/templates/modeloGeneral.xhtml">
 		
 	<ui:define name="contenido">
-	
+		
+		<f:metadata>
+			   <f:event listener="#{directorGBean.inicioVista()}" type="preRenderView" />   	
+		</f:metadata>
+		
 		<div style="background-color: #dfe4e6; height: 50px">
 			<h:form style="padding: 6px">
 				<h:panelGrid columns="5" style="width:100%" styleClass="pnlVenG">
@@ -32,7 +36,7 @@
 					</p:progressBar>
 					
 					<p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
-						style="width:100%; opacity: .90;" disabled="true"/>
+						style="width:100%; opacity: .90;  font-size: 16px" disabled="true"/>
 					
 				</h:panelGrid>
 			</h:form>
