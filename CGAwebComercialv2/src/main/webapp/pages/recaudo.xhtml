@@ -8,7 +8,6 @@
 	
 	<ui:composition template="/templates/modeloGeneral.xhtml">
 		<ui:define name="contenido">
-			<p:outputLabel value="Estos datos son dinamicos y temporales debido al no cierre del periodo" />
 			<f:metadata>
 				<f:viewParam name="linIdR" value="#{recaudoBean.codigo}"/>
 				<f:viewParam name="perIdR" value="#{recaudoBean.idPersona}"/>
@@ -29,8 +28,8 @@
 			             <h:outputText value="#{autenticacionBean.fechaActual} Recaudo" />  
 			        </f:facet>
 			        
-			    	<p:column headerText="Periodo" filterBy="#{recaudo.fecha}" >
-						<h:outputText value="#{recaudo.fecha}" />
+			    	<p:column headerText="Periodo" filterBy="#{recaudo.mes}" style="text-align:center" >
+						<h:outputText value="#{recaudo.mes}" />
 					</p:column>
 					
 					<p:column headerText="Presupuesto " style="text-align:right">
@@ -39,17 +38,17 @@
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Real" style="text-align:right" >
+					<p:column headerText="Recaudo" style="text-align:right" >
 						<h:outputText value="#{recaudo.real}" >
 							<f:convertNumber locale="pt_CO" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Zona" >
+					<p:column headerText="Zona" style="text-align:center" >
 						<h:outputText value="#{recaudo.zonaVenta.nombre}" />
 					</p:column>
 					
-		 		<p:column headerText="Cumplimiento"  style="text-align:right">
+		 		<p:column headerText="Cumplimiento%"  style="text-align:right">
 						<h:outputText value="#{recaudo.cumplimiento} %" >
 						  <f:convertNumber maxIntegerDigits="2"/>
 						</h:outputText>
@@ -59,7 +58,7 @@
 						<h:outputText value="#{recaudo.umbral}" />
 					</p:column>	 -->				
 					
-					<p:column headerText="comision" style="text-align:center" >
+					<p:column headerText="Desempeño Recaudo" style="text-align:center" >
 						<p:graphicImage library="images" name="#{recaudo.imagen}"  height="25" width="25" />
 					</p:column>					
 					

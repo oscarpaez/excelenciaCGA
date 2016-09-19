@@ -62,6 +62,12 @@ public class Proyecto implements Serializable{
 	@Column(length = 100)
 	private String responsable;
 	
+	@Column(length = 100)
+	private String roi;
+	
+	@Column(length = 100)
+	private String tir;
+	
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	private PrioridadProyecto prioridad;
@@ -228,4 +234,21 @@ public class Proyecto implements Serializable{
 	public void setItem(int item) {
 		this.item = item;
 	}
+
+	public String getRoi() {
+		return roi;
+	}
+
+	public void setRoi(String roi) {
+		this.roi = roi;
+	}
+
+	public String getTir() {
+		return tir;
+	}
+
+	public void setTir(String tir) {
+		this.tir = tir;
+	}
+	
 }

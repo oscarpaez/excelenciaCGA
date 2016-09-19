@@ -2,6 +2,7 @@ package co.com.CGAwebComercial.bean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -47,7 +48,6 @@ public class ProyectoBean implements Serializable {
 			System.out.println(autenticacion+ "WWWWWW");
 			ProyectoDao daoP = new ProyectoDao();
 			listaProyecto = daoP.listaProyectosInactivos(autenticacion.getUsuarioLogin().getId());
-		
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se Cargaron Los estados");
@@ -61,7 +61,18 @@ public class ProyectoBean implements Serializable {
 			listaProyecto = daoP.listaProyectosActivos(autenticacion.getUsuarioLogin().getId());
 			
 			for (Proyecto proyecto : listaProyecto) {
-				System.out.println("TTTjpg");
+				
+				long diferenciaEn_ms = proyecto.getFechaFin().getTime() - proyecto.getFechaInicio().getTime();
+				long dias = diferenciaEn_ms / (1000 * 60 * 60 * 24);
+				
+				Date fechaHoy = new Date();
+				float diasTrancurridos =  fechaHoy.getTime() - proyecto.getFechaInicio().getTime();
+				float diasH = diasTrancurridos / (1000 * 60 * 60 * 24);
+				
+				float porDias =  (diasH / dias) * 100 ;
+				proyecto.setImagen((porDias < proyecto.getAvance())? "azul.jpg": (porDias == proyecto.getAvance())? "verde.jpg" :(porDias-10 > proyecto.getAvance())? "amarillo.jpg": "rojo.png");
+				System.out.println(diasH  + "DIASSS " + dias + " " + porDias);
+				/*
 				if(proyecto.getEstado().getId() == 1){
 					System.out.println("amarillo.jpg");
 					proyecto.setImagen("amarillo.jpg");
@@ -80,7 +91,7 @@ public class ProyectoBean implements Serializable {
 				}
 				else if(proyecto.getEstado().getId() == 6){
 					proyecto.setImagen("rojo.jpg");
-				}
+				}*/
 			}
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();

@@ -230,9 +230,12 @@ public class vendedorLBRBean implements Serializable{
 					tipo = "funcionario";
 				}
 				int i=0;
+				/*
 				String[] periodo = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
 						"Julio", "Agosto", "Septiembre", "Octubre", "Noviembre",
-				"Diciembre"}; 
+				"Diciembre"}; */
+				String[] periodo = {"Ene", "Feb", "Mar", "Abr", "May", "Jun",
+						"Jul", "Ago", "Sep", "Oct", "Nov", "Dic"}; 
 				int[] P = new int[listaRecaudo.size()];
 				int[] R = new int[listaRecaudo.size()];
 				int[] PI = new int[listaRecaudo.size()];
@@ -293,7 +296,7 @@ public class vendedorLBRBean implements Serializable{
 
 					BigDecimal desc = new BigDecimal(D[i]); 
 					BigDecimal desc1 = new BigDecimal(PI[i]);
-					desc = desc.divide(desc1,  2, RoundingMode.HALF_UP).multiply(new BigDecimal("100")).subtract(new BigDecimal("5"));
+					desc = (desc1.longValue() == 0)? new BigDecimal("0"):desc.divide(desc1,  2, RoundingMode.HALF_UP).multiply(new BigDecimal("100")).subtract(new BigDecimal("5"));
 					descuento.set(periodo[i], desc.intValue());
 					descuento1.set(periodo[i], 5 );
 					i++;
@@ -311,7 +314,7 @@ public class vendedorLBRBean implements Serializable{
 				desempenoVentas.setTitle("Desempeño Recaudo");
 				desempenoVentas.setAnimate(true);
 				desempenoVentas.setLegendPosition("ne");
-
+				
 				desempenoVentas.setShowPointLabels(true);
 				desempenoVentas.getAxes().put(AxisType.X, new CategoryAxis("Periodo    Escala de valores en MILLONES"));
 				Axis yAxis = desempenoVentas.getAxis(AxisType.Y);
@@ -364,19 +367,20 @@ public class vendedorLBRBean implements Serializable{
 				PresupuestoDao daoD = new PresupuestoDao();
 				List<BigDecimal> ventaMes = daoD.ventasMes(tipo, funcionario.getId_funcionario() );
 
-				presupuestoMes = ventaMes.get(1).abs();
-				realMes = ventaMes.get(0).abs(); 
+				presupuestoMes = ventaMes.get(1);
+				realMes = ventaMes.get(0).multiply(new BigDecimal("-1")); 
 
-				BigDecimal porV = ventaMes.get(0).divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
-				int V = (porV.abs().intValue() > 100)? 100 : porV.abs().intValue();
+				BigDecimal porV = (ventaMes.get(1).longValue() == 0)? new BigDecimal("0"):realMes.divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+				int V = porV.intValue();
+				
+				interval.add(3,(V >100)? V:100); 
 
 				meterGaugeModel = new MeterGaugeChartModel(V, interval);
 				meterGaugeModel.setTitle("Cumplimiento " + mesActual );
 				meterGaugeModel.setGaugeLabel( V +"%");
 				meterGaugeModel.setSeriesColors("ff0000, ffff00, 009933 ");
-
+				
 				promedioVentas();
-
 
 			}
 			else{

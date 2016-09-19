@@ -7,17 +7,22 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
-
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.omnifaces.util.Faces;
 //import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
+import org.primefaces.context.RequestContext;
 
 import co.com.CGAwebComercial.dao.PersonaDao;
 import co.com.CGAwebComercial.dao.UsuarioDao;
@@ -40,6 +45,8 @@ public class AutenticacionBean implements Serializable {
     private String fechaBusqueda;
 	private String fechaBusquedaYear;
 	private String tipoVendedor;
+	private String clave;
+	private String clave1;
 	private List<String> imagenes;
 	private BigDecimal umbral;
 	private int index = 0;
@@ -59,7 +66,7 @@ public class AutenticacionBean implements Serializable {
 			
 		}catch (RuntimeException ex) {
 			ex.printStackTrace();
-			Messages.addGlobalError("Error al login verifique el usuario y contrase�a" + ex.getMessage());
+			Messages.addGlobalError("Error verifique el usuario y contrase�a" + ex.getMessage());
 		}	
 	}
 	
@@ -71,7 +78,7 @@ public class AutenticacionBean implements Serializable {
 			usuarioLogin = dao.autenticar(persona.getCedula(), usuarioLogin.getClave());
 			
 			if(usuarioLogin == null){
-				Messages.addGlobalError("La el usuario o la cantraseña son incorrectas", "info");
+				Messages.addGlobalError("El usuario o la cantraseña son incorrectas", "info");
 				return null;
 			}
 			else if(usuarioLogin.getPerfil().getId() == 1  || usuarioLogin.getPerfil().getId() == 6 ){
@@ -157,7 +164,51 @@ public class AutenticacionBean implements Serializable {
 		this.progress = valor;
 	}
 	
+	public void ventanaContrasena() {
+		
+		try{
+			//System.out.println("GGG");
+	        Map<String,Object> options = new HashMap<String, Object>();
+	        options.put("resizable", false);
+	        options.put("draggable", false);
+	        options.put("modal", true);
+	        RequestContext.getCurrentInstance().openDialog("cambioContrasena", options, null);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+    }
 	
+	public void cambiarContrasena() {
+		
+		try{
+			if(clave.length() >= 6 ){
+				
+				if(clave.equals(clave1)){
+					
+					SimpleHash hash = new SimpleHash("md5", clave);
+					UsuarioDao dao = new UsuarioDao();
+					Usuario usuario = dao.buscar(usuarioLogin.getId());
+					usuario.setClave(hash.toHex());
+					dao.merge(usuario);	
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se actualizo la Contraseña Correctamente", ""));
+					//RequestContext.getCurrentInstance().closeDialog("cambioContrasena");
+					//Thread.sleep(3000);					
+				}
+				else{
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error las contraseñas deben ser Iguales", ""));
+				}
+				
+			}
+			else{
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error las contraseña deben ser Mayor a 6 Caracteres", ""));
+			}
+			
+			
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+    }
 	
 	public Usuario getUsuarioLogin() {
 		if(usuarioLogin == null){
@@ -279,5 +330,21 @@ public class AutenticacionBean implements Serializable {
 
 	public void setListaUsuario(List<Usuario> listaUsuario) {
 		this.listaUsuario = listaUsuario;
+	}
+
+	public String getClave() {
+		return clave;
+	}
+
+	public void setClave(String clave) {
+		this.clave = clave;
+	}
+
+	public String getClave1() {
+		return clave1;
+	}
+
+	public void setClave1(String clave1) {
+		this.clave1 = clave1;
 	}
 }

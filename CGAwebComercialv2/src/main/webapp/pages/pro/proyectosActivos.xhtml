@@ -51,10 +51,10 @@
 			            	<p:column colspan="1" headerText="Valor" />
 			            	<p:column colspan="1" headerText="Fecha Inicio" />
 			            	<p:column colspan="1" headerText="Fechac Final" />
-			            	<p:column colspan="1" headerText="Avance" width="5%"/>
-			            	<p:column colspan="1" headerText="Plan de Avance" />
+			            	<p:column colspan="1" headerText="Avance %" width="5%"/>
+			            	<p:column colspan="1" headerText="Plan de Recuperacion" />
 			            	<p:column colspan="1" headerText="Prioridad" width="6%"/>
-			            	<p:column colspan="2" headerText="Estado" />
+			            	<p:column colspan="2" headerText="Estado" width="10%"/>
 			            	<p:column colspan="1" headerText="Acciones" />
 			           </p:row>
 			        </p:columnGroup> 
@@ -102,7 +102,7 @@
 					</p:column>
 					
 					<p:column headerText="Avance" >
-						<h:outputText value="#{proyecto.avance}" />
+						<h:outputText value="#{proyecto.avance} %" />
 					</p:column>
 					
 					<p:column headerText="Plan de Avance" >

@@ -1,5 +1,6 @@
 package co.com.CGAwebComercial.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -32,6 +33,34 @@ public class Zona_ventaDao extends GenericDao<Zona_venta> {
 		}
 	}
 	
+	
+	@SuppressWarnings("unchecked")
+	public List<Zona_venta> buscarZonaVenOfi(int idFuncionario, int idCiudad){
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<Zona_venta> zona = new ArrayList<>();
+		try{
+			Criteria consulta = session.createCriteria(Zona_venta.class);
+			consulta.createAlias("funcionario", "f");
+			consulta.createAlias("ciudad", "c");
+			consulta.add(Restrictions.eq("f.id_funcionario", idFuncionario ));
+			if(idCiudad == 3){
+				Criterion resul =Restrictions.in("c.id", new Integer[]{3,6});
+				consulta.add(resul);
+			}
+			else{
+				consulta.add(Restrictions.eq("c.id", idCiudad ));
+			}
+			zona =  consulta.list();
+			return zona;
+			
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<Zona_venta> buscarZonaSucursal(int ciudad){
 		Session session = HibernateUtil.getSessionfactory().openSession();
@@ -39,7 +68,13 @@ public class Zona_ventaDao extends GenericDao<Zona_venta> {
 		try{
 			Criteria consulta = session.createCriteria(Zona_venta.class);
 			consulta.createAlias("ciudad", "c");
-			consulta.add(Restrictions.eq("c.id", ciudad ));			
+			if(ciudad == 3){
+				Criterion resul =Restrictions.in("c.id", new Integer[]{3,6});
+				consulta.add(resul);
+			}
+			else{
+				consulta.add(Restrictions.eq("c.id", ciudad ));
+			}
 			zona = consulta.list();
 			return zona;
 			

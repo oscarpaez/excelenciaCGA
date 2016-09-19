@@ -10,6 +10,7 @@
 	<ui:define name="contenido">
 		
 		<f:metadata>
+			<f:viewParam name="frst" value="#{directorGBean.fechaConsulta}"/>
 			<f:event listener="#{directorGBean.cumplimietoDirectorDeLinea()}" type="preRenderView" />
 		</f:metadata>
 		<div style="height: 40px">

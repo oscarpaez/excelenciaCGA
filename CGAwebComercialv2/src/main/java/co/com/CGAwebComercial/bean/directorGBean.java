@@ -51,6 +51,7 @@ public class directorGBean implements Serializable{
 	private List<Detalle> listadetalle;
 	private List<Plan> listaplanV;	
 	private List<Fechas> listaFechas;
+	private List<Fechas> listaFechasR;
 
 	private String tipo;
 	private String fechaBusqueda;
@@ -75,6 +76,7 @@ public class directorGBean implements Serializable{
 	public directorGBean() {
 		recurso = new Recursos();
 		listaFechas = recurso.cargarFechas();
+		listaFechasR = recurso.cargarFechasTotal();
 		tablaFun = "E";
 		tablaLin = "false";
 	}
@@ -253,7 +255,7 @@ public class directorGBean implements Serializable{
 					vendedores.setCedula(funcionario.getPersona().getCedula());
 					vendedores.setNombre(funcionario.getPersona().getNombre());
 					vendedores.setId(funcionario.getId_funcionario());
-					vendedores.setTipo(funcionario.getComision().getNombre());
+					vendedores.setTipo(funcionario.getDescripcion());
                 }	
 				else{
 //					sucursales.setCumplimiento(new BigDecimal("0.00"));
@@ -368,6 +370,7 @@ public class directorGBean implements Serializable{
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public void listarVendedores(){
 
 		try{
@@ -379,7 +382,8 @@ public class directorGBean implements Serializable{
 			
 			if(autenticacion.getUsuarioLogin().getPerfil().getId() == 9)
 				autenticacion.setTipoVendedor("I");
-				
+			
+			List<Object> listaV = new ArrayList<>();
 			ListaComisionVendedores = new ArrayList<>();
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
@@ -396,6 +400,9 @@ public class directorGBean implements Serializable{
 			int numero1 = 0;
 			int progress1 = 0;
 			int t =0;
+			
+			DetalleDao dao = new DetalleDao();
+			Zona_ventaDao daoV = new Zona_ventaDao();
 			FuncionarioDao daoF = new FuncionarioDao();
 			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
 
@@ -414,7 +421,7 @@ public class directorGBean implements Serializable{
 
 				}
 				else{
-					int sucursal = (zonaF.getCiudad().getId() == 1)? 1000 :(zonaF.getCiudad().getId() == 7)? 2000: (zonaF.getCiudad().getId()+1)*1000;
+					int sucursal= (zonaF.getCiudad().getId() == 1)? 1000 :(zonaF.getCiudad().getId() == 7)? 2000: (zonaF.getCiudad().getId()+1)*1000;
 					OficinaVendedorInternoDao daoOF = new OficinaVendedorInternoDao();
 					List<OficinaVendedorInterno> lista = daoOF.listaVenIntDirector(sucursal); 
 					for (OficinaVendedorInterno ofiVenInt : lista) {
@@ -446,13 +453,112 @@ public class directorGBean implements Serializable{
 				}
 				else{
 					tablaFun = "E";
-					Zona_ventaDao daoV = new Zona_ventaDao();
+					tipo="funcionario";
+				
+					listaV = dao.listarDetalleVendedoresOficina(zonaF.getCiudad().getId(), tipo, fechaBusqueda, fechaBusquedaYear);
 					List<Zona_venta> ListaZona = daoV.buscarZonaSucursal(zonaF.getCiudad().getId());
 					listaVendedor  = daoF.listarVendedoresParaDirector(ListaZona);
-					tipo="funcionario";
-				}
+				}	
 			}
 			progress1 = 100 /listaVendedor.size();
+			for (Object object : listaV) {
+				Object[] obc = (Object[]) object;
+				Integer fun = (Integer) obc[1];
+				System.out.println(sumaIngresoR + "--" + fun);
+				
+				for (int i =0;  i<listaVendedor.size(); i++) {
+					
+					if(listaVendedor.get(i).getId_funcionario() == fun  ){
+						listaVendedor.remove(i);
+						//i = listaVendedor.size();
+					}
+									
+				}
+				
+				Funcionario fun1 = daoF.buscar(fun);
+				System.out.println(fun1.getId_funcionario());
+				if(fun1 != null){
+					valorReal = new BigDecimal("0.00");
+					valorUtilidad = new BigDecimal("0.00");
+					sumaPresupuesto = new BigDecimal("0.00");
+					sumaIngresoR = new BigDecimal("0.00");	
+					totalR =  new BigDecimal("0.00");
+					total =  new BigDecimal("0.00");
+					ComisionVendedores vendedores = new ComisionVendedores();
+					vendedores.setId(fun1.getId_funcionario());
+					vendedores.setCedula(fun1.getPersona().getCedula());
+					vendedores.setUmbralCV(new BigDecimal("0.00"));
+					vendedores.setNombre(fun1.getPersona().getNombre());
+					vendedores.setTipo(fun1.getDescripcion());
+					List<Zona_venta> zonaV =  daoV.buscarZonaVenOfi(fun1.getId_funcionario(), zonaF.getCiudad().getId() );
+					sumaIngresoR = new BigDecimal(((Long) obc[0] == 0)? (Long) obc[0] : (Long) obc[0] * -1);
+					System.out.println(zonaV);
+					if(zonaV.size() > 0 ){
+						PresupuestoDao daoP = new PresupuestoDao();
+						if(tipo.equals("funcionario")){
+							BigDecimal pre = daoP.datoPorLineaSumFechasE(fun1.getId_funcionario(), zonaF.getCiudad().getId(), fechaBusqueda, fechaBusquedaYear);
+							sumaPresupuesto = (pre == null) ? new BigDecimal("0.00"): pre;
+						}
+						else{
+							BigDecimal pre = daoP.datoPorLineaSumFechas(fun1.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
+							sumaPresupuesto = (pre == null) ? new BigDecimal("0.00"): pre;
+						}
+					}
+					else{
+						sumaPresupuesto = new BigDecimal("0.00");
+					}
+					
+					vendedores.setPresupuesto(sumaPresupuesto.intValue());
+					vendedores.setIngresoReal(sumaIngresoR.intValue());	
+					
+					vendedores.setCumplimiento((sumaIngresoR.intValue() == 0 || sumaPresupuesto.intValue() == 0 )? new BigDecimal("0"):sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+					vendedores.setCumplimiento(vendedores.getCumplimiento().setScale(2, BigDecimal.ROUND_HALF_UP));
+					vendedores.setImagen1((vendedores.getCumplimiento().intValue() >= 85)? "verde.png" :"rojo.png" );
+					
+					if(sumaPresupuesto.intValue() == 0  &&  sumaIngresoR.intValue() == 0){
+						
+					}
+					else{
+						ListaComisionVendedores.add(vendedores);
+					}
+					TPresupuesto = TPresupuesto.add(new BigDecimal(vendedores.getPresupuesto()));
+					TIngresoR= TIngresoR.add(new BigDecimal(vendedores.getIngresoReal()));
+					
+					t += progress1;
+					setProgress(t);					
+				}
+			}
+				if(listaVendedor.size() >0){
+					
+					for (Funcionario f : listaVendedor) {
+						PresupuestoDao daoP = new PresupuestoDao();
+						BigDecimal pre = daoP.datoPorLineaSumFechasE(f.getId_funcionario(), zonaF.getCiudad().getId(), fechaBusqueda, fechaBusquedaYear);
+						sumaPresupuesto = (pre == null) ? new BigDecimal("0.00"): pre;
+						ComisionVendedores vendedores = new ComisionVendedores();
+						vendedores.setId(f.getId_funcionario());
+						vendedores.setCedula(f.getPersona().getCedula());
+						vendedores.setUmbralCV(new BigDecimal("0.00"));
+						vendedores.setNombre(f.getPersona().getNombre());
+						vendedores.setTipo(f.getDescripcion());
+						
+						vendedores.setPresupuesto(sumaPresupuesto.intValue());
+						vendedores.setIngresoReal(0);	
+						
+						vendedores.setCumplimiento((sumaIngresoR.intValue() == 0 || sumaPresupuesto.intValue() == 0 )? new BigDecimal("0"):sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+						vendedores.setCumplimiento(vendedores.getCumplimiento().setScale(2, BigDecimal.ROUND_HALF_UP));
+						vendedores.setImagen1((vendedores.getCumplimiento().intValue() >= 85)? "verde.png" :"rojo.png" );
+						
+						ListaComisionVendedores.add(vendedores);
+						
+						TPresupuesto = TPresupuesto.add(new BigDecimal(vendedores.getPresupuesto()));
+						TIngresoR= TIngresoR.add(new BigDecimal(vendedores.getIngresoReal()));				
+						
+					}
+					
+				}
+			
+			
+			/*
 			for (Funcionario fun : listaVendedor) {
 
 				if(fun != null){
@@ -468,19 +574,19 @@ public class directorGBean implements Serializable{
 					vendedores.setCedula(fun.getPersona().getCedula());
 					vendedores.setUmbralCV(new BigDecimal("0.00"));
 					vendedores.setNombre(fun.getPersona().getNombre());
-					vendedores.setTipo(fun.getComision().getNombre());
+					vendedores.setTipo(fun.getDescripcion());
 
 					PresupuestoDao daoP = new PresupuestoDao();
 					if(tipo.equals("funcionario")){
-						BigDecimal pre = daoP.datoPorLineaSumFechasE(fun.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
+						BigDecimal pre = daoP.datoPorLineaSumFechasE(fun.getId_funcionario(), zonaF.getCiudad().getId(), fechaBusqueda, fechaBusquedaYear);
 						sumaPresupuesto = (pre == null) ? new BigDecimal("0.00"): pre;
 					}
 					else{
 						BigDecimal pre = daoP.datoPorLineaSumFechas(fun.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
 						sumaPresupuesto = (pre == null) ? new BigDecimal("0.00"): pre;
 					}		
-
-					listaplanV = daoD.listarPlanPorFechasPrueba(tipo,fun.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
+					listaplanV = daoD.listarPlanPorFechasPruebaE(tipo,fun.getId_funcionario(),zonaF.getCiudad().getId(), fechaBusqueda, fechaBusquedaYear);
+					//listaplanV = daoD.listarPlanPorFechasPrueba(tipo,fun.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
 
 					Plan planLinea2_3 = null; 
 					for (Plan planL : listaplanV) {
@@ -608,7 +714,7 @@ public class directorGBean implements Serializable{
 					setProgress(t);
 				}	
 				
-			}
+			}*/
 			cumplimiento = TIngresoR.divide(TPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimiento = cumplimiento.setScale(2, BigDecimal.ROUND_HALF_UP);
 			totalPre = new DecimalFormat("###,###").format(TPresupuesto);
@@ -787,7 +893,7 @@ public class directorGBean implements Serializable{
 				ComisionVendedores sucursales = new ComisionVendedores();
 				sucursales.setPresupuestoB(new BigDecimal("0.00"));
 				sucursales.setIngresoRealB(new BigDecimal("0.00"));
-				sucursales.setConcepto((listaFechas.get(i-1).getValorMes().equals(fechaBusqueda))? listaFechas.get(i-1).getMes():null);
+				sucursales.setConcepto((listaFechasR.get(i-1).getValorMes().equals(fechaBusqueda))? listaFechasR.get(i-1).getMes():null);
 				
 				for (Zona_venta zona_venta : listaZona) {
 	
@@ -835,7 +941,10 @@ public class directorGBean implements Serializable{
 				
 				int meses =  dao.fechaFinalR();
 				
-				
+				Calendar fecha = Calendar.getInstance();
+				int year = fecha.get(Calendar.YEAR);
+				fechaBusquedaYear = (fechaBusquedaYear == null || fechaBusquedaYear.equals(""))?  String.valueOf(year) : fechaBusquedaYear;	       
+		       
 				for (int i=1; i<meses; i++){
 					
 					fechaBusqueda = "0"+i;
@@ -845,7 +954,7 @@ public class directorGBean implements Serializable{
 					ComisionVendedores sucursales = new ComisionVendedores();
 					sucursales.setPresupuestoB(new BigDecimal("0.00"));
 					sucursales.setIngresoRealB(new BigDecimal("0.00"));
-					sucursales.setConcepto((listaFechas.get(i-1).getValorMes().equals(fechaBusqueda))? listaFechas.get(i-1).getMes():null);
+					sucursales.setConcepto((listaFechasR.get(i-1).getValorMes().equals(fechaBusqueda))? listaFechasR.get(i-1).getMes():null);
 					for (Recaudo recaudo : listaRecaudo) {
 	
 							sucursales.setPresupuestoB(sucursales.getPresupuestoB().add(recaudo.getPresupuesto()));
@@ -1191,5 +1300,11 @@ public class directorGBean implements Serializable{
 	}
 	public void setTotalReA(String totalReA) {
 		this.totalReA = totalReA;
+	}
+	public List<Fechas> getListaFechasR() {
+		return listaFechasR;
+	}
+	public void setListaFechasR(List<Fechas> listaFechasR) {
+		this.listaFechasR = listaFechasR;
 	}
 }

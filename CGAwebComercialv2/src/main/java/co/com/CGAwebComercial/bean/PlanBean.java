@@ -47,6 +47,7 @@ public class PlanBean implements Serializable {
 	private List<Detalle_venta> listadetalle;
 	private List<Detallesin> listaDetalle1;
 	private List<Fechas> listaFechas;
+	private List<Fechas> listaFechasR;
 	
 	private LineChartModel desempenoVentas;
 	private LineChartModel desempenoRecaudo;
@@ -352,7 +353,7 @@ public class PlanBean implements Serializable {
 							}
 						}
 						else{
-							valorUtilidad= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
+							//valorUtilidad= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
 							valorUtilidad= valorUtilidad.multiply(plan.getUtilidad_Cumplimiento());
 							plan.setValor_Comision_Pagar(valorUtilidad);
 							total = total.add(plan.getValor_Comision_Pagar());
@@ -386,7 +387,7 @@ public class PlanBean implements Serializable {
 							}
 						}
 						else{
-							valorUtilidadR= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
+							//valorUtilidadR= plan.getDistribucion_Linea().multiply(plan.getFuncionario().getComision().getValorBaseVenta().divide(new BigDecimal("100.00")));
 							valorUtilidadR= valorUtilidadR.multiply(plan.getIngreso_Cumplimiento()); 
 							plan.setValor_Comision_PagarR(valorUtilidadR);
 							totalR = totalR.add(plan.getValor_Comision_PagarR());
@@ -394,7 +395,7 @@ public class PlanBean implements Serializable {
 							plan.setImagen("verde.png");
 						}
 					}
-					plan.setDistribucion_Linea(plan.getDistribucion_Linea().multiply(new BigDecimal("100")));
+					//plan.setDistribucion_Linea(plan.getDistribucion_Linea().multiply(new BigDecimal("100")));
 //					plan.setDistribucion_Linea(plan.getDistribucion_Linea().setScale(2, BigDecimal.ROUND_HALF_UP));
 					
 				}
@@ -744,44 +745,40 @@ public class PlanBean implements Serializable {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-
 	public Recursos getRecurso() {
 		return recurso;
 	}
-
 	public void setRecurso(Recursos recurso) {
 		this.recurso = recurso;
 	}
-
 	public BigDecimal getTotalR() {
 		return totalR;
 	}
-
 	public void setTotalR(BigDecimal totalR) {
 		this.totalR = totalR;
 	}
-
 	public String getAccionR() {
 		return accionR;
 	}
-
 	public void setAccionR(String accionR) {
 		this.accionR = accionR;
 	}
-
 	public List<Detallesin> getListaDetalle1() {
 		return listaDetalle1;
 	}
-
 	public void setListaDetalle1(List<Detallesin> listaDetalle1) {
 		this.listaDetalle1 = listaDetalle1;
 	}
-
 	public String getFechaConsulta() {
 		return fechaConsulta;
 	}
-
 	public void setFechaConsulta(String fechaConsulta) {
 		this.fechaConsulta = fechaConsulta;
+	}
+	public List<Fechas> getListaFechasR() {
+		return listaFechasR;
+	}
+	public void setListaFechasR(List<Fechas> listaFechasR) {
+		this.listaFechasR = listaFechasR;
 	}
 }

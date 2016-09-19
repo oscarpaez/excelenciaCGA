@@ -11,6 +11,7 @@
 	<ui:define name="contenido">
 	
 		<f:metadata>
+			<f:viewParam name="frst" value="#{directorGBean.fechaConsulta}"/>
 			<f:viewParam name="perIdr" value="#{directorGBean.cod}" />
 			<f:event listener="#{directorGBean.listarPresupuestoDirectorLinea()}" type="preRenderView" />
 		</f:metadata>

@@ -75,8 +75,15 @@ public class RecaudoBean implements Serializable{
 	public void listarRecaudo(){
 
 		try{
+			Recursos recurso = new Recursos();
+			listaFechas = recurso.cargarFechasTotal();
 			RecaudoDao dao = new RecaudoDao();
 			listaRecaudo = dao.listarPresupuesto(idPersona );
+			
+			for (int i = 0; i<listaRecaudo.size(); i++) {
+				listaRecaudo.get(i).setMes(listaFechas.get(i).getMes());
+			}
+			
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se Cargo la lista de Recaudo");

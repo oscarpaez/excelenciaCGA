@@ -280,8 +280,14 @@ public class CiudadDao extends GenericDao<Ciudad>{
 
 			int oficina = (idCiudad == 1 )? 1000 : (idCiudad == 7 )? 2000 : (idCiudad+1)*1000 ;
 
-			Criteria consulta = session.createCriteria(PresupuestoE.class);			
-			consulta.add(Restrictions.eq("oficinaVentas", oficina ));
+			Criteria consulta = session.createCriteria(PresupuestoE.class);	
+			if(oficina == 4000){
+				Criterion resul =Restrictions.in("oficinaVentas", new Integer[]{4000,7000});
+				consulta.add(resul);
+			}
+			else{
+				consulta.add(Restrictions.eq("oficinaVentas", oficina ));
+			}			
 			consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("ingresos"));
 			BigDecimal valor = (BigDecimal) consulta.uniqueResult();

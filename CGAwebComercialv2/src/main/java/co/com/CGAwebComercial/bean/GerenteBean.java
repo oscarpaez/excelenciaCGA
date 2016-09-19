@@ -67,12 +67,13 @@ public class GerenteBean implements Serializable{
 	private int idLinea;
 	private int idFuncionario;
 	private int idOficina;
+	private int inicio=0;
 	private Integer progress=0;
 
 
 	public GerenteBean() {
 		recurso = new Recursos();
-		listaFechas = recurso.cargarFechas();
+		listaFechas = recurso.cargarFechasTotal();
 		progress = 0;
 	}
 
@@ -552,7 +553,22 @@ public class GerenteBean implements Serializable{
 		}
 
 	}
+	
+	public void inicioListar(){
 
+		try{
+			if(inicio == 0){
+			  listarComisionVendedoresFechas();
+			  inicio =1;
+			}	
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se Cargo la lista de Vendedores por Linea");
+		}
+
+	}
+	
+	
 	//*lista el presupuesto y el real de los vendedores por pais *//
 	@SuppressWarnings({ "unused" })
 	public void listarComisionVendedoresFechas(){
@@ -1310,5 +1326,11 @@ public class GerenteBean implements Serializable{
 	}
 	public void setTotalCumplimientoU(String totalCumplimientoU) {
 		this.totalCumplimientoU = totalCumplimientoU;
+	}
+	public int getInicio() {
+		return inicio;
+	}
+	public void setInicio(int inicio) {
+		this.inicio = inicio;
 	}
 }

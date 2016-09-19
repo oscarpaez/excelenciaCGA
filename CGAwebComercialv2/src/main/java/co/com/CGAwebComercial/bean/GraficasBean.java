@@ -250,23 +250,26 @@ public class GraficasBean implements Serializable{
 			
 			PresupuestoDao daoPr = new PresupuestoDao();
 			List<BigDecimal> listaPre = daoPr.datoPorLineaPaisE(idLinea);
-			BigDecimal porV = listaPre.get(1).divide(listaPre.get(0), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
-			int V = (porV.abs().intValue() > 100)? 100 : porV.abs().intValue();
+			
+			presupuestoMes = listaPre.get(0).longValue();
+			realMes = listaPre.get(1).multiply(new BigDecimal("-1")).longValue();
+			
+			listaPre.add(1, new BigDecimal(realMes));
+			BigDecimal porV =(listaPre.get(1).longValue() == 0)? new BigDecimal("0"): listaPre.get(1).divide(listaPre.get(0), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			int V = porV.intValue();
 			
 			interval = new ArrayList<Number>(){{
 				add(60);
 				add(85);
 				add(100);
-			}};
+			}};			
+			interval.add(3,(V >100)? V:100);
+			
 
 			meterGaugeModel = new MeterGaugeChartModel(V, interval);
 			meterGaugeModel.setTitle("Cumplimiento Mes " + mesActual);
 			meterGaugeModel.setGaugeLabel( V +"%");
-			meterGaugeModel.setSeriesColors("ff0000, ffff00, 009933 ");
-			
-
-			presupuestoMes = listaPre.get(0).abs().longValue();
-			realMes = listaPre.get(1).abs().longValue();
+			meterGaugeModel.setSeriesColors("ff0000, ffff00, 009933 ");			
 
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
@@ -308,22 +311,27 @@ public class GraficasBean implements Serializable{
 
 			PresupuestoDao daoPr = new PresupuestoDao();
 			List<BigDecimal> listaPre = (autenticacion.getUsuarioLogin().getPerfil().getId() == 9)? daoPr.presupuestoPorOficinaI() : daoPr.presupuestoPorOficina(ciudad);
-			BigDecimal porV = listaPre.get(1).divide(listaPre.get(0), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
-			int V = (porV.abs().intValue() > 100)? 100 : porV.abs().intValue();
+			
+			presupuestoMes = listaPre.get(0).longValue();
+			realMes = listaPre.get(1).multiply(new BigDecimal("-1")).longValue(); 
+			
+			listaPre.add(1, new BigDecimal(realMes));
+			BigDecimal porV =(listaPre.get(1).longValue() == 0)? new BigDecimal("0"): listaPre.get(1).divide(listaPre.get(0), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			int V = porV.intValue();
 			
 			interval = new ArrayList<Number>(){{
 				add(60);
 				add(85);
 				add(100);
 			}};
-
+			
+			interval.add(3,(V >100)? V:100); 
 			meterGaugeModel = new MeterGaugeChartModel(V, interval);
 			meterGaugeModel.setTitle("Cumplimiento " + mesActual );
 			meterGaugeModel.setGaugeLabel( V +"%");
 			meterGaugeModel.setSeriesColors("ff0000, ffff00, 009933 ");
 
-			presupuestoMes = listaPre.get(0).abs().longValue();
-			realMes = listaPre.get(1).abs().longValue();
+			
 
 
 		} catch (RuntimeException ex) {
@@ -341,8 +349,13 @@ public class GraficasBean implements Serializable{
 			mesInicial = "Enero";
 			PresupuestoDao daoPr = new PresupuestoDao();
 			List<BigDecimal> listaPre = daoPr.listaPresupuestoPaisMes();
-			BigDecimal porV = listaPre.get(0).divide(listaPre.get(2), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
-			int V = (porV.abs().intValue() > 100)? 100 : porV.abs().intValue();
+			
+			realMes = listaPre.get(0).multiply(new BigDecimal("-1")).longValue();
+			presupuestoMes = listaPre.get(2).longValue();
+			listaPre.add(0, new BigDecimal(realMes));
+			listaPre.add(2, new BigDecimal(presupuestoMes));
+			BigDecimal porV = (listaPre.get(2).longValue() == 0)? new BigDecimal("0") :listaPre.get(0).divide(listaPre.get(2), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			int V = porV.intValue();
 			
 			List<Number> interval = new ArrayList<Number>(){{
 				add(60);
@@ -350,14 +363,14 @@ public class GraficasBean implements Serializable{
 				add(100);
 			}};
 
+			interval.add(3,(V >100)? V:100);
 			
 			meterGaugeModel = new MeterGaugeChartModel(V, interval);
 			meterGaugeModel.setTitle("Cumplimiento " + mesActual );
 			meterGaugeModel.setGaugeLabel( V +"%");
 			meterGaugeModel.setSeriesColors("ff0000, ffff00, 009933 ");
 			
-			realMes = listaPre.get(0).abs().longValue();
-			presupuestoMes = listaPre.get(2).abs().longValue();
+			
 			
 			List<BigDecimal> listaPreA = daoPr.listaPresupuestoPaisAcumulado("2016");
 			porV = listaPreA.get(0).divide(listaPreA.get(2), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));

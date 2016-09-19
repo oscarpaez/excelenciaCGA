@@ -94,8 +94,8 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 					recaudo = consulta.list();
 	
 				}
-				System.out.println(recaudo.size());
-				if(recaudo.size() >0){
+				//System.out.println(recaudo.size());
+				if(recaudo != null && recaudo.size() >0){
 					for (Recaudo recaudo1 : recaudo ) {
 		
 		
@@ -111,8 +111,8 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 							double cum =  recaudo1.getReal().doubleValue();
 							double pre = recaudo1.getPresupuesto().doubleValue();
 							cum= cum / pre *100  ; 
-		
-							BigDecimal cumplimiento =recaudo1.getReal().divide(recaudo1.getPresupuesto(), 2, BigDecimal.ROUND_HALF_UP);  
+							System.out.println(recaudo1.getReal() + "---" + recaudo1.getPresupuesto() );
+							BigDecimal cumplimiento =(recaudo1.getReal().longValue()== 0 || recaudo1.getPresupuesto().longValue() == 0)? new BigDecimal("0") : recaudo1.getReal().divide(recaudo1.getPresupuesto(), 2, BigDecimal.ROUND_HALF_UP);  
 							recaudo1.setCumplimiento(cumplimiento.multiply(new BigDecimal("100")));
 							recaudo1.setUmbral(comision.getUmbralRecaudo());
 							int numero = recaudo1.getUmbral().compareTo(recaudo1.getCumplimiento().divide(new BigDecimal("100")));
@@ -172,8 +172,8 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 				consulta.add(Restrictions.eq(tipo, idPersona));
 				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("valorNeto"));
-				Long totalWages = (Long) consulta.uniqueResult();
-				ValorNeto.add(totalWages);
+				Number totalWages = (Number) consulta.uniqueResult();
+				ValorNeto.add((totalWages == null)? 0 :totalWages.longValue());
 			}
 			return ValorNeto;
 
@@ -253,8 +253,8 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 				consulta.add(Restrictions.eq(tipo, idPersona));
 				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("valorDescuentos"));
-				long totalWages = (long) consulta.uniqueResult();
-				ValorDescuento.add(totalWages);
+				Number totalWages = (Number) consulta.uniqueResult();
+				ValorDescuento.add((totalWages == null)? 0 :totalWages.longValue());
 			}
 			return ValorDescuento;
 
@@ -289,8 +289,8 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 				consulta.add(Restrictions.eq(tipo, idPersona));
 				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("costoTotal"));
-				Long totalWages = (Long) consulta.uniqueResult();
-				costoTotal.add(totalWages);
+				Number totalWages = (Number) consulta.uniqueResult();
+				costoTotal.add((totalWages == null)? 0 : totalWages.longValue());
 			}
 			return costoTotal;
 
@@ -486,9 +486,9 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 					}
 					else{
 						itemSucursal = new Recaudo();
-						sumaR = new BigDecimal("0");
+						sumaR = sumaR.add(new BigDecimal("0"));
 						itemSucursal.setReal(sumaR);
-						sumaP = new BigDecimal("0");
+						sumaP =sumaP.add(new BigDecimal("0"));
 						itemSucursal.setPresupuesto(sumaP);
 					}
 
@@ -764,7 +764,14 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 				int sucursal = (f.getCiudad().getId() == 1)? 1000 : (f.getCiudad().getId() == 7)? 2000 : (f.getCiudad().getId()+1)*1000;
 				
 				Criteria consulta = session.createCriteria(PresupuestoE.class);
-				consulta.add(Restrictions.eq("oficinaVentas", sucursal ));
+				if(sucursal == 4000){
+					Criterion resul =Restrictions.in("oficinaVentas", new Integer[]{4000,7000});
+					consulta.add(resul);
+				}
+				else{
+					consulta.add(Restrictions.eq("oficinaVentas", sucursal ));
+					
+				}
 				consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("ingresos"));
 				BigDecimal valor = (BigDecimal) consulta.uniqueResult();
@@ -772,7 +779,13 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 				listaTotal.add(valor);
 
 				consulta = session.createCriteria(Detalle.class);
-				consulta.add(Restrictions.eq("sucursal", sucursal ));
+				if(sucursal == 4000){
+					Criterion resul =Restrictions.in("sucursal", new Integer[]{4000,7000});
+					consulta.add(resul);
+				}
+				else{
+					consulta.add(Restrictions.eq("sucursal", sucursal ));
+				}
 				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("valorNeto"));
 				Long totalWages = (Long) consulta.uniqueResult();
@@ -781,7 +794,13 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 
 				consulta = session.createCriteria(Zona_venta.class);
 				consulta.createAlias("ciudad", "c");
-				consulta.add(Restrictions.eq("c.id", f.getCiudad().getId()));			
+				if(f.getCiudad().getId() == 3){
+					Criterion resul =Restrictions.in("c.id", new Integer[]{3,6});
+					consulta.add(resul);
+				}
+				else{
+					consulta.add(Restrictions.eq("c.id", f.getCiudad().getId()));			
+				}
 				List<Zona_venta> zona = consulta.list();
 
 				BigDecimal presupuestoR = new BigDecimal("0");
@@ -908,8 +927,8 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 		List <Recaudo> recaudo = new ArrayList<>();
 		List <Recaudo> recaudo1 = new ArrayList<>();
 		try{
-			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
-			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
+			Date fechaFinal = (fecMes.equals("") || fecMes == null || fecYear.equals("") || fecYear == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+			Date fechaInicial =(fecMes.equals("") || fecMes == null || fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
 
 			Criteria consulta = session.createCriteria(Zona_venta.class);
 			consulta.createAlias("ciudad", "c");

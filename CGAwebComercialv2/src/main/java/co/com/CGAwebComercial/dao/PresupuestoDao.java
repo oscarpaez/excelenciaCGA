@@ -138,14 +138,26 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			Date fechaInicial = fechaInicial();	
 
 			Criteria consulta = session.createCriteria(PresupuestoE.class);
-			consulta.add(Restrictions.eq("oficinaVentas", oficina));
+			if(oficina == 4000){
+				Criterion resul =Restrictions.in("oficinaVentas", new Integer[]{4000,7000});
+				consulta.add(resul);
+			}
+			else{
+				consulta.add(Restrictions.eq("oficinaVentas", oficina));
+			}
 			consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("ingresos"));
 			BigDecimal valor = (BigDecimal) consulta.uniqueResult();
 			lista.add(valor);
 			
 			consulta = session.createCriteria(Detalle.class);
-			consulta.add(Restrictions.eq("sucursal", oficina));
+			if(oficina == 4000){
+				Criterion resul =Restrictions.in("sucursal", new Integer[]{4000,7000});
+				consulta.add(resul);
+			}
+			else{
+				consulta.add(Restrictions.eq("sucursal", oficina));
+			}			
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorNeto"));
 			Long valorN = (Long) consulta.uniqueResult();
@@ -279,16 +291,29 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 		}	
 	}
 
-	public BigDecimal datoPorLineaSumFechasE(int idPersona, String fecMes, String fecYear){
+	public BigDecimal datoPorLineaSumFechasE(int idPersona, int idC,  String fecMes, String fecYear){
 
 		Session session = HibernateUtil.getSessionfactory().openSession();
 
 		try{
 			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
 			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
-
+			
+			
+			
 			Criteria consulta = session.createCriteria(PresupuestoE.class);	
 			consulta.add(Restrictions.eq("funcionario", idPersona));
+			System.out.println(idC  + "--" +  idPersona);
+			if(idC == 3 || idC == 6){
+				Criterion resul = Restrictions.in("oficinaVentas", new Integer[]{4000,7000});
+				consulta.add(resul);
+			}		
+			else{
+				idC = (idC == 1)? 1000 :(idC == 7)? 2000: (idC+1)*1000;
+				consulta.add(Restrictions.eq("oficinaVentas", idC));
+			}	
+
+			
 			consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("ingresos"));
 			BigDecimal totalWages = (BigDecimal) consulta.uniqueResult();

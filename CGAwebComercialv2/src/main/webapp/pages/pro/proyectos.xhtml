@@ -43,11 +43,13 @@
 			            <p:row>
 			            	<p:column colspan="1" headerText="Item" width="4%" />
 			            	<p:column colspan="1" headerText="Nombre" width="10%"/>
-			            	<p:column colspan="1" headerText="Descripcion" />
+			            	<p:column colspan="1" headerText="Objetivo" />
 			            	<p:column colspan="1" headerText="Area" width="7%"  />
 			            	<p:column colspan="1" headerText="Responsable " width="10%"/>
-			            	<p:column colspan="1" headerText="Valor " width="8%" />
 			            	<p:column colspan="1" headerText="Fecha Creacion" width="8%"/>
+			            	<p:column colspan="1" headerText="Valor " width="8%" />
+			            	<p:column colspan="1" headerText="ROI" width="8%" />
+			            	<p:column colspan="1" headerText="TIR" width="8%" />
 			            	<p:column colspan="1" headerText="Prioridad" width="8%"/>
 			            	<p:column colspan="1" headerText="Estado" width="8%"/>
 			            	<p:column colspan="1" headerText="Acciones" width="9%" style="text-align:center"/>
@@ -74,13 +76,23 @@
 						<h:outputText value="#{proyecto.responsable}" />
 					</p:column>
 					
-					<p:column headerText="valor" >
-						<h:outputText value="#{proyecto.valor}" />
-					</p:column>
-					
 					<p:column headerText="Fecha ini" >
 						<h:outputText value="#{proyecto.fechaSolicitud}" />
 					</p:column>
+					
+					<p:column headerText="valor" >
+						<h:outputText value="#{proyecto.valor}">
+							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="ROI" >
+						<h:outputText value="#{proyecto.roi}" />
+					</p:column>
+					
+					<p:column headerText="TIR" >
+						<h:outputText value="#{proyecto.tir}" />
+					</p:column>					
 					
 					<p:column headerText="Prioridad" >
 						<h:outputText value="#{proyecto.prioridad.nombre}" />
@@ -169,7 +181,15 @@
 						<f:convertNumber pattern="#,##0;(#,##0)" />
 						<f:validateLongRange minimum="0" maximum="100000000000" /> 
 					</p:inputText>
-		
+					
+					<p:outputLabel  value="ROI" />
+					<p:inputText  size="30" maxlength="50" 
+						value="#{proyectoBean.proyecto.roi}" required="true" requiredMessage="Campo Responsable es obligatorio"/>
+					
+					<p:outputLabel  value="TIR" />
+					<p:inputText  size="30" maxlength="50" 
+						value="#{proyectoBean.proyecto.tir}" required="true" requiredMessage="Campo Responsable es obligatorio"/>
+					
 					<p:outputLabel  value="Fecha Creacion" />
 					<p:calendar  size="30" required="true" requiredMessage="El campo fecha Creación es Obligatorio"
 						value="#{proyectoBean.proyecto.fechaSolicitud}" />

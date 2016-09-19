@@ -1382,18 +1382,30 @@ public class LineaDao extends GenericDao<Linea> {
 
 				Criteria consulta = session.createCriteria(PresupuestoE.class);			
 				consulta.add(Restrictions.eq("linea", linea1.getId()));
-				consulta.add(Restrictions.eq("oficinaVentas", oficina ));
+				if(oficina == 4000){
+					Criterion resul =Restrictions.in("oficinaVentas", new Integer[]{4000,7000});
+					consulta.add(resul);
+				}
+				else{
+					consulta.add(Restrictions.eq("oficinaVentas", oficina ));
+				}
 				consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("ingresos"));
 				BigDecimal valor = (BigDecimal) consulta.uniqueResult();
-				sucursales.setPresupuestoB(valor);
+				sucursales.setPresupuestoB((valor == null)? new BigDecimal("0"): valor);
 
 				consulta.setProjection(Projections.sum("utilidad"));
 				valor = (BigDecimal) consulta.uniqueResult();
-				sucursales.setUtilpresupuesto(valor);
+				sucursales.setUtilpresupuesto((valor== null)? new BigDecimal("0"): valor);
 
 				consulta = session.createCriteria(Detalle.class);
-				consulta.add(Restrictions.eq("sucursal", oficina ));
+				if(oficina == 4000){
+					Criterion resul =Restrictions.in("sucursal", new Integer[]{4000,7000});
+					consulta.add(resul);
+				}
+				else{
+					consulta.add(Restrictions.eq("sucursal", oficina ));
+				}
 				consulta.add(Restrictions.eq("linea", linea1.getId()));
 				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("valorNeto"));
@@ -1406,7 +1418,7 @@ public class LineaDao extends GenericDao<Linea> {
 				totalWages = (totalWages == null)? 0: totalWages;
 				sucursales.setUtilidadReal(new BigDecimal(totalWages));
 
-				if(sucursales.getIngresoRealB().intValue() == 0 || sucursales.getUtilidadReal().intValue() == 0 ){
+				if(sucursales.getIngresoRealB().intValue() == 0 || sucursales.getPresupuestoB().intValue() == 0 ){
 					sucursales.setCumplimiento(new BigDecimal("0"));
 				}
 				else{
@@ -1416,7 +1428,7 @@ public class LineaDao extends GenericDao<Linea> {
 				String semaforo = (sucursales.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";
 				sucursales.setImagen1(semaforo);
 
-				if(sucursales.getUtilidadReal().intValue() == 0){
+				if(sucursales.getUtilidadReal().intValue() == 0  || sucursales.getUtilpresupuesto().intValue() == 0){
 					sucursales.setCumplimientoU(new BigDecimal("0"));
 				}
 				else{

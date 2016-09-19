@@ -21,9 +21,8 @@
 		<br />
 		<div class="ui-grid ui-grid-responsive">
 			<div class="ui-grid-row">
-				<div class="ui-grid-col-4">
-				   <p:panel style="width: 400px " styleClass="promedio">
-				  		
+				<div class="ui-grid-col-4" style="width: 410px">
+				   <p:panel style="width:400px;" styleClass="promedio">				  		
 				  		<h:form >
 							<h:panelGrid columns="2">
 								<p:outputLabel  value="Venta Mes " 
@@ -69,12 +68,19 @@
 					</p:panel>
 				</div>
 				
-				<div class="ui-grid-col-8">
-					<div style="display:block; text-align:center; margin: 0 auto; ">	
+				<div class="ui-grid-col-5" style="padding-left: 10px; width:35%;">
+					<div style="display:block; text-align:center; margin: 0 auto; width: 850px; ">	
 					  <p:button value="Excelencia Comercial"
 							style="width:200px; height:100px"
 							outcome="/pages/plan.xhtml?faces-redirect=true"
 							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}" />
+					  
+					  <p:link  href="http://cgadev.cga.com.co:8001/sap(bD1lcyZjPTMwMA==)/bc/bsp/nub/mys/index.html?language=S#/login" 
+							target="_bank" >
+					  		<p:button value="Excelencia App SAP"
+								style="width:190px; height:100px"
+								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 50}" />
+						</p:link>					
 					</div>
 					<br />
 					<h:form id="frmDesRec" enctype="multipart/form-data">
@@ -89,7 +95,7 @@
         	<br />
         	<br />
         	<div class="ui-grid-row">
-				<div class="ui-grid-col-4" >
+				<div class="ui-grid-col-4" style="width:410px;" >
 				  <h:form id="frmDes" enctype="multipart/form-data">
 						<p:panel style="height:370px; width:400px" styleClass="promedio">
 							<h:panelGrid columns="2" id="pnlDes">
@@ -98,17 +104,16 @@
 						</p:panel>
 					</h:form>
 				</div>
-				<div class="ui-grid-col-8">
+				<div class="ui-grid-col-5" style="padding-left: 10px; width:35%;">
 					<h:form id="frmDesVen" enctype="multipart/form-data">
-						<p:panel style="height:370px; width:850px" >
+						<p:panel style="height:370px; width:850px;" >
 							<h:panelGrid columns="2" id="pnlDesVen">
-								<p:chart type="line" model="#{vendedorLBRBean.desempenoVentas}" style="height:300px; width:800px" /> 
+								<p:chart type="line" model="#{vendedorLBRBean.desempenoVentas}" style="height:300px; width:800px; "  /> 
 							</h:panelGrid>
 						</p:panel>
 					</h:form>
 				</div>
-				
-        	</div>	
+			</div>	
 		</div>
 	</ui:define>
 

@@ -36,7 +36,7 @@
 					</p:progressBar>
 					
 					<p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
-						style="width:100%; opacity: .90;  font-size: 16px" disabled="true"/>
+						style="width:100%; opacity: .90;  font-size: 15px" disabled="true"/>
 					
 				</h:panelGrid>
 			</h:form>
@@ -74,7 +74,7 @@
 					emptyMessage="No se encontraron registros" paginator="true"
 					value="#{directorGBean.listaComisionVendedores}" var="vendedor"
 					filteredValue="#{directorGBean.listaFiltrados}"
-					rows="10" paginatorPosition="bottom" >
+					rows="15" paginatorPosition="bottom" >
 
 					<f:facet name="header">
 						<h:outputText value="#{autenticacionBean.fechaActual}" /> Plan Vendedores
@@ -143,14 +143,16 @@
 			        </p:columnGroup>
 
 					<f:facet name="footer">
-						<p:button value="Mix linea" outcome="/pages/dr/mixLinea.xhtml?faces-redirect=true" 
+						<p:button value="Oficina por linea" outcome="/pages/dr/mixLinea.xhtml?faces-redirect=true" 
 							style="height:30px; background:#f0ad4e">
+							<f:param name="frst" value="#{directorGBean.fechaConsulta}"/>
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
 							<f:param name="tipo" value="#{planBean.tipo}"/>							
 						</p:button>
 						
 						<p:button value="Zonas Cargo" outcome="/pages/dr/zonasCargo.xhtml?faces-redirect=true" 
 							style="height:30px; background:#ff99ff">
+						 	<f:param name="frst" value="#{directorGBean.fechaConsulta}"/>	
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
 							<f:param name="tipo" value="#{planBean.tipo}"/>							
 						</p:button>

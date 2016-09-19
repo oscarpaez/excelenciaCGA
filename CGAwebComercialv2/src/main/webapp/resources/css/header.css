@@ -36,10 +36,17 @@
 		position: absolute;
 	}
 
+.salirF .salirL{
+	float: right;
+    margin: 28px 19px;
+    color: white;
+}
+
 .salirF .salir{
 	float: right;
     margin: 20px 19px;
 }
+
 .ui-widget-content a  .excel{
 	float: right;
     

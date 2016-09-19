@@ -44,6 +44,9 @@ public class Recaudo implements Serializable{
 		private String imagen;
 		
 		@Transient
+		private String mes;
+		
+		@Transient
 		private BigDecimal valorComision;	
 		
 		@OneToOne
@@ -128,6 +131,14 @@ public class Recaudo implements Serializable{
 
 		public void setUmbral(BigDecimal umbral) {
 			this.umbral = umbral;
+		}
+
+		public String getMes() {
+			return mes;
+		}
+
+		public void setMes(String mes) {
+			this.mes = mes;
 		}
 		
 }

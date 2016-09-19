@@ -29,4 +29,6 @@ public class UsuarioDao extends GenericDao<Usuario> {
 			session.close();
 		}
 	}
+	
+	
 }

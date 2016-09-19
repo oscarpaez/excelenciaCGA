@@ -22,7 +22,7 @@
 		<br />
 		<div class="ui-grid ui-grid-responsive">
 			 <div class="ui-grid-row">
-					<div class="ui-grid-col-4">
+					<div class="ui-grid-col-4" style="width: 410px">
 						<p:panel style="width: 400px " styleClass="promedio">
 							<h:form >
 								<h:panelGrid columns="2">
@@ -45,7 +45,7 @@
 								style="width:350px;height:250px" />
 								
 							<h:form id="frmProVen" enctype="multipart/form-data">
-								<p:outputLabel value="Promedio de venta #{graficasBean.promedioVenta.mes}"
+								<p:outputLabel value="Promedio de venta #{graficasBean.mesActual}"
 									style="color: #0000ff; font-style: italic; " />
 								<br />
 								<br />
@@ -69,8 +69,8 @@
 						<br />
 				 </div>
 				
-					<div class="ui-grid-col-8">
-						<div style="display: block; text-align: center; margin: 0 auto;">
+					<div class="ui-grid-col-8"  style="padding-left: 20px; width:35%;">
+						<div style="display: block; text-align: center; margin: 0 auto; width: 850px">
 							<p:button value="Excelencia Comercial"
 								style="width:200px; height:100px"
 								outcome="/pages/dl/plandl.xhtml?faces-redirect=true"
@@ -96,10 +96,10 @@
 			<br />
 			<div class="ui-grid-row">
 				
-				<div class="ui-grid-col-4">
+				<div class="ui-grid-col-4" style="width:410px;">
 					<p:panel style="width: 400px " styleClass="promedio">
 						<h:form id="frmProDes" enctype="multipart/form-data">
-							<p:outputLabel value="Promedio Descuento #{graficasBean.promedioVenta.mes}"
+							<p:outputLabel value="Promedio Descuento #{graficasBean.mesActual}"
 								style="color: #0000ff; font-style: italic;" />
 							<br />
 							<br />
@@ -125,7 +125,7 @@
 					</p:panel>
 				</div>
 			
-				<div class="ui-grid-col-8">
+				<div class="ui-grid-col-8" style="padding-left: 20px; width:35%;" >
 					<h:form id="frmDesRec" enctype="multipart/form-data">
 						<p:panel style="height:370px; width:850px">
 							<h:panelGrid id="pnlDesRec">

@@ -106,6 +106,10 @@
 
 .tblPla .ui-datatable .ui-column-filter{display:block;width:10px;margin:auto;}
 
+/*grid 4*/
 
+ui-grid-col-4{
+	width: 410px;
+}
 
       

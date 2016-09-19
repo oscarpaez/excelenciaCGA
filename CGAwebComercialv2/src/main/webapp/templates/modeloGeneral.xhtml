@@ -17,7 +17,7 @@
 </h:head>
 <h:body>
 	<p:growl id="msgGlobal" />
-	<p:idleMonitor timeout="600000" >
+	<p:idleMonitor timeout="900000" >
         <p:ajax event="idle" listener="#{autenticacionBean.salir()}" update="msgGlobal" />        
     </p:idleMonitor>
 	
@@ -25,9 +25,12 @@
 		<p:layoutUnit position="north" >
 			 <div  class="header">
 			 	<h:form styleClass="salirF" >
+			 	
 			 	<p:graphicImage library="images"  name="logo-actual.png" />			 	
 			 	 	<p:commandButton  styleClass="salir" icon="ui-icon-power" value="Salir" actionListener="#{autenticacionBean.salir}" 
 			 	 		rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
+			 	 <p:commandLink value="Cambiar Contraseña" actionListener="#{autenticacionBean.ventanaContrasena()}" styleClass="salirL"
+			 	 	rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
 			 	 </h:form>
 			 </div>
 		</p:layoutUnit>		

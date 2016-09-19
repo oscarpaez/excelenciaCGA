@@ -156,8 +156,9 @@
 			        </p:columnGroup>
 
 					<f:facet name="footer">
-						<p:button value="Mix linea" outcome="/pages/dcB/mixLinea.xhtml?faces-redirect=true" 
+						<p:button value="Oficina por linea" outcome="/pages/dcB/mixLinea.xhtml?faces-redirect=true" 
 							style="height:30px; background:#f0ad4e">
+							<f:param name="frst" value="#{directorGBean.fechaConsulta}"/>
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
 							<f:param name="tipo" value="#{planBean.tipo}"/>							
 						</p:button>

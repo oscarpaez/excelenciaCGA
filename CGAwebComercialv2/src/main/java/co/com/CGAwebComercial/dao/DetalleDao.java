@@ -717,6 +717,54 @@ public class DetalleDao extends GenericDao<Detalle> {
 		}	
 	}
 	
+	public List<Plan> listarPlanPorFechasPruebaE(String tipo, int idPersona, int idC, String fecMes, String fecYear){
+		
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<Plan> listaPlan = new ArrayList<>();
+		try{
+			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
+			
+			Plan  plan = new Plan();
+			
+			Criteria consulta = session.createCriteria(Detalle.class);
+			consulta.add(Restrictions.eq(tipo, idPersona));
+			if(idPersona == 2601 || idPersona == 2602){
+							
+							if(idC == 3 || idC == 4){
+							   Criterion resul = Restrictions.in("sucursal", new Integer[]{4000,7000});
+							   consulta.add(resul);
+							}		
+							else{
+								idC = (idC == 1)? 1000 :(idC == 7)? 2000: (idC+1)*1000;
+								consulta.add(Restrictions.eq("sucursal", idC));
+							}	
+							
+			}
+			
+			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
+			consulta.setProjection(Projections.sum("valorNeto"));
+			Long  totalWages = (Long) consulta.uniqueResult();
+			System.out.println(totalWages  + "--" +  idPersona);
+			totalWages = (totalWages == null )? 0 : totalWages *  -1;
+			plan.setIngreso_Real(new BigDecimal(totalWages));	
+
+			FuncionarioDao daoF = new FuncionarioDao();
+			Funcionario funcionario = daoF.buscar(idPersona);
+			plan.setFuncionario(funcionario);
+			listaPlan.add(plan);
+			
+		////*fin*///
+		return listaPlan;
+
+	} catch (RuntimeException ex) {
+		throw ex;
+	}
+	finally{
+		session.close();
+	}	
+	}	
+	
 	//*Carga Modulo Gestion humana con los para metros de fecha y funcionario ventas con LBR*//
 	public List<Plan> listarPlanPorFechasPrueba(String tipo, int idPersona, String fecMes, String fecYear){
 
@@ -951,14 +999,14 @@ public class DetalleDao extends GenericDao<Detalle> {
 								lineaS = presupuesto.getLinea();
 								plan.setIngreso(plan.getIngreso().add(presupuesto.getIngresos()));
 								plan.setUtilidad(plan.getUtilidad().add(presupuesto.getUtilidad()));
-								plan.setDistribucion_Linea(plan.getDistribucion_Linea().add(presupuesto.getDistribucionPorLinea()));
+								//plan.setDistribucion_Linea(plan.getDistribucion_Linea().add(presupuesto.getDistribucionPorLinea()));
 								
 							}
 							else{
 								lineaS = presupuesto.getLinea();
 								plan.setIngreso(presupuesto.getIngresos());
 								plan.setUtilidad(presupuesto.getUtilidad());
-								plan.setDistribucion_Linea(presupuesto.getDistribucionPorLinea());
+								//plan.setDistribucion_Linea(presupuesto.getDistribucionPorLinea());
 							}
 						}
 					}
@@ -1312,5 +1360,47 @@ public class DetalleDao extends GenericDao<Detalle> {
 				session.close();
 			}	
 		}
-	
+		
+		//*Lista todos los funcionarios de la tabla detalle por oficina "para todos ver los resultados de la oficina"*//
+		@SuppressWarnings({ "unchecked" })
+		public List<Object> listarDetalleVendedoresOficina(int oficina, String tipo, String fecMes, String fecYear){
+
+			Session session = HibernateUtil.getSessionfactory().openSession();
+			//List<Integer> listaFuncionarios = new ArrayList<>();
+			try{
+				Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+				Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
+				oficina = (oficina == 1)? 1000 :(oficina == 7)? 2000: (oficina+1)*1000;
+				
+				Criteria consulta = session.createCriteria(Detalle.class);
+				if(oficina == 4000){
+					Criterion resul =Restrictions.in("sucursal", new Integer[]{4000,7000});
+					consulta.add(resul);
+				}
+				else{
+					consulta.add(Restrictions.eq("sucursal", oficina ));
+				}	
+				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
+				consulta.setProjection(Projections.projectionList()
+						.add(Projections.sum("valorNeto"))
+						.add(Projections.groupProperty(tipo)));
+				
+				List<Object> results = consulta.list();
+				
+				for (Object object : results) {
+					Object[] obc = (Object[]) object;
+					Long a = (Long) obc[0];
+					Integer b = (Integer) obc[1];
+					System.out.println(a + "--" + b);
+				}
+				
+				
+				return results; 
+			} catch (RuntimeException ex) {
+				throw ex;
+			}
+			finally{
+				session.close();
+			}
+		}
 }
