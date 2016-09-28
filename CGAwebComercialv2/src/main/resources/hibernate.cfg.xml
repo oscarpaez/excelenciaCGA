@@ -90,6 +90,12 @@
         <mapping class = "co.com.CGAwebComercial.entyties.EstadoProyecto" />
         <mapping class = "co.com.CGAwebComercial.entyties.Proyecto" />
         <mapping class = "co.com.CGAwebComercial.entyties.AjusteVendedor" />
+        <mapping class = "co.com.CGAwebComercial.entyties.Registro_Ingresos" />
+        <mapping class = "co.com.CGAwebComercial.entyties.CausaPerdidaVenta" />
+        <mapping class = "co.com.CGAwebComercial.entyties.RegularidadPerdidaVenta" />
+        <mapping class = "co.com.CGAwebComercial.entyties.Incidencia" />
+        <mapping class = "co.com.CGAwebComercial.entyties.PedidosEnProceso" />
+                
         
 	</session-factory>
 

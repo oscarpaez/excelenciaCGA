@@ -56,6 +56,14 @@
 					disabled="#{autenticacionBean.usuarioLogin.perfil.financiera}" />
 					
 		</h:panelGroup>
+		<br />
+		<h:panelGroup columns="4" id="content1" 
+				style="display:block; text-align:center;">
+				<p:button value="Excelencia Pedidos Perdidos"
+					style="width:200px; height:100px"
+					disabled="#{autenticacionBean.usuarioLogin.perfil.gastos}" 
+					outcome="/pages/vi/vistaIncidencia.xhtml?faces-redirect=true;"/>
+		</h:panelGroup>
 	</ui:define>
 
 </ui:composition>

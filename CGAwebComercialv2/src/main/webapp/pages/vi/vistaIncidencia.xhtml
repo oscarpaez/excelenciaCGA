@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+		<ui:define name="contenido">
+		
+			<f:metadata>
+				<f:event listener="#{incidenciaBean.listarIncidencias()}" type="preRenderView" />
+			</f:metadata>
+			
+			<f:facet name="header">
+				<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+			</f:facet>	
+			
+			<h:form>
+			<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="true" 
+						value="#{incidenciaBean.listaIncidencia}" var="incidencia" rows="15"
+						paginatorPosition="bottom"	>
+					
+					<f:facet name="header">
+			            <h:outputText value="#{autenticacionBean.fechaActual}" /> 			        </f:facet>	
+			        
+			        <p:columnGroup type="header">
+		            <p:row>
+		            	<p:column rowspan="2" headerText="Cod Sap"  style="width:5%" />
+		            	<p:column rowspan="2" headerText="Nombre Vendedor" />
+		            	<p:column rowspan="2" headerText="Oficina" />
+		            	<p:column rowspan="2" headerText="Zona Venta" style="width:7%" />
+		            	<p:column rowspan="2" headerText="Linea" />
+		            	<p:column rowspan="2" headerText="Cliente" />
+		            	<p:column rowspan="2" headerText="Necesidad Cliente" />
+		            	<p:column rowspan="2" headerText="Causa" />
+		            	<p:column colspan="1" headerText="Valor" />
+		                <p:column rowspan="2" headerText="Fecha" style="text-align: center; width:8%" />
+		            </p:row>
+		            
+		            
+		        </p:columnGroup>
+				
+					<p:column style="text-align: center">
+						<h:outputText value="#{incidencia.zona.funcionario.id_funcionario}" />
+					</p:column>
+					
+					<p:column  >
+						<h:outputText value="#{incidencia.zona.funcionario.persona.nombre}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{incidencia.zona.ciudad.nombre}" >
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column>
+						<h:outputText value="#{incidencia.zona.id_zona_venta}" />
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{incidencia.linea.nombre}" />
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<h:outputText value="#{incidencia.cliente}" />
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<h:outputText value="#{incidencia.necesidad}" />
+					</p:column>					
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<h:outputText value="#{incidencia.causaPerdida.descripcion}" />
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: right">
+						<h:outputText value="#{incidencia.valorVenta}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0" pattern="#,##0;(#,##0)" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="comision"    style="text-align: center">
+						<h:outputText value="#{incidencia.fechaRegistro}" />
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column colspan="8" footerText="Totales"  style="text-align:right"/>
+			            	<p:column colspan="" footerText="#{incidenciaBean.valorTotal}" style="text-align:right" />
+			            	<p:column colspan="" footerText="" />	
+			            </p:row>
+			        </p:columnGroup>
+					
+					
+			        </p:dataTable>
+			</h:form>
+		
+		</ui:define>
+	</ui:composition>	
+</html>	

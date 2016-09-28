@@ -25,9 +25,9 @@
 		<p:layoutUnit position="north" >
 			 <div  class="header">
 			 	<h:form styleClass="salirF" >
-			 	
 			 	<p:graphicImage library="images"  name="logo-actual.png" />			 	
 			 	 	<p:commandButton  styleClass="salir" icon="ui-icon-power" value="Salir" actionListener="#{autenticacionBean.salir}" 
+			 	 		update="@this"
 			 	 		rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
 			 	 <p:commandLink value="Cambiar Contraseña" actionListener="#{autenticacionBean.ventanaContrasena()}" styleClass="salirL"
 			 	 	rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>

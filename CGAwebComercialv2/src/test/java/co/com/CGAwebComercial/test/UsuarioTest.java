@@ -14,11 +14,13 @@ import co.com.CGAwebComercial.dao.DetalleDao;
 import co.com.CGAwebComercial.dao.FuncionarioDao;
 import co.com.CGAwebComercial.dao.LineaDao;
 import co.com.CGAwebComercial.dao.PersonaDao;
+import co.com.CGAwebComercial.dao.Registro_IngresosDao;
 import co.com.CGAwebComercial.dao.UsuarioDao;
 import co.com.CGAwebComercial.dao.Zona_ventaDao;
 import co.com.CGAwebComercial.entyties.Detalle;
 import co.com.CGAwebComercial.entyties.Funcionario;
 import co.com.CGAwebComercial.entyties.Persona;
+import co.com.CGAwebComercial.entyties.Registro_Ingresos;
 import co.com.CGAwebComercial.entyties.Usuario;
 import co.com.CGAwebComercial.entyties.Zona_venta;
 import co.com.CGAwebComercial.util.ComisionVendedores;
@@ -90,7 +92,7 @@ public class UsuarioTest {
 	
 	@SuppressWarnings("rawtypes")
 	@Test
-	
+	@Ignore
 	public void listarF(){
 		
 //		LineaDao dao = new LineaDao();
@@ -128,7 +130,18 @@ public class UsuarioTest {
 //			System.out.println("U" + detalle2.getCedulaEspecialista());
 //		}
 	}
-
+	
+	@Test
+	public void listaIngresos(){
+		
+		Registro_IngresosDao dao = new Registro_IngresosDao();
+		
+		List<Registro_Ingresos> listaR = dao.listaIngresos("09", "2016");
+		System.out.println(listaR);
+		for (Registro_Ingresos r : listaR) {
+			System.out.println(r.getPersona().getNombre());			
+		}
+	}
 	
 	
 	

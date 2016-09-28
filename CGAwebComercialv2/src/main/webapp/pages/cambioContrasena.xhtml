@@ -12,9 +12,9 @@
 	
 	<h:body>
 	<p:messages id="messages" showDetail="true" autoUpdate="true" />
-		 <h:form style="width:500px; height:180px;" >
+		 <h:form  id="frmCla" style="width:500px; height:180px;" >
 		 	
-    		<h:panelGrid columns="2" >
+    		<h:panelGrid  id="pnlCla" columns="2" >
 				 <h:outputLabel for="pass" value="Nueva Contraseña" />
 		   	     <p:password id="pass" value="#{autenticacionBean.clave}" feedback="true" inline="true" 
 		   	     	promptLabel="Ingrese contraseña" weakLabel="Debil"

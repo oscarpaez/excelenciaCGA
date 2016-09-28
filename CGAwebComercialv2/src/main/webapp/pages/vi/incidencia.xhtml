@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	
+	<ui:define name="contenido">
+		<f:metadata>
+			<f:event listener="#{incidenciaBean.listarAsesor()}" type="preRenderView" />
+		</f:metadata>
+		
+		<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+		</f:facet>					
+		
+		<h:form id="frmNueIci"> 
+			<p:panel style="" styleClass="">
+				<div class="ui-grid ui-grid-responsive">
+					<div class="ui-grid-row">
+						<div class="ui-grid-col-4" style="width: 45%">
+							<p:panel header="Vendedor" toggleOrientation="horizontal"
+								toggleable="true" >
+								<h:panelGrid columns="1">
+									<p:outputLabel value="Asesor Comercial: #{incidenciaBean.incidencia.zona.funcionario.persona.nombre}" style="" />
+									<p:outputLabel value="Cod Sap: #{incidenciaBean.incidencia.zona.funcionario.id_funcionario}" style=" " />
+									<p:outputLabel value="Oficina Ventas: #{incidenciaBean.incidencia.zona.ciudad.nombre}" style="" />
+									<p:outputLabel value="Zona de Ventas: #{incidenciaBean.incidencia.zona.id_zona_venta}" style=" " />
+								</h:panelGrid>
+							</p:panel>
+							<br />
+							<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
+							style="background:#449d44;" onclick="history.back()" />
+						</div>
+						<div class="ui-grid-col-4" style="width: 5%">
+						
+						</div>
+						<div class="ui-grid-col-4" style="width: 50%">		
+					<p:panel id="pnlNueIci" style="border: 1px solid #50bf22;" styleClass="">
+							<f:facet name="header">
+								<p:outputLabel value="Registro Pedidos Perdidos" />
+							</f:facet>
+							<h:panelGrid columns="2">
+								<p:outputLabel value="Nombre Cliente: " style=" " />
+								<p:inputText style="width:100%" value="#{incidenciaBean.incidencia.cliente}" />
+									
+								<p:outputLabel value="Necesidad Cliente: " style=" " />
+								<p:inputTextarea  value="#{incidenciaBean.incidencia.necesidad}" cols="40"  rows="4" autoResize="false" />		
+								
+								<p:outputLabel for="estado" value="Regularidad Negocio: " />
+								<p:selectOneMenu id="estado" filter="true" style="width:94%"
+									value="#{incidenciaBean.incidencia.regularidad}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Estado es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItems value="#{incidenciaBean.listaRegularidad}" var="regularidad"
+										itemValue="#{regularidad}" itemLabel="#{regularidad.descripcionR}" />
+								</p:selectOneMenu>
+				
+								<h:inputHidden value="#{incidenciaBean.incidencia.zona.funcionario.persona.nombre}" />		
+								
+								<h:inputHidden value="#{incidenciaBean.incidencia.zona.funcionario.id_funcionario}" disabled="true" />						
+								
+								<h:inputHidden value="#{incidenciaBean.incidencia.zona.ciudad.nombre}" disabled="true" />						
+								
+								<h:inputHidden value="#{incidenciaBean.incidencia.zona.id_zona_venta}" disabled="true" />
+									
+								<p:outputLabel  value="Linea: " />
+								<p:selectOneMenu  filter="true" style="width:94%"
+									value="#{incidenciaBean.incidencia.linea}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Estado es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItems value="#{incidenciaBean.listaLinea}" var="linea"
+										itemValue="#{linea}" itemLabel="#{linea.nombre}" />
+								</p:selectOneMenu>							
+								
+								<p:outputLabel value="Valor Venta:"  />
+								<p:inputNumber id="valor" value="#{incidenciaBean.incidencia.valorVenta}" placeholder="0.00 $" symbol=" $" symbolPosition="s" 
+			                               decimalSeparator="." thousandSeparator="," 
+			                               style="width: 100%;"/>  
+			               		
+			               		<p:outputLabel for="e" value="Causa de Perdida: " />
+								<p:selectOneMenu id="e" filter="true" style="width:94%"
+									value="#{incidenciaBean.incidencia.causaPerdida}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Estado es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItems value="#{incidenciaBean.listaCausa}" var="causa"
+										itemValue="#{causa}" itemLabel="#{causa.descripcion}" />
+								</p:selectOneMenu>
+								
+								<p:outputLabel value="Fecha Registro:"  />
+								<p:calendar value="#{incidenciaBean.incidencia.fechaRegistro}" />
+								
+								<p:commandButton value="Salvar" icon="ui-icon-disk"
+									actionListener="#{incidenciaBean.salvar()}"
+									update=":frmNueIci:pnlNueIci"/>
+							</h:panelGrid>	
+						</p:panel>
+						</div>
+					</div>
+				</div>	
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

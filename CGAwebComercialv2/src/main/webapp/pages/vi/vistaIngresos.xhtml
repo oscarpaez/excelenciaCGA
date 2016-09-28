@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	
+	<ui:define name="contenido">
+	
+	<f:metadata>
+		<f:event listener="#{registro_IngresosBean.inicioVistaRegistro()}" type="preRenderView" />	
+	</f:metadata>
+		
+	<p:dataTable styleClass="tblPla" id="tblIng"
+					emptyMessage="No se encontraron registros" value="#{registro_IngresosBean.listaRegistros}"
+					var="registro" draggableColumns="true" draggableRows="true">
+					
+					<f:facet name="header">
+						Lista de Ingresos Excelencia Comercial
+					</f:facet>
+					
+	 			    <p:columnGroup type="header">
+			            <p:row>
+			            	<p:column colspan="1" headerText="Cod SAP" width="10%"/>
+			            	<p:column colspan="1" headerText="Nombre" width="10%"/>
+			            	<p:column colspan="1" headerText="Cargo" width="7%"  />
+			            	<p:column colspan="1" headerText="Cantidad Ingresos" width="4%" />
+			            	<p:column colspan="1" headerText="Acciones" width="9%" style="text-align:center"/>
+			           </p:row>
+			        </p:columnGroup> 
+			        
+			        <p:column headerText="" >
+						<h:outputText value="#{registro.funcionario.id_funcionario}" />
+					</p:column>
+					
+					<p:column headerText="" >
+						<h:outputText value="#{registro.persona.nombre}" />
+					</p:column>
+					
+					 <p:column headerText="" >
+						<h:outputText value="#{registro.funcionario.descripcion}" />
+					</p:column>
+					
+					 <p:column headerText="" >
+						<h:outputText value="#{registro.id_Registro}" />
+					</p:column>
+					<p:column headerText="Acciones">
+						
+					</p:column>
+					
+					<f:facet name="footer">
+						
+					</f:facet>
+				</p:dataTable>
+	</ui:define>	
+</ui:composition>
+</html>

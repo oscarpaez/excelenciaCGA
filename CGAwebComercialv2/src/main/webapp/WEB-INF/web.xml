@@ -28,16 +28,20 @@
   <listener>
     <listener-class>co.com.CGAwebComercial.util.HibernateContexto</listener-class>
   </listener>
+  
   <filter>
     <filter-name>Pretty Filter</filter-name>
     <filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>
   </filter>
   <filter-mapping>
+  	
     <filter-name>Pretty Filter</filter-name>
     <url-pattern>/*</url-pattern>
     <dispatcher>FORWARD</dispatcher>
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>INCLUDE</dispatcher>
     <dispatcher>ERROR</dispatcher>
-  </filter-mapping>
+  </filter-mapping>  
+  
+  
 </web-app>

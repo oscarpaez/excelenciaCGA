@@ -79,7 +79,7 @@
 						</p:panel>
 					</h:form>
 				</div>
-				<div class="ui-grid-col-2" style="padding: 4.0em 0.0em 0.0em 0.0em;">
+				<div class="ui-grid-col-2" style="padding: 1.0em 0.0em 0.0em 0.0em;">
 
 					<p:button value="Excelencia Comercial"
 						style="width:200px; height:100px"
@@ -93,7 +93,13 @@
 								outcome="/pages/pro/proyectos.xhtml?faces-redirect=true"
 								disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}">
 					</p:button>	
-
+					<br />
+					<br />
+					
+					<p:button value="Excelencia Pedidos Perdidos"
+						style="width:200px; height:100px"
+						disabled="{autenticacionBean.usuarioLogin.perfil.id == 1 ?  true : false}" 
+						outcome="/pages/vi/vistaIncidencia.xhtml?faces-redirect=true;"/>
 				</div>
 			</div>
 			<br />

@@ -24,9 +24,13 @@ import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 import org.primefaces.context.RequestContext;
 
+import co.com.CGAwebComercial.dao.FuncionarioDao;
 import co.com.CGAwebComercial.dao.PersonaDao;
+import co.com.CGAwebComercial.dao.Registro_IngresosDao;
 import co.com.CGAwebComercial.dao.UsuarioDao;
+import co.com.CGAwebComercial.entyties.Funcionario;
 import co.com.CGAwebComercial.entyties.Persona;
+import co.com.CGAwebComercial.entyties.Registro_Ingresos;
 import co.com.CGAwebComercial.entyties.Usuario;
 
 //import co.com.consecionario.util.FacesUtil;
@@ -76,6 +80,19 @@ public class AutenticacionBean implements Serializable {
 			
 			UsuarioDao dao = new UsuarioDao();
 			usuarioLogin = dao.autenticar(persona.getCedula(), usuarioLogin.getClave());
+			
+			if(usuarioLogin != null){
+				Registro_IngresosDao  daoR= new Registro_IngresosDao();
+				Registro_Ingresos registro = new Registro_Ingresos();
+				registro.setPersona(usuarioLogin.getPersona());
+				Date fechaIngreso = new Date(); 
+				FuncionarioDao daoF = new FuncionarioDao();
+				Funcionario funcionario = daoF.buscar(usuarioLogin.getId());
+				registro.setFechaIngreso(fechaIngreso);
+				registro.setHoraIngreso(fechaIngreso);
+				registro.setFuncionario(funcionario);
+				daoR.salvar(registro);
+			}	
 			
 			if(usuarioLogin == null){
 				Messages.addGlobalError("El usuario o la cantraseña son incorrectas", "info");

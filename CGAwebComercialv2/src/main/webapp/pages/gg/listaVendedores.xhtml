@@ -77,11 +77,11 @@
 			        
 			         <p:columnGroup type="header">
 		            <p:row>
-		                <p:column colspan="1" headerText="Cedula" filterBy="#{vendedor.cedula}"	sortBy="#{vendedor.cedula}" footerText="cedula" filterMatchMode="cedula"/>
-		                <p:column colspan="1" headerText="CodSap" width="5%" sortBy="#{vendedor.id}" filterBy="#{vendedor.id}" footerText="sap" filterMatchMode="sap" />
-		                <p:column colspan="1" headerText="Nombre"  width="15%" filterBy="#{vendedor.nombre}" sortBy="#{vendedor.nombre}" footerText="nombre" filterMatchMode="nombre"/>
+		                <p:column colspan="1" headerText="Cedula" id="ced" filterBy="#{vendedor.cedula}" sortBy="#{vendedor.cedula}" footerText="cedula"  filterMatchMode="contains"/>
+		                <p:column colspan="1" headerText="CodSap" width="5%" sortBy="#{vendedor.id}" filterBy="#{vendedor.id}" footerText="sap" filterMatchMode="contains" />
+		                <p:column colspan="1" headerText="Nombre"  width="15%" filterBy="#{vendedor.nombre}" sortBy="#{vendedor.nombre}" footerText="nombre" filterMatchMode="contains"/>
 		                <p:column colspan="1" headerText="Tipo" width="12%" />
-		                <p:column colspan="1" headerText="Regional" width="12%" filterBy="#{vendedor.concepto}" sortBy="#{vendedor.concepto}" footerText="contains" filterMatchMode="contains"/>
+		                <p:column colspan="1" headerText="Regional" width="12%" filterBy="#{vendedor.concepto}" sortBy="#{vendedor.concepto}" footerText="copcepto" filterMatchMode="contains"/>
 		                <p:column colspan="1" headerText="Presupuesto" />
 		                <p:column colspan="1" headerText="Venta" />
 		          		<p:column colspan="2" headerText="Cumplimiento %" width="15%"/>

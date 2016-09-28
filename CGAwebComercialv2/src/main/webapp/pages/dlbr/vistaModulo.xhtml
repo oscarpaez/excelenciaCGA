@@ -75,14 +75,14 @@
 							outcome="/pages/plan.xhtml?faces-redirect=true"
 							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}" />
 					  
-					  <p:link  href="http://cgaprd.cga.com.co:8000/sap(bD1lcyZjPTMwMA==)/bc/bsp/nub/mys/index.html?language=S#/login" 
+					  <p:link  href="http://cgadev.cga.com.co:8001/sap(bD1lcyZjPTMwMA==)/bc/bsp/nub/mys/index.html?language=S#/login" 
 							target="_bank" >
 					  		<p:button value="Excelencia App SAP"
 								style="width:190px; height:100px"
-								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 50}" />
+								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}" />
 					   </p:link>
 					   
-					   <p:button value="Excelencia Pedidos Perdidos"
+					   <p:button value="Excelencia Incidencias"
 								style="width:190px; height:100px"
 								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}" 
 								outcome="/pages/vi/incidencia.xhtml?faces-redirect=true"/>						
