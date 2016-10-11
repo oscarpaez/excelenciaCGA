@@ -200,8 +200,10 @@ public class directorGBean implements Serializable{
 				Calendar fechas = Calendar.getInstance();
 				int month = fechas.get(Calendar.MONTH)+1;
 				for (Fechas fecha: listaFechas) {
-					fechaConsulta  = (fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes(): fechaConsulta;
+					System.out.println(fecha.getValorMes() + "/////////////////" + month);
+					fechaConsulta  = (month<10)?(fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes():fechaConsulta:(fecha.getValorMes().equals(String.valueOf(""+month)))? fecha.getMes(): fechaConsulta;
 				}
+				System.out.println(fechaConsulta + "$$$$$$$$$$");
 				listarVendedoresLinea();
 			}
 
@@ -359,7 +361,8 @@ public class directorGBean implements Serializable{
 				Calendar fechas = Calendar.getInstance();
 				int month = fechas.get(Calendar.MONTH)+1;
 				for (Fechas fecha: listaFechas) {
-					fechaConsulta  = (fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes(): fechaConsulta;
+					System.out.println(fecha.getValorMes() + "/////////////////" + month);
+					fechaConsulta  = (month<10)?(fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes():fechaConsulta:(fecha.getValorMes().equals(String.valueOf(""+month)))? fecha.getMes(): fechaConsulta;
 				}
 				listarVendedores();
 			}

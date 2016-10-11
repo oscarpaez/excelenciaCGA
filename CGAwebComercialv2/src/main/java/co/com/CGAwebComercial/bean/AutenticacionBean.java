@@ -98,21 +98,27 @@ public class AutenticacionBean implements Serializable {
 				Messages.addGlobalError("El usuario o la cantraseña son incorrectas", "info");
 				return null;
 			}
-			else if(usuarioLogin.getPerfil().getId() == 1  || usuarioLogin.getPerfil().getId() == 6 ){
+			else if(usuarioLogin.getPerfil().getId() == 1 ){
+				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
+				return "ve/vistaModulo2.xhtml?faces-redirect=true";
+			}
+			else if(usuarioLogin.getPerfil().getId() == 6 ){
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
 				return "ve/vistaModulo.xhtml?faces-redirect=true";
 			}
+			
 			else if(usuarioLogin.getPerfil().getId() == 2 || usuarioLogin.getPerfil().getId() == 12){
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
 				return "dl/vistaModulo.xhtml?faces-redirect=true";
 			}
 			else if(usuarioLogin.getPerfil().getId() == 7 ){
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
-				return "dr/vistaModulo.xhtml?faces-redirect=true";
+				//return "dr/vistaModulo.xhtml?faces-redirect=true";
+				return "dr/vistaModulo2.xhtml?faces-redirect=true";
 			}
 			else if(usuarioLogin.getPerfil().getId() == 8 ){
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
-				return "dcB/vistaModulo.xhtml?faces-redirect=true";
+				return "dcB/vistaModulo2.xhtml?faces-redirect=true";
 			}
 			else if(usuarioLogin.getPerfil().getId() == 9 ){
 				//Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
@@ -120,7 +126,7 @@ public class AutenticacionBean implements Serializable {
 			}
 			else if(usuarioLogin.getPerfil().getId() == 11 ){
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
-				return "gg/vistaModulo.xhtml?faces-redirect=true";
+				return "gg/vistaModulo2.xhtml?faces-redirect=true";
 			}
 			else{
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());

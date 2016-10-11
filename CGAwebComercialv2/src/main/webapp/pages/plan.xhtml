@@ -18,7 +18,7 @@
 	
 											
 						<p:button  id="mes" value="Mes de consulta: #{planBean.fechaConsulta}" 
-							style="width:100%; opacity: .90;" disabled="true"/>
+							style="width:100%; opacity: .90;" disabled="true" />
 						
 					</h:panelGrid>
 				</h:form>
@@ -32,7 +32,15 @@
 						 
 						<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
 						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
-						outcome="/pages/ve/vistaModulo.xhtml?faces-redirect=true" />
+						outcome="/pages/ve/vistaModulo.xhtml?faces-redirect=true" 
+						rendered="#{autenticacionBean.usuarioLogin.perfil.id == 6}"
+						onclick="showLoading()" />
+						
+						<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true" 
+						rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}"
+						onclick="showLoading()" />
 			        </f:facet>
 				
 					<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="false" 
@@ -90,7 +98,8 @@
 					
 					<p:column headerText="Detalle" style="width:5%; text-align: center" >
 						<p:button icon="ui-icon-search" 
-							outcome="/pages/detalle.xhtml?faces-redirect=true">
+							outcome="/pages/detalle.xhtml?faces-redirect=true"
+							onclick="showLoading()" >
 							<f:param name="linId" value="#{plan.linea.id}"/>
 							<f:param name="linNom" value="#{plan.linea.nombre}"/>
 							<f:param name="perId" value="#{plan.funcionario.id_funcionario}"/>							
@@ -111,9 +120,11 @@
 			        <f:facet name="footer">
 			        	
 						<p:button value="Lenta y Baja Rotación" outcome="/pages/ve/bajarotacion.xhtml?faces-redirect=true" 
-							style="height:30px; background:#f0ad4e">
+							style="height:30px; background:#f0ad4e"
+							onclick="showLoading()">
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
-							<f:param name="tipo" value="#{planBean.tipo}"/>							
+							<f:param name="tipo" value="#{planBean.tipo}"/>	
+												
 						</p:button>
 						
 						<p:button value="Recaudo" outcome="/pages/recaudo.xhtml?faces-redirect=true" 

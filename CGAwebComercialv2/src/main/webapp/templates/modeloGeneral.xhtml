@@ -20,6 +20,12 @@
 	<p:idleMonitor timeout="900000" >
         <p:ajax event="idle" listener="#{autenticacionBean.salir()}" update="msgGlobal" />        
     </p:idleMonitor>
+    
+    <p:ajaxStatus  onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+ 
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+			    <p:graphicImage library="images" name="mundo.gif" />
+			</p:dialog>
 	
 	<p:layout  fullPage="true">
 		<p:layoutUnit position="north" >

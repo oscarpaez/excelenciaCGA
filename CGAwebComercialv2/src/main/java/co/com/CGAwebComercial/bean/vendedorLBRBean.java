@@ -30,13 +30,18 @@ import co.com.CGAwebComercial.dao.ContadoAnticipoDao;
 import co.com.CGAwebComercial.dao.DetalleDao;
 import co.com.CGAwebComercial.dao.FuncionarioDao;
 import co.com.CGAwebComercial.dao.GerentesDao;
+import co.com.CGAwebComercial.dao.IncidenciaDao;
+import co.com.CGAwebComercial.dao.PedidosEnProcesoDao;
+import co.com.CGAwebComercial.dao.PedidosProyectadosDao;
 import co.com.CGAwebComercial.dao.PresupuestoDao;
 import co.com.CGAwebComercial.dao.PromedioVentaDao;
 import co.com.CGAwebComercial.dao.RecaudoDao;
+import co.com.CGAwebComercial.dao.Zona_ventaDao;
 import co.com.CGAwebComercial.entyties.ContadoAnticipo;
 import co.com.CGAwebComercial.entyties.Funcionario;
 import co.com.CGAwebComercial.entyties.PromedioVenta;
 import co.com.CGAwebComercial.entyties.Recaudo;
+import co.com.CGAwebComercial.entyties.Zona_venta;
 import co.com.CGAwebComercial.resource.Recursos;
 import co.com.CGAwebComercial.util.ComisionVendedores;
 import co.com.CGAwebComercial.util.Fechas;
@@ -57,6 +62,7 @@ public class vendedorLBRBean implements Serializable{
 	private LineChartModel desempenoVentas;
 	private LineChartModel desempenoRecaudo;
 	private MeterGaugeChartModel meterGaugeModel;
+	private MeterGaugeChartModel meterGaugeModelA;
 	private BarChartModel descuentoV;
 
 	private PromedioVenta promedioVenta;
@@ -71,6 +77,10 @@ public class vendedorLBRBean implements Serializable{
 	private String mesActual;
 	private BigDecimal presupuestoMes;
 	private BigDecimal realMes;	
+	private BigDecimal pedidosPerdidos;
+	private BigDecimal pedidosProceso;
+	private BigDecimal pedidosProyectados;
+	private BigDecimal pedidosTotal;
 
 
 	public vendedorLBRBean(){
@@ -376,10 +386,39 @@ public class vendedorLBRBean implements Serializable{
 				interval.add(3,(V >100)? V:100); 
 
 				meterGaugeModel = new MeterGaugeChartModel(V, interval);
-				meterGaugeModel.setTitle("Cumplimiento " + mesActual );
+				meterGaugeModel.setTitle("Cumplimiento " + mesActual + " Pedidos Facturados");
 				meterGaugeModel.setGaugeLabel( V +"%");
 				meterGaugeModel.setSeriesColors("ff0000, ffff00, 009933 ");
 				
+				
+				/**/
+				if(autenticacion.getUsuarioLogin().getPerfil().getId() == 1 ){
+					Zona_ventaDao daoZ = new Zona_ventaDao();
+					List<Zona_venta> zona = daoZ.buscarZona(funcionario.getId_funcionario());
+					
+					IncidenciaDao daoI  = new IncidenciaDao();
+					Long valorPer  = daoI.valorPedidosPerdidos(zona.get(0).getId_zona_venta());
+					pedidosPerdidos = new BigDecimal(valorPer);
+					
+					PedidosEnProcesoDao daoP = new PedidosEnProcesoDao();
+					pedidosProceso  = daoP.valorPedidosProceso(tipo, funcionario.getId_funcionario());
+					
+					PedidosProyectadosDao daoPe = new PedidosProyectadosDao();
+					pedidosProyectados = daoPe.valorPedidosProyectados(funcionario.getId_funcionario());
+					
+					pedidosTotal =pedidosProceso.add(pedidosProyectados.add(realMes));
+					
+					porV = (pedidosTotal.longValue() == 0)? new BigDecimal("0"):pedidosTotal.divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+					V = porV.intValue();
+					
+					interval.add(3,(V >100)? V:100); 
+					
+					meterGaugeModelA = new MeterGaugeChartModel(V, interval);
+					meterGaugeModelA.setTitle("Cumplimiento " + mesActual + " Pedidos Facturados y Proyectados");
+					meterGaugeModelA.setGaugeLabel( V +"%");
+					meterGaugeModelA.setSeriesColors("ff0000, ffff00, 009933 ");
+				}
+				/**/
 				promedioVentas();
 
 			}
@@ -563,5 +602,35 @@ public class vendedorLBRBean implements Serializable{
 	}
 	public void setMesActual(String mesActual) {
 		this.mesActual = mesActual;
+	}
+	public BigDecimal getPedidosPerdidos() {
+		return pedidosPerdidos;
+	}
+	public void setPedidosPerdidos(BigDecimal pedidosPerdidos) {
+		this.pedidosPerdidos = pedidosPerdidos;
+	}
+	public BigDecimal getPedidosProceso() {
+		return pedidosProceso;
+	}
+	public void setPedidosProceso(BigDecimal pedidosProceso) {
+		this.pedidosProceso = pedidosProceso;
+	}
+	public BigDecimal getPedidosProyectados() {
+		return pedidosProyectados;
+	}
+	public void setPedidosProyectados(BigDecimal pedidosProyectados) {
+		this.pedidosProyectados = pedidosProyectados;
+	}
+	public BigDecimal getPedidosTotal() {
+		return pedidosTotal;
+	}
+	public void setPedidosTotal(BigDecimal pedidosTotal) {
+		this.pedidosTotal = pedidosTotal;
+	}
+	public MeterGaugeChartModel getMeterGaugeModelA() {
+		return meterGaugeModelA;
+	}
+	public void setMeterGaugeModelA(MeterGaugeChartModel meterGaugeModelA) {
+		this.meterGaugeModelA = meterGaugeModelA;
 	}
 }

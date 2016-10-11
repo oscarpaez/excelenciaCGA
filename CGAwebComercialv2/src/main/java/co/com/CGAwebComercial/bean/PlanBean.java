@@ -84,12 +84,14 @@ public class PlanBean implements Serializable {
 			recurso = new Recursos();
 			listaFechas = recurso.cargarFechas();
 			if(fechaConsulta == null){
-
+				
 				Calendar fechas = Calendar.getInstance();
 				int month = fechas.get(Calendar.MONTH)+1;
 				for (Fechas fecha: listaFechas) {
-					fechaConsulta  = (fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes(): fechaConsulta;
+					System.out.println(fecha.getValorMes() + "/////////////////" + month);
+					fechaConsulta  = (month<10)?(fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes():fechaConsulta:(fecha.getValorMes().equals(String.valueOf(""+month)))? fecha.getMes(): fechaConsulta;
 				}
+				System.out.println(fechaConsulta + "$$$$$$$$$$");
 				listarPlan();
 			}
 
@@ -98,6 +100,7 @@ public class PlanBean implements Serializable {
 			Messages.addGlobalError("Error no se Cargo La vista de Inicio");
 		}
 	}
+	
 	
 	
 	//*Lista los datos del Plan del vendedor interno y externo *//

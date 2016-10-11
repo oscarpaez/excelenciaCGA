@@ -73,7 +73,8 @@
 					  <p:button value="Excelencia Comercial"
 							style="width:200px; height:100px"
 							outcome="/pages/plan.xhtml?faces-redirect=true"
-							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}" />
+							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}"
+							onclick="showLoading()" />
 					  
 					  <p:link  href="http://cgaprd.cga.com.co:8000/sap(bD1lcyZjPTMwMA==)/bc/bsp/nub/mys/index.html?language=S#/login" 
 							target="_bank" >

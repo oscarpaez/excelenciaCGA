@@ -13,48 +13,57 @@
 	<f:metadata>
 		<f:event listener="#{registro_IngresosBean.inicioVistaRegistro()}" type="preRenderView" />	
 	</f:metadata>
-		
-	<p:dataTable styleClass="tblPla" id="tblIng"
-					emptyMessage="No se encontraron registros" value="#{registro_IngresosBean.listaRegistros}"
-					var="registro" draggableColumns="true" draggableRows="true">
-					
-					<f:facet name="header">
+
+		<p:panel>
+			<p:dataTable styleClass="tblPla" id="tblIng"
+				emptyMessage="No se encontraron registros"
+				value="#{registro_IngresosBean.listaRegistros}" var="registro"
+				draggableColumns="true" draggableRows="true">
+
+				<f:facet name="header">
 						Lista de Ingresos Excelencia Comercial
 					</f:facet>
-					
-	 			    <p:columnGroup type="header">
-			            <p:row>
-			            	<p:column colspan="1" headerText="Cod SAP" width="10%"/>
-			            	<p:column colspan="1" headerText="Nombre" width="10%"/>
-			            	<p:column colspan="1" headerText="Cargo" width="7%"  />
-			            	<p:column colspan="1" headerText="Cantidad Ingresos" width="4%" />
-			            	<p:column colspan="1" headerText="Acciones" width="9%" style="text-align:center"/>
-			           </p:row>
-			        </p:columnGroup> 
-			        
-			        <p:column headerText="" >
-						<h:outputText value="#{registro.funcionario.id_funcionario}" />
-					</p:column>
-					
-					<p:column headerText="" >
-						<h:outputText value="#{registro.persona.nombre}" />
-					</p:column>
-					
-					 <p:column headerText="" >
-						<h:outputText value="#{registro.funcionario.descripcion}" />
-					</p:column>
-					
-					 <p:column headerText="" >
-						<h:outputText value="#{registro.id_Registro}" />
-					</p:column>
-					<p:column headerText="Acciones">
-						
-					</p:column>
-					
-					<f:facet name="footer">
-						
-					</f:facet>
-				</p:dataTable>
+
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column colspan="1" headerText="Cod SAP" width="5%" />
+						<p:column colspan="1" headerText="Nombre" width="10%" />
+						<p:column colspan="1" headerText="Cargo" width="10%" />
+						<p:column colspan="1" headerText="Cantidad Ingresos" width="4%" />
+						<p:column colspan="1" headerText="Acciones" width="9%"
+							style="text-align:center" />
+					</p:row>
+				</p:columnGroup>
+
+				<p:column headerText="">
+					<h:outputText value="#{registro.funcionario.id_funcionario}" />
+				</p:column>
+
+				<p:column headerText="">
+					<h:outputText value="#{registro.persona.nombre}" />
+				</p:column>
+
+				<p:column headerText="">
+					<h:outputText value="#{registro.funcionario.descripcion}" />
+				</p:column>
+
+				<p:column style="text-align:center;">
+					<h:outputText value="#{registro.id_Registro}" />
+				</p:column>
+				<p:column headerText="Acciones" style="text-align:center;">
+					<p:button icon="ui-icon-search"  title="Detalle Ingresos"
+							outcome="/pages/vi/detalleIngresos.xhtml?faces-redirect=true"
+							onclick="showLoading()"	 >
+						<f:param name="perId" value="#{registro.funcionario.id_funcionario}"/>	
+					</p:button>
+												
+				</p:column>
+
+				<f:facet name="footer">
+
+				</f:facet>
+			</p:dataTable>
+		</p:panel>
 	</ui:define>	
 </ui:composition>
 </html>

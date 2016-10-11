@@ -32,6 +32,7 @@ public class Registro_IngresosBean implements Serializable {
 	private String fechaConsulta;
 	private String fechaBusqueda;
 	private String fechaBusquedaYear;
+	private int idFun;
 
 	public Registro_IngresosBean() {
 		recurso = new Recursos();
@@ -66,6 +67,19 @@ public class Registro_IngresosBean implements Serializable {
 			Registro_IngresosDao daoR = new Registro_IngresosDao();
 			listaRegistros = daoR.listaIngresos(fechaBusqueda, fechaBusquedaYear);
 			
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se Lista de Registros");
+		}
+	}
+	
+	public void listaRegistroUsuarios(){
+		
+		try{
+			fechaBusqueda = autenticacion.getFechaBusqueda();
+			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
+			Registro_IngresosDao daoR = new Registro_IngresosDao();
+			listaRegistros = daoR.listaIngresosUsuarios(fechaBusqueda, fechaBusquedaYear, idFun);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se Lista de Registros");
@@ -126,5 +140,13 @@ public class Registro_IngresosBean implements Serializable {
 
 	public void setRecurso(Recursos recurso) {
 		this.recurso = recurso;
+	}
+
+	public int getIdFun() {
+		return idFun;
+	}
+
+	public void setIdFun(int idFun) {
+		this.idFun = idFun;
 	}
 }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	
+	<ui:define name="contenido">
+	
+	<f:metadata>
+		<f:viewParam name="perId" value="#{registro_IngresosBean.idFun}"/>
+		<f:event listener="#{registro_IngresosBean.listaRegistroUsuarios()}" type="preRenderView" />	
+	</f:metadata>
+
+		<p:panel>
+			<h:form>
+				<p:dataTable styleClass="tblPla" id="tblIng"
+					emptyMessage="No se encontraron registros"
+					value="#{registro_IngresosBean.listaRegistros}" var="registro"
+					draggableColumns="true" draggableRows="true">
+
+					<f:facet name="header">
+						Lista de Ingresos Excelencia Comercial
+					</f:facet>
+
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column colspan="1" headerText="Cod SAP" width="5%" />
+							<p:column colspan="1" headerText="Nombre" width="10%" />
+							<p:column colspan="1" headerText="Cargo" width="10%" />
+							<p:column colspan="1" headerText="Fecha de Ingreso" width="10%" />
+							<p:column colspan="1" headerText="Hora de Ingreso" width="10%" />
+						</p:row>
+					</p:columnGroup>
+
+					<p:column headerText="">
+						<h:outputText value="#{registro.funcionario.id_funcionario}" />
+					</p:column>
+
+					<p:column headerText="">
+						<h:outputText value="#{registro.persona.nombre}" />
+					</p:column>
+
+					<p:column headerText="">
+						<h:outputText value="#{registro.funcionario.descripcion}" />
+					</p:column>
+
+					<p:column style="text-align:center;">
+						<h:outputText value="#{registro.fechaIngreso}" />
+					</p:column>
+
+					<p:column headerText="Acciones" style="text-align:center;">
+						<h:outputText value="#{registro.horaIngreso}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Volver" icon="ui-icon-arrowreturn-1-w"
+							style="background:#449d44;" onclick="history.back(); " />
+					</f:facet>
+				</p:dataTable>
+			</h:form>
+		</p:panel>
+	</ui:define>	
+</ui:composition>
+</html>

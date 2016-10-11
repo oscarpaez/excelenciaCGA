@@ -40,7 +40,8 @@
 				<p:button value="Excelencia Gestion"
 					style="width:200px; height:100px"
 					disabled="#{autenticacionBean.usuarioLogin.perfil.gastos}" 
-					outcome="/pages/pro/proyectos.xhtml?faces-redirect=true;"/>
+					outcome="/pages/pro/proyectos.xhtml?faces-redirect=true;"
+					onclick="showLoading()"/>
 				
 				<p:button value="Excelencia Gestion Humana" 
 					style="width:200px; height:100px" outcome="/pages/gh/comisiones.xhtml?faces-redirect=true;"
@@ -62,7 +63,14 @@
 				<p:button value="Excelencia Pedidos Perdidos"
 					style="width:200px; height:100px"
 					disabled="#{autenticacionBean.usuarioLogin.perfil.gastos}" 
-					outcome="/pages/vi/vistaIncidencia.xhtml?faces-redirect=true;"/>
+					outcome="/pages/vi/vistaIncidencia.xhtml?faces-redirect=true;"
+					onclick="showLoading()"/>
+				
+				<p:button value="Excelencia Registro Ingresos"
+					style="width:200px; height:100px"
+					disabled="#{autenticacionBean.usuarioLogin.perfil.gastos}" 
+					outcome="/pages/vi/vistaIngresos.xhtml?faces-redirect=true;"
+					onclick="showLoading()"/>	
 		</h:panelGroup>
 	</ui:define>
 

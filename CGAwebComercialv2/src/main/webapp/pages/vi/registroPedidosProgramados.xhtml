@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	
+	<ui:define name="contenido">
+		<f:metadata>
+			<f:event listener="#{incidenciaBean.registroProyectados()}" type="preRenderView" />
+		</f:metadata>
+		
+		<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+		</f:facet>					
+		
+		<h:form id="frmNueIci"> 
+			<p:panel style="" styleClass="">
+				<div class="ui-grid ui-grid-responsive">
+					<div class="ui-grid-row">
+						<div class="ui-grid-col-4" style="width: 45%">
+							<p:panel header="Vendedor" toggleOrientation="horizontal"
+								toggleable="true" >
+								<h:panelGrid columns="1">
+									<p:outputLabel value="Asesor Comercial: #{incidenciaBean.incidencia.zona.funcionario.persona.nombre}" style="" />
+									<p:outputLabel value="Cod Sap: #{incidenciaBean.incidencia.zona.funcionario.id_funcionario}" style=" " />
+									<p:outputLabel value="Oficina Ventas: #{incidenciaBean.incidencia.zona.ciudad.nombre}" style="" />
+									<p:outputLabel value="Zona de Ventas: #{incidenciaBean.incidencia.zona.id_zona_venta}" style=" " />
+								</h:panelGrid>
+							</p:panel>
+							<br />
+							<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
+							style="background:#449d44;" onclick="history.back()" />
+						</div>
+						<div class="ui-grid-col-4" style="width: 5%">
+						
+						</div>
+						<div class="ui-grid-col-4" style="width: 50%">		
+					<p:panel id="pnlNueIci" style="border: 1px solid #50bf22;" styleClass="">
+							<f:facet name="header">
+								<p:outputLabel value="Registro Pedidos Proyectados" />
+							</f:facet>
+							<h:panelGrid columns="2">
+								<div id="cli1" >
+									Cliente:
+								</div>
+								<p:selectOneMenu id="cliente" filter="true" style="width:95%"
+									value="#{incidenciaBean.cliente.id}"
+									widgetVar="test"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Estado es obligatorio" 
+									onchange="showCliente(); "
+								    >
+								   <f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItem itemValue="0" itemLabel="Otro" />	
+									<f:selectItems value="#{incidenciaBean.listaCliente}" var="cliente"
+										itemValue="#{cliente.id}" itemLabel="#{cliente.descripcion}" />
+								</p:selectOneMenu>
+								
+								<div id="cli"  style="display:none" >
+									Cliente:
+								</div>
+								
+								<p:inputText   id="cliOtro"  widgetVar="cliOtro" value="#{incidenciaBean.clienteO}"  
+											   style="display:none" />
+								
+								<p:outputLabel  value="Ciudad: " />
+								<p:selectOneMenu id="ciudad" filter="true" style="width:95%"
+									value="#{incidenciaBean.ciudad.id}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Estado es obligatorio" 
+									>
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItems value="#{incidenciaBean.listaCiudad}" var="ciudad"
+										itemValue="#{ciudad.id}" itemLabel="#{ciudad.nombre}" />
+								</p:selectOneMenu>
+								
+								<div id="mateL" >
+									Material:
+								</div>
+								<p:selectOneMenu id="material" filter="true"  style="width: 95%"
+									value="#{incidenciaBean.material.id}"
+									converter="omnifaces.SelectItemsConverter" 
+									required="true"
+									widgetVar="mate"
+									requiredMessage="Campo Estado es obligatorio"
+									onchange="showMaterial()">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItem itemValue="0" itemLabel="Otro" />	
+									<f:selectItems value="#{incidenciaBean.listaMaterial}" var="material"
+										itemValue="#{material.id}" itemLabel="#{material.descripcion}" />
+									<p:ajax listener="#{incidenciaBean.popular}" update=":frmNueIci:linea"/>		
+								</p:selectOneMenu> 		
+								
+								<div id="mate1" style="display:none" >
+									Material:
+								</div>
+								<p:inputText   id="Material"  widgetVar="mateOtro" value="#{incidenciaBean.materialO}"  
+											   style="display:none" />
+								
+								<p:outputLabel  value="Linea: " />
+								<p:selectOneMenu  id="linea" filter="true" style="width:95%"
+									value="#{incidenciaBean.pedidosProyectados.linea}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Estado es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItems value="#{incidenciaBean.listaLinea}" var="linea"
+										itemValue="#{linea}" itemLabel="#{linea.nombre}" />
+								</p:selectOneMenu>
+								
+								<p:outputLabel value="Dim1: " style=" " />
+								<p:inputText  value="#{incidenciaBean.pedidosProyectados.dim1}" />		
+								
+								<p:outputLabel value="Dim2: " style=" " />
+								<p:inputText  value="#{incidenciaBean.pedidosProyectados.dim2}" />		
+								
+								<p:outputLabel value="Dim3: " style=" " />
+								<p:inputText  value="#{incidenciaBean.pedidosProyectados.dim3}" />		
+												
+								<p:outputLabel value="Cantidad: " style=" " />
+								<p:inputText  value="#{incidenciaBean.pedidosProyectados.cantidad}" />
+								
+								<p:outputLabel value="Tipo " style=" " />
+								<p:selectOneMenu id="um" filter="true" style="width:95%"
+									value="#{incidenciaBean.pedidosProyectados.un}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Estado es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItem itemValue="UM" itemLabel="UM" />
+									<f:selectItem itemValue="KG" itemLabel="KG" />									
+								</p:selectOneMenu>
+								
+								<p:outputLabel value="Moneda " style=" " />
+								<p:selectOneMenu id="cop" filter="true" style="width:95%"
+									value="#{incidenciaBean.pedidosProyectados.moneda}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Estado es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItem itemValue="COP" itemLabel="COP" />
+									<f:selectItem itemValue="US" itemLabel="US" />									
+								</p:selectOneMenu>		
+								
+								<p:outputLabel value="Rentabilidad: " style=" " />
+								<p:inputNumber id="renta" value="#{incidenciaBean.pedidosProyectados.rentabilidad}" placeholder="0.00 %" symbol=" %" symbolPosition="s" 
+			                               decimalSeparator="." thousandSeparator="," 
+			                               style="width: 100%;"/> 
+								
+								<p:outputLabel value="Valor Venta:"  />
+								<p:inputNumber id="valor" value="#{incidenciaBean.pedidosProyectados.valorPedido}" placeholder="0.00 $" symbol=" $" symbolPosition="s" 
+			                               decimalSeparator="." thousandSeparator=","  required="true"
+			                               style="width: 100%;"/> 
+			                               
+			                    <p:outputLabel  value="Estado: " />
+								<p:selectOneMenu id="estado" filter="true" style="width:95%"
+									value="#{incidenciaBean.estadoPP.id}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Estado es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItems value="#{incidenciaBean.listaEstadoPP}" var="estado"
+										itemValue="#{estado.id}" itemLabel="#{estado.nombre}" />
+								</p:selectOneMenu>            
+			               		
+			               		<p:outputLabel value="Fecha Entrega:"  />
+								<p:calendar value="#{incidenciaBean.pedidosProyectados.fechaEntrega}" 
+									rendered="true"/>
+								
+								<p:outputLabel value="Observacion: " style=" " />
+								<p:inputTextarea  value="#{incidenciaBean.pedidosProyectados.observacion}" cols="40"  rows="4" autoResize="false" />		
+								
+								<p:commandButton value="Salvar" icon="ui-icon-disk"
+									actionListener="#{incidenciaBean.salvarProyectados()}"
+									update=":frmNueIci:pnlNueIci"/>
+							</h:panelGrid>	
+						</p:panel>
+						</div>
+					</div>
+				</div>	
+			</p:panel>
+		</h:form>
+		<script type="text/javascript">
+
+			function showRequest(args) {
+				//alert($('#cliente').val());
+				var testValue = PF('test').getSelectedValue();
+				alert( testValue);
+				if(PF('test').getSelectedValue() == 0){
+					$('#cliOtro').show();
+					$('#cliente').hide();
+					alert( testValue);        	
+				}
+				
+				
+			}
+		
+		</script>
+	</ui:define>
+</ui:composition>
+</html>

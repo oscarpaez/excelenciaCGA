@@ -103,7 +103,8 @@
 
 					<p:column style="text-align:right">
 						<p:button icon="ui-icon-search"
-								outcome="/pages/gg/oficina.xhtml?faces-redirect=true">
+								outcome="/pages/gg/oficina.xhtml?faces-redirect=true"
+								onclick="showLoading()">
 							<f:param name="frts" value="#{gerenteBean.fechaConsulta}"/>
 						</p:button>
 					</p:column>

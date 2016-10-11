@@ -33,3 +33,34 @@ function start(){
 	$('.animated').show();
 	$('#pbAjaxText').show();
 }
+
+function showLoading() {
+	 PF('statusDialog').show();
+}
+
+function showCliente(){
+	
+	
+	//alert(PF('test').getSelectedValue());
+		
+	if(PF('test').getSelectedValue() == 0){
+		//alert("listo");  
+		PF('test').jq.hide();
+		PF('cliOtro').jq.show();
+		$('#cli').show();
+		$('#cli1').hide();
+	}	
+	
+}
+
+function showMaterial(){
+	
+	if(PF('mate').getSelectedValue() == 0){
+		//alert("listo");  
+		PF('mate').jq.hide();
+		PF('mateOtro').jq.show();
+		$('#mate1').show();
+		$('#mateL').hide();
+	}
+	
+}

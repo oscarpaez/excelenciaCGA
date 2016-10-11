@@ -21,6 +21,7 @@
 			<h:form>
 			<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="true" 
 						value="#{incidenciaBean.listaIncidencia}" var="incidencia" rows="15"
+						filteredValue="#{incidenciaBean.listaFiltrarIncidencia}"
 						paginatorPosition="bottom"	>
 					
 					<f:facet name="header">
@@ -29,11 +30,11 @@
 			        <p:columnGroup type="header">
 		            <p:row>
 		            	<p:column rowspan="2" headerText="Cod Sap"  style="width:5%" />
-		            	<p:column rowspan="2" headerText="Nombre Vendedor" />
-		            	<p:column rowspan="2" headerText="Oficina" />
+		            	<p:column rowspan="2" headerText="Nombre Vendedor"  filterBy="#{incidencia.zona.funcionario.persona.nombre}" filterMatchMode="contains"/>
+		            	<p:column rowspan="2" headerText="Oficina" filterBy="#{incidencia.zona.ciudad.nombre}" filterMatchMode="contains"/>
 		            	<p:column rowspan="2" headerText="Zona Venta" style="width:7%" />
 		            	<p:column rowspan="2" headerText="Linea" />
-		            	<p:column rowspan="2" headerText="Cliente" />
+		            	<p:column rowspan="2" headerText="Cliente" filterBy="#{incidencia.cliente}" filterMatchMode="contains" />
 		            	<p:column rowspan="2" headerText="Necesidad Cliente" />
 		            	<p:column rowspan="2" headerText="Causa" />
 		            	<p:column colspan="1" headerText="Valor" />
@@ -96,6 +97,11 @@
 			            	<p:column colspan="" footerText="" />	
 			            </p:row>
 			        </p:columnGroup>
+			        
+			        <f:facet name="footer">
+						<p:commandButton value="Volver"  icon="ui-icon-arrowreturn-1-w"
+							style="height:35px; background:#449d44;"  onclick="history.back();" />						
+					</f:facet>
 					
 					
 			        </p:dataTable>

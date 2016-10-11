@@ -112,6 +112,23 @@ ui-grid-col-4{
 	width: 410px;
 }
 
+/* quitar grid del panel grid */
+
+.pnlGra.ui-panelgrid>*>tr,
+.pnlGra.ui-panelgrid .ui-panelgrid-cell {
+    border: none;
+}
+/*
+.ui-selectonemenu-filter-container {
+    width: 20% !important;
+}*/
+
+.ui-selectonemenu {
+min-width: 0 !important;
+}	
+
+
+
 
 
       

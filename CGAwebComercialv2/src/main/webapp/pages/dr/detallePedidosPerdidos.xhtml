@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+		<ui:define name="contenido">
+			<f:metadata>
+				<f:event listener="#{incidenciaBean.listarIncidenciasPorSucursal()}" type="preRenderView" />
+			</f:metadata>	
+			
+			<h:form>			
+				<p:commandButton value="Volver"  icon="ui-icon-arrowreturn-1-w"
+								style="height:35px; background:#449d44;"  onclick="history.back();" />
+				<br />
+			</h:form>
+			
+			<h:form id="frmInc" >
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" value="#{incidenciaBean.listaIncidencia}" var="perdidos"
+					draggableColumns="true" 
+					draggableRows="true">
+					
+					<f:facet name="header">
+						Lista de Pedidos Perdidos
+					</f:facet>
+					
+	 			    <p:columnGroup type="header">
+			            <p:row>
+			            	<p:column colspan="1" headerText="Item" width="4%" />
+			            	<p:column colspan="1" headerText="Nombre Cliente" />
+			            	<p:column colspan="1" headerText="Necesidad" />
+			            	<p:column colspan="1" headerText="Causa Perdida" width="15%"  />
+			            	<p:column colspan="1" headerText="Regularidad " width="10%"/>
+			            	<p:column colspan="1" headerText="Linea" width="12%"/>
+			            	<p:column colspan="1" headerText="Fecha Registro " width="8%" />
+			            	<p:column colspan="1" headerText="Valor" width="10%" />			            	
+			           </p:row>
+			        </p:columnGroup> 
+			        
+			        <p:column headerText="Item" >
+						<h:outputText value="#{perdidos.id}" />
+					</p:column>
+					
+				    <p:column headerText="nombre" >
+						<h:outputText value="#{perdidos.cliente}" />
+					</p:column>
+					
+					<p:column headerText="Descripcion" >
+						<h:outputText value="#{perdidos.necesidad}" />
+					</p:column>
+					
+					<p:column headerText="Area" >
+						<h:outputText value="#{perdidos.causaPerdida.descripcion}" />
+					</p:column>
+					
+					<p:column headerText="Representante " >
+						<h:outputText value="#{perdidos.regularidad.descripcionR}" />
+					</p:column>
+					
+					<p:column headerText="Fecha ini" >
+						<h:outputText value="#{perdidos.linea.nombre}" />
+					</p:column>
+					
+					<p:column headerText="valor" >
+						<h:outputText value="#{perdidos.fechaRegistro}" />
+					</p:column>
+					
+					<p:column headerText="ROI"  style="text-align:right" >
+						<h:outputText value="#{perdidos.valorVenta}" >
+							 <f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column colspan="7" footerText="Totales" style="text-align: right" />
+			            	<p:column footerText="$ #{incidenciaBean.valorTotal}"  style="text-align: right"/>		 
+			            </p:row>
+			        </p:columnGroup>
+					
+					<f:facet name="footer">
+						<p:button value="Volver"  icon="ui-icon-arrowreturn-1-w"
+							style="height:35px; background:#449d44;"  onclick="history.back();" >
+						</p:button>
+					</f:facet>
+				</p:dataTable>
+			</h:form>	
+		
+		</ui:define>
+	</ui:composition>
+</html>

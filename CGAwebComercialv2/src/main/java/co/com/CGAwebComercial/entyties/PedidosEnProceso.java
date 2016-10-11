@@ -63,10 +63,10 @@ public class PedidosEnProceso implements Serializable{
 	@Column(length =120)
 	private String linea;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date fechaCreacion;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date fechaEntrega;
 
 	public int getId() {

@@ -53,14 +53,14 @@
 					<h:panelGrid columns="1">
 						<p:commandButton value="Entrar"
 							update=" :frmlog:gridlog :msgGlobal "
-							action="#{autenticacionBean.entrar()}">
+							action="#{autenticacionBean.entrar()}"
+							global="false" >
 						</p:commandButton>
 					</h:panelGrid>
 				</p:panel>
 
 			</h:panelGrid>
-		</h:form>
+		</h:form>		
 	</ui:define>
-
 </ui:composition>
 </html>

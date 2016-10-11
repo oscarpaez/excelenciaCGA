@@ -1256,6 +1256,7 @@ public class DetalleDao extends GenericDao<Detalle> {
 		Session session = HibernateUtil.getSessionfactory().openSession();
 
 		try{
+			System.out.println(tipo + " es "+ idPersona );
 			Criteria consulta = session.createCriteria(Detalle.class);
 			consulta.add(Restrictions.eq(tipo, idPersona));
 			List<Detalle> totalWages =  consulta.list();

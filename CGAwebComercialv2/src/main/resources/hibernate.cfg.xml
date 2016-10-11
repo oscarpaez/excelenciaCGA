@@ -14,6 +14,15 @@
         <property name="connection.username">root</property>
         <property name="connection.password"></property> -->
         
+         <!-- Database connection settings  
+        <property name="connection.driver_class">com.sap.dbtech.jdbc.DriverSapDB</property>
+        <property name="connection.url">jdbc:sapdb://URL/BASEDATOS</property>
+        <property name="connection.username">USER</property>
+        <property name="connection.password">PASS</property> 
+        
+        <property name="dialect">org.hibernate.dialect.SAPDBDialect</property>-->
+        
+        
          <!-- Base servidor Aplicacion en produccion -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://192.168.0.15:3306/excelenciacga</property>
@@ -95,6 +104,9 @@
         <mapping class = "co.com.CGAwebComercial.entyties.RegularidadPerdidaVenta" />
         <mapping class = "co.com.CGAwebComercial.entyties.Incidencia" />
         <mapping class = "co.com.CGAwebComercial.entyties.PedidosEnProceso" />
+        <mapping class = "co.com.CGAwebComercial.entyties.Material" />
+        <mapping class = "co.com.CGAwebComercial.entyties.EstadoPedidosProyectados" />
+        <mapping class = "co.com.CGAwebComercial.entyties.PedidosProyectados" />
                 
         
 	</session-factory>

@@ -38,7 +38,8 @@
 						 <p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 						 <p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
 							style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
-							outcome="/pages/dcB/plandcB.xhtml?faces-redirect=true" />
+							outcome="/pages/dcB/plandcB.xhtml?faces-redirect=true" 
+							onclick="showLoading()"/>
 			        </f:facet>
 				
 					<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" paginator="false" 

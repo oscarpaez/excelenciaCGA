@@ -67,7 +67,8 @@
 					
 					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
 						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
-						outcome="/pages/dr/vistaModulo.xhtml?faces-redirect=true" />
+						outcome="/pages/dr/vistaModulo2.xhtml?faces-redirect=true" 
+						onclick="showLoading()"/>
 				</f:facet>
 
 				<p:dataTable styleClass="tblPla" id="tblPlan"
@@ -123,7 +124,8 @@
 					
 					<p:column headerText="Detalle" style="text-align:center; width:6%">
 						<p:button icon="ui-icon-search"
-							outcome="/pages/dr/detalle.xhtml?faces-redirect=true">
+							outcome="/pages/dr/detalle.xhtml?faces-redirect=true"
+							onclick="showLoading()">
 						    <f:param name="frst" value="#{directorGBean.fechaConsulta}"/>
 							<f:param name="nomIn" value="#{vendedor.nombre}"/>
 							<f:param name="perId" value="#{vendedor.id}"/>	
@@ -144,21 +146,24 @@
 
 					<f:facet name="footer">
 						<p:button value="Oficina por linea" outcome="/pages/dr/mixLinea.xhtml?faces-redirect=true" 
-							style="height:30px; background:#f0ad4e">
+							style="height:30px; background:#f0ad4e"
+							onclick="showLoading()">
 							<f:param name="frst" value="#{directorGBean.fechaConsulta}"/>
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
 							<f:param name="tipo" value="#{planBean.tipo}"/>							
 						</p:button>
 						
 						<p:button value="Zonas Cargo" outcome="/pages/dr/zonasCargo.xhtml?faces-redirect=true" 
-							style="height:30px; background:#ff99ff">
+							style="height:30px; background:#ff99ff"
+							onclick="showLoading()">
 						 	<f:param name="frst" value="#{directorGBean.fechaConsulta}"/>	
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
 							<f:param name="tipo" value="#{planBean.tipo}"/>							
 						</p:button>
 						
 						<p:button value="Recaudo Cartera" outcome="/pages/dr/recaudoCartera.xhtml?faces-redirect=true" 
-							style="height:30px; background:#00e673">
+							style="height:30px; background:#00e673"
+							onclick="showLoading()">
 							<f:param name="perIdR" value="#{autenticacionBean.usuarioLogin.persona.cedula}"/>
 							<f:param name="tipo" value="#{planBean.tipo}"/>							
 						</p:button>
@@ -246,7 +251,7 @@
 				<p:commandButton value="Buscar" update=":frmPlan:tblPlan"
 					actionListener="#{directorGBean.listarVendedores()}"
 					style="background: #b94a48" 
-					onclick="start(); PF('pbAjax').start(); PF('pbAjax').show();" />
+					onclick="start(); PF('pbAjax').start(); PF('statusDialog').show(); PF('pbAjax').show();" />
 			</h:panelGrid>
 		</h:form>
 		</ui:define>

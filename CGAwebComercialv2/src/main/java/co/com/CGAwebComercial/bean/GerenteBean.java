@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-
 import org.omnifaces.util.Messages;
 
 import co.com.CGAwebComercial.dao.CiudadDao;
@@ -837,12 +836,12 @@ public class GerenteBean implements Serializable{
 	public void inicioVista(){
 		
 		try{
+			  
 			if(fechaConsulta == null){
-
 				Calendar fechas = Calendar.getInstance();
 				int month = fechas.get(Calendar.MONTH)+1;
 				for (Fechas fecha: listaFechas) {
-					fechaConsulta  = (fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes(): fechaConsulta;
+					fechaConsulta  = (month<10)?(fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes():fechaConsulta:(fecha.getValorMes().equals(String.valueOf(""+month)))? fecha.getMes(): fechaConsulta;
 				}
 				listarPais1();
 			}
