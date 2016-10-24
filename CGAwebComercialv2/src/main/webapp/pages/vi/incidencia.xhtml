@@ -34,7 +34,22 @@
 							</p:panel>
 							<br />
 							<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
-							style="background:#449d44;" onclick="history.back()" />
+								style="background:#449d44;" 
+								outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true" 
+								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}"
+								onclick="showLoading()"/>
+							
+							<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
+								style="background:#449d44;" 
+								outcome="/pages/dr/vistaModulo2.xhtml?faces-redirect=true" 
+								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 7 }"
+								onclick="showLoading()"/>	
+							
+							<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
+								style="background:#449d44;" 
+								outcome="/pages/dcB/vistaModulo2.xhtml?faces-redirect=true" 
+								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 8 }"
+								onclick="showLoading()"/>	
 						</div>
 						<div class="ui-grid-col-4" style="width: 5%">
 						

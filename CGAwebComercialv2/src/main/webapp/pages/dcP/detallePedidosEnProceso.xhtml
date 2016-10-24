@@ -10,13 +10,27 @@
 		
 		<ui:define name="contenido">
 			<f:metadata>
-				<f:event listener="#{incidenciaBean.listarPedidosProceso()}" type="preRenderView" />
-			</f:metadata>	
+				<f:viewParam name="perId" value="#{incidenciaBean.idCiudad}"/>
+				<f:viewParam name="ciuNo" value="#{incidenciaBean.nombreC}"/>				
+				<f:event listener="#{incidenciaBean.listarPedidosProcesoOficina()}" type="preRenderView" />
+			</f:metadata>
 			
-			<h:form>
-				<p:commandButton value="Volver"  icon="ui-icon-arrowreturn-1-w"
-							style="height:35px; background:#449d44;"  onclick="history.back();" />	
-			</h:form>
+			<p:panel  
+				styleClass="oficina">
+			
+				<f:facet name="header">			
+					<p:outputLabel value="Gestion Pedidos en Proceso de la Sucursal #{incidenciaBean.nombreC}" />
+					
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+								outcome="/pages/dcP/vistaModulo2.xhtml?faces-redirect=true"
+								onclick="showLoading()" />
+							
+					<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+								  iconPos="right" styleClass="excel "
+								  style="text-align: left; float:right; height:24px; font-size: 12px "
+								  onclick="showLoading(); history.back()"/>
+				</f:facet>	
 			
 			<h:form id="frmInc" >
 				<p:dataTable styleClass="tblPla" id="tblPlan"
@@ -24,15 +38,16 @@
 					filteredValue="#{incidenciaBean.listaFiltroPP}">
 					
 					<f:facet name="header">
-						Lista de Pedidos Proceso
+						Lista de Pedidos en Proceso
 					</f:facet>
 					
 	 			    <p:columnGroup type="header">
 			            <p:row>
 			            	<p:column colspan="1" headerText="Item" width="4%" />
+			            	<p:column colspan="1" headerText="Especialista" filterMatchMode="contains" filterBy="#{pep.especialista}"/>
 			            	<p:column colspan="1" headerText="Nombre Cliente" filterBy="#{pep.cliente}"  filterMatchMode="contains" />
 			            	<p:column colspan="1" headerText="Documento Ventas" width="10%" />
-			            	<p:column colspan="1" headerText="Oficina" width="5%"  filterBy="#{pep.oficina}" filterMatchMode="contains" filterStyle="width:90%"/>
+			            	<p:column colspan="1" headerText="Oficina" width="5%" filterBy="#{pep.oficina}" filterMatchMode="contains" filterStyle="width:90%"/>
 			            	<p:column colspan="1" headerText="Linea" width="12%"/>
 			            	<p:column colspan="1" headerText="Material" width="18%"/>
 			            	<p:column colspan="1" headerText="Estatus" width="7%" filterBy="#{pep.status}" filterMatchMode="contains" filterStyle="width:90%"/>
@@ -43,6 +58,10 @@
 			        
 			        <p:column headerText="Item" >
 						<h:outputText value="#{pep.id}" />
+					</p:column>
+					
+					 <p:column headerText="nombre" >
+						<h:outputText value="#{pep.especialista}" />
 					</p:column>
 					
 				    <p:column headerText="nombre" >
@@ -81,19 +100,16 @@
 					
 					<p:columnGroup type="footer">
 			            <p:row>
-			            	<p:column colspan="8" footerText="Totales" style="text-align: right" />
+			            	<p:column colspan="9" footerText="Totales" style="text-align: right" />
 			            	<p:column footerText="$ #{incidenciaBean.valorTotal}"  style="text-align: right"/>		 
 			            </p:row>
 			        </p:columnGroup>
 					
 					<f:facet name="footer">
-						<p:button value="Volver"  icon="ui-icon-arrowreturn-1-w"
-							style="height:35px; background:#449d44;"  onclick="history.back();" >
-						</p:button>
 					</f:facet>
 				</p:dataTable>
 			</h:form>	
-		
+		  </p:panel>	
 		</ui:define>
 	</ui:composition>
 </html>

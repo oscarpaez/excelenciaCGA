@@ -78,6 +78,10 @@
 	background: #4FC021;
 }
 
+.oficina .ui-widget-header {
+	background: #5cb85c;
+}
+
 /*////ocultar calendario/////*/
 .promedio{
 	position:absolute;

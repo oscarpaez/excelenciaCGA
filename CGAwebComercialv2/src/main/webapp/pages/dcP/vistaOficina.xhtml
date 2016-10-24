@@ -10,27 +10,41 @@
 	
 	<ui:define name="contenido">
 		<f:metadata>
+			<f:viewParam name="perId" value="#{graficasBean.idCiudad}"/>
 			<f:event listener="#{graficasBean.desempenoVentas()}" type="preRenderView" />	
 		</f:metadata>	
 		
 		<p:messages id="msgData" showDetail="true" autoUpdate="true" closable="true" />
 		<f:facet name="header">			
 			<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+			
+			<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/dcP/vistaModulo2.xhtml?faces-redirect=true"
+						onclick="showLoading()" />
+					
+			<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+						  iconPos="right" styleClass="excel "
+						  style="text-align: left; float:right; height:24px; font-size: 12px "
+						  onclick="showLoading(); history.back()"/>
 		</f:facet>
 		
 		<br />
 		<div class="ui-grid ui-grid-responsive">
+			<p:panel header="Gestion de Ventas de la Sucursal #{graficasBean.nombreSucursal}" 
+				styleClass="oficina">			  				
+			
 			<div class="ui-grid-row">
 				<div class="ui-grid-col-4" style="width: 410px">
-				   <p:panel style="width:400px;" styleClass="promedio">				  		
-				  		<h:form >
+				   <p:panel style="width:400px;" styleClass="promedio">	
+				   		<h:form >
 							<h:panelGrid columns="2">
-								<p:outputLabel  value="Venta Mes Real " 
+								<p:outputLabel  value="Venta Mes Facturado " 
 									    	style="font-size: 14px; " />
 								<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
 											value="#{graficasBean.realMes}"  disabled="true" >
 											<f:convertNumber pattern="#,##0;"/>
-								</p:inputText>
+								</p:inputText>								
 								
 								<p:outputLabel  value="Presupuesto Mes " 
 									    	style="font-size: 14px; " />
@@ -38,58 +52,45 @@
 											value="#{graficasBean.presupuestoMes}"  disabled="true" >
 											<f:convertNumber pattern="#,##0;(#,##0)"/>
 								</p:inputText>								
+								
+								<!-- 
+								<p:outputLabel  value="Venta Mes LBR " 
+									    	style="font-size: 14px; " />
+								<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
+											value="#{graficasBean.lbr}"  disabled="true" >
+											<f:convertNumber pattern="#,##0;"/>
+								</p:inputText> -->
 							</h:panelGrid>
 						</h:form>
 				  		
 				  		<p:chart type="metergauge" 	model="#{graficasBean.meterGaugeModel}"
 								style="width:350px;height:250px" />						
 						
-				  		
-				  		<h:form id="frmProVen" styleClass="frmProVen" enctype="multipart/form-data">
-							<p:outputLabel  id="tituloVenta" styleClass="tituloVenta" value="Promedio de venta  #{graficasBean.mesActual}" 
-							    	style="color: #0000ff; font-style: italic;"/> <br />
-							<h:panelGrid columns="2" id="pnlProVen">
-							    
-							    <p:outputLabel  value="Valor Promedio X pedido " 
-							    	style="font-size: 14px; " />
-								<p:inputText id="descripcion" size="15"  style="color:#0000ff; opacity: .90; text-align: right"
-									value="#{graficasBean.promedioMes}"  disabled="true" >
-									<f:convertNumber pattern="#,##0;(#,##0)"/>
-								</p:inputText>
-								
-								<p:outputLabel value="Meta Venta Mes X pedido" style="font-size: 14px; " />
-								<p:inputText id="cantidad" size="15" value="#{graficasBean.promedioVenta.meta}" 
-									style="color:#0000ff; opacity: .90; text-align: right" disabled="true"> 
-									 <f:convertNumber pattern="#,##0;(#,##0)"/>
-								</p:inputText>
-							</h:panelGrid>
-						</h:form>
-									
-					</p:panel>
+				  	</p:panel>
 				</div>
 				
 				<div class="ui-grid-col-8" style="padding-left: 10px; width:70%">
 					<div style="display:block; text-align:center; margin: 0 auto; width: 850px; ">	
-					  <p:button value="Excelencia Comercial"
+				<!--	  <p:button value="Excelencia Comercial"
 							style="width:200px; height:100px"
 							outcome="/pages/dr/pland.xhtml?faces-redirect=true"
 							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}"
 							onclick="showLoading()" />
-					  
+						  
 					  <p:button value="Excelencia Proyectos"
 								style="width:200px; height:100px"
 								outcome="/pages/pro/proyectos.xhtml?faces-redirect=true"
 								disabled="#{autenticacionBean.usuarioLogin.perfil.gastos}"
 								onclick="showLoading()" />
-					  	
+				 	  	
 					   	<p:button value="Excelencia Ofertas y Pedidos"
 							style="width:200px; height:100px"
 							outcome="/pages/dr/ofertaPedido.xhtml?faces-redirect=true"
 							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}"
 							onclick="showLoading()" />							
-					   					
+					  -->  					
 					</div>
-				<br />
+				
 					<div class="ui-grid-col-5" style="padding-left: 10px; width:50%;">	
 					<h:form id="frmDesRec" enctype="multipart/form-data">
 						<p:panel style="height:340px; width:430px">
@@ -103,10 +104,10 @@
 												<f:convertNumber pattern="#,##0;"/>
 									</p:inputText>
 									<p:button icon="ui-icon-search" title="Detalle Pedidos Perdidos"
-										outcome="/pages/dr/detallePedidosPerdidos.xhtml?faces-redirect=true"
+										outcome="/pages/dcP/detallePedidosPerdidos.xhtml?faces-redirect=true"
 										onclick="showLoading()">
-										<f:param name="perId" value=""/>
-										<f:param name="tipo" value=""/>
+										<f:param name="perId" value="#{graficasBean.idCiudad}"/>
+										<f:param name="ciuNo" value="#{graficasBean.nombreSucursal}"/>
 									</p:button>
 									
 									<p:outputLabel  value="Pedidos en Proceso " 
@@ -116,10 +117,10 @@
 												<f:convertNumber pattern="#,##0;"/>
 									</p:inputText>
 									<p:button icon="ui-icon-search" title="Detalle Pedidos en Proceso"
-										outcome="/pages/dr/detallePedidosEnProceso.xhtml?faces-redirect=true"
+										outcome="/pages/dcP/detallePedidosEnProceso.xhtml?faces-redirect=true"
 										onclick="showLoading()">
-										<f:param name="perId" value=""/>
-										<f:param name="tipo" value=""/>
+										<f:param name="perId" value="#{graficasBean.idCiudad}"/>
+										<f:param name="ciuNo" value="#{graficasBean.nombreSucursal}"/>
 									</p:button>
 									
 									<p:outputLabel  value="Pedidos Proyectados " 
@@ -129,21 +130,25 @@
 												<f:convertNumber pattern="#,##0;(#,##0)"/>
 									</p:inputText>
 									<p:button icon="ui-icon-search"  title="Detalle Pedidos en Proceso"
-										outcome="/pages/dr/detallePedidosProyectados.xhtml?faces-redirect=true"
+										outcome="/pages/dcP/detallePedidosProyectados.xhtml?faces-redirect=true"
 										onclick="showLoading()">
-										<f:param name="perId" value=""/>
-										<f:param name="tipo" value=""/>
-									</p:button>
-									<!-- 
-									<p:outputLabel  value="Venta Mes LBR " 
-									    	style="font-size: 14px; " />
-									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
-												value="#{graficasBean.lbr}"  disabled="true" >
-												<f:convertNumber pattern="#,##0;"/>
-									</p:inputText>
-									<p:outputLabel  value=" " />  -->
+										<f:param name="perId" value="#{graficasBean.idCiudad}"/>
+										<f:param name="ciuNo" value="#{graficasBean.nombreSucursal}"/>
+									</p:button>									
 									
-								</h:panelGrid><br />
+								<br />	
+								</h:panelGrid>
+								<div style="text-align:center;">
+									<p:button value="Excelencia Comercial"
+										style="width:200px; height:100px"
+										outcome="/pages/dcP/vistaEspecialista.xhtml?faces-redirect=true"
+										disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}"
+										onclick="showLoading()" >
+										<f:param name="perId" value="#{graficasBean.idCiudad}"/>
+										<f:param name="ciuId" value="#{graficasBean.nombreSucursal}"/>
+									</p:button>
+								</div>		
+								<!--  
 								<div style="text-align:center;">
 									<p:button icon="ui-icon-document"  value="Registrar Pedidos Proyectados"
 										outcome="/pages/vi/registroPedidosProgramados.xhtml?faces-redirect=true"
@@ -162,6 +167,7 @@
 										<f:param name="tipo" value=""/>
 									</p:button>
 								</div>
+								-->
 							</h:form>
 						</p:panel>
 					</h:form>
@@ -250,8 +256,8 @@
 					</h:form>
 				</div>
 			</div>
-			
-		 </div>
+		</p:panel>		
+		</div>
 	</ui:define>
 
 </ui:composition>

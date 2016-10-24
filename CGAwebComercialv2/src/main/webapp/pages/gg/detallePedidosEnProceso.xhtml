@@ -11,34 +11,54 @@
 		<ui:define name="contenido">
 			<f:metadata>
 				<f:event listener="#{incidenciaBean.listarPedidosProcesoPais()}" type="preRenderView" />
-			</f:metadata>	
+			</f:metadata>
 			
-			<h:form>
-				<p:commandButton value="Volver"  icon="ui-icon-arrowreturn-1-w"
-							style="height:35px; background:#449d44;"  onclick="history.back();" />	
-			</h:form>
-			
+			<f:facet name="header">			
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+								outcome="/pages/gg/vistaModulo2.xhtml?faces-redirect=true"
+								onclick="showLoading()" />
+										
+							
+					<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+								  iconPos="right" styleClass="excel "
+								  style="text-align: left; float:right; height:24px; font-size: 12px "
+								  onclick="showLoading(); history.back()"/>
+			</f:facet>	
+			<br />
 			<h:form id="frmInc" >
+				
+				<p:panel>
+					<f:facet name="header" >
+						<p:outputLabel value="Lista de Pedidos en Proceso " />
+						
+						<h:commandLink >
+							<p:graphicImage library="images" name="excel.png" width="20" styleClass="excel"/>
+							<p:dataExporter type="xls" target="tblPlan" fileName="Pedidos en Proceso" />
+						</h:commandLink>
+						
+					</f:facet>				
+				
 				<p:dataTable styleClass="tblPla" id="tblPlan"
 					emptyMessage="No se encontraron registros"
 					value="#{incidenciaBean.listaPedidosEnProceso}" var="pep"
 					filteredValue="#{incidenciaBean.listaFiltroPP}"	>
 					
-					<f:facet name="header">
-						Lista de Pedidos en Proceso
-					</f:facet>
-					
-	 			    <p:columnGroup type="header">
+					<p:columnGroup type="header">
 			            <p:row>
 			            	<p:column colspan="1" headerText="Item" width="4%" />
 			            	<p:column colspan="1" headerText="Nombre Cliente" filterBy="#{pep.cliente}"  filterMatchMode="contains" />
-			            	<p:column colspan="1" headerText="Documento Ventas" width="10%" />
-			            	<p:column colspan="1" headerText="Oficina" width="5%"  filterBy="#{pep.oficina}" filterMatchMode="contains"/>
+			            	<p:column colspan="1" headerText="Documento Ventas" width="7%" />
+			            	<p:column colspan="1" headerText="Oficina" width="5%"  filterBy="#{pep.oficina}" filterMatchMode="contains" filterStyle="width:90%"/>
 			            	<p:column colspan="1" headerText="Linea" width="12%"/>
 			            	<p:column colspan="1" headerText="Material" width="18%"/>
-			            	<p:column colspan="1" headerText="Estatus" width="7%" filterBy="#{pep.status}" filterMatchMode="contains"/>
+			            	<p:column colspan="1" headerText="Estatus" width="7%" filterBy="#{pep.status}" filterMatchMode="contains" filterStyle="width:90%"/>
 			            	<p:column colspan="1" headerText="Fecha Entrega" width="8%" />
-			            	<p:column colspan="1" headerText="Valor" width="10%" />			            	
+			            	<p:column colspan="1" headerText="Valor" width="9%" />
+			            <!--<p:column colspan="1" headerText="Rentabilidad" width="9%" />
+			            	<p:column colspan="1" headerText="Rentabilidad  %" width="9%" />  -->			            	
 			           </p:row>
 			        </p:columnGroup> 
 			        
@@ -46,44 +66,57 @@
 						<h:outputText value="#{pep.id}" />
 					</p:column>
 					
-				    <p:column headerText="nombre" >
+				    <p:column headerText="Nombre Cliente" >
 						<h:outputText value="#{pep.cliente}" />
 					</p:column>
 					
-					<p:column headerText="Descripcion" >
+					<p:column headerText="Documento Ventas" >
 						<h:outputText value="#{pep.docVenta}" />
 					</p:column>
 					
-					<p:column headerText="Area" >
+					<p:column headerText="Oficina" >
 						<h:outputText value="#{pep.oficina}" />
 					</p:column>
 					
-					<p:column headerText="Representante " >
+					<p:column headerText="Linea " >
 						<h:outputText value="#{pep.linea}" />
 					</p:column>
 					
-					<p:column headerText="Fecha ini" >
+					<p:column headerText="Material" >
 						<h:outputText value="#{pep.material}" />
 					</p:column>
 					
-					<p:column headerText="valor" >
+					<p:column headerText="Estado" >
 						<h:outputText value="#{pep.status}" />
 					</p:column>
 					
-					<p:column headerText="valor" >
+					<p:column headerText="Fecha Entrega" >
 						<h:outputText value="#{pep.fechaEntrega}" />
 					</p:column>
 					
-					<p:column headerText="ROI"  style="text-align:right" >
+					<p:column headerText="Valor Neto"  style="text-align:right" >
 						<h:outputText value="#{pep.valorNeto}" >
 							 <f:convertNumber locale="en_US" maxFractionDigits="0"/>
 						</h:outputText>
 					</p:column>
 					
+			<!-- 	<p:column headerText="Rentabilidad"  style="text-align:right" >
+						<h:outputText value="#{pep.rentabilidad}" >
+							 <f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Rentabilidad%"  style="text-align:right" >
+						<h:outputText value="#{pep.rentabilidadX} %" >
+							 <f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>   -->
+					
 					<p:columnGroup type="footer">
 			            <p:row>
-			            	<p:column colspan="8" footerText="Totales" style="text-align: right" />
-			            	<p:column footerText="$ #{incidenciaBean.valorTotal}"  style="text-align: right"/>		 
+			            	<p:column colspan="7" footerText="Totales" style="text-align: right" />
+			            	<p:column footerText="$ #{incidenciaBean.valorTotal}"  style="text-align: right"/>
+			            	<p:column footerText="$ #{incidenciaBean.valorTotalR}"  style="text-align: right"/>
 			            </p:row>
 			        </p:columnGroup>
 					
@@ -92,8 +125,9 @@
 							style="height:35px; background:#449d44;"  onclick="history.back();" />						
 					</f:facet>
 				</p:dataTable>
+			  </p:panel>
 			</h:form>	
-		
+		  
 		</ui:define>
 	</ui:composition>
 </html>

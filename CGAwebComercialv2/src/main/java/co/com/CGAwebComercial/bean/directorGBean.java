@@ -64,6 +64,7 @@ public class directorGBean implements Serializable{
 	private String utilidad;
 	private String fechaConsulta;
 	private String nombreVendedor;
+	private String nombreCiudad;
 	
 	private BigDecimal total;
 	private BigDecimal totalR;
@@ -71,6 +72,7 @@ public class directorGBean implements Serializable{
 	private int cod;
 	private int idFuncionario;
 	private int idLinea;
+	private int idCiudad;
 	private Integer progress=0;
 
 	public directorGBean() {
@@ -457,9 +459,20 @@ public class directorGBean implements Serializable{
 				else{
 					tablaFun = "E";
 					tipo="funcionario";
-				
-					listaV = dao.listarDetalleVendedoresOficina(zonaF.getCiudad().getId(), tipo, fechaBusqueda, fechaBusquedaYear);
-					List<Zona_venta> ListaZona = daoV.buscarZonaSucursal(zonaF.getCiudad().getId());
+					
+					List<Zona_venta> ListaZona  = new ArrayList<>();
+					
+					if(autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
+						listaV = dao.listarDetalleVendedoresOficina(idCiudad, tipo, fechaBusqueda, fechaBusquedaYear);
+						ListaZona = daoV.buscarZonaSucursal(idCiudad);
+						System.out.println( "Entro lista" + idCiudad);
+					}
+					else{
+						listaV = dao.listarDetalleVendedoresOficina(zonaF.getCiudad().getId(), tipo, fechaBusqueda, fechaBusquedaYear);
+						ListaZona = daoV.buscarZonaSucursal(zonaF.getCiudad().getId());
+					}
+					System.out.println(ListaZona.size() + "Valor lista");
+					
 					listaVendedor  = daoF.listarVendedoresParaDirector(ListaZona);
 				}	
 			}
@@ -493,13 +506,28 @@ public class directorGBean implements Serializable{
 					vendedores.setUmbralCV(new BigDecimal("0.00"));
 					vendedores.setNombre(fun1.getPersona().getNombre());
 					vendedores.setTipo(fun1.getDescripcion());
-					List<Zona_venta> zonaV =  daoV.buscarZonaVenOfi(fun1.getId_funcionario(), zonaF.getCiudad().getId() );
+					
+					List<Zona_venta> zonaV = new ArrayList<>();
+					if(autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
+						zonaV = daoV.buscarZonaVenOfi(fun1.getId_funcionario(), idCiudad );
+					}
+					else{
+						zonaV = daoV.buscarZonaVenOfi(fun1.getId_funcionario(), zonaF.getCiudad().getId() );
+					}
+					 
 					sumaIngresoR = new BigDecimal(((Long) obc[0] == 0)? (Long) obc[0] : (Long) obc[0] * -1);
 					System.out.println(zonaV);
 					if(zonaV.size() > 0 ){
 						PresupuestoDao daoP = new PresupuestoDao();
 						if(tipo.equals("funcionario")){
-							BigDecimal pre = daoP.datoPorLineaSumFechasE(fun1.getId_funcionario(), zonaF.getCiudad().getId(), fechaBusqueda, fechaBusquedaYear);
+							BigDecimal pre = new BigDecimal("0");
+							if(autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
+								pre = daoP.datoPorLineaSumFechasE(fun1.getId_funcionario(), idCiudad, fechaBusqueda, fechaBusquedaYear);
+							}
+							else{
+								pre = daoP.datoPorLineaSumFechasE(fun1.getId_funcionario(), zonaF.getCiudad().getId(), fechaBusqueda, fechaBusquedaYear);
+							}
+							
 							sumaPresupuesto = (pre == null) ? new BigDecimal("0.00"): pre;
 						}
 						else{
@@ -535,7 +563,13 @@ public class directorGBean implements Serializable{
 					
 					for (Funcionario f : listaVendedor) {
 						PresupuestoDao daoP = new PresupuestoDao();
-						BigDecimal pre = daoP.datoPorLineaSumFechasE(f.getId_funcionario(), zonaF.getCiudad().getId(), fechaBusqueda, fechaBusquedaYear);
+						BigDecimal pre = new BigDecimal("0");
+						if(autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
+							pre = daoP.datoPorLineaSumFechasE(f.getId_funcionario(), idCiudad, fechaBusqueda, fechaBusquedaYear);
+						}
+						else{
+							pre = daoP.datoPorLineaSumFechasE(f.getId_funcionario(), zonaF.getCiudad().getId(), fechaBusqueda, fechaBusquedaYear);
+						}
 						sumaPresupuesto = (pre == null) ? new BigDecimal("0.00"): pre;
 						ComisionVendedores vendedores = new ComisionVendedores();
 						vendedores.setId(f.getId_funcionario());
@@ -1309,5 +1343,17 @@ public class directorGBean implements Serializable{
 	}
 	public void setListaFechasR(List<Fechas> listaFechasR) {
 		this.listaFechasR = listaFechasR;
+	}
+	public int getIdCiudad() {
+		return idCiudad;
+	}
+	public void setIdCiudad(int idCiudad) {
+		this.idCiudad = idCiudad;
+	}
+	public String getNombreCiudad() {
+		return nombreCiudad;
+	}
+	public void setNombreCiudad(String nombreCiudad) {
+		this.nombreCiudad = nombreCiudad;
 	}
 }

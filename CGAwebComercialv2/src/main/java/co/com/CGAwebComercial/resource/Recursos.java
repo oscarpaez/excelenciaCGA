@@ -1,6 +1,7 @@
 package co.com.CGAwebComercial.resource;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import co.com.CGAwebComercial.util.Fechas;
@@ -144,5 +145,23 @@ public class Recursos {
 		return listaFechas;
 	}
 
+	public int idOficina(int idCiudad){
 
+		int oficina = 0;
+		try{
+			oficina = (idCiudad== 1 )? 1000 : (idCiudad == 7 )? 2000 : (idCiudad+1)*1000 ;
+
+			return oficina;
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+		}
+		return oficina;
+	}
+	
+	public int yearActual(){
+		
+		Calendar fechas = Calendar.getInstance();
+		int year = fechas.get(Calendar.YEAR);
+		return year;
+	}
 }

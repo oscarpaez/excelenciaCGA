@@ -107,6 +107,9 @@
         <mapping class = "co.com.CGAwebComercial.entyties.Material" />
         <mapping class = "co.com.CGAwebComercial.entyties.EstadoPedidosProyectados" />
         <mapping class = "co.com.CGAwebComercial.entyties.PedidosProyectados" />
+        <mapping class = "co.com.CGAwebComercial.entyties.OfertasPedidos" />
+        <mapping class = "co.com.CGAwebComercial.entyties.Llamadas" />
+        
                 
         
 	</session-factory>

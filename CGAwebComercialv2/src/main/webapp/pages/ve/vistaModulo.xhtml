@@ -25,10 +25,17 @@
 				   <p:panel style="width:400px;" styleClass="promedio">				  		
 				  		<h:form >
 							<h:panelGrid columns="2">
-								<p:outputLabel  value="Venta Mes " 
+								<p:outputLabel  value="Venta Mes Facturado " 
 									    	style="font-size: 14px; " />
 								<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
 											value="#{vendedorLBRBean.realMes}"  disabled="true" >
+											<f:convertNumber pattern="#,##0;"/>
+								</p:inputText>
+								
+								<p:outputLabel  value="Venta Mes LBR " 
+									    	style="font-size: 14px; " />
+								<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
+											value="#{vendedorLBRBean.lbr}"  disabled="true" >
 											<f:convertNumber pattern="#,##0;"/>
 								</p:inputText>
 								
@@ -83,10 +90,16 @@
 								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 50}" />
 					   </p:link>
 					   
-					   <p:button value="Excelencia Pedidos Perdidos"
+					   <p:button value="Gestion Pedidos Perdidos"
 								style="width:190px; height:100px"
 								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}" 
-								outcome="/pages/vi/incidencia.xhtml?faces-redirect=true"/>						
+								outcome="/pages/vi/incidencia.xhtml?faces-redirect=true"/>	
+								
+						<p:button value="Excelencia Ofertas y Pedidos"
+							style="width:200px; height:100px"
+							outcome="/pages/ve/ofertaPedido.xhtml?faces-redirect=true"
+							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}"
+							onclick="showLoading()" />					
 					   					
 					</div>
 					<br />

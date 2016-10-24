@@ -12,6 +12,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import co.com.CGAwebComercial.util.HibernateUtil;
@@ -152,6 +153,26 @@ public class GenericDao<Entidad> {
 		finally{
 			session.close();
 		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public List buscarEspecialista(String tipo, int oficina){
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		try{
+			Criteria consulta = session.createCriteria(clase);
+			consulta.add(Restrictions.eq("codOficina", oficina));
+			consulta.setProjection(Projections.groupProperty(tipo));
+			List results = consulta.list();			
+			return results;
+			
+			
+		} catch (RuntimeException ex) {			
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+		
 	}
 	
 	public Date fechaInicial(String fecMes, String fecYear){

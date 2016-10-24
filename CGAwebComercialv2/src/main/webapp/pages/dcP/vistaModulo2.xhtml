@@ -22,6 +22,7 @@
 		<br />
 		<div class="ui-grid ui-grid-responsive">
 			<div class="ui-grid-row">
+			<!-- 
 				<div class="ui-grid-col-10"
 					style="display: block; text-align: center; margin: 0 auto;">
 					
@@ -46,13 +47,15 @@
 						outcome="/pages/vi/vistaIncidencia.xhtml?faces-redirect=true;"
 						onclick="showLoading()"/>
 				</div>
-			</div>
+			-->	
+			</div>			
 			<br />
+			 
 			<div class="ui-grid-row">
 				<div class="ui-grid-col-5"
 					style="height: 390px; width: 450px; display: block; text-align: center; margin: 0 auto;">
 					<h:form id="frmDesRecc" enctype="multipart/form-data">
-						<p:panel style="height:390px; width:430px;">
+						<p:panel style=" width:430px;">
 							<h:panelGrid id="pnlDesRec">
 								<p:chart type="metergauge"
 									model="#{graficasBean.meterGaugeModel}"
@@ -66,11 +69,27 @@
 											disabled="true" style="opacity: .90; text-align:right;">
 											<f:convertNumber pattern="#,##0;(#,##0)" />
 										</p:inputText>
-										<p:outputLabel value="Venta Mes " style="font-size: 14px;  " />
+										<p:outputLabel value="Venta Mes Facturada " style="font-size: 14px;  " />
 										<p:inputText size="15" value="#{graficasBean.realMes}"
 											disabled="true" style="opacity: .90; text-align:right;">
 											<f:convertNumber pattern="#,##0;" />
 										</p:inputText>
+										
+										<p:outputLabel value="Pedidos en Proceso" style="font-size: 14px;  " />
+										<p:inputText size="15" value="#{graficasBean.pedidosProceso}"
+											disabled="true" style="opacity: .90; text-align:right;">
+											<f:convertNumber pattern="#,##0;" />
+										</p:inputText>	
+										
+										<p:outputLabel value="Pedidos facturados y en Proceso Mes " style="font-size: 14px;  " />
+										<p:inputText size="15" value="#{graficasBean.pedidosTotal}"
+											disabled="true" style="opacity: .90; text-align:right;">
+											<f:convertNumber pattern="#,##0;" />
+										</p:inputText>
+										<p:outputLabel value=" " />
+										
+										
+																			
 									</h:panelGrid>
 								</h:form>
 							</h:panelGrid>
@@ -78,7 +97,7 @@
 					</h:form>
 				</div>
 				<div class="ui-grid-col-5"
-					style="height: 390px; width: 450px; display: block; text-align: center; margin: 0 auto;">
+					style="height: 390px; width: 450px; display: none; text-align: center; margin: 0 auto;">
 					<h:form id="frmDesR" enctype="multipart/form-data">
 						<p:panel style="height:390px; width:430px;">
 							<h:panelGrid id="pnlDesRec">
@@ -119,7 +138,7 @@
 					</h:form>
 				</div>		
 				<div class="ui-grid-col-5"
-					style="height: 390px; width: 450px; display: block; text-align: center; margin: 0 auto;">
+					style="height: 390px; width: 450px; display: none; text-align: center; margin: 0 auto;">
 
 					<h:form id="frmDesRecc1" enctype="multipart/form-data">
 						<p:panel style="height:390px; width:430px;">
@@ -148,13 +167,9 @@
 					</h:form>
 				</div>
 				
-			</div>
-			<br />
-
-			<div class="ui-grid-row">
-				<div class="ui-grid-col-6" style="width: 680px;">
-					<p:tabView style="width: 670px;">
-						<p:tab title="Presupuesto">
+			<div class="ui-grid-col-5" style="width: 780px; display: block">
+				<!-- <p:tabView style="width: 670px;">
+						<p:tab title="Presupuesto">  -->
 							<h:form id="frmPlan">
 								<p:dataTable styleClass="tblPla" id="tblPlan"
 									emptyMessage="No se encontraron registros" paginator="true"
@@ -171,6 +186,7 @@
 											<p:column colspan="1" headerText="Presupuesto " />
 											<p:column colspan="1" headerText="Venta" />
 											<p:column colspan="2" headerText="Cumplimiento %" />
+											<p:column colspan="1" headerText="Detalle" />
 										</p:row>
 									</p:columnGroup>
 
@@ -203,6 +219,16 @@
 											height="25" width="25" />
 									</p:column>
 									
+									<p:column style="text-align: center;">
+										<!-- <h:outputText value="#{plan.id}" />  -->
+										<p:button icon="ui-icon-search" title="Detalle Pedidos En Proceso"
+											outcome="/pages/dcP/vistaOficina.xhtml?faces-redirect=true"
+											onclick="showLoading()">
+											<f:param name="perId" value="#{plan.id}"/>
+											<f:param name="tipo" value=""/>
+										</p:button>
+									</p:column>
+									
 									<p:columnGroup type="footer">
 										<p:row>
 											<p:column colspan="1" footerText="Totales"
@@ -213,7 +239,7 @@
 												style="text-align:right" />
 											<p:column footerText="#{graficasBean.totalCumO}%"
 												style="text-align:right" />
-											<p:column footerText="" style="text-align: rigth" />
+											<p:column colspan="2" footerText="" style="text-align: rigth" />
 										</p:row>
 									</p:columnGroup>
 									<f:facet name="footer">
@@ -221,8 +247,8 @@
 									</f:facet>
 								</p:dataTable>
 							</h:form>
-						</p:tab>
-						<!--  
+				<!-- </p:tab>
+						 
 						<p:tab title="Utilidad">
 							<h:form id="frmPlanU">
 								<p:dataTable styleClass="tblPla" id="tblPlanU"
@@ -293,12 +319,14 @@
 										</f:facet> 
 								</p:dataTable>
 							</h:form>
-						</p:tab>  -->
-					</p:tabView>
+						</p:tab>  
+					</p:tabView> -->
 				</div>
-
+			</div>
+				
+			<div class="ui-grid-row" style="display: none;">
 				<div class="ui-grid-col-1"></div>
-				<div class="ui-grid-col-5" style="width: 640px;">
+				<div class="ui-grid-col-5" style="width: 640px; display: block;">
 					<p:tabView style="width: 670px;">
 						<p:tab title="Presupuesto">
 							<h:form id="frmPlanL">

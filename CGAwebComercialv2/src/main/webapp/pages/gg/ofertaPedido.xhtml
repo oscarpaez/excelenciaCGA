@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+		<ui:define name="contenido">
+		
+		<f:metadata>
+			<f:event listener="#{ofertaPedidoBean.listarOfertaPedidosPais()}" type="preRenderView" />
+		</f:metadata>
+			
+		<h:form id="frmInc" >	
+			
+			<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" value="#{ofertaPedidoBean.listaOfertaPedidos}" var="oferta"
+					filteredValue="#{ofertaPedidoBean.listaFiltrarOfePed}">
+					
+					<f:facet name="header">
+						Lista de Oferta Pedidos 
+					</f:facet>
+					
+	 			    <p:columnGroup type="header">
+			            <p:row>
+			            	<p:column colspan="1" headerText="Oficina" width="" filterBy="#{oferta.cliente}" filterMatchMode="contains"/>
+			            	<p:column colspan="1" headerText="Total Oferta" width="12%"/>
+			            	<p:column colspan="1" headerText="Total Pedido " width="12%" filterBy="" filterMatchMode="contains"/>
+			            	<p:column colspan="2" headerText="Cumplimiento %" width="15%"/>
+			            	<p:column colspan="1" headerText="Detalle" width="12%"/>			            	
+			           </p:row>
+			        </p:columnGroup> 
+			        
+			        <p:column  >
+						<h:outputText value="#{oferta.oficina}" />
+					</p:column>
+					
+					<p:column  style="text-align: right">
+						<h:outputText value="#{oferta.valorOferta}" >
+							 <f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column  style="text-align: right" >
+						<h:outputText value="#{oferta.valorPedido}" >
+							 <f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column  >
+						<h:outputText value="#{oferta.porcentaje}"  >
+							 <f:convertNumber locale="en_US" maxFractionDigits="2"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column   style="text-align: center;">
+						<p:graphicImage library="images" name="#{oferta.imagen}"  height="25" width="25" />
+					</p:column>
+					
+					<p:column headerText="Detalle" style="text-align:center; width:6%">
+						<p:button icon="ui-icon-search"
+							outcome="/pages/gg/detalleOfertaPedido.xhtml?faces-redirect=true"
+							onclick="showLoading()">
+						    <f:param name="frst" value="#{oferta.codOficina}"/>							
+						</p:button>
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column colspan="1" footerText="Totales" style="text-align: right" />
+			            	<p:column footerText="$ #{ofertaPedidoBean.valorTotal}"  style="text-align: right"/>
+			            	<p:column footerText="$ #{ofertaPedidoBean.valorTotalP}"  style="text-align: right"/>
+			            	<p:column colspan="3" footerText="" style="text-align: right" />		 
+			            </p:row>
+			        </p:columnGroup>
+					
+					<f:facet name="footer">
+						<p:button value="Volver"  icon="ui-icon-arrowreturn-1-w"
+							style="height:35px; background:#449d44;"  onclick="history.back();" >
+						</p:button>
+					</f:facet>
+				</p:dataTable>
+			</h:form>	
+		
+			
+	
+		</ui:define>
+	</ui:composition>
+</html>

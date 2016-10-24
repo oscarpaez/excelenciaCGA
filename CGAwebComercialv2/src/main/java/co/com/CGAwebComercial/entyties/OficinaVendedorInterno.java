@@ -31,6 +31,8 @@ public class OficinaVendedorInterno implements Serializable {
 	private int tip;
 	
 	private int estado;
+	
+	private int extension;
 
 	public int getId() {
 		return id;
@@ -95,5 +97,12 @@ public class OficinaVendedorInterno implements Serializable {
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-	
+
+	public int getExtension() {
+		return extension;
+	}
+
+	public void setExtension(int extension) {
+		this.extension = extension;
+	}
 }

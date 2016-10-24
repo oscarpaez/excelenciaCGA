@@ -121,4 +121,5 @@ public class Incidencia  implements Serializable {
 	public void setLinea(Linea linea) {
 		this.linea = linea;
 	}
+	
 }

@@ -36,10 +36,12 @@ import co.com.CGAwebComercial.dao.PromedioVentaDao;
 import co.com.CGAwebComercial.dao.RecaudoDao;
 import co.com.CGAwebComercial.dao.Zona_FuncionarioDao;
 import co.com.CGAwebComercial.dao.Zona_ventaDao;
+import co.com.CGAwebComercial.entyties.Ciudad;
 import co.com.CGAwebComercial.entyties.Funcionario;
 import co.com.CGAwebComercial.entyties.PromedioVenta;
 import co.com.CGAwebComercial.entyties.Zona_Funcionario;
 import co.com.CGAwebComercial.entyties.Zona_venta;
+import co.com.CGAwebComercial.resource.Recursos;
 import co.com.CGAwebComercial.util.ComisionVendedores;
 
 @SuppressWarnings("serial")
@@ -71,7 +73,9 @@ public class GraficasBean implements Serializable{
 	private Long presupuestoAcumulado;
 	private Long realAcumulado;
 	private Long realMes;
+	private Long lbr;
 	private int idLinea;
+	private int idCiudad;
 	private Long proDescuento;
 	private String totalPreO;
 	private String totolRealO;
@@ -87,6 +91,7 @@ public class GraficasBean implements Serializable{
 	private String totalCumUL;
 	private String mesActual;
 	private String mesInicial;
+	private String nombreSucursal;
 
 	//*Carga la grafica de desempeño de las ventas y recaudo del "DL" *//
 
@@ -123,6 +128,10 @@ public class GraficasBean implements Serializable{
 				}
 				else if(autenticacion.getUsuarioLogin().getPerfil().getId() == 9){
 					listaRecaudo = dao.recaudoPaisPeriodosJefeI(autenticacion.getUsuarioLogin().getPersona().getCedula());
+					titulo = "Desempeño Recaudo";
+				}
+				else if(autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
+					listaRecaudo = dao.recaudoPaisPeriodosDirectorP(idCiudad);
 					titulo = "Desempeño Recaudo";
 				}
 				else{
@@ -217,7 +226,7 @@ public class GraficasBean implements Serializable{
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ultima Actualización "+ autenticacion.getFechaDiaAnterior(), ""));
 				//promedioVentasNacional();
 				if(autenticacion.getUsuarioLogin().getPerfil().getId() == 8 || autenticacion.getUsuarioLogin().getPerfil().getId() == 7
-						|| autenticacion.getUsuarioLogin().getPerfil().getId() == 9	){
+						|| autenticacion.getUsuarioLogin().getPerfil().getId() == 9 ||  autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
 					promedioVentasOficina();
 				}
 				else
@@ -253,7 +262,7 @@ public class GraficasBean implements Serializable{
 				add(30);
 				add(100);
 			}};
-
+			
 			descuentoP = new MeterGaugeChartModel(proDescuento, interval);
 			descuentoP.setTitle("Cumplimiento " + mesActual + " Descuento");
 			descuentoP.setGaugeLabel(proDescuento +"%");
@@ -301,8 +310,18 @@ public class GraficasBean implements Serializable{
 			Zona_FuncionarioDao daoFu =  new Zona_FuncionarioDao();
 			Zona_Funcionario zona = daoFu.buscarFuncionarioZona(funcionario.getId_funcionario());
 
-			int ciudad = (zona.getCiudad().getId() == 1 )? 1000 : (zona.getCiudad().getId() == 7 )? 2000 : (zona.getCiudad().getId()+1)*1000 ;
-
+			int ciudad = 0;
+			Recursos recursos = new Recursos();
+			if( autenticacion.getUsuarioLogin().getPerfil().getId() == 20){				
+				ciudad = recursos.idOficina(idCiudad);
+				CiudadDao dao = new CiudadDao();
+				Ciudad ciudadA =dao.buscar(idCiudad);
+				nombreSucursal = ciudadA.getNombre();
+			}
+			else{
+			   ciudad = recursos.idOficina(zona.getCiudad().getId());
+			}
+			
 			PromedioVentaDao daoP = new PromedioVentaDao();			
 			Double pro = ( autenticacion.getUsuarioLogin().getPerfil().getId() == 9)? daoP.promedioVentasOficinaI():daoP.promedioVentasOficina(ciudad);
 			pro = (pro == null)? 0 : pro;
@@ -316,7 +335,7 @@ public class GraficasBean implements Serializable{
 				add(6);
 				add(15);
 			}};
-
+			interval.add(3,(proDescuento >15)? proDescuento:15); 
 			descuentoP = new MeterGaugeChartModel(proDescuento, interval);
 			descuentoP.setTitle("Cumplimiento " + mesActual + " Descuento");
 			descuentoP.setGaugeLabel(proDescuento +"%");
@@ -327,7 +346,7 @@ public class GraficasBean implements Serializable{
 			
 			presupuestoMes = listaPre.get(0).longValue();
 			realMes = listaPre.get(1).multiply(new BigDecimal("-1")).longValue(); 
-			
+			lbr = listaPre.get(2).multiply(new BigDecimal("-1")).longValue();
 			listaPre.add(1, new BigDecimal(realMes));
 			BigDecimal porV =(listaPre.get(1).longValue() == 0)? new BigDecimal("0"): listaPre.get(1).divide(listaPre.get(0), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			int V = porV.intValue();
@@ -338,7 +357,7 @@ public class GraficasBean implements Serializable{
 				add(100);
 			}};
 			
-			interval.add(3,(V >100)? V:100); 
+			interval.add(3,(V>100)? V:100); 
 			meterGaugeModel = new MeterGaugeChartModel(V, interval);
 			meterGaugeModel.setTitle("Cumplimiento " + mesActual + " Pedidos Facturados" );
 			meterGaugeModel.setGaugeLabel( V +"%");
@@ -346,20 +365,28 @@ public class GraficasBean implements Serializable{
 
 			/**/
 			Zona_ventaDao doaZ = new Zona_ventaDao();
-			List<Zona_venta> listaZona = doaZ.buscarZonaSucursal(zona.getCiudad().getId());
+			List<Zona_venta> listaZona = ( autenticacion.getUsuarioLogin().getPerfil().getId() == 20)? doaZ.buscarZonaSucursal(idCiudad) : doaZ.buscarZonaSucursal(zona.getCiudad().getId());
 			IncidenciaDao daoI = new IncidenciaDao();
 			pedidosPerdidos = daoI.valorPedidosPerdidosSucursal(listaZona);
 			
 			System.out.println(pedidosPerdidos);
 			
-			int sucursal = (zona.getCiudad().getId() == 1)? 1000 : (zona.getCiudad().getId() == 7)? 2000 : (zona.getCiudad().getId()+1)*1000;
+			//int sucursal = (zona.getCiudad().getId() == 1)? 1000 : (zona.getCiudad().getId() == 7)? 2000 : (zona.getCiudad().getId()+1)*1000;
 			PedidosEnProcesoDao daoEP = new PedidosEnProcesoDao();
-			pedidosProceso =  daoEP.valorPedidosProcesoOficina(sucursal);
+			pedidosProceso =  daoEP.valorPedidosProcesoOficina(ciudad);
 			
 			PedidosProyectadosDao daoPe = new PedidosProyectadosDao();
-			pedidosProyectados = daoPe.valorPedidosProyectadosOficina(zona.getCiudad().getId());
+			pedidosProyectados = ( autenticacion.getUsuarioLogin().getPerfil().getId() == 20)? daoPe.valorPedidosProyectadosOficina(idCiudad): daoPe.valorPedidosProyectadosOficina(zona.getCiudad().getId());
 			
 			pedidosTotal =pedidosProceso.add(pedidosProyectados.add(new BigDecimal(realMes)));
+			
+//			if( autenticacion.getUsuarioLogin().getPerfil().getId() == 20){				
+//				pedidosTotal =pedidosProceso.add(pedidosProyectados.add(new BigDecimal(realMes)));
+//			}
+//			else{
+//				pedidosTotal =pedidosProceso.add(pedidosProyectados.add(new BigDecimal(realMes)).add(new BigDecimal(lbr)));
+//			}			
+			
 			
 			porV =(pedidosTotal.longValue() == 0)? new BigDecimal("0"): pedidosTotal.divide(listaPre.get(0), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			V = porV.intValue();
@@ -756,5 +783,23 @@ public class GraficasBean implements Serializable{
 	}
 	public void setMeterGaugeModelA(MeterGaugeChartModel meterGaugeModelA) {
 		this.meterGaugeModelA = meterGaugeModelA;
+	}
+	public Long getLbr() {
+		return lbr;
+	}
+	public void setLbr(Long lbr) {
+		this.lbr = lbr;
+	}
+	public int getIdCiudad() {
+		return idCiudad;
+	}
+	public void setIdCiudad(int idCiudad) {
+		this.idCiudad = idCiudad;
+	}
+	public String getNombreSucursal() {
+		return nombreSucursal;
+	}
+	public void setNombreSucursal(String nombreSucursal) {
+		this.nombreSucursal = nombreSucursal;
 	}
 }

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+	<ui:define name="contenido">
+		
+		<f:metadata>
+			   <f:viewParam name="perId" value="#{directorGBean.idCiudad}"/>
+			   <f:viewParam name="ciuId" value="#{directorGBean.nombreCiudad}"/>
+			   <f:event listener="#{directorGBean.inicioVista()}" type="preRenderView" />   	
+		</f:metadata>
+		
+		<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/dcP/vistaModulo2.xhtml?faces-redirect=true"
+						onclick="showLoading()" />
+					
+					<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+							  iconPos="right" styleClass="excel "
+							  style="text-align: left; float:right; height:24px; font-size: 12px "
+							  onclick="showLoading(); history.back()"/>	
+		</f:facet>
+		<br />
+		<!-- 
+		<div style="height: 50px">
+			<h:form style="padding: 6px">
+				<h:panelGrid columns="5" style="width:100%" styleClass="pnlVenG">
+					<p:button value="Mes de consulta: #{directorGBean.fechaConsulta}" 
+						style="width:100%; opacity: .90;  font-size: 15px" disabled="true"/>
+				</h:panelGrid>
+			</h:form>
+		</div>
+		 -->
+		<h:form id="frmPlan"  >
+			<p:panel header="Gestion de Ventas de la Sucursal #{directorGBean.nombreCiudad}  Por Especialista" 
+				styleClass="oficina">
+				<h:inputHidden value="#{directorGBean.tablaFun}" id="hiddenId" />				
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" paginator="false"
+					value="#{directorGBean.listaComisionVendedores}" var="vendedor"
+					filteredValue="#{directorGBean.listaFiltrados}"
+					rows="30" paginatorPosition="bottom" >
+
+					<f:facet name="header">
+						<h:outputText value="#{autenticacionBean.fechaActual}" /> Plan Vendedores
+					</f:facet>
+					
+					<p:column headerText="cod Sap" filterBy="#{vendedor.id}"
+						sortBy="#{vendedor.id}"  width="13%">
+						<h:outputText value="#{vendedor.id}" />
+					</p:column>
+
+					<p:column headerText="Nombre" filterBy="#{vendedor.nombre}"
+						sortBy="#{vendedor.nombre}"  width="13%">
+						<h:outputText value="#{vendedor.nombre}" />
+					</p:column>
+
+					<p:column headerText="Tipo" width="10%">
+						<h:outputText value="#{vendedor.tipo}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Presupuesto" style="text-align:right;">
+						<h:outputText value="#{vendedor.presupuesto}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Venta" style="text-align:right;">
+						<h:outputText value="#{vendedor.ingresoReal}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Cumplimiento %"  width="13%" style="text-align:right;">
+						<h:outputText value="#{vendedor.cumplimiento}%" />
+					</p:column>
+
+					<p:column headerText="Desempeño de ventas" style="text-align:center; width:10%">
+						<p:graphicImage library="images" name="#{vendedor.imagen1}"  height="25" width="25" />
+					</p:column>
+					
+					<p:column headerText="Detalle" style="text-align:center; width:6%">
+						<p:button icon="ui-icon-search"
+							outcome="/pages/dcP/vistaModuloEspecialista.xhtml?faces-redirect=true"
+							onclick="showLoading()">
+						    <f:param name="frst" value="#{directorGBean.fechaConsulta}"/>
+							<f:param name="nomIn" value="#{vendedor.nombre}"/>
+							<f:param name="perId" value="#{vendedor.id}"/>	
+						    <f:param name="fecBus" value="#{directorGBean.autenticacion.fechaBusqueda}"/>	
+						    <f:param name="fecYear" value="#{directorGBean.autenticacion.fechaBusquedaYear}"/>
+						    <f:param name="nomCiu" value="#{directorGBean.nombreCiudad}"/>						
+						</p:button>
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column colspan="3" footerText="Totales" style="text-align: right" />
+			            	<p:column footerText="$ #{directorGBean.totalPre} " style="text-align: right" />		 
+			            	<p:column footerText="$ #{directorGBean.totalReA}"  style="text-align: right"/>
+			            	<p:column footerText="% #{directorGBean.utilidad}"  style="text-align: right"/>		 
+			            	<p:column colspan="2" footerText="" />		 
+			            </p:row>
+			        </p:columnGroup>
+
+					<f:facet name="footer">
+						
+						
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		
+		<div  id="frmPlanLin"  style="display: none;">
+		<h:form id="frmPlanLin" >
+			<p:panel>
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+				</f:facet>
+
+				<p:dataTable styleClass="tblPla" id="tblPlanLin"
+					emptyMessage="No se encontraron registros" paginator="false"
+					value="#{directorGBean.listaComisionVendedores}" var="linea"
+					filteredValue="#{directorGBean.listaFiltrados}"
+					paginatorPosition="bottom">
+
+					<f:facet name="header">
+						<h:outputText value="#{autenticacionBean.fechaActual} Registros Lineas" />
+					</f:facet>
+					
+					<p:column headerText="Nombre Linea" filterBy="#{linea.nombre}"
+						sortBy="#{linea.nombre}"  width="13%">
+						<h:outputText value="#{linea.nombre}" />
+					</p:column>
+
+					<p:column headerText="Presupuesto">
+						<h:outputText value="#{linea.presupuestoB}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Ingreso Real">
+						<h:outputText value="#{linea.ingresoRealB}">
+							<f:convertNumber locale="en_US" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Umbral"  width="13%">
+						<h:outputText value="#{linea.cumplimiento}%" />
+					</p:column>
+
+					<p:column headerText="Semaforo" width="10%">
+						<p:graphicImage library="images" name="#{linea.imagen1}"  height="25" width="25" />
+					</p:column>
+					
+					
+					<p:column headerText="Detalle" style="width:6%">
+						<p:button icon="ui-icon-search"
+							>
+						    <f:param name="perId" value="#{vendedor.cedula}"/>	
+						    <f:param name="fecBus" value="#{directorGBean.autenticacion.fechaBusqueda}"/>	
+						    <f:param name="fecYear" value="#{directorGBean.autenticacion.fechaBusquedaYear}"/>						
+						</p:button>
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton  value="Volver" onclick="history.back()" style="background: #acdd4a"/>
+					</f:facet>
+				</p:dataTable>
+			</p:panel>
+
+		</h:form>
+		</div>
+		<!-- 
+		<h:form>
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Fecha:" />
+				<p:selectOneMenu value="#{directorGBean.autenticacion.fechaBusqueda}" filter="true"
+					style="width:180px;" required="true">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione mes" />
+					<f:selectItems value="#{directorGBean.listaFechas}" var="item"
+						itemValue="#{item.valorMes}" itemLabel="#{item.mes}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu value="#{directorGBean.autenticacion.fechaBusquedaYear}"
+					style="width:100px;">
+					<f:selectItem itemValue="2016" itemLabel="2016" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Buscar" update=":frmPlan:tblPlan"
+					actionListener="#{directorGBean.listarVendedores()}"
+					style="background: #b94a48" 
+					onclick="start(); PF('pbAjax').start(); PF('statusDialog').show(); PF('pbAjax').show();" />
+			</h:panelGrid>
+		</h:form>
+		 -->
+		</ui:define>
+	</ui:composition>
+</html>

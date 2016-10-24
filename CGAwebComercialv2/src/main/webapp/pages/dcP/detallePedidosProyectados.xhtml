@@ -10,14 +10,27 @@
 		
 		<ui:define name="contenido">
 			<f:metadata>
+				<f:viewParam name="perId" value="#{incidenciaBean.idCiudad}"/>
+				<f:viewParam name="ciuNo" value="#{incidenciaBean.nombreC}"/>	
 				<f:event listener="#{incidenciaBean.listarPedidosProyectadosOficina()}" type="preRenderView" />
 			</f:metadata>
 			
-			<h:form>			
-				<p:commandButton value="Volver"  icon="ui-icon-arrowreturn-1-w"
-								style="height:35px; background:#449d44;"  onclick="history.back();" />
-				<br />
-			</h:form>	
+			<p:panel  
+				styleClass="oficina">
+			
+				<f:facet name="header">			
+					<p:outputLabel value="Gestion Pedidos Proyectados de la Sucursal #{incidenciaBean.nombreC}" />
+					
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+								outcome="/pages/dcP/vistaModulo2.xhtml?faces-redirect=true"
+								onclick="showLoading()" />
+							
+					<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+								  iconPos="right" styleClass="excel "
+								  style="text-align: left; float:right; height:24px; font-size: 12px "
+								  onclick="showLoading(); history.back()"/>
+				</f:facet>	
 			
 			<h:form id="frmInc" >
 				<p:dataTable styleClass="tblPla" id="tblPlan"
@@ -31,7 +44,7 @@
 	 			    <p:columnGroup type="header">
 			            <p:row>
 			            	<p:column colspan="1" headerText="Item" width="4%" />
-			            	<p:column colspan="1" headerText="Nombre Especialista" filterBy="#{pp.funcionario.persona.nombre}"  filterMatchMode="contains" />
+			            	<p:column colspan="1" headerText="Nombre Especialista" filterBy="#{pp.funcionario.persona.nombre}"  filterMatchMode="contains" filterStyle="width:80%" />
 			            	<p:column colspan="1" headerText="Nombre Cliente" filterBy="#{pp.cliente.descripcion}"  filterMatchMode="contains" />
 			            	<p:column colspan="1" headerText="Linea" width="12%"/>
 			            	<p:column colspan="1" headerText="Material" width="18%"/>
@@ -83,12 +96,10 @@
 			        </p:columnGroup>
 					
 					<f:facet name="footer">
-						<p:commandButton value="Volver"  icon="ui-icon-arrowreturn-1-w"
-								style="height:35px; background:#449d44;"  onclick="history.back();" />
 					</f:facet>
 				</p:dataTable>
 			</h:form>	
-		
+		  </p:panel>
 		</ui:define>
 	</ui:composition>
 </html>

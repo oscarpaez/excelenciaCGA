@@ -37,6 +37,7 @@ import co.com.CGAwebComercial.entyties.PedidosProyectados;
 import co.com.CGAwebComercial.entyties.RegularidadPerdidaVenta;
 import co.com.CGAwebComercial.entyties.Zona_Funcionario;
 import co.com.CGAwebComercial.entyties.Zona_venta;
+import co.com.CGAwebComercial.resource.Recursos;
 
 
 @SuppressWarnings("serial")
@@ -72,9 +73,12 @@ public class IncidenciaBean implements Serializable{
 	
 	
 	private String valorTotal;
+	private String valorTotalR;
 	private String clienteO;
 	private String materialO;
+	private String nombreC;
 	private int idFun;
+	private int idCiudad;
 	
 	public void listarIncidencias(){
 		
@@ -364,14 +368,27 @@ public class IncidenciaBean implements Serializable{
 	public void listarIncidenciasPorSucursal(){
 
 		try{
+			
+			Zona_ventaDao dao = new Zona_ventaDao();
+			List<Zona_venta > zonaL = new ArrayList<>();
+			IncidenciaDao daoI = new IncidenciaDao();
+			
 			Zona_FuncionarioDao daoF = new Zona_FuncionarioDao();
 			Zona_Funcionario zonaF = daoF.buscarFuncionarioZona(autenticacion.getUsuarioLogin().getId());
 			
-			Zona_ventaDao dao = new Zona_ventaDao();
-			List<Zona_venta > zonaL = dao.buscarZonaSucursal(zonaF.getCiudad().getId());
-			
-			IncidenciaDao daoI = new IncidenciaDao();
-			listaIncidencia = daoI.pedidosPerdidosSucursal(zonaL, zonaF.getCiudad().getId());
+			if(idCiudad >0){
+				zonaL = dao.buscarZonaSucursal(idCiudad);
+				listaIncidencia = daoI.pedidosPerdidosSucursal(zonaL, idCiudad);
+			}
+			else{
+				zonaL = dao.buscarZonaSucursal(zonaF.getCiudad().getId());
+				listaIncidencia = daoI.pedidosPerdidosSucursal(zonaL, zonaF.getCiudad().getId());
+			}			
+//			Zona_ventaDao dao = new Zona_ventaDao();
+//			List<Zona_venta > zonaL = dao.buscarZonaSucursal(zonaF.getCiudad().getId());
+//			
+//			IncidenciaDao daoI = new IncidenciaDao();
+//			listaIncidencia = daoI.pedidosPerdidosSucursal(zonaL, zonaF.getCiudad().getId());
 			
 			Long sumaTotal = (long) 0;
 			for (Incidencia incidencia : listaIncidencia) {
@@ -408,10 +425,13 @@ public class IncidenciaBean implements Serializable{
 			listaPedidosEnProceso = dao.pedidosProcesoPais();
 			
 			Long sumaTotal = (long) 0;
+			Long sumaTotalR = (long) 0;
 			for (PedidosEnProceso pep : listaPedidosEnProceso) {
 				sumaTotal += pep.getValorNeto().longValue();
+				sumaTotalR+= pep.getRentabilidad().longValue();
 			}
 			valorTotal = new DecimalFormat("###,###").format(sumaTotal);
+			valorTotalR = new DecimalFormat("###,###").format(sumaTotalR);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error No se cargo la lista de Incidencias");
@@ -421,10 +441,18 @@ public class IncidenciaBean implements Serializable{
 	public void listarPedidosProcesoOficina(){
 
 		try{
-			Zona_FuncionarioDao daoF = new Zona_FuncionarioDao();
-			Zona_Funcionario zonaF = daoF.buscarFuncionarioZona(autenticacion.getUsuarioLogin().getId());
 			
-			int oficina = (zonaF.getCiudad().getId()== 1 )? 1000 : (zonaF.getCiudad().getId() == 7 )? 2000 : (zonaF.getCiudad().getId()+1)*1000 ;
+			int oficina = 0;
+			Recursos recurso = new Recursos();				
+			
+			if(idCiudad >0){
+				oficina = recurso.idOficina(idCiudad); 
+			}
+			else{
+				Zona_FuncionarioDao daoF = new Zona_FuncionarioDao();
+				Zona_Funcionario zonaF = daoF.buscarFuncionarioZona(autenticacion.getUsuarioLogin().getId());
+				oficina = recurso.idOficina(zonaF.getCiudad().getId());
+			}			
 			
 			PedidosEnProcesoDao dao = new PedidosEnProcesoDao();
 			listaPedidosEnProceso = dao.pedidosProcesoOficina(oficina);
@@ -460,11 +488,23 @@ public class IncidenciaBean implements Serializable{
 	public void listarPedidosProyectadosOficina(){
 
 		try{
-			Zona_FuncionarioDao daoF = new Zona_FuncionarioDao();
-			Zona_Funcionario zonaF = daoF.buscarFuncionarioZona(autenticacion.getUsuarioLogin().getId());
 			
 			PedidosProyectadosDao dao = new PedidosProyectadosDao();
-			listaPedidosProyectados = dao.pedidosProyectadosOficina(zonaF.getCiudad().getId());
+			
+			if(idCiudad >0){
+				listaPedidosProyectados = dao.pedidosProyectadosOficina(idCiudad);
+			}
+			else{
+				Zona_FuncionarioDao daoF = new Zona_FuncionarioDao();
+				Zona_Funcionario zonaF = daoF.buscarFuncionarioZona(autenticacion.getUsuarioLogin().getId());
+				listaPedidosProyectados = dao.pedidosProyectadosOficina(zonaF.getCiudad().getId());
+			}	
+			
+//			Zona_FuncionarioDao daoF = new Zona_FuncionarioDao();
+//			Zona_Funcionario zonaF = daoF.buscarFuncionarioZona(autenticacion.getUsuarioLogin().getId());
+			
+//			PedidosProyectadosDao dao = new PedidosProyectadosDao();
+//			listaPedidosProyectados = dao.pedidosProyectadosOficina(zonaF.getCiudad().getId());
 			
 			Long sumaTotal = (long) 0;
 			for (PedidosProyectados pp : listaPedidosProyectados) {
@@ -645,5 +685,23 @@ public class IncidenciaBean implements Serializable{
 	}
 	public void setListaPedidosP(List<PedidosProyectados> listaPedidosP) {
 		this.listaPedidosP = listaPedidosP;
+	}
+	public String getValorTotalR() {
+		return valorTotalR;
+	}
+	public void setValorTotalR(String valorTotalR) {
+		this.valorTotalR = valorTotalR;
+	}
+	public int getIdCiudad() {
+		return idCiudad;
+	}
+	public void setIdCiudad(int idCiudad) {
+		this.idCiudad = idCiudad;
+	}
+	public String getNombreC() {
+		return nombreC;
+	}
+	public void setNombreC(String nombreC) {
+		this.nombreC = nombreC;
 	}	
 }

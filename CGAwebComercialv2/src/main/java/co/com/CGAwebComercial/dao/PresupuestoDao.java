@@ -15,6 +15,7 @@ import co.com.CGAwebComercial.entyties.Detalle;
 import co.com.CGAwebComercial.entyties.Detallesin;
 import co.com.CGAwebComercial.entyties.Presupuesto;
 import co.com.CGAwebComercial.entyties.PresupuestoE;
+import co.com.CGAwebComercial.entyties.bajaRotacion;
 import co.com.CGAwebComercial.util.HibernateUtil;
 
 public class PresupuestoDao extends GenericDao<Presupuesto>{
@@ -163,9 +164,26 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			Long valorN = (Long) consulta.uniqueResult();
 			valorN = (valorN == null)? 0 : valorN;
 			valor = new BigDecimal(valorN);
-
 			lista.add(valor);
-
+			
+			consulta = session.createCriteria(bajaRotacion.class);			
+			if(oficina == 4000){
+				Criterion resul =Restrictions.in("codoficina", new Integer[]{4000,7000});
+				consulta.add(resul);
+			}
+			else{
+				consulta.add(Restrictions.eq("codoficina", oficina));
+			}
+			Criterion resul =Restrictions.or(Restrictions.eq("almacen", 1020),
+					Restrictions.eq("almacen", 2020), Restrictions.eq("almacen", 3020),
+					Restrictions.eq("almacen", 4020), Restrictions.eq("almacen", 5020),
+					Restrictions.eq("almacen", 6020));
+			consulta.add(resul);
+			consulta.add(Restrictions.between("fechaFactura", fechaInicial, fechaFinal));
+			consulta.setProjection(Projections.sum("valorNeto"));
+			Long totalWages = (Long) consulta.uniqueResult();
+			BigDecimal valLBR = (totalWages == null)? new BigDecimal("0"): new BigDecimal(totalWages);
+			lista.add(valLBR);
 
 			return lista;
 		} catch (RuntimeException ex) {
@@ -572,6 +590,22 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			valorp = (valorp==null)? new BigDecimal("0"):valorp;
 			lista.add(valorp);
 
+			
+			String tipo1 = (tipo.equals("funcionarioI"))? "codVendedorInt": "codEspecialista";
+			
+			consulta = session.createCriteria(bajaRotacion.class);			
+			consulta.add(Restrictions.eq(tipo1, idfuncionario));
+			Criterion resul =Restrictions.or(Restrictions.eq("almacen", 1020),
+					Restrictions.eq("almacen", 2020), Restrictions.eq("almacen", 3020),
+					Restrictions.eq("almacen", 4020), Restrictions.eq("almacen", 5020),
+					Restrictions.eq("almacen", 6020));
+			consulta.add(resul);
+			consulta.add(Restrictions.between("fechaFactura", fechaInicial, fechaFinal));
+			consulta.setProjection(Projections.sum("valorNeto"));
+			totalWages = (Long) consulta.uniqueResult();
+			BigDecimal valLBR = (totalWages == null)? new BigDecimal("0"): new BigDecimal(totalWages);
+			lista.add(valLBR);
+			
 			return lista;
 
 		} catch (RuntimeException ex) {

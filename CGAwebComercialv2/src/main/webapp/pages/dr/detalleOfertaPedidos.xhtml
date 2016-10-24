@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+		<ui:define name="contenido">
+		
+		<f:metadata>
+			<f:viewParam name="frst" value="#{ofertaPedidoBean.detalleIdFunG}"/>
+			<f:viewParam name="nomIn" value="#{ofertaPedidoBean.detalleNombre}"/>
+			<f:event listener="#{ofertaPedidoBean.listarOfertaPedidos()}" type="preRenderView" />
+		</f:metadata>
+			
+		<h:form id="frmInc" >	
+			
+			<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
+							style="background:#449d44;" onclick="history.back()" /><br />							
+			<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" value="#{ofertaPedidoBean.listaOfertaPedidos}" var="oferta"
+					filteredValue="#{ofertaPedidoBean.listaFiltrarOfePed}">
+					
+					<f:facet name="header">
+						<p:outputLabel value="Lista de Oferta Pedidos #{ofertaPedidoBean.detalleNombre}" />						 
+					</f:facet>
+					
+	 			    <p:columnGroup type="header">
+			            <p:row>
+			            	<p:column colspan="1" headerText="N° oferta" width="7%" filterBy="#{oferta.nOferta}"  filterMatchMode="contains" filterStyle="width:90%" />
+			            	<p:column colspan="1" headerText="Pos" width="5%"  />
+			            	<p:column colspan="1" headerText="Fecha Creacion oferta" width="8%" />
+			            	<p:column colspan="1" headerText="Fecha Entrega oferta" width="8%"  />
+			            	<p:column colspan="1" headerText="Cliente" width="" filterBy="#{oferta.cliente}" filterMatchMode="contains"/>
+			            	<p:column colspan="1" headerText="Material" width=""/>
+			            	<p:column colspan="1" headerText="Valor Oferta" width="7%"/>
+			            	<p:column colspan="1" headerText="Motivo Rechazo" width=""/>
+			            	<p:column colspan="1" headerText="N° pedido" width="7%" filterBy="#{oferta.nPedido}" filterMatchMode="contains" filterStyle="width:90%"/>
+			            	<p:column colspan="1" headerText="Fecha Creacion pedido" width="8%" />
+			            	<p:column colspan="1" headerText="Fecha Entrega Oferta" width="8%"  filterBy="" filterMatchMode="contains"/>
+			            	<p:column colspan="1" headerText="Valor Pedido " width="7%" filterBy="" filterMatchMode="contains"/>			            	
+			           </p:row>
+			        </p:columnGroup> 
+			        
+			        <p:column  >
+						<h:outputText value="#{oferta.nOferta}" />
+					</p:column>
+					
+					<p:column  >
+						<h:outputText value="#{oferta.posOferta}" />
+					</p:column>
+					
+					<p:column  >
+						<h:outputText value="#{oferta.fechaCreOfe}" />
+					</p:column>
+					
+					<p:column  >
+						<h:outputText value="#{oferta.fechaEntOfe}" />
+					</p:column>
+					
+					<p:column  >
+						<h:outputText value="#{oferta.cliente}" />
+					</p:column>
+					
+					<p:column  >
+						<h:outputText value="#{oferta.material}" />
+					</p:column>
+					
+					<p:column style="text-align: right;" >
+						<h:outputText value="#{oferta.valorOferta}" >
+							 <f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column  >
+						<h:outputText value="#{oferta.descripcionMotRec}" />
+					</p:column>
+					
+					<p:column  >
+						<h:outputText value="#{oferta.nPedido}" />
+					</p:column>
+					
+					<p:column  >
+						<h:outputText value="#{oferta.fechaCrePed}" />
+					</p:column>
+					
+					<p:column  >
+						<h:outputText value="#{oferta.fechaEntPed}" />
+					</p:column>
+					
+					<p:column style="text-align: right;" >
+						<h:outputText value="#{oferta.valorPedido}" >
+							 <f:convertNumber locale="en_US" maxFractionDigits="0"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column colspan="6" footerText="Totales" style="text-align: right" />
+			            	<p:column footerText="$ #{ofertaPedidoBean.valorTotal}"  style="text-align: right"/>
+			            	<p:column colspan="4" footerText="Totales" style="text-align: right" />
+			            	<p:column footerText="$ #{ofertaPedidoBean.valorTotalP}"  style="text-align: right"/>		 
+			            </p:row>
+			        </p:columnGroup>
+					
+					<f:facet name="footer">
+						<p:button value="Volver"  icon="ui-icon-arrowreturn-1-w"
+							style="height:35px; background:#449d44;"  onclick="history.back();" >
+						</p:button>
+					</f:facet>
+				</p:dataTable>
+			</h:form>	
+		
+			
+	
+		</ui:define>
+	</ui:composition>
+</html>

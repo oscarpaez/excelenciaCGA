@@ -27,6 +27,7 @@ import co.com.CGAwebComercial.entyties.PresupuestoE;
 import co.com.CGAwebComercial.entyties.Recaudo;
 import co.com.CGAwebComercial.entyties.Zona_Funcionario;
 import co.com.CGAwebComercial.entyties.Zona_venta;
+import co.com.CGAwebComercial.resource.Recursos;
 import co.com.CGAwebComercial.util.ComisionVendedores;
 import co.com.CGAwebComercial.util.HibernateUtil;
 
@@ -72,6 +73,7 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			DateFormat formatoFecha = new SimpleDateFormat("yyyy/MM/dd");
 			FuncionarioDao dao = new FuncionarioDao();
 			Funcionario funcionario = dao.buscarPersona(idPersona);
+			System.out.println(idPersona);
 			Zona_ventaDao daoZ = new Zona_ventaDao();
 			List<Zona_venta> zona = daoZ.buscarZona(funcionario.getId_funcionario());
 			
@@ -802,7 +804,7 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 					consulta.add(Restrictions.eq("c.id", f.getCiudad().getId()));			
 				}
 				List<Zona_venta> zona = consulta.list();
-
+				System.out.println(zona.size());
 				BigDecimal presupuestoR = new BigDecimal("0");
 				BigDecimal realR =  new BigDecimal("0");
 
@@ -813,6 +815,7 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 					consulta.add(Restrictions.eq("z.id_zona_venta", zona_venta.getId_zona_venta()));
 					consulta.add(Restrictions.between("fecha", fechaInicial, fechaFinal));
 					recaudo = consulta.list();
+					System.out.println(recaudo.size() +"fecha"+ fechaInicial +" --- "+ fechaFinal );
 					if(recaudo.size()>0){
 						presupuestoR = (recaudo.get(0).getPresupuesto().toString() == null)? presupuestoR.add(new BigDecimal("0")) : presupuestoR.add(recaudo.get(0).getPresupuesto());
 						realR = (recaudo.get(0).getReal().toString() == null)? realR.add(new BigDecimal("0")) :realR.add(recaudo.get(0).getReal());
@@ -998,4 +1001,101 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			session.close();
 		}
 	}
+	
+	//*Lista grafica Para el director Comercial Pais "dcP" "vistas /pages/dcP/vistaOficina"*//
+		@SuppressWarnings("unchecked")
+		public List <BigDecimal> recaudoPaisPeriodosDirectorP(int idCiudad){
+
+			Session session = HibernateUtil.getSessionfactory().openSession();
+			List <BigDecimal> listaTotal = new ArrayList<>();
+			List <Recaudo> recaudo = new ArrayList<>();
+			try{
+				int meses = fechaFinalR();
+				
+				Date fechaFinal = null;
+				Date fechaInicial = null;
+				DateFormat formatoFecha = new SimpleDateFormat("yyyy/MM/dd");
+				Recursos recurso = new Recursos();
+				int year = recurso.yearActual();
+				int sucursal = recurso.idOficina(idCiudad);
+				for (int i=1; i<meses; i++){
+					String fecInicial = year+"/0"+i+"/01";
+					fechaInicial  = formatoFecha.parse(fecInicial);
+					String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" : year+"/0"+i+"/31";
+					fechaFinal = formatoFecha.parse(fecFinal);
+					
+					Criteria consulta = session.createCriteria(PresupuestoE.class);
+					if(sucursal == 4000){
+						Criterion resul =Restrictions.in("oficinaVentas", new Integer[]{4000,7000});
+						consulta.add(resul);
+					}
+					else{
+						consulta.add(Restrictions.eq("oficinaVentas", sucursal ));
+						
+					}
+					consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
+					consulta.setProjection(Projections.sum("ingresos"));
+					BigDecimal valor = (BigDecimal) consulta.uniqueResult();
+					valor = (valor==null)? new BigDecimal("0"):valor;
+					listaTotal.add(valor);
+
+					consulta = session.createCriteria(Detallesin.class);
+					if(sucursal == 4000){
+						Criterion resul =Restrictions.in("sucursal", new Integer[]{4000,7000});
+						consulta.add(resul);
+					}
+					else{
+						consulta.add(Restrictions.eq("sucursal", sucursal ));
+					}
+					consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
+					consulta.setProjection(Projections.sum("valorNeto"));
+					Long totalWages = (Long) consulta.uniqueResult();
+					totalWages = (totalWages== null)?0: totalWages;
+					listaTotal.add(new BigDecimal(totalWages));
+
+					consulta = session.createCriteria(Zona_venta.class);
+					consulta.createAlias("ciudad", "c");
+					if(idCiudad == 3){
+						Criterion resul =Restrictions.in("c.id", new Integer[]{3,6});
+						consulta.add(resul);
+					}
+					else{
+						consulta.add(Restrictions.eq("c.id", idCiudad));			
+					}
+					List<Zona_venta> zona = consulta.list();
+					System.out.println(zona.size());
+					BigDecimal presupuestoR = new BigDecimal("0");
+					BigDecimal realR =  new BigDecimal("0");
+
+					for (Zona_venta zona_venta : zona) {
+
+						consulta = session.createCriteria(Recaudo.class);			
+						consulta.createAlias("zonaVenta", "z");
+						consulta.add(Restrictions.eq("z.id_zona_venta", zona_venta.getId_zona_venta()));
+						consulta.add(Restrictions.between("fecha", fechaInicial, fechaFinal));
+						recaudo = consulta.list();
+						System.out.println(recaudo.size() +"fecha"+ fechaInicial +" --- "+ fechaFinal );
+						if(recaudo.size()>0){
+							presupuestoR = (recaudo.get(0).getPresupuesto().toString() == null)? presupuestoR.add(new BigDecimal("0")) : presupuestoR.add(recaudo.get(0).getPresupuesto());
+							realR = (recaudo.get(0).getReal().toString() == null)? realR.add(new BigDecimal("0")) :realR.add(recaudo.get(0).getReal());
+						}
+					}
+					listaTotal.add(realR);
+					listaTotal.add(presupuestoR);
+
+				}
+				return listaTotal;
+
+			} catch (RuntimeException ex) {
+				throw ex;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally{
+				session.close();
+			}
+			return listaTotal;
+		}
+
 }

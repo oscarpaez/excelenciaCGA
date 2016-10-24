@@ -75,8 +75,11 @@ public class vendedorLBRBean implements Serializable{
 	private String fechaBusquedaYear= "";
 	private Double promedioMes;
 	private String mesActual;
+	private String nombreV;
+	private String nombreC;
 	private BigDecimal presupuestoMes;
 	private BigDecimal realMes;	
+	private BigDecimal lbr;	
 	private BigDecimal pedidosPerdidos;
 	private BigDecimal pedidosProceso;
 	private BigDecimal pedidosProyectados;
@@ -230,13 +233,25 @@ public class vendedorLBRBean implements Serializable{
 				RecaudoDao dao = new RecaudoDao();
 				List<Recaudo> listaRecaudo = new ArrayList<>();
 				FuncionarioDao daoF = new FuncionarioDao();
-				Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
+				Funcionario funcionario = new Funcionario();
+				if(autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
+					funcionario = daoF.buscar(codVen);	
+				}
+				else{
+					funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
+				}
+				 
 				if(autenticacion.getUsuarioLogin().getPerfil().getId() == 6){
 					listaRecaudo = dao.carteraInternosGraficas(funcionario.getId_funcionario());
 					tipo = "funcionarioI";
 				}	
 				else{
-					listaRecaudo = dao.listarPresupuesto(autenticacion.getUsuarioLogin().getPersona().getCedula());
+					if(autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
+						listaRecaudo = dao.listarPresupuesto(funcionario.getPersona().getCedula());
+					}
+					else{
+						listaRecaudo = dao.listarPresupuesto(autenticacion.getUsuarioLogin().getPersona().getCedula());
+					}
 					tipo = "funcionario";
 				}
 				int i=0;
@@ -256,11 +271,19 @@ public class vendedorLBRBean implements Serializable{
 				int escala1 = 0;
 
 				mesActual = mesActualG();
-
+				
+				int funcionario_id = (autenticacion.getUsuarioLogin().getPerfil().getId() == 20)? codVen : funcionario.getId_funcionario();
+				
+				List<Long>  PV = dao.listarDetalleValorNeto(tipo,funcionario_id);
+				List<Long>  PPT = dao.listarDetalleCostoTotal(tipo, funcionario_id);
+				List<Long>  PVD = dao.listarDetalleValorDescuento(tipo, funcionario_id);
+				List<BigDecimal> PR= dao.presupuestoVendedor(tipo, funcionario_id );
+				
+				/*
 				List<Long>  PV = dao.listarDetalleValorNeto(tipo,funcionario.getId_funcionario());
 				List<Long>  PPT = dao.listarDetalleCostoTotal(tipo, funcionario.getId_funcionario());
 				List<Long>  PVD = dao.listarDetalleValorDescuento(tipo,funcionario.getId_funcionario());
-				List<BigDecimal> PR= dao.presupuestoVendedor(tipo, funcionario.getId_funcionario());
+				List<BigDecimal> PR= dao.presupuestoVendedor(tipo, funcionario.getId_funcionario());*/
 
 				Long b;
 				BigDecimal tem = new BigDecimal("0");
@@ -372,14 +395,17 @@ public class vendedorLBRBean implements Serializable{
 					add(60);
 					add(85);
 					add(100);
-				}};
+				}};				
 
 				PresupuestoDao daoD = new PresupuestoDao();
-				List<BigDecimal> ventaMes = daoD.ventasMes(tipo, funcionario.getId_funcionario() );
+				
+				List<BigDecimal> ventaMes = daoD.ventasMes(tipo, funcionario_id );
+				//List<BigDecimal> ventaMes = daoD.ventasMes(tipo, funcionario.getId_funcionario() );
 
 				presupuestoMes = ventaMes.get(1);
 				realMes = ventaMes.get(0).multiply(new BigDecimal("-1")); 
-
+				lbr = ventaMes.get(2).multiply(new BigDecimal("-1"));
+				
 				BigDecimal porV = (ventaMes.get(1).longValue() == 0)? new BigDecimal("0"):realMes.divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 				int V = porV.intValue();
 				
@@ -392,28 +418,38 @@ public class vendedorLBRBean implements Serializable{
 				
 				
 				/**/
-				if(autenticacion.getUsuarioLogin().getPerfil().getId() == 1 ){
+				if(autenticacion.getUsuarioLogin().getPerfil().getId() == 1 || autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
 					Zona_ventaDao daoZ = new Zona_ventaDao();
-					List<Zona_venta> zona = daoZ.buscarZona(funcionario.getId_funcionario());
+					//List<Zona_venta> zona = daoZ.buscarZona(funcionario.getId_funcionario());
+					List<Zona_venta> zona = daoZ.buscarZona(funcionario_id);
 					
 					IncidenciaDao daoI  = new IncidenciaDao();
 					Long valorPer  = daoI.valorPedidosPerdidos(zona.get(0).getId_zona_venta());
 					pedidosPerdidos = new BigDecimal(valorPer);
 					
 					PedidosEnProcesoDao daoP = new PedidosEnProcesoDao();
-					pedidosProceso  = daoP.valorPedidosProceso(tipo, funcionario.getId_funcionario());
+					//pedidosProceso  = daoP.valorPedidosProceso(tipo, funcionario.getId_funcionario());
+					pedidosProceso  = daoP.valorPedidosProceso(tipo, funcionario_id);
 					
 					PedidosProyectadosDao daoPe = new PedidosProyectadosDao();
-					pedidosProyectados = daoPe.valorPedidosProyectados(funcionario.getId_funcionario());
+					//pedidosProyectados = daoPe.valorPedidosProyectados(funcionario.getId_funcionario());
+					pedidosProyectados = daoPe.valorPedidosProyectados(funcionario_id);
 					
-					pedidosTotal =pedidosProceso.add(pedidosProyectados.add(realMes));
+					pedidosTotal =pedidosProceso.add(pedidosProyectados.add(realMes).add(lbr));
+					
+					List<Number> intervalA = new ArrayList<Number>(){{
+						add(60);
+						add(85);
+						add(100);
+					}};				
+
 					
 					porV = (pedidosTotal.longValue() == 0)? new BigDecimal("0"):pedidosTotal.divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 					V = porV.intValue();
 					
-					interval.add(3,(V >100)? V:100); 
+					intervalA.add(3,(V >100)? V:100); 
 					
-					meterGaugeModelA = new MeterGaugeChartModel(V, interval);
+					meterGaugeModelA = new MeterGaugeChartModel(V, intervalA);
 					meterGaugeModelA.setTitle("Cumplimiento " + mesActual + " Pedidos Facturados y Proyectados");
 					meterGaugeModelA.setGaugeLabel( V +"%");
 					meterGaugeModelA.setSeriesColors("ff0000, ffff00, 009933 ");
@@ -436,7 +472,14 @@ public class vendedorLBRBean implements Serializable{
 
 		try {
 			FuncionarioDao daoF = new FuncionarioDao();
-			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
+			Funcionario funcionario = new Funcionario();
+			if(autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
+				funcionario = daoF.buscar(codVen);				
+			}
+			else{
+				funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
+			}
+			 
 			DetalleDao dao = new DetalleDao();
 			if(tipo.equals("funcionario")){
 				promedioMes = dao.promedioVentas(funcionario.getId_funcionario());
@@ -632,5 +675,23 @@ public class vendedorLBRBean implements Serializable{
 	}
 	public void setMeterGaugeModelA(MeterGaugeChartModel meterGaugeModelA) {
 		this.meterGaugeModelA = meterGaugeModelA;
+	}
+	public BigDecimal getLbr() {
+		return lbr;
+	}
+	public void setLbr(BigDecimal lbr) {
+		this.lbr = lbr;
+	}
+	public String getNombreV() {
+		return nombreV;
+	}
+	public void setNombreV(String nombreV) {
+		this.nombreV = nombreV;
+	}
+	public String getNombreC() {
+		return nombreC;
+	}
+	public void setNombreC(String nombreC) {
+		this.nombreC = nombreC;
 	}
 }

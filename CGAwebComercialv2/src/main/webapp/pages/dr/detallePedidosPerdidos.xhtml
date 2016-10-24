@@ -32,6 +32,7 @@
 	 			    <p:columnGroup type="header">
 			            <p:row>
 			            	<p:column colspan="1" headerText="Item" width="4%" />
+			            	<p:column colspan="1" headerText="Nombre Vendedor" />
 			            	<p:column colspan="1" headerText="Nombre Cliente" />
 			            	<p:column colspan="1" headerText="Necesidad" />
 			            	<p:column colspan="1" headerText="Causa Perdida" width="15%"  />
@@ -44,6 +45,10 @@
 			        
 			        <p:column headerText="Item" >
 						<h:outputText value="#{perdidos.id}" />
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{perdidos.zona.funcionario.persona.nombre}" />
 					</p:column>
 					
 				    <p:column headerText="nombre" >
@@ -78,7 +83,7 @@
 					
 					<p:columnGroup type="footer">
 			            <p:row>
-			            	<p:column colspan="7" footerText="Totales" style="text-align: right" />
+			            	<p:column colspan="8" footerText="Totales" style="text-align: right" />
 			            	<p:column footerText="$ #{incidenciaBean.valorTotal}"  style="text-align: right"/>		 
 			            </p:row>
 			        </p:columnGroup>
