@@ -11,17 +11,34 @@
 		<ui:define name="contenido">
 			<f:metadata>
 				<f:event listener="#{incidenciaBean.listarPedidosProceso()}" type="preRenderView" />
-			</f:metadata>	
-			
-			<h:form>
-				<p:commandButton value="Volver"  icon="ui-icon-arrowreturn-1-w"
-							style="height:35px; background:#449d44;"  onclick="history.back();" />	
-			</h:form>
-			
+			</f:metadata>
+				
+			<f:facet name="header">			
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+								outcome="/pages/ve/vistaModulo.xhtml?faces-redirect=true"
+								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 6}"
+								onclick="showLoading()" />
+					
+					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+								outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true"
+								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}"
+								onclick="showLoading()" />			
+							
+					<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+								  iconPos="right" styleClass="excel "
+								  style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
+								  onclick="showLoading(); history.back()"/>
+		  </f:facet>
+		  
 			<h:form id="frmInc" >
 				<p:dataTable styleClass="tblPla" id="tblPlan"
 					emptyMessage="No se encontraron registros" value="#{incidenciaBean.listaPedidosEnProceso}" var="pep"
-					filteredValue="#{incidenciaBean.listaFiltroPP}">
+					filteredValue="#{incidenciaBean.listaFiltroPP}"
+					scrollRows="50" scrollable="true" liveScroll="true" scrollHeight="320">
 					
 					<f:facet name="header">
 						Lista de Pedidos Proceso

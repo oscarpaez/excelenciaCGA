@@ -20,7 +20,7 @@
 				
 				<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
 								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
-								outcome="/pages/gg/vistaModulo2.xhtml?faces-redirect=true"
+								outcome="/pages/ve/vistaModulo.xhtml?faces-redirect=true"
 								onclick="showLoading()" />	
 				
 				<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
@@ -31,26 +31,17 @@
 			
 			<h:form id="frmPlan">
 			<p:panel>
-				<f:facet name="header" >
-				           <h:outputText value="Fecha #{autenticacionBean.fechaActual}" /> 			       
-				        	
-				        	<h:commandLink title="Exportar a Excel" >
-									<p:graphicImage library="images" name="excel.png" width="24" styleClass="excel"/>
-									<p:dataExporter type="xls" target="tblPlan" fileName="Oportunidad de Negocio" />
-						    </h:commandLink>
-				</f:facet>	
+					
 			<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" 
 						value="#{incidenciaBean.listaIncidencia}" var="incidencia" rows="15"
 						filteredValue="#{incidenciaBean.listaFiltrarIncidencia}"
-						scrollRows="40" scrollable="true"  liveScroll="true" scrollHeight="300"
+						scrollRows="40" scrollable="true"  liveScroll="true" scrollHeight="330"
 						scrollWidth="97%"  >
 					
 					<p:columnGroup type="header">
 		            <p:row>
-		            	<p:column rowspan="2" headerText="Cod Sap"  width="30" />
-		            	<p:column rowspan="2" headerText="Nombre Vendedor"  filterBy="#{incidencia.funcionario.persona.nombre}" filterMatchMode="contains" width="150"/>
 		            	<p:column rowspan="2" headerText="Oficina" filterBy="#{incidencia.ciudad.nombre}" filterMatchMode="contains" width="90" filterStyle="width:90%"/>
-		            	<p:column rowspan="2" headerText="Tipo de Negocio" width="150"/>
+		            	<p:column rowspan="2" headerText="Tipo de Negocio" width="100"/>
 		            	<p:column rowspan="2" headerText="Cliente" filterBy="#{incidencia.cliente}" filterMatchMode="contains" width="150"/>
 		            	<p:column rowspan="2" headerText="Necesidad Cliente" width="250" />
 		            	<p:column rowspan="2" headerText="Probabilidad de Concretar el Negocio" width="100" filterBy="#{incidencia.probabilidadConNeg}" filterMatchMode="contains" filterStyle="width:90%"/>
@@ -60,7 +51,7 @@
 		            	<p:column colspan="1" headerText="Nombre Competencia" width="150"/>
 		            	<p:column colspan="1" headerText="Precio Competencia" width="90"/>
 		            	<p:column colspan="1" headerText="Rentabilidad Requeridad" width="80"/>
-		            	<p:column colspan="1" headerText="Resultado de la Negociacion" width="70"/>
+		            	<p:column colspan="1" headerText="Resultado de la Negociacion" width="70" filterBy="#{incidencia.resultaNegocio}" filterMatchMode="contains" filterStyle="width:90%"/>
 		            	<p:column colspan="1" headerText="Medio de contacto" width="100"/>
 		            	<p:column rowspan="2" headerText="Fecha" style="text-align: center;" width="100" />  
 		            </p:row>
@@ -68,81 +59,70 @@
 		            
 		        </p:columnGroup>
 				
-					<p:column headerText="Cod Sap" style="text-align: center">
-						<h:outputText value="#{incidencia.funcionario.id_funcionario}" />
-					</p:column>
-					
-					<p:column headerText="Nombre Vendedor" >
-						<h:outputText value="#{incidencia.funcionario.persona.nombre}" >
-							<f:convertNumber locale="en_US" maxFractionDigits="0"/>
-						</h:outputText>
-					</p:column>
-					
-					<p:column headerText="Oficina">
+					<p:column >
 						<h:outputText value="#{incidencia.ciudad.nombre}" >
 							<f:convertNumber locale="en_US" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Tipo de Negocio">
+					<p:column >
 						<h:outputText value="#{incidencia.linea.nombre}" />
 					</p:column>
 					
-					<p:column headerText="Cliente"    style="text-align: center">
+					<p:column headerText="comision"    style="text-align: center">
 						<h:outputText value="#{incidencia.cliente}" />
 					</p:column>
 					
-					<p:column headerText="Necesidad Cliente"    style="text-align: center">
+					<p:column headerText="comision"    style="text-align: center">
 						<h:outputText value="#{incidencia.necesidad}" />
 					</p:column>	
-					
-					<p:column headerText="Probabilidad de Concretar el Negocio"    style="text-align: center">
+									
+					<p:column headerText="comision"    style="text-align: center">
 						<h:outputText value="#{incidencia.probabilidadConNeg} %" />
-					</p:column>					
+					</p:column>	
 					
-					<p:column headerText="Causa"    style="text-align: center">
+					<p:column headerText="comision"    style="text-align: center">
 						<h:outputText value="#{incidencia.causaPerdida.descripcion}" />
 					</p:column>
 					
-					<p:column headerText="Precio oferta"    style="text-align: right">
+					<p:column headerText="comision"    style="text-align: right">
 						<h:outputText value="#{incidencia.valorVenta}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="0" pattern="#,##0;(#,##0)" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Rentabilidad Plan"    style="text-align: center">
-						<h:outputText value="#{incidencia.rentabilidad} %" />
+					<p:column headerText="rP"    style="text-align: center">
+						<h:outputText value="#{incidencia.rentabilidad}" />
 					</p:column>
 				 	
-					<p:column headerText="Nombre Competencia"    style="text-align: center">
+					<p:column headerText="nC"    style="text-align: center">
 						<h:outputText value="#{incidencia.nombreCompetencia}" />
 					</p:column>
 					
-					<p:column headerText="Precio Competencia"    style="text-align: center">
+					<p:column headerText="pC"    style="text-align: center">
 						<h:outputText value="#{incidencia.precioCompetencia}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="0" pattern="#,##0;(#,##0)" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Rentabilidad Requeridad"    style="text-align: center">
-						<h:outputText value="#{incidencia.rentabilidadRequerida} %" />
+					<p:column headerText="rP"    style="text-align: center">
+						<h:outputText value="#{incidencia.rentabilidadRequerida}" />
 					</p:column>
 					
-					<p:column headerText="Resultado de la Negociacion"    style="text-align: center">
+					<p:column headerText="rP"    style="text-align: center">
 						<h:outputText value="#{incidencia.resultaNegocio}" />
 					</p:column>
 					
-					<p:column headerText="Medio de contacto"    style="text-align: center">
+					<p:column headerText="rP"    style="text-align: center">
 						<h:outputText value="#{incidencia.canalesContacto}" />
 					</p:column>	
 					
-					<p:column headerText="Fecha"    style="text-align: center">
+					<p:column headerText="comision"    style="text-align: center">
 						<h:outputText value="#{incidencia.fechaRegistro}" />
 					</p:column>  
 					
 					<p:columnGroup type="footer">
 			            <p:row>
-			            	<p:column colspan="1" style="text-align:right"/>
 			            	<p:column colspan="1" style="text-align:right"/>
 			            	<p:column colspan="1" style="text-align:right"/>
 			            	<p:column colspan="1" style="text-align:right"/>
@@ -167,22 +147,6 @@
 			        </p:dataTable>
 			    </p:panel>    
 			</h:form>
-			
-			<h:form>
-			<h:panelGrid columns="8">
-				<p:outputLabel value="Fecha Inicio:" />
-				<p:calendar value="#{incidenciaBean.fechaIni}" 
-									size="35" />
-
-				<p:outputLabel value="Fecha Final:" />
-				<p:calendar value="#{incidenciaBean.fechaFin}" 
-									size="35"  />
-
-				<p:commandButton value="Buscar" update=":frmPlan:tblPlan "
-					actionListener="#{incidenciaBean.listarIncidencias()}" style="background: #b94a48"/>
-				
-			</h:panelGrid>
-		</h:form>
 		
 		</ui:define>
 	</ui:composition>	

@@ -431,6 +431,7 @@ public class directorGBean implements Serializable{
 					List<OficinaVendedorInterno> lista = daoOF.listaVenIntDirector(sucursal); 
 					for (OficinaVendedorInterno ofiVenInt : lista) {
 						Funcionario fun = daoF.buscar(ofiVenInt.getCodigosap());
+						
 						if (fun !=null){
 							listaVendedor.add(fun);
 						}
@@ -440,6 +441,7 @@ public class directorGBean implements Serializable{
 					}
 					tablaFun = "I";
 					tipo="funcionarioI";
+					listaV = dao.listarDetalleVendedoresOficina(zonaF.getCiudad().getId(), tipo, fechaBusqueda, fechaBusquedaYear);
 				}
 			}
 			else if(autenticacion.getTipoVendedor().equals("L")){
@@ -490,7 +492,7 @@ public class directorGBean implements Serializable{
 					}
 									
 				}
-				
+				//System.out.println(fun + "!!!!!!!!!");
 				Funcionario fun1 = daoF.buscar(fun);
 				System.out.println(fun1.getId_funcionario());
 				if(fun1 != null){
@@ -564,7 +566,11 @@ public class directorGBean implements Serializable{
 					for (Funcionario f : listaVendedor) {
 						PresupuestoDao daoP = new PresupuestoDao();
 						BigDecimal pre = new BigDecimal("0");
-						if(autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
+						
+						if(tipo.equals("funcionarioI")){
+							pre = daoP.datoPorLineaSumFechas(f.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
+						}						
+						else if(autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
 							pre = daoP.datoPorLineaSumFechasE(f.getId_funcionario(), idCiudad, fechaBusqueda, fechaBusquedaYear);
 						}
 						else{
@@ -752,7 +758,7 @@ public class directorGBean implements Serializable{
 				}	
 				
 			}*/
-			cumplimiento = TIngresoR.divide(TPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimiento =(TPresupuesto.intValue() == 0 || TIngresoR.intValue() == 0)? new BigDecimal("0"): TIngresoR.divide(TPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimiento = cumplimiento.setScale(2, BigDecimal.ROUND_HALF_UP);
 			totalPre = new DecimalFormat("###,###").format(TPresupuesto);
 			totalReA = new DecimalFormat("###,###").format(TIngresoR);

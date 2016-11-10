@@ -1,9 +1,15 @@
 package co.com.CGAwebComercial.resource;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import org.omnifaces.util.Messages;
+
+import co.com.CGAwebComercial.dao.GerentesDao;
 import co.com.CGAwebComercial.util.Fechas;
 
 public class Recursos {
@@ -74,15 +80,15 @@ public class Recursos {
 		fechas.setValorMes("12");
 		fechas.setMes( "Diciembre");
 		listaFechas.add(fechas);
-		
+
 		return listaFechas;
 	}
-	
+
 	public List<Fechas> cargarFechasTotal(){
 
 		listaFechas = new ArrayList<>();	
 		Fechas fechas = new Fechas();
-		
+
 		fechas.setValorMes("01");
 		fechas.setMes( "Enero");
 		listaFechas.add(0,fechas);
@@ -141,7 +147,7 @@ public class Recursos {
 		fechas.setValorMes("12");
 		fechas.setMes( "Diciembre");
 		listaFechas.add(fechas);
-		
+
 		return listaFechas;
 	}
 
@@ -158,10 +164,50 @@ public class Recursos {
 		return oficina;
 	}
 	
+	public int idOficinaDivsion(int idCiudad){
+
+		int oficina = 0;
+		try{
+			oficina = (idCiudad == 1000 )? 1 : (idCiudad == 7000 )? 2 : (idCiudad - 1000)/1000 ;
+
+			return oficina;
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+		}
+		return oficina;
+	}
+
 	public int yearActual(){
-		
+
 		Calendar fechas = Calendar.getInstance();
 		int year = fechas.get(Calendar.YEAR);
 		return year;
+	}
+
+	public String mesActualG(){
+
+		String periodoM = "";
+		try{
+			GerentesDao daoG = new GerentesDao();
+			Date fechaActual = daoG.fechaFinal();
+			DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+			String fechaConverdita = formatoFecha.format(fechaActual); 
+			String diaArray[] = fechaConverdita.split("-");
+			for (String string : diaArray) {
+				System.out.println(string);
+			}
+			int mes = Integer.parseInt("" + diaArray[1]);
+			System.out.println(mes);
+			String[] periodo = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+					"Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+
+			periodoM = periodo[mes -1];
+			return periodoM;
+
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se Cargo el mes Actual");
+		}
+		return periodoM;
 	}
 }

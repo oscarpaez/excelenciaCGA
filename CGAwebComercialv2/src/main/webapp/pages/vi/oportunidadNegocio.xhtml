@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	
+	<ui:define name="contenido">
+		<f:metadata>
+			<f:event listener="#{incidenciaBean.listarAsesor()}" type="preRenderView" />
+		</f:metadata>
+		
+		<f:facet name="header">
+				<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+				
+				<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+								  iconPos="right" styleClass="excel "
+								  style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
+								  rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}"
+								  outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true"
+								  onclick="showLoading(); "/>
+			
+				<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+								  iconPos="right" styleClass="excel "
+								  style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
+								  rendered="#{autenticacionBean.usuarioLogin.perfil.id == 6}"
+								  outcome="/pages/ve/vistaModulo.xhtml?faces-redirect=true"
+								  onclick="showLoading();"/>					  
+		</f:facet>					
+		
+		<h:form id="frmNueIci"> 
+			<p:panel style="" styleClass="">
+				<div class="ui-grid ui-grid-responsive">
+			 	<div class="ui-grid-row">
+						<div class="ui-grid-col-4" style="width: 100%; display:">
+							<p:panel header="Vendedor" closable="true" toggleSpeed="500" closeSpeed="500" 
+							 widgetVar="panel" style="margin-bottom:20px" toggleable="true" >
+  
+								<h:panelGrid columns="2">
+									<p:outputLabel value="Asesor Comercial: #{incidenciaBean.incidencia.funcionario.persona.nombre}" style="" />
+									<p:outputLabel value="Cod Sap: #{incidenciaBean.incidencia.funcionario.id_funcionario}" style=" " />
+									<p:outputLabel value="Oficina Ventas: #{incidenciaBean.incidencia.ciudad.nombre}" style="" />
+									<p:outputLabel value="Zona de Ventas: #{incidenciaBean.incidencia.zonaId}" style=" " />
+								</h:panelGrid>
+							</p:panel>
+							<br />								
+						</div>
+					</div>  
+					<div class="ui-grid-row">	
+						
+						<div class="ui-grid-col-4" style="width: 100%">		
+					<p:panel id="pnlNueIci" style="border: 1px solid #50bf22;" styleClass="">
+							<f:facet name="header">
+								<p:outputLabel value="Registrar Oportunidad de Negocio" />
+							</f:facet>
+							<p:panelGrid columns="4"  id="pnlGps"  styleClass="pnlGps"
+									columnClasses="column1,column2,column3,column4"
+									 >
+							
+							<p:outputLabel value="Nombre Cliente: " style="font-size: 16px" />
+							<p:inputText style="width:90%" value="#{incidenciaBean.incidencia.cliente}" 
+									required="true" requiredMessage="Campo Cliente es obligatorio "/>
+							
+							<p:outputLabel value="Probabilidad de Concretar el Negocio:" style="font-size: 16px " />
+							<p:selectOneMenu id="proNeg" filter="true" style="width:83%"
+									value="#{incidenciaBean.incidencia.probabilidadConNeg}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Probabilidad de Concretar el Negocio es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItem itemValue="10" itemLabel="10%" />
+									<f:selectItem itemValue="20" itemLabel="20%" />
+									<f:selectItem itemValue="30" itemLabel="30%" />
+									<f:selectItem itemValue="40" itemLabel="40%" />
+									<f:selectItem itemValue="50" itemLabel="50%" />
+									<f:selectItem itemValue="60" itemLabel="60%" />
+									<f:selectItem itemValue="70" itemLabel="70%" />
+									<f:selectItem itemValue="80" itemLabel="80%" />
+									<f:selectItem itemValue="90" itemLabel="90%" />
+									<f:selectItem itemValue="100" itemLabel="100%" />
+							</p:selectOneMenu>
+								
+							
+							<p:outputLabel value="N° oferta: " style="font-size: 16px" />
+							<p:inputText style="width:90%" value="#{incidenciaBean.incidencia.noferta}" 
+									required="true" requiredMessage="Campo Cliente es obligatorio "/>
+							
+							<p:outputLabel value="Necesidad Cliente: " style="font-size: 16px " />
+							<p:inputTextarea  value="#{incidenciaBean.incidencia.necesidad}" cols="40"  rows="3" autoResize="false" 
+									style="width:90%" requiredMessage="Campo Necesidad Cliente es obligatorio " required="true"/>		
+						
+							
+								<p:outputLabel value="Nombre de la Competencia: " style="font-size: 16px " />
+								<p:inputText style="width:90%" value="#{incidenciaBean.incidencia.nombreCompetencia}" 
+										requiredMessage="Campo Nombre de la Competencia es obligatorio " required="true"/>
+								
+								<p:outputLabel for="estado" value="Regularidad Negocio: " style="font-size: 16px " />
+								<p:selectOneMenu id="estado" filter="true" style="width:83%"
+									value="#{incidenciaBean.incidencia.regularidad}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="El Campo Regularidad Negocio es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItems value="#{incidenciaBean.listaRegularidad}" var="regularidad"
+										itemValue="#{regularidad}" itemLabel="#{regularidad.descripcionR}" />
+								</p:selectOneMenu>
+								
+								<p:outputLabel value="Precio de la Competencia: " style="font-size: 16px " />
+								<p:inputNumber id="precioCom" value="#{incidenciaBean.incidencia.precioCompetencia}" placeholder="0 $" symbol=" $" symbolPosition="s" 
+			                               thousandSeparator=","   decimalPlaces="0"
+			                               style="width: 100%;" size="35" required="true" 
+			                               requiredMessage="Campo Precio de la Competencia es obligatorio"/>
+								
+								<p:outputLabel  value="Tipo de Negocio: " style="font-size: 16px " />
+								<p:selectCheckboxMenu id="menu" widgetVar="menu" value="#{incidenciaBean.selectTipoNegocio}" label="Tipo de Negocio"
+			                              filter="true" filterMatchMode="startsWith" panelStyle="width:30%" style="width:92%"
+			                              required="true"
+										  requiredMessage="El Campo Tipo de Negocio es obligatorio" 
+										  >	
+										<f:selectItems value="#{incidenciaBean.listaLinea}" var="linea"
+											itemValue="#{linea.id}" itemLabel="#{linea.nombre}" />
+						        		
+						        </p:selectCheckboxMenu>
+								
+								<p:outputLabel value="Rentabilidad Requerida:"  style="font-size: 16px "/>
+								<p:inputNumber id="retanbilidadR" value="#{incidenciaBean.incidencia.rentabilidadRequerida}" placeholder="0 %" symbol=" %" symbolPosition="s" 
+			                               thousandSeparator=","  maxValue="999" decimalPlaces="0" 
+			                               style="width: 100%;" size="35" required="true" 
+			                               requiredMessage="El Campo Rentabilidad Requerida es obligatorio"/>  						
+								
+								<p:outputLabel value="Precio Ofertado:" style="font-size: 16px " />
+								<p:inputNumber id="valor" value="#{incidenciaBean.incidencia.valorVenta}" placeholder="0 $" symbol=" $" symbolPosition="s" 
+			                               thousandSeparator=","  decimalPlaces="0"
+			                               style="width: 100%;" size="35"
+			                               validatorMessage="Ingrese un valor superior a 5,000,000" 
+			                               required="true" 
+			                               requiredMessage="El Campo Rentabilidad Requerida es obligatorio">
+			                               <f:validateLongRange minimum="5000000" /> 
+			                    </p:inputNumber> 
+			                    
+			                    <p:outputLabel  value="Resultado de la Negociación: " style="font-size: 16px "/>
+								<p:selectOneMenu  filter="true" style="width:83%"
+									value="#{incidenciaBean.incidencia.resultaNegocio}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="El Campo Resultado de la Negociación es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItem itemValue="SI" itemLabel="SI" />
+									<f:selectItem itemValue="NO" itemLabel="NO" />	
+									<f:selectItem itemValue="PR" itemLabel="PROYECTADO" />									
+								</p:selectOneMenu>	
+								           
+			                               
+			                    <p:outputLabel value="Rentabilidad Plan:"  style="font-size: 16px "/>
+								<p:inputNumber id="retanbilidad" value="#{incidenciaBean.incidencia.rentabilidad}" placeholder="0 %" symbol=" %" symbolPosition="s" 
+			                               thousandSeparator="," maxValue="999" decimalPlaces="0"
+			                               style="width: 100%;" size="35"  required="true" 
+			                               requiredMessage="El Campo Rentabilidad Plan es obligatorio"/>             
+			               		
+			               		<p:outputLabel for="e" value="Causa de Perdida: "  style="font-size: 16px "/>
+								<p:selectOneMenu id="e" filter="true" style="width:83%"
+									value="#{incidenciaBean.incidencia.causaPerdida}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Estado es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItems value="#{incidenciaBean.listaCausa}" var="causa"
+										itemValue="#{causa}" itemLabel="#{causa.descripcion}" />
+								</p:selectOneMenu>
+								
+								<p:outputLabel  value="Medio de Contacto: " style="font-size: 16px "/>
+								<p:selectOneMenu  filter="true" style="width:83%"
+									value="#{incidenciaBean.incidencia.canalesContacto}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="El Campo Medio de Contacto es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItem itemValue="Otro" itemLabel="Otro" />
+									<f:selectItem itemValue="Pagina Web" itemLabel="Pagina Web" />
+									<f:selectItem itemValue="Ventas Internas" itemLabel="Ventas Internas" />
+									<f:selectItem itemValue="Ventas Externas" itemLabel="Ventas Externas" />
+								</p:selectOneMenu>
+								
+								<p:outputLabel value="Fecha Registro:" style="font-size: 16px " />
+								<p:calendar value="#{incidenciaBean.incidencia.fechaRegistro}" 
+									size="35" required="true"
+									requiredMessage="El Fecha Registro es obligatorio" />
+								
+								<p:commandButton value="Salvar" icon="ui-icon-disk"
+									actionListener="#{incidenciaBean.salvar()}"
+									update=":frmNueIci:pnlNueIci :msgGlobal  :frmNueIci:menu   "/>
+							</p:panelGrid>	
+						</p:panel>
+						</div>
+					</div>
+				</div>	
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

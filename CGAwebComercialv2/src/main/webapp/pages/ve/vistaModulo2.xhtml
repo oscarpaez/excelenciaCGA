@@ -25,6 +25,23 @@
 				   <p:panel style="width:400px;" styleClass="promedio">				  		
 				  		<h:form >
 							<h:panelGrid columns="2">
+								
+								<p:outputLabel  value="Venta Total Facturada" 
+									    	style="font-size: 14px; " />
+								<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right;
+											border: 1px solid #9C27B0;"
+											value="#{vendedorLBRBean.totalRealMes}"  disabled="true" >
+											<f:convertNumber pattern="#,##0;"/>
+								</p:inputText>
+								
+								<p:outputLabel  value="Presupuesto Mes " 
+									    	style="font-size: 14px; " />
+								<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right;
+											border: 1px solid #9C27B0;"
+											value="#{vendedorLBRBean.presupuestoMes}"  disabled="true" >
+											<f:convertNumber pattern="#,##0;(#,##0)"/>
+								</p:inputText>
+								
 								<p:outputLabel  value="Venta Mes Real " 
 									    	style="font-size: 14px; " />
 								<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
@@ -38,20 +55,13 @@
 												value="#{vendedorLBRBean.lbr}"  disabled="true" >
 												<f:convertNumber pattern="#,##0;"/>
 									</p:inputText>								
-									
-								<p:outputLabel  value="Presupuesto Mes " 
-									    	style="font-size: 14px; " />
-								<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
-											value="#{vendedorLBRBean.presupuestoMes}"  disabled="true" >
-											<f:convertNumber pattern="#,##0;(#,##0)"/>
-								</p:inputText>								
 							</h:panelGrid>
 						</h:form>
 				  		
 				  		<p:chart type="metergauge" 	model="#{vendedorLBRBean.meterGaugeModel}"
 								style="width:350px;height:250px" />						
 						
-				  		
+				  		<!-- 
 				  		<h:form id="frmProVen" styleClass="frmProVen" enctype="multipart/form-data">
 							<p:outputLabel  id="tituloVenta" styleClass="tituloVenta" value="Promedio de venta  #{vendedorLBRBean.mesActual}" 
 							    	style="color: #0000ff; font-style: italic;"/> <br />
@@ -70,15 +80,16 @@
 									 <f:convertNumber pattern="#,##0;(#,##0)"/>
 								</p:inputText>
 							</h:panelGrid>
-						</h:form>
+						</h:form> -->
 									
 					</p:panel>
 				</div>
 				
-				<div class="ui-grid-col-8" style="padding-left: 10px; width:70%">
-					<div style="display:block; text-align:center; margin: 0 auto; width: 850px; ">	
+				<div class="ui-grid-col-8" style="padding-left: 10px; width:55%">
+					<div class="ui-grid-row" style="width:840px">
+						<div style="display:block; text-align:center; width: 440px; ">	
 					  <p:button value="Excelencia Comercial"
-							style="width:200px; height:100px"
+							style="width:200px; height:80px"
 							outcome="/pages/plan.xhtml?faces-redirect=true"
 							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}" 
 							onclick="showLoading()"/>
@@ -91,29 +102,52 @@
 					   </p:link>
 					   
 					   <p:button value="Excelencia Ofertas y Pedidos"
-							style="width:200px; height:100px"
+							style="width:200px; height:80px"
 							outcome="/pages/ve/ofertaPedido.xhtml?faces-redirect=true"
 							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}"
 							onclick="showLoading()" />					  					
 					   					
 					</div>
+					
+					<div style="margin: 0 auto; ">
+						<p:panel style="height:80px; width:390px;">
+							<h:form>
+								<h:panelGrid columns="3">
+									<p:outputLabel value="KPI Ofertas y Pedidos"
+										style="font-size: 14px; " />
+									<p:inputText size="8"
+										style="color:#0000ff; opacity: .90; text-align: right;
+												border: 1px solid #9C27B0;"
+										value="#{vendedorLBRBean.kpiOfertas} %" disabled="true">
+										<f:convertNumber pattern="#,##0;" />
+									</p:inputText>
+									<p:graphicImage library="images" name="#{vendedorLBRBean.kpiOimagen}" height="25"
+										width="25" />
+
+
+									<p:outputLabel value="KPI Oportunidad de Negocio"
+										style="font-size: 14px; " />
+									<p:inputText size="8"
+										style="color:#0000ff; opacity: .90; text-align: right;
+												border: 1px solid #9C27B0;"
+										value="#{vendedorLBRBean.kpiOpoNeg} %" disabled="true">
+										<f:convertNumber pattern="#,##0;" />
+									</p:inputText>
+									<p:graphicImage library="images" name="#{vendedorLBRBean.kpiNimagen}" height="25"
+										width="25" />
+
+								</h:panelGrid>
+							</h:form>
+						</p:panel>
+						</div>
+					</div>
 				<br />
-					<div class="ui-grid-col-5" style="padding-left: 10px; width:50%;">	
+					<div class="ui-grid-row" style="width:840px">
+					<div class="ui-grid-col-5" style="padding-left: 10px; width:62%;">	
 					<h:form id="frmDesRec" enctype="multipart/form-data">
 						<p:panel style="height:340px; width:430px">
 							<h:form >
 								<h:panelGrid columns="3">
-									
-									<p:outputLabel  value="Pedidos Perdidos" 
-										    	style="font-size: 14px; " />
-									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
-												value="#{vendedorLBRBean.pedidosPerdidos}"  disabled="true" >
-												<f:convertNumber pattern="#,##0;"/>
-									</p:inputText>
-									<p:button icon="ui-icon-search" title="Detalle Pedidos Perdidos"
-										outcome="/pages/ve/detallePedidosPerdidos.xhtml?faces-redirect=true"
-										onclick="showLoading()" >
-									</p:button>
 									
 									<p:outputLabel  value="Pedidos en Proceso " 
 										    	style="font-size: 14px; " />
@@ -135,29 +169,75 @@
 												<f:convertNumber pattern="#,##0;(#,##0)"/>
 									</p:inputText>
 									<p:button icon="ui-icon-search"  title="Detalle Pedidos en Proceso"
-										outcome="/pages/ve/detallePedidosProyectados.xhtml?faces-redirect=true"
+										outcome="/pages/ve/vistaIncidencia2.xhtml?faces-redirect=true"
 										onclick="showLoading()" >
-										<f:param name="perId" value=""/>
+										<f:param name="perId" value="PR"/>
 										<f:param name="tipo" value=""/>
 									</p:button>
 									
-								</h:panelGrid><br />
-								<div style="text-align:center;">
+									<p:outputLabel  value="Oportunidad de Negocio Ganado" 
+										    	style="font-size: 14px; " />
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
+												value="#{vendedorLBRBean.pedidosGanados}"  disabled="true" >
+												<f:convertNumber pattern="#,##0;"/>
+									</p:inputText>
+									<p:button icon="ui-icon-search" title="Detalle Pedidos Ganados"
+										outcome="/pages/ve/vistaIncidencia2.xhtml?faces-redirect=true"
+										onclick="showLoading()" >
+										<f:param name="perId" value="SI"/>
+										<f:param name="tipo" value=""/>
+									</p:button>
+									
+									<p:outputLabel  value="Oportunidad de Negocio Perdido" 
+										    	style="font-size: 14px; " />
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
+												value="#{vendedorLBRBean.pedidosPerdidos}"  disabled="true" >
+												<f:convertNumber pattern="#,##0;"/>
+									</p:inputText>
+									<p:button icon="ui-icon-search" title="Detalle Pedidos Perdidos"
+											outcome="/pages/ve/vistaIncidencia2.xhtml?faces-redirect=true"
+											onclick="showLoading()" >
+											<f:param name="perId" value="NO"/>
+											<f:param name="tipo" value=""/>
+									</p:button>
+									
+								</h:panelGrid>
+						<!--		<div style="text-align:center;">
 									<p:button icon="ui-icon-document"  value="Registrar Pedidos Proyectados"
-										style="width:340px; "
+										style="width:340px; font-size: 16px;"
 										outcome="/pages/vi/registroPedidosProgramados.xhtml?faces-redirect=true"
 										onclick="showLoading()">
 										<f:param name="perId" value=""/>
 										<f:param name="tipo" value=""/>
 									</p:button>
-								</div>
+								</div>  -->
 								<br />
 								<div style="text-align:center;">	
-									 <p:button icon="ui-icon-document" value="Registrar Pedidos Perdidos"
-											style="width:340px; "
-											outcome="/pages/vi/incidencia.xhtml?faces-redirect=true"
+									 <p:button icon="ui-icon-document" value="Registrar Oportunidad de Negocio"
+											style="width:340px;  font-size: 16px;"
+											outcome="/pages/vi/oportunidadNegocio.xhtml?faces-redirect=true"
 											onclick="showLoading()" />	
 								</div>
+								<br />
+								<h:panelGrid columns="2">
+									<p:outputLabel  value="Recaudo Mes " 
+										    	style="font-size: 14px; " />
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right;
+											border: 1px solid #FF9800;"
+												value="#{vendedorLBRBean.realRecaudo}"  disabled="true" >
+												<f:convertNumber pattern="#,##0;(#,##0)"/>
+									</p:inputText>
+									
+									<p:outputLabel  value="Presupuesto Recaudo" 
+										    	style="font-size: 14px; " />
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right;
+											border: 1px solid #FF9800;"
+												value="#{vendedorLBRBean.presupuestoRecaudo}"  disabled="true" >
+												<f:convertNumber pattern="#,##0;(#,##0)"/>
+									</p:inputText>
+								</h:panelGrid>
+								
+								
 							</h:form>
 						</p:panel>
 					</h:form>
@@ -189,6 +269,7 @@
 							</p:panel>
 						</h:form>
 					</div>
+				   </div>	
 				</div>
 			</div>
 			

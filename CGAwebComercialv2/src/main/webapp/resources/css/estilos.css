@@ -118,10 +118,7 @@ ui-grid-col-4{
 
 /* quitar grid del panel grid */
 
-.pnlGra.ui-panelgrid>*>tr,
-.pnlGra.ui-panelgrid .ui-panelgrid-cell {
-    border: none;
-}
+
 /*
 .ui-selectonemenu-filter-container {
     width: 20% !important;
@@ -131,8 +128,24 @@ ui-grid-col-4{
 min-width: 0 !important;
 }	
 
+/* tamaño de celdas del Grid */
+.column1{width: 17%;height:auto}
+.column2{width: 33%;height:auto}
+.column3{width: 17%;height:auto}
+.column4{width: 33%;height:auto}
 
+.pnlGps{font-size: 16px} 
 
+.pnlGps .ui-panelgrid .ui-panelgrid-cell{
+	
+	/*border-style: none;*/
+	padding: 1px, 0; 
+}
 
+.pnlGps.ui-panelgrid>*>tr,
+.pnlGps.ui-panelgrid .ui-panelgrid-cell {
+    border-style: none;
+	padding: 0; 
+}
 
       

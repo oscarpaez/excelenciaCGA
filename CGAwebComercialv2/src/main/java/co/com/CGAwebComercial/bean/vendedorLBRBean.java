@@ -31,8 +31,8 @@ import co.com.CGAwebComercial.dao.DetalleDao;
 import co.com.CGAwebComercial.dao.FuncionarioDao;
 import co.com.CGAwebComercial.dao.GerentesDao;
 import co.com.CGAwebComercial.dao.IncidenciaDao;
+import co.com.CGAwebComercial.dao.OfertasPedidosDao;
 import co.com.CGAwebComercial.dao.PedidosEnProcesoDao;
-import co.com.CGAwebComercial.dao.PedidosProyectadosDao;
 import co.com.CGAwebComercial.dao.PresupuestoDao;
 import co.com.CGAwebComercial.dao.PromedioVentaDao;
 import co.com.CGAwebComercial.dao.RecaudoDao;
@@ -78,13 +78,21 @@ public class vendedorLBRBean implements Serializable{
 	private String nombreV;
 	private String nombreC;
 	private BigDecimal presupuestoMes;
+	private BigDecimal totalRealMes;
 	private BigDecimal realMes;	
 	private BigDecimal lbr;	
 	private BigDecimal pedidosPerdidos;
+	private BigDecimal pedidosGanados;
 	private BigDecimal pedidosProceso;
 	private BigDecimal pedidosProyectados;
 	private BigDecimal pedidosTotal;
-
+	private BigDecimal presupuestoRecaudo;
+	private BigDecimal realRecaudo;	
+	private BigDecimal kpiOfertas;
+	private BigDecimal kpiOpoNeg;
+	private String kpiOimagen;
+	private String kpiNimagen;
+	
 
 	public vendedorLBRBean(){
 
@@ -405,8 +413,13 @@ public class vendedorLBRBean implements Serializable{
 				presupuestoMes = ventaMes.get(1);
 				realMes = ventaMes.get(0).multiply(new BigDecimal("-1")); 
 				lbr = ventaMes.get(2).multiply(new BigDecimal("-1"));
+				presupuestoRecaudo = ventaMes.get(3);
+				realRecaudo = ventaMes.get(4);
 				
-				BigDecimal porV = (ventaMes.get(1).longValue() == 0)? new BigDecimal("0"):realMes.divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+				totalRealMes = realMes.add(lbr); 
+				
+				BigDecimal porV = (ventaMes.get(1).longValue() == 0)? new BigDecimal("0"):totalRealMes.divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+				//BigDecimal porV = (ventaMes.get(1).longValue() == 0)? new BigDecimal("0"):realMes.divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 				int V = porV.intValue();
 				
 				interval.add(3,(V >100)? V:100); 
@@ -424,18 +437,34 @@ public class vendedorLBRBean implements Serializable{
 					List<Zona_venta> zona = daoZ.buscarZona(funcionario_id);
 					
 					IncidenciaDao daoI  = new IncidenciaDao();
-					Long valorPer  = daoI.valorPedidosPerdidos(zona.get(0).getId_zona_venta());
-					pedidosPerdidos = new BigDecimal(valorPer);
+					List<Long> valorPer  = daoI.valorPedidosPerdidos(zona.get(0).getId_zona_venta(), funcionario_id);
+					
+					System.out.println(valorPer.size() + " Tamaño");
+					pedidosPerdidos = new BigDecimal(valorPer.get(0));
+					pedidosGanados =  new BigDecimal(valorPer.get(1));
+					pedidosProyectados = new BigDecimal(valorPer.get(2));
 					
 					PedidosEnProcesoDao daoP = new PedidosEnProcesoDao();
 					//pedidosProceso  = daoP.valorPedidosProceso(tipo, funcionario.getId_funcionario());
 					pedidosProceso  = daoP.valorPedidosProceso(tipo, funcionario_id);
 					
-					PedidosProyectadosDao daoPe = new PedidosProyectadosDao();
+					//PedidosProyectadosDao daoPe = new PedidosProyectadosDao();
 					//pedidosProyectados = daoPe.valorPedidosProyectados(funcionario.getId_funcionario());
-					pedidosProyectados = daoPe.valorPedidosProyectados(funcionario_id);
+					//pedidosProyectados = daoPe.valorPedidosProyectados(funcionario_id);
 					
 					pedidosTotal =pedidosProceso.add(pedidosProyectados.add(realMes).add(lbr));
+					
+					
+					OfertasPedidosDao daoOF = new OfertasPedidosDao();
+					List<BigDecimal> listaOferta = daoOF.sumaValorOfertasPedidosVendedor(tipo, funcionario_id);
+					
+					kpiOfertas = (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0"):listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+					kpiOimagen = (kpiOfertas.intValue() > 80)? "verde.png" : (kpiOfertas.intValue() > 60 &&  kpiOfertas.intValue() < 80)? "amarillo.jpg"  : "rojo.png";
+					
+					listaOferta= daoI.valorOportunidadNegocioVendedor(funcionario_id);
+					
+					kpiOpoNeg =  (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0"): listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+					kpiNimagen = (kpiOpoNeg.intValue() > 1 && kpiOpoNeg.intValue() < 20)? "verde.png" : (kpiOpoNeg.intValue() > 20 &&  kpiOpoNeg.intValue() < 40)? "amarillo.jpg"  : "rojo.png";
 					
 					List<Number> intervalA = new ArrayList<Number>(){{
 						add(60);
@@ -444,7 +473,7 @@ public class vendedorLBRBean implements Serializable{
 					}};				
 
 					
-					porV = (pedidosTotal.longValue() == 0)? new BigDecimal("0"):pedidosTotal.divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+					porV = (pedidosTotal.longValue() == 0 || ventaMes.get(1).intValue() == 0 )? new BigDecimal("0"):pedidosTotal.divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 					V = porV.intValue();
 					
 					intervalA.add(3,(V >100)? V:100); 
@@ -453,6 +482,20 @@ public class vendedorLBRBean implements Serializable{
 					meterGaugeModelA.setTitle("Cumplimiento " + mesActual + " Pedidos Facturados y Proyectados");
 					meterGaugeModelA.setGaugeLabel( V +"%");
 					meterGaugeModelA.setSeriesColors("ff0000, ffff00, 009933 ");
+				}
+				else{
+					OfertasPedidosDao daoOF = new OfertasPedidosDao();
+					List<BigDecimal> listaOferta = daoOF.sumaValorOfertasPedidosVendedor(tipo, funcionario_id);
+					
+					kpiOfertas = (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0"):listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+					kpiOimagen = (kpiOfertas.intValue() > 80)? "verde.png" : (kpiOfertas.intValue() > 60 &&  kpiOfertas.intValue() < 80)? "amarillo.jpg"  : "rojo.png";
+					
+					IncidenciaDao daoI  = new IncidenciaDao();
+					listaOferta= daoI.valorOportunidadNegocioVendedor(funcionario_id);
+					
+					kpiOpoNeg = (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0"):listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+					kpiNimagen = (kpiOpoNeg.intValue() > 1 && kpiOpoNeg.intValue() < 20)? "verde.png" : (kpiOpoNeg.intValue() > 20 &&  kpiOpoNeg.intValue() < 40)? "amarillo.jpg"  : "rojo.png";
+					
 				}
 				/**/
 				promedioVentas();
@@ -693,5 +736,53 @@ public class vendedorLBRBean implements Serializable{
 	}
 	public void setNombreC(String nombreC) {
 		this.nombreC = nombreC;
+	}
+	public BigDecimal getPresupuestoRecaudo() {
+		return presupuestoRecaudo;
+	}
+	public void setPresupuestoRecaudo(BigDecimal presupuestoRecaudo) {
+		this.presupuestoRecaudo = presupuestoRecaudo;
+	}
+	public BigDecimal getRealRecaudo() {
+		return realRecaudo;
+	}
+	public void setRealRecaudo(BigDecimal realRecaudo) {
+		this.realRecaudo = realRecaudo;
+	}
+	public BigDecimal getTotalRealMes() {
+		return totalRealMes;
+	}
+	public void setTotalRealMes(BigDecimal totalRealMes) {
+		this.totalRealMes = totalRealMes;
+	}
+	public BigDecimal getPedidosGanados() {
+		return pedidosGanados;
+	}
+	public void setPedidosGanados(BigDecimal pedidosGanados) {
+		this.pedidosGanados = pedidosGanados;
+	}
+	public BigDecimal getKpiOfertas() {
+		return kpiOfertas;
+	}
+	public void setKpiOfertas(BigDecimal kpiOfertas) {
+		this.kpiOfertas = kpiOfertas;
+	}
+	public BigDecimal getKpiOpoNeg() {
+		return kpiOpoNeg;
+	}
+	public void setKpiOpoNeg(BigDecimal kpiOpoNeg) {
+		this.kpiOpoNeg = kpiOpoNeg;
+	}
+	public String getKpiOimagen() {
+		return kpiOimagen;
+	}
+	public void setKpiOimagen(String kpiOimagen) {
+		this.kpiOimagen = kpiOimagen;
+	}
+	public String getKpiNimagen() {
+		return kpiNimagen;
+	}
+	public void setKpiNimagen(String kpiNimagen) {
+		this.kpiNimagen = kpiNimagen;
 	}
 }

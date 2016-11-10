@@ -22,7 +22,7 @@
 					<p:outputLabel value="Gestion Ofertas y Pedidos  #{ofertaPedidoBean.nombreCiu}" />					
 					
 				</f:facet>
-
+		
 		<div class="ui-grid ui-grid-responsive">
 			<div class="ui-grid-row">
 				<div class="ui-grid-col-4" style="width: 350px">
@@ -42,7 +42,7 @@
 									value="#{ofertaPedidoBean.valorTotal}" disabled="true">
 									<f:convertNumber pattern="#,##0;" />
 								</p:inputText>
-
+							
 							</h:panelGrid>
 						</h:form>
 						
@@ -55,8 +55,8 @@
 				<div class="ui-grid-col-8" style="padding-left: 10px; width:75%">
 					<h:form id="frmInc">
 
-						<p:poll interval="60" update=" :frmInc:tblPlan" 
-							listener="#{ofertaPedidoBean.cambioPagina1()}"/>
+						<p:poll interval="60" update=" :frmInc:tblPlan"
+							listener="#{ofertaPedidoBean.cambioPagina()}" />
 
 						<p:dataTable styleClass="tblPla" id="tblPlan"
 							emptyMessage="No se encontraron registros"
@@ -73,20 +73,20 @@
 									<p:column  rowspan="2" colspan="1" headerText="Cod SAP" width="5%"
 										filterBy="#{oferta.cliente}" filterMatchMode="contains" filterStyle="width: 90%" />
 									<p:column rowspan="2" colspan="1" headerText="Nombre" width="" />
-									<p:column rowspan="2" colspan="1" headerText="Total Oferta" width="12%" />
-									<p:column rowspan="2" colspan="1" headerText="Total Pedido " width="12%"
+									<p:column rowspan="2" colspan="1" headerText="Total Oferta" width="14%" />
+									<p:column rowspan="2" colspan="1" headerText="Total Pedido " width="14%"
 										filterBy="" filterMatchMode="contains" />
-									<p:column rowspan="2" colspan="2" headerText="Cumplimiento %" width="12%" />
-									<p:column rowspan="2" colspan="1" headerText="Presupuesto" width="12%" />
-									<p:column rowspan="2" colspan="1" headerText="Total Facturado" width="12%"
-										filterBy="" filterMatchMode="contains" />
-									<p:column rowspan="2" colspan="2" headerText="Cumplimiento %" width="12%" />	
-							<!--		<p:column colspan="3" headerText="LLamadas" width="" />									
+						<!--    	<p:column rowspan="2" colspan="2" headerText="Cumplimiento %" width="12%" />
+									<p:column rowspan="2" colspan="1" headerText="Presupuesto" width="10%" />
+									<p:column rowspan="2" colspan="1" headerText="Total Facturado" width="10%"
+										filterBy="" filterMatchMode="contains" /> -->
+									<p:column rowspan="2" colspan="2" headerText="Cumplimiento %" width="13%" />  	
+									<p:column colspan="3" headerText="LLamadas" width="24%" />									
 								</p:row>
 									<p:column colspan="1" headerText="Entrantes" width="" />
 									<p:column colspan="1" headerText="Salientes" width="" />
 									<p:column colspan="1" headerText="No contestadas" width="" />
-								<p:row> -->
+								<p:row>
 								
 								</p:row>
 							</p:columnGroup>
@@ -130,7 +130,7 @@
 							<f:param name="nomIn" value="#{oferta.especialista}"/>
 						</p:button>
 					</p:column>
-			-->
+			
 							<p:column style="text-align: right">
 								<h:outputText value="#{oferta.presupuesto}">
 									<f:convertNumber locale="en_US" maxFractionDigits="0" />
@@ -152,8 +152,8 @@
 							<p:column style="text-align: center;">
 								<p:graphicImage library="images" name="#{oferta.imagenA}"
 									height="25" width="25" />
-							</p:column>
-							<!-- 
+							</p:column> -->
+							
 							<p:column>
 								<h:outputText value="#{oferta.llamadaEntrante}" />
 							</p:column>
@@ -165,7 +165,7 @@
 							<p:column>
 								<h:outputText value="#{oferta.llamadaNoContestadas}" />
 							</p:column>
-							-->
+
 							<p:columnGroup type="footer">
 								<p:row>
 									<p:column colspan="2" footerText="Totales"
@@ -177,13 +177,13 @@
 									<p:column footerText="#{ofertaPedidoBean.valorPor} %"
 										style="text-align: right" />
 									<p:column colspan="1" footerText="" style="text-align: right" />	
-									<p:column footerText="$ #{ofertaPedidoBean.valorTotalPre}"
+							<!-- 	<p:column footerText="$ #{ofertaPedidoBean.valorTotalPre}"
 										style="text-align: right" />
 									<p:column footerText="$ #{ofertaPedidoBean.valorTotalF}"
 										style="text-align: right" />
-									<p:column footerText=" #{ofertaPedidoBean.valorPorV} %"
-										style="text-align: right" />				
-									<p:column colspan="1" footerText="" style="text-align: right" />
+									<p:column footerText="$ #{ofertaPedidoBean.valorPorV}"
+										style="text-align: right" />   -->				
+									<p:column colspan="3" footerText="" style="text-align: right" />
 								</p:row>
 							</p:columnGroup>
 
@@ -195,7 +195,7 @@
 				</div>
 			</div>
 		</div>
-		</p:panel>
+	   </p:panel>
 	</ui:define>
 </ui:composition>
 </html>

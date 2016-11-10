@@ -58,4 +58,23 @@ public class OficinaVendedorInternoDao  extends GenericDao<OficinaVendedorIntern
 			session.close();
 		}
 	}
+	
+	public int ciudadInterno( int codFun ){
+
+		Session session = HibernateUtil.getSessionfactory().openSession();		
+		try{
+			Criteria consulta = session.createCriteria(OficinaVendedorInterno.class);
+			consulta.add(Restrictions.eq("codigosap", codFun));
+			OficinaVendedorInterno	results = (OficinaVendedorInterno) consulta.uniqueResult();			
+			int ciudad = results.getOficinadeventas();
+			return ciudad;		
+			
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
+	
 }

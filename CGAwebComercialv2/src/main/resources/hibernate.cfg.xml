@@ -23,13 +23,13 @@
         <property name="dialect">org.hibernate.dialect.SAPDBDialect</property>-->
         
         
-         <!-- Base servidor Aplicacion en produccion -->
+         <!-- Base servidor Aplicacion en produccion  -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://192.168.0.15:3306/excelenciacga</property>
         <property name="connection.username">excelenciacga</property>
-        <property name="connection.password">E1825cGA*-</property> 
+        <property name="connection.password">E1825cGA*-</property>  
         
-         <!-- Base servidor pruebas 
+         <!-- Base servidor pruebas  
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://192.168.0.15:3306/copiaexcelenciacga</property>
         <property name="connection.username">excelenciacga</property>

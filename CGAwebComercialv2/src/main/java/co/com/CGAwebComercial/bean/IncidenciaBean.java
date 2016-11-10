@@ -17,9 +17,11 @@ import co.com.CGAwebComercial.dao.CausaPerdidaVentaDao;
 import co.com.CGAwebComercial.dao.CiudadDao;
 import co.com.CGAwebComercial.dao.ClienteDao;
 import co.com.CGAwebComercial.dao.EstadoPedidosProyectadosDao;
+import co.com.CGAwebComercial.dao.FuncionarioDao;
 import co.com.CGAwebComercial.dao.IncidenciaDao;
 import co.com.CGAwebComercial.dao.LineaDao;
 import co.com.CGAwebComercial.dao.MaterialDao;
+import co.com.CGAwebComercial.dao.OficinaVendedorInternoDao;
 import co.com.CGAwebComercial.dao.PedidosEnProcesoDao;
 import co.com.CGAwebComercial.dao.PedidosProyectadosDao;
 import co.com.CGAwebComercial.dao.RegularidadPerdidaVentaDao;
@@ -29,6 +31,7 @@ import co.com.CGAwebComercial.entyties.CausaPerdidaVenta;
 import co.com.CGAwebComercial.entyties.Ciudad;
 import co.com.CGAwebComercial.entyties.Cliente;
 import co.com.CGAwebComercial.entyties.EstadoPedidosProyectados;
+import co.com.CGAwebComercial.entyties.Funcionario;
 import co.com.CGAwebComercial.entyties.Incidencia;
 import co.com.CGAwebComercial.entyties.Linea;
 import co.com.CGAwebComercial.entyties.Material;
@@ -71,12 +74,17 @@ public class IncidenciaBean implements Serializable{
 	private EstadoPedidosProyectados estadoPP;
 	private Ciudad ciudad;
 	
+	private Date fechaIni;
+	private Date fechaFin;
 	
 	private String valorTotal;
+	private String valorTotalC;
 	private String valorTotalR;
 	private String clienteO;
 	private String materialO;
 	private String nombreC;
+	private String proNeg;
+	private String[] selectTipoNegocio;
 	private int idFun;
 	private int idCiudad;
 	
@@ -84,14 +92,45 @@ public class IncidenciaBean implements Serializable{
 		
 		try{
 			IncidenciaDao dao = new IncidenciaDao();
-			listaIncidencia = dao.listar();
+			
+			if(autenticacion.getUsuarioLogin().getPerfil().getId() == 6){
+				listaIncidencia = dao.valorPedidosPerdidosUsuarios("", autenticacion.getUsuarioLogin().getId());
+			}
+			else if(autenticacion.getUsuarioLogin().getPerfil().getId() == 1){
+				listaIncidencia = dao.valorPedidosPerdidosUsuarios(proNeg, autenticacion.getUsuarioLogin().getId());
+			}
+			else if(autenticacion.getUsuarioLogin().getPerfil().getId() == 7 || autenticacion.getUsuarioLogin().getPerfil().getId() == 8){
+				
+			}	
+			else{
+				listaIncidencia = dao.pedidosPerdidosPais( fechaIni, fechaFin);
+				//listaIncidencia = dao.listar();
+			}
+			
 			System.out.println(listaIncidencia.size());
 			Long sumaTotal = (long) 0;
+			Long sumaTotalC = (long) 0;
+			int i =0;
 			for (Incidencia incidencia : listaIncidencia) {
-				sumaTotal += incidencia.getValorVenta();
+				sumaTotal += (incidencia.getValorVenta() == null)? 0 : incidencia.getValorVenta();
+				sumaTotalC += (incidencia.getPrecioCompetencia() == null)? 0 :incidencia.getPrecioCompetencia();
+				
+				String lineas = "";
+				if(incidencia.getIdLineas() != null){
+					for (String retval: incidencia.getIdLineas().split("-")) {
+				         int codigo = Integer.parseInt(retval); 
+						 LineaDao daoL = new LineaDao();
+				         Linea linea = daoL.buscar(codigo);
+				         lineas = lineas +"\n"+ linea.getNombre();
+				    }
+					System.out.println(lineas + "lineas");
+					listaIncidencia.get(i).getLinea().setNombre(lineas);
+				}
+				i++;
 			}
 			
 			valorTotal = new DecimalFormat("###,###").format(sumaTotal);
+			valorTotalC = new DecimalFormat("###,###").format(sumaTotalC);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error No se cargo la lista de Incidencias");
@@ -110,8 +149,41 @@ public class IncidenciaBean implements Serializable{
 			estadoPP = new EstadoPedidosProyectados();
 			Zona_ventaDao dao = new Zona_ventaDao();
 			zona = new Zona_venta();
-			List<Zona_venta > zonaL = dao.buscarZona(autenticacion.getUsuarioLogin().getId());
+			
+			int venI = 0;
+			CiudadDao daoCi = new CiudadDao();
+			Ciudad ciudad = new Ciudad();
+			List <Zona_venta> zonaV = new ArrayList<>();
+			FuncionarioDao daoF = new FuncionarioDao();
+			Funcionario funcionario = daoF.buscar(autenticacion.getUsuarioLogin().getId());
 			incidencia = new Incidencia();
+			if(autenticacion.getUsuarioLogin().getPerfil().getId() == 6){
+				OficinaVendedorInternoDao daoOF = new OficinaVendedorInternoDao();
+				venI = daoOF.ciudadInterno(autenticacion.getUsuarioLogin().getId());
+				venI = venI / 1000; 
+				System.out.println(venI + "wwwwwww");
+				ciudad = daoCi.buscar(venI);
+				//System.out.println(ciudad.getNombre() + venI);
+			}
+			else if (autenticacion.getUsuarioLogin().getPerfil().getId() == 1){
+				List<Zona_venta > zonaL = dao.buscarZona(autenticacion.getUsuarioLogin().getId());
+				venI = zonaL.get(0).getCiudad().getId();
+				ciudad = daoCi.buscar(venI);
+				Zona_ventaDao daoZ = new Zona_ventaDao();
+				zonaV = daoZ.buscarZona(funcionario.getId_funcionario());
+				incidencia.setZonaId(zonaV.get(0).getId_zona_venta());
+			}
+			else{
+				List<Zona_venta > zonaL = dao.buscarZona(autenticacion.getUsuarioLogin().getId());
+				venI = zonaL.get(0).getCiudad().getId();
+				ciudad = daoCi.buscar(venI);
+				Zona_ventaDao daoZ = new Zona_ventaDao();
+				zonaV = daoZ.buscarZona(funcionario.getId_funcionario());
+				incidencia.setZonaId(zonaV.get(0).getId_zona_venta());
+			}
+			
+			//List<Zona_venta > zonaL = dao.buscarZona(autenticacion.getUsuarioLogin().getId());
+			
 			
 			CausaPerdidaVentaDao daoC = new CausaPerdidaVentaDao();
 			listaCausa = daoC.listar();
@@ -122,11 +194,14 @@ public class IncidenciaBean implements Serializable{
 			LineaDao daoL = new LineaDao();
 			listaLinea = daoL.listar();
 			
-			CiudadDao daoCi = new CiudadDao();
-			listaCiudad = daoCi.listar();
+//			CiudadDao daoCi = new CiudadDao();
+//			listaCiudad = daoCi.listar();
 			
 			System.out.println(autenticacion.getUsuarioLogin().getId() +" - " + zona);
-			incidencia.setZona(zonaL.get(0));
+			//incidencia.setZona(zonaL.get(0));
+			incidencia.setFuncionario(funcionario);
+			incidencia.setCiudad(ciudad);
+			//incidencia.setZonaId(zonaV.get(0).getId_zona_venta());
 			
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
@@ -138,12 +213,41 @@ public class IncidenciaBean implements Serializable{
 		
 		try{
 			IncidenciaDao dao = new IncidenciaDao();
+			System.out.println( "ffff"  + selectTipoNegocio.length);
+			String lineas = "";
+			for (int i = 0; i < selectTipoNegocio.length; i++) {
+				System.out.println(selectTipoNegocio[i] + "linea");
+				LineaDao daoL = new LineaDao();
+				int a = Integer.parseInt(selectTipoNegocio[i]);
+				Linea linea = daoL.buscar(a);
+				incidencia.setLinea(linea);
+				lineas = lineas + selectTipoNegocio[i] + "-";
+			}
+			//incidencia.setLinea(linea);
+			incidencia.setIdLineas(lineas);
 			dao.salvar(incidencia); 
+			selectTipoNegocio = new String[0];
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se guardo el Proyecto");
 		}
 	}
+	
+	public void editar(){
+
+		try{
+			IncidenciaDao dao = new IncidenciaDao();
+			LineaDao daoL = new LineaDao();
+			Linea linea = daoL.buscar(incidencia.getId());
+			incidencia.setLinea(linea);
+			dao.merge(incidencia); 
+			Messages.addGlobalInfo("La oferta se edito Correctamente"+ incidencia.getResultaNegocio());
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se guardo el Proyecto");
+		}
+	}
+
 	
 	public void salvarProyectados(){
 		try{
@@ -151,7 +255,7 @@ public class IncidenciaBean implements Serializable{
 			PedidosProyectadosDao dao = new PedidosProyectadosDao();
 			pedidosProyectados.setFuncionario(incidencia.getZona().getFuncionario());
 			pedidosProyectados.setFechaInicio(new Date());
-			pedidosProyectados.setPropuesto("M");
+	 		pedidosProyectados.setPropuesto("M");
 			
 			if(clienteO.equals("")){
 
@@ -352,7 +456,7 @@ public class IncidenciaBean implements Serializable{
 			List<Zona_venta > zonaL = dao.buscarZona(autenticacion.getUsuarioLogin().getId());
 			
 			IncidenciaDao daoI = new IncidenciaDao();
-			listaIncidencia = daoI.valorPedidosPerdidosUsuarios(zonaL.get(0).getId_zona_venta());
+			listaIncidencia = daoI.valorPedidosPerdidosUsuarios(zonaL.get(0).getId_zona_venta(), zonaL.get(0).getFuncionario().getId_funcionario());
 			
 			Long sumaTotal = (long) 0;
 			for (Incidencia incidencia : listaIncidencia) {
@@ -378,11 +482,11 @@ public class IncidenciaBean implements Serializable{
 			
 			if(idCiudad >0){
 				zonaL = dao.buscarZonaSucursal(idCiudad);
-				listaIncidencia = daoI.pedidosPerdidosSucursal(zonaL, idCiudad);
+				listaIncidencia = daoI.pedidosPerdidosSucursal(zonaL, idCiudad, proNeg);
 			}
 			else{
 				zonaL = dao.buscarZonaSucursal(zonaF.getCiudad().getId());
-				listaIncidencia = daoI.pedidosPerdidosSucursal(zonaL, zonaF.getCiudad().getId());
+				listaIncidencia = daoI.pedidosPerdidosSucursal(zonaL, zonaF.getCiudad().getId(), proNeg);
 			}			
 //			Zona_ventaDao dao = new Zona_ventaDao();
 //			List<Zona_venta > zonaL = dao.buscarZonaSucursal(zonaF.getCiudad().getId());
@@ -391,10 +495,13 @@ public class IncidenciaBean implements Serializable{
 //			listaIncidencia = daoI.pedidosPerdidosSucursal(zonaL, zonaF.getCiudad().getId());
 			
 			Long sumaTotal = (long) 0;
+			Long sumaTotalR = (long) 0;
 			for (Incidencia incidencia : listaIncidencia) {
 				sumaTotal += incidencia.getValorVenta();
+				sumaTotalR += incidencia.getPrecioCompetencia();
 			}
 			valorTotal = new DecimalFormat("###,###").format(sumaTotal);
+			valorTotalC = new DecimalFormat("###,###").format(sumaTotalR);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error No se cargo la lista de Incidencias");
@@ -514,6 +621,30 @@ public class IncidenciaBean implements Serializable{
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error No se cargo la lista de Incidencias");
+		}
+	}
+	
+	public void editar(Incidencia incidencia1){
+
+		try {
+
+
+			System.out.println(incidencia1.getNoferta());
+			incidencia = incidencia1;
+//			String lineas = "";
+////			if(incidencia.getIdLineas() != null){
+////				for (String retval: incidencia.getIdLineas().split("-")) {
+////			         int codigo = Integer.parseInt(retval); 
+////					 LineaDao daoL = new LineaDao();
+////			         Linea linea = daoL.buscar(codigo);
+////			         lineas = lineas +"\n"+ linea.getNombre();
+////			    }
+////			}
+//			incidencia.getLinea().setNombre(lineas);
+			
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			Messages.addGlobalError("Error no se guardo el Proyecto");
 		}
 	}
 
@@ -703,5 +834,35 @@ public class IncidenciaBean implements Serializable{
 	}
 	public void setNombreC(String nombreC) {
 		this.nombreC = nombreC;
+	}
+	public String getValorTotalC() {
+		return valorTotalC;
+	}
+	public void setValorTotalC(String valorTotalC) {
+		this.valorTotalC = valorTotalC;
+	}
+	public String[] getSelectTipoNegocio() {
+		return selectTipoNegocio;
+	}
+	public void setSelectTipoNegocio(String[] selectTipoNegocio) {
+		this.selectTipoNegocio = selectTipoNegocio;
+	}
+	public String getProNeg() {
+		return proNeg;
+	}
+	public void setProNeg(String proNeg) {
+		this.proNeg = proNeg;
+	}
+	public Date getFechaIni() {
+		return fechaIni;
+	}
+	public void setFechaIni(Date fechaIni) {
+		this.fechaIni = fechaIni;
+	}
+	public Date getFechaFin() {
+		return fechaFin;
+	}
+	public void setFechaFin(Date fechaFin) {
+		this.fechaFin = fechaFin;
 	}	
 }

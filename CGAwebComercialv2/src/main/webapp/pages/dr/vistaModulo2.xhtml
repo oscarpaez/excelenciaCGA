@@ -68,46 +68,77 @@
 					</p:panel>
 				</div>
 				
-				<div class="ui-grid-col-8" style="padding-left: 10px; width:70%">
-					<div style="display:block; text-align:center; margin: 0 auto; width: 850px; ">	
-					  <p:button value="Excelencia Comercial"
-							style="width:200px; height:100px"
-							outcome="/pages/dr/pland.xhtml?faces-redirect=true"
-							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}"
-							onclick="showLoading()" />
-					  
-					  <p:button value="Excelencia Proyectos"
-								style="width:200px; height:100px"
-								outcome="/pages/pro/proyectos.xhtml?faces-redirect=true"
-								disabled="#{autenticacionBean.usuarioLogin.perfil.gastos}"
-								onclick="showLoading()" />
-					  	
-					   	<p:button value="Excelencia Ofertas y Pedidos"
-							style="width:200px; height:100px"
-							outcome="/pages/dr/ofertaPedido.xhtml?faces-redirect=true"
-							disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}"
-							onclick="showLoading()" />							
-					   					
+				<div class="ui-grid-col-8" style="padding-left: 10px; width:55%">
+					<div class="ui-grid-row" style="width:940px">
+						<div style="display:block; text-align:center; margin: 0 auto; width: 850px; ">	
+						  <p:button value="Excelencia Comercial"
+								style="width:160px; height:80px; font-size: 14px"
+								outcome="/pages/dcB/plandcB.xhtml?faces-redirect=true"
+								disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}" 
+								onclick="showLoading()"/>
+						  
+						  <p:button value="Excelencia Proyectos"
+									style="width:160px; height:80px; font-size: 14px"
+									outcome="/pages/pro/proyectos.xhtml?faces-redirect=true"
+									disabled="#{autenticacionBean.usuarioLogin.perfil.gastos}"
+									onclick="showLoading()">
+						  </p:button>	
+						   
+						   <p:button value="Excelencia Pedidos Perdidos"
+									style="width:160px; height:80px; font-size: 14px"
+									rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}" 
+									outcome="/pages/vi/incidencia.xhtml?faces-redirect=true"
+									onclick="showLoading()"/>
+							
+							<p:button value="Excelencia Ofertas y Pedidos"
+								style="width:160px; height:80px; font-size: 14px"
+								outcome="/pages/dr/ofertaPedido.xhtml?faces-redirect=true"
+								disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}"
+								onclick="showLoading()" />										
+						   					
+						</div>
+						
+						<div style=" ">
+						<p:panel style="height:80px; width:400px;">
+							<h:form>
+								<h:panelGrid columns="3">
+									<p:outputLabel value="KPI Ofertas y Pedidos"
+										style="font-size: 14px; " />
+									<p:inputText size="8"
+										style="color:#0000ff; opacity: .90; text-align: right;
+												border: 1px solid #9C27B0;"
+										value="#{graficasBean.kpiOfertas} %" disabled="true">
+										<f:convertNumber pattern="#,##0;" />
+									</p:inputText>
+									<p:graphicImage library="images" name="#{graficasBean.kpiOimagen}" height="25"
+										width="25" />
+
+
+									<p:outputLabel value="KPI Oportunidad de Negocio"
+										style="font-size: 14px; " />
+									<p:inputText size="8"
+										style="color:#0000ff; opacity: .90; text-align: right;
+												border: 1px solid #9C27B0;"
+										value="#{graficasBean.kpiOpoNeg} %" disabled="true">
+										<f:convertNumber pattern="#,##0;" />
+									</p:inputText>
+									<p:graphicImage library="images" name="#{graficasBean.kpiNimagen}" height="25"
+										width="25" />
+
+								</h:panelGrid>
+
+							</h:form>
+						</p:panel>
+						</div>
+						
 					</div>
 				<br />
-					<div class="ui-grid-col-5" style="padding-left: 10px; width:50%;">	
+					<div class="ui-grid-row" style="width:840px">
+					<div class="ui-grid-col-5" style="padding-left: 10px; width:62%;">	
 					<h:form id="frmDesRec" enctype="multipart/form-data">
 						<p:panel style="height:340px; width:430px">
 							<h:form >
 								<h:panelGrid columns="3">
-									
-									<p:outputLabel  value="Pedidos Perdidos" 
-										    	style="font-size: 14px; " />
-									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
-												value="#{graficasBean.pedidosPerdidos}"  disabled="true" >
-												<f:convertNumber pattern="#,##0;"/>
-									</p:inputText>
-									<p:button icon="ui-icon-search" title="Detalle Pedidos Perdidos"
-										outcome="/pages/dr/detallePedidosPerdidos.xhtml?faces-redirect=true"
-										onclick="showLoading()">
-										<f:param name="perId" value=""/>
-										<f:param name="tipo" value=""/>
-									</p:button>
 									
 									<p:outputLabel  value="Pedidos en Proceso " 
 										    	style="font-size: 14px; " />
@@ -128,23 +159,41 @@
 												value="#{graficasBean.pedidosProyectados}"  disabled="true" >
 												<f:convertNumber pattern="#,##0;(#,##0)"/>
 									</p:inputText>
-									<p:button icon="ui-icon-search"  title="Detalle Pedidos en Proceso"
-										outcome="/pages/dr/detallePedidosProyectados.xhtml?faces-redirect=true"
+									<p:button icon="ui-icon-search"  title="Detalle Pedidos Proyectados"
+										outcome="/pages/dr/vistaIncidencia.xhtml?faces-redirect=true"
 										onclick="showLoading()">
-										<f:param name="perId" value=""/>
+										<f:param name="perId" value="PR"/>
 										<f:param name="tipo" value=""/>
 									</p:button>
-									<!-- 
-									<p:outputLabel  value="Venta Mes LBR " 
-									    	style="font-size: 14px; " />
+									
+									<p:outputLabel  value="Oportunidad de Negocio Ganado" 
+										    	style="font-size: 14px; " />
 									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
-												value="#{graficasBean.lbr}"  disabled="true" >
+												value="#{graficasBean.pedidosGanados}"  disabled="true" >
 												<f:convertNumber pattern="#,##0;"/>
 									</p:inputText>
-									<p:outputLabel  value=" " />  -->
+									<p:button icon="ui-icon-search" title="Detalle Pedidos Ganados"
+										outcome="/pages/dr/vistaIncidencia.xhtml?faces-redirect=true"
+										onclick="showLoading()">
+										<f:param name="perId" value="SI"/>
+										<f:param name="tipo" value=""/>
+									</p:button>
+									
+									<p:outputLabel  value="Oportunidad de Negocio Perdido" 
+										    	style="font-size: 14px; " />
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
+												value="#{graficasBean.pedidosPerdidos}"  disabled="true" >
+												<f:convertNumber pattern="#,##0;"/>
+									</p:inputText>
+									<p:button icon="ui-icon-search" title="Detalle Pedidos Perdidos"
+										outcome="/pages/dr/vistaIncidencia.xhtml?faces-redirect=true"
+										onclick="showLoading()">
+										<f:param name="perId" value="NO"/>
+										<f:param name="tipo" value=""/>
+									</p:button>
 									
 								</h:panelGrid><br />
-								<div style="text-align:center;">
+					<!-- 		<div style="text-align:center;">
 									<p:button icon="ui-icon-document"  value="Registrar Pedidos Proyectados"
 										outcome="/pages/vi/registroPedidosProgramados.xhtml?faces-redirect=true"
 										style="width:350px;"
@@ -153,15 +202,34 @@
 										<f:param name="tipo" value=""/>
 									</p:button>
 								</div>
-								<br />
+								<br />   -->
 								<div style="text-align:center;">
-									<p:button icon="ui-icon-document"  value="Registrar Pedidos Perdidos"
-										outcome="/pages/vi/incidencia.xhtml?faces-redirect=true"
-										style="width:350px;">
+									<p:button icon="ui-icon-document"  value="Registrar Oportunidad de Negocio"
+										outcome="/pages/vi/oportunidadNegocio.xhtml?faces-redirect=true"
+										style="width:350px; font-size: 16px"
+										onclick="showLoading()">
 										<f:param name="perId" value=""/>
 										<f:param name="tipo" value=""/>
 									</p:button>
 								</div>
+								<br />
+								<h:panelGrid columns="2">
+									<p:outputLabel  value="Recaudo Mes " 
+										    	style="font-size: 14px; " />
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right;
+											border: 1px solid #FF9800;"
+												value="#{graficasBean.realRecaudo}"  disabled="true" >
+												<f:convertNumber pattern="#,##0;(#,##0)"/>
+									</p:inputText>
+									
+									<p:outputLabel  value="Presupuesto Recaudo" 
+										    	style="font-size: 14px; " />
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right;
+											border: 1px solid #FF9800;"
+												value="#{graficasBean.presupuestoRecaudo}"  disabled="true" >
+												<f:convertNumber pattern="#,##0;(#,##0)"/>
+									</p:inputText>
+								</h:panelGrid>
 							</h:form>
 						</p:panel>
 					</h:form>
@@ -192,6 +260,7 @@
 									style="width:350px;height:250px" />	
 							</p:panel>
 						</h:form>
+					</div>
 					</div>
 				</div>
 			</div>

@@ -10,47 +10,18 @@
 
 	<ui:define name="contenido">
 		<f:metadata>
-			<f:event listener="#{graficasBean.desempenoVentasGerentes()}" type="preRenderView" />
+			<f:event listener="#{graficasBean.desempenoVentasGerentes()}"
+				type="preRenderView" />
 		</f:metadata>
-		
-		<p:messages id="msgData" showDetail="true" autoUpdate="true" closable="true" />
-		
+
+		<p:messages id="msgData" showDetail="true" autoUpdate="true"
+			closable="true" />
+
 		<f:facet name="header">
 			<p:outputLabel
 				value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 		</f:facet>
-		<br />
 		<div class="ui-grid ui-grid-responsive">
-			<div class="ui-grid-row">
-			<!-- 
-				<div class="ui-grid-col-10"
-					style="display: block; text-align: center; margin: 0 auto;">
-					
-					<p:button value="Excelencia Comercial"
-						style="width:200px; height:100px"
-						outcome="/pages/gg/vistaInicial.xhtml?faces-redirect=true"
-						disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}" 
-						onclick="showLoading()">
-						
-					</p:button>
-					
-					<p:button value="Excelencia Proyectos"
-								style="width:200px; height:100px"
-								outcome="/pages/pro/proyectos.xhtml?faces-redirect=true"
-								disabled="#{autenticacionBean.usuarioLogin.perfil.comercial}"
-								onclick="showLoading()">
-					</p:button>	
-					
-					<p:button value="Gestión Pedidos Perdidos"
-						style="width:200px; height:100px"
-						disabled="{autenticacionBean.usuarioLogin.perfil.id == 1 ?  true : false}" 
-						outcome="/pages/vi/vistaIncidencia.xhtml?faces-redirect=true;"
-						onclick="showLoading()"/>
-				</div>
-			-->	
-			</div>			
-			<br />
-			 
 			<div class="ui-grid-row">
 				<div class="ui-grid-col-5"
 					style="height: 390px; width: 450px; display: block; text-align: center; margin: 0 auto;">
@@ -69,27 +40,30 @@
 											disabled="true" style="opacity: .90; text-align:right;">
 											<f:convertNumber pattern="#,##0;(#,##0)" />
 										</p:inputText>
-										<p:outputLabel value="Venta Mes Facturada " style="font-size: 14px;  " />
+										<p:outputLabel value="Venta Mes Facturada "
+											style="font-size: 14px;  " />
 										<p:inputText size="15" value="#{graficasBean.realMes}"
 											disabled="true" style="opacity: .90; text-align:right;">
 											<f:convertNumber pattern="#,##0;" />
 										</p:inputText>
-										
-										<p:outputLabel value="Pedidos en Proceso" style="font-size: 14px;  " />
+
+										<p:outputLabel value="Pedidos en Proceso"
+											style="font-size: 14px;  " />
 										<p:inputText size="15" value="#{graficasBean.pedidosProceso}"
 											disabled="true" style="opacity: .90; text-align:right;">
 											<f:convertNumber pattern="#,##0;" />
-										</p:inputText>	
-										
-										<p:outputLabel value="Pedidos facturados y en Proceso Mes " style="font-size: 14px;  " />
+										</p:inputText>
+
+										<p:outputLabel value="Pedidos facturados y en Proceso Mes "
+											style="font-size: 14px;  " />
 										<p:inputText size="15" value="#{graficasBean.pedidosTotal}"
 											disabled="true" style="opacity: .90; text-align:right;">
 											<f:convertNumber pattern="#,##0;" />
 										</p:inputText>
 										<p:outputLabel value=" " />
-										
-										
-																			
+
+
+
 									</h:panelGrid>
 								</h:form>
 							</h:panelGrid>
@@ -104,7 +78,7 @@
 								<p:chart type="metergauge"
 									model="#{graficasBean.meterGaugeModelA}"
 									style="width:380px;height:250px" />
-									
+
 								<h:form>
 									<h:panelGrid columns="3">
 										<p:outputLabel value="Presupuesto Mes "
@@ -114,20 +88,23 @@
 											<f:convertNumber pattern="#,##0;(#,##0)" />
 										</p:inputText>
 										<p:outputLabel value=" " />
-										
-										<p:outputLabel value="Pedidos facturados y en Proceso Mes " style="font-size: 14px;  " />
+
+										<p:outputLabel value="Pedidos facturados y en Proceso Mes "
+											style="font-size: 14px;  " />
 										<p:inputText size="15" value="#{graficasBean.pedidosTotal}"
 											disabled="true" style="opacity: .90; text-align:right;">
 											<f:convertNumber pattern="#,##0;" />
 										</p:inputText>
 										<p:outputLabel value=" " />
-										
-										<p:outputLabel value="Pedidos en Proceso" style="font-size: 14px;  " />
+
+										<p:outputLabel value="Pedidos en Proceso"
+											style="font-size: 14px;  " />
 										<p:inputText size="15" value="#{graficasBean.pedidosProceso}"
 											disabled="true" style="opacity: .90; text-align:right;">
 											<f:convertNumber pattern="#,##0;" />
 										</p:inputText>
-										<p:button icon="ui-icon-search" title="Detalle Pedidos En Proceso"
+										<p:button icon="ui-icon-search"
+											title="Detalle Pedidos En Proceso"
 											outcome="/pages/gg/detallePedidosEnProceso.xhtml?faces-redirect=true"
 											onclick="showLoading()">
 										</p:button>
@@ -136,7 +113,7 @@
 							</h:panelGrid>
 						</p:panel>
 					</h:form>
-				</div>		
+				</div>
 				<div class="ui-grid-col-5"
 					style="height: 390px; width: 450px; display: none; text-align: center; margin: 0 auto;">
 
@@ -166,307 +143,126 @@
 						</p:panel>
 					</h:form>
 				</div>
-				
-			<div class="ui-grid-col-5" style="width: 780px; display: block">
-				<!-- <p:tabView style="width: 670px;">
+
+				<div class="ui-grid-col-5" style="padding-left: 10px; width: 70%">
+					<div
+						style="display: block;  margin: 0 auto; width: 850px;">
+						<p:panel style="height:100px; width:630px;">
+							<h:form>
+								<h:panelGrid columns="3">
+									<p:outputLabel value="KPI Ofertas y Pedidos"
+										style="font-size: 14px; " />
+									<p:inputText size="10"
+										style="color:#0000ff; opacity: .90; text-align: right;
+												border: 1px solid #9C27B0;"
+										value="#{graficasBean.kpiOfertas} %" disabled="true">
+										<f:convertNumber pattern="#,##0;" />
+									</p:inputText>
+									<p:graphicImage library="images"
+										name="#{graficasBean.kpiOimagen}" height="25" width="25" />
+
+
+									<p:outputLabel value="KPI Oportunidad de Negocio"
+										style="font-size: 14px; " />
+									<p:inputText size="10"
+										style="color:#0000ff; opacity: .90; text-align: right;
+												border: 1px solid #9C27B0;"
+										value="#{graficasBean.kpiOpoNeg} %" disabled="true">
+										<f:convertNumber pattern="#,##0;" />
+									</p:inputText>
+									<p:graphicImage library="images"
+										name="#{graficasBean.kpiNimagen}" height="25" width="25" />
+
+								</h:panelGrid>
+							</h:form>
+						</p:panel>
+					</div>
+
+					<br />
+
+					<div class="ui-grid-col-5" style="padding-left: 10px; width: 100%;">
+
+						<!-- <p:tabView style="width: 670px;">
 						<p:tab title="Presupuesto">  -->
-							<h:form id="frmPlan">
-								<p:dataTable styleClass="tblPla" id="tblPlan"
-									emptyMessage="No se encontraron registros" paginator="true"
-									value="#{graficasBean.listaComisionVendedores}" var="plan"
-									rows="10" paginatorPosition="bottom" style="margin-bottom:20px">
+						<h:form id="frmPlan">
+							<p:dataTable styleClass="tblPla" id="tblPlan"
+								emptyMessage="No se encontraron registros" paginator="true"
+								value="#{graficasBean.listaComisionVendedores}" var="plan"
+								rows="10" paginatorPosition="bottom" style="margin-bottom:20px">
 
-									<f:facet name="header">
-										<h:outputText value="Sucursales Pais #{graficasBean.mesActual}" />
-									</f:facet>
+								<f:facet name="header">
+									<h:outputText value="Sucursales Pais #{graficasBean.mesActual}" />
+								</f:facet>
 
-									<p:columnGroup type="header">
-										<p:row>
-											<p:column colspan="1" headerText="Oficina" />
-											<p:column colspan="1" headerText="Presupuesto " />
-											<p:column colspan="1" headerText="Venta" />
-											<p:column colspan="2" headerText="Cumplimiento %" />
-											<p:column colspan="1" headerText="Detalle" />
-										</p:row>
-									</p:columnGroup>
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column colspan="1" headerText="Oficina" />
+										<p:column colspan="1" headerText="Presupuesto " />
+										<p:column colspan="1" headerText="Venta" />
+										<p:column colspan="2" headerText="Cumplimiento %" />
+										<p:column colspan="1" headerText="Detalle" />
+									</p:row>
+								</p:columnGroup>
 
-									<p:column>
-										<h:outputText value="#{plan.nombre}" />
-									</p:column>
+								<p:column>
+									<h:outputText value="#{plan.nombre}" />
+								</p:column>
 
-									<p:column headerText="Presupuesto" style="text-align:right">
-										<h:outputText value="#{plan.presupuestoB}">
-											<f:convertNumber locale="en_US" maxFractionDigits="0" />
-										</h:outputText>
-									</p:column>
+								<p:column headerText="Presupuesto" style="text-align:right">
+									<h:outputText value="#{plan.presupuestoB}">
+										<f:convertNumber locale="en_US" maxFractionDigits="0" />
+									</h:outputText>
+								</p:column>
 
-									<p:column headerText="Real" style="text-align:right">
-										<h:outputText value="#{plan.ingresoRealB}">
-											<f:convertNumber locale="en_US" maxFractionDigits="0" />
-										</h:outputText>
-									</p:column>
+								<p:column headerText="Real" style="text-align:right">
+									<h:outputText value="#{plan.ingresoRealB}">
+										<f:convertNumber locale="en_US" maxFractionDigits="0" />
+									</h:outputText>
+								</p:column>
 
-									<p:column headerText="cumplimiento" style="text-align:right">
-										<h:outputText value="#{plan.cumplimiento}%">
-											<f:convertNumber locale="pt_CO" integerOnly="true"
-												maxFractionDigits="0" />
-										</h:outputText>
-									</p:column>
+								<p:column headerText="cumplimiento" style="text-align:right">
+									<h:outputText value="#{plan.cumplimiento}%">
+										<f:convertNumber locale="pt_CO" integerOnly="true"
+											maxFractionDigits="0" />
+									</h:outputText>
+								</p:column>
 
-									<p:column headerText="Comision"
-										style="text-align: center; width:40%">
-										<p:graphicImage library="images" name="#{plan.imagen1}"
-											height="25" width="25" />
-									</p:column>
-									
-									<p:column style="text-align: center;">
-										<!-- <h:outputText value="#{plan.id}" />  -->
-										<p:button icon="ui-icon-search" title="Detalle Pedidos En Proceso"
-											outcome="/pages/dcP/vistaOficina.xhtml?faces-redirect=true"
-											onclick="showLoading()">
-											<f:param name="perId" value="#{plan.id}"/>
-											<f:param name="tipo" value=""/>
-										</p:button>
-									</p:column>
-									
-									<p:columnGroup type="footer">
-										<p:row>
-											<p:column colspan="1" footerText="Totales"
-												style="text-align: right" />
-											<p:column footerText="$ #{graficasBean.totalPreO}"
-												style="text-align:right" />
-											<p:column footerText="$ #{graficasBean.totolRealO}"
-												style="text-align:right" />
-											<p:column footerText="#{graficasBean.totalCumO}%"
-												style="text-align:right" />
-											<p:column colspan="2" footerText="" style="text-align: rigth" />
-										</p:row>
-									</p:columnGroup>
-									<f:facet name="footer">
+								<p:column headerText="Comision"
+									style="text-align: center; width:40%">
+									<p:graphicImage library="images" name="#{plan.imagen1}"
+										height="25" width="25" />
+								</p:column>
 
-									</f:facet>
-								</p:dataTable>
-							</h:form>
-				<!-- </p:tab>
-						 
-						<p:tab title="Utilidad">
-							<h:form id="frmPlanU">
-								<p:dataTable styleClass="tblPla" id="tblPlanU"
-									emptyMessage="No se encontraron registros" paginator="true"
-									value="#{graficasBean.listaComisionVendedores}" var="plan"
-									rows="10" paginatorPosition="bottom"
-									style="margin-bottom:20px; ">
+								<p:column style="text-align: center;">
+									<!-- <h:outputText value="#{plan.id}" />  -->
+									<p:button icon="ui-icon-search"
+										title="Detalle Pedidos En Proceso"
+										outcome="/pages/dcP/vistaOficina.xhtml?faces-redirect=true"
+										onclick="showLoading()">
+										<f:param name="perId" value="#{plan.id}" />
+										<f:param name="tipo" value="" />
+									</p:button>
+								</p:column>
 
-									<f:facet name="header">
-										<h:outputText value="Sucursales Pais #{graficasBean.mesActual}" />
-									</f:facet>
+								<p:columnGroup type="footer">
+									<p:row>
+										<p:column colspan="1" footerText="Totales"
+											style="text-align: right" />
+										<p:column footerText="$ #{graficasBean.totalPreO}"
+											style="text-align:right" />
+										<p:column footerText="$ #{graficasBean.totolRealO}"
+											style="text-align:right" />
+										<p:column footerText="#{graficasBean.totalCumO}%"
+											style="text-align:right" />
+										<p:column colspan="2" footerText="" style="text-align: rigth" />
+									</p:row>
+								</p:columnGroup>
+								<f:facet name="footer">
 
-									<p:columnGroup type="header">
-										<p:row>
-											<p:column colspan="1" headerText="Oficina" />
-											<p:column colspan="1" headerText="Presupuesto Utilidad" />
-											<p:column colspan="1" headerText="Real Utilidad" />
-											<p:column colspan="2" headerText="Cumplimiento %" />
-										</p:row>
-									</p:columnGroup>
-
-
-									<p:column>
-										<h:outputText value="#{plan.nombre}" />
-									</p:column>
-
-									<p:column headerText="Presupuesto" style="text-align:right">
-										<h:outputText value="#{plan.utilpresupuesto}">
-											<f:convertNumber locale="en_US" maxFractionDigits="0" />
-										</h:outputText>
-									</p:column>
-
-									<p:column headerText="Real" style="text-align:right">
-										<h:outputText value="#{plan.utilidadReal}">
-											<f:convertNumber locale="en_US" maxFractionDigits="0" />
-										</h:outputText>
-									</p:column>
-
-									<p:column headerText="cumplimiento" style="text-align:right">
-										<h:outputText value="#{plan.cumplimientoU}%">
-											<f:convertNumber locale="pt_CO" integerOnly="true"
-												maxFractionDigits="2" />
-										</h:outputText>
-									</p:column>
-
-									<p:column headerText="Comision"
-										style="text-align: center; width:40%">
-										<p:graphicImage library="images" name="#{plan.imagen}"
-											height="25" width="25" />
-									</p:column>
-
-									<p:columnGroup type="footer">
-											<p:row>
-												<p:column colspan="1" footerText="Totales"
-													style="text-align: right" />
-												<p:column footerText="$ #{graficasBean.totalPreUO}"
-													style="text-align:right" />
-												<p:column footerText="$ #{graficasBean.totolRealUO}"
-													style="text-align:right" />
-												<p:column footerText="#{graficasBean.totalCumUO}%"
-													style="text-align:right" />
-												<p:column footerText="" style="text-align: rigth" />
-											</p:row>
-									</p:columnGroup>
-									
-										<f:facet name="footer"> 
-
-										</f:facet> 
-								</p:dataTable>
-							</h:form>
-						</p:tab>  
-					</p:tabView> -->
-				</div>
-			</div>
-				
-			<div class="ui-grid-row" style="display: none;">
-				<div class="ui-grid-col-1"></div>
-				<div class="ui-grid-col-5" style="width: 640px; display: block;">
-					<p:tabView style="width: 670px;">
-						<p:tab title="Presupuesto">
-							<h:form id="frmPlanL">
-								<p:dataTable styleClass="tblPla" id="tblPlanL"
-									emptyMessage="No se encontraron registros" paginator="true"
-									value="#{graficasBean.listaLineas}" var="plan" rows="15"
-									paginatorPosition="bottom">
-
-									<f:facet name="header">
-										<h:outputText value="lineas Pais #{graficasBean.mesActual}" />
-									</f:facet>
-
-									<p:columnGroup type="header">
-										<p:row>
-											<p:column colspan="1" headerText="Lineas" />
-											<p:column colspan="1" headerText="Presupuesto " />
-											<p:column colspan="1" headerText="Venta" />
-											<p:column colspan="2" headerText="Cumplimiento %" />
-										</p:row>
-									</p:columnGroup>
-
-									<p:column headerText="Linea" filterBy="#{plan.nombre}"
-										sortBy="#{plan.nombre}">
-										<h:outputText value="#{plan.nombre}" />
-									</p:column>
-
-									<p:column headerText="Ingreso P" style="text-align:right">
-										<h:outputText value="#{plan.presupuestoB}">
-											<f:convertNumber locale="en_US" maxFractionDigits="0" />
-										</h:outputText>
-									</p:column>
-
-									<p:column headerText="Ingreso R" style="text-align:right">
-										<h:outputText value="#{plan.ingresoRealB}">
-											<f:convertNumber locale="en_US" maxFractionDigits="0" />
-										</h:outputText>
-									</p:column>
-
-									<p:column headerText="Ingreso C" style="text-align:right">
-										<h:outputText value="#{plan.cumplimiento}%">
-											<f:convertNumber locale="en_US" />
-										</h:outputText>
-									</p:column>
-
-									<p:column headerText="comision" style="text-align: center">
-										<p:graphicImage library="images" name="#{plan.imagen1}"
-											height="25" width="25" />
-									</p:column>
-								
-									<p:columnGroup type="footer">
-										<p:row>
-											<p:column colspan="1" footerText="Totales"
-												style="text-align: right" />
-											<p:column footerText="$ #{graficasBean.totalPreL}"
-												style="text-align:right" />
-											<p:column footerText="$ #{graficasBean.totolRealL}"
-												style="text-align:right" />
-											<p:column footerText="#{graficasBean.totalCumL}%"
-												style="text-align:right" />
-											<p:column footerText="" style="text-align: rigth" />
-										</p:row>
-									</p:columnGroup>
-									<f:facet name="footer">
-
-									</f:facet>
-								</p:dataTable>
-							</h:form>
-						</p:tab>
-						<!--  
-						<p:tab title="Utilidad">
-							<h:form id="frmPlanLU">
-								<p:dataTable styleClass="tblPla" id="tblPlanLU"
-									emptyMessage="No se encontraron registros" paginator="true"
-									value="#{graficasBean.listaLineas}" var="plan" rows="15"
-									paginatorPosition="bottom">
-
-									<f:facet name="header">
-										<h:outputText value="lineas Pais #{graficasBean.mesActual}" />
-									</f:facet>
-
-									<p:columnGroup type="header">
-										<p:row>
-											<p:column colspan="1" headerText="Lineas" />
-											<p:column colspan="1" headerText="Presupuesto Utilidad" />
-											<p:column colspan="1" headerText="Real Utilidad" />
-											<p:column colspan="2" headerText="Cumplimiento %" />
-										</p:row>
-									</p:columnGroup>
-
-									<p:column headerText="Linea" filterBy="#{plan.nombre}"
-										sortBy="#{plan.nombre}">
-										<h:outputText value="#{plan.nombre}" />
-									</p:column>
-
-
-
-								<p:column headerText="Utilidad P" style="text-align:right">
-										<h:outputText value="#{plan.utilpresupuesto}">
-											<f:convertNumber locale="en_US" maxFractionDigits="0" />
-										</h:outputText>
-									</p:column>
-
-									<p:column headerText="Utilidad R" style="text-align:right">
-										<h:outputText value="#{plan.utilidadReal}">
-											<f:convertNumber locale="en_US" maxFractionDigits="0" />
-										</h:outputText>
-									</p:column>
-
-									<p:column headerText="Utilidad C" style="text-align: right">
-										<h:outputText value="#{plan.cumplimientoU}%">
-											<f:convertNumber locale="en_US" maxFractionDigits="0" />
-										</h:outputText>
-									</p:column>
-
-									<p:column headerText="comision" style="text-align: center">
-										<p:graphicImage library="images" name="#{plan.imagen}"
-											height="25" width="25" />
-									</p:column>
-
-
-									<p:columnGroup type="footer">
-										<p:row>
-											<p:column colspan="1" footerText="Totales"
-												style="text-align: right" />
-											<p:column footerText="$ #{graficasBean.totalPreUL}"
-												style="text-align:right" />
-											<p:column footerText="$ #{graficasBean.totolRealUL}"
-												style="text-align:right" />
-											<p:column footerText="#{graficasBean.totalCumUL}%"
-												style="text-align:right" />
-											<p:column footerText="" style="text-align: rigth" />
-										</p:row>
-									</p:columnGroup>
-									<f:facet name="footer">
-
-									</f:facet> 
-								</p:dataTable>
-							</h:form>
-						</p:tab>  -->
-					</p:tabView>
+								</f:facet>
+							</p:dataTable>
+						</h:form>
+					</div>
 				</div>
 			</div>
 		</div>

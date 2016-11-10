@@ -15,6 +15,8 @@ import co.com.CGAwebComercial.entyties.Detalle;
 import co.com.CGAwebComercial.entyties.Detallesin;
 import co.com.CGAwebComercial.entyties.Presupuesto;
 import co.com.CGAwebComercial.entyties.PresupuestoE;
+import co.com.CGAwebComercial.entyties.Recaudo;
+import co.com.CGAwebComercial.entyties.Zona_venta;
 import co.com.CGAwebComercial.entyties.bajaRotacion;
 import co.com.CGAwebComercial.util.HibernateUtil;
 
@@ -184,7 +186,30 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			Long totalWages = (Long) consulta.uniqueResult();
 			BigDecimal valLBR = (totalWages == null)? new BigDecimal("0"): new BigDecimal(totalWages);
 			lista.add(valLBR);
+			
+			Zona_ventaDao daoz = new Zona_ventaDao();
+			List<Zona_venta> listaZ = daoz.buscarZonaSucursal(oficina/1000);
+			
+			BigDecimal presupuestoR = new BigDecimal("0");
+			BigDecimal realR = new BigDecimal("0");
+			for (Zona_venta zona_venta : listaZ) {
 
+				consulta = session.createCriteria(Recaudo.class);
+				consulta.createAlias("zonaVenta", "z");
+				consulta.add(Restrictions.eq("z.id_zona_venta", zona_venta.getId_zona_venta()));				
+				consulta.add(Restrictions.between("fecha", fechaInicial, fechaFinal));
+				consulta.setProjection(Projections.sum("presupuesto"));
+				BigDecimal preR = (BigDecimal) consulta.uniqueResult();
+				presupuestoR = (preR == null)? presupuestoR: presupuestoR.add(preR); 
+				
+				consulta.setProjection(Projections.sum("real"));
+				BigDecimal rR = (BigDecimal) consulta.uniqueResult();
+				realR = (rR == null)? realR: realR.add(rR);
+			}
+			
+			lista.add(presupuestoR);
+			lista.add(realR);
+			
 			return lista;
 		} catch (RuntimeException ex) {
 			throw ex;
@@ -605,6 +630,20 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			totalWages = (Long) consulta.uniqueResult();
 			BigDecimal valLBR = (totalWages == null)? new BigDecimal("0"): new BigDecimal(totalWages);
 			lista.add(valLBR);
+			
+			consulta = session.createCriteria(Recaudo.class);
+			consulta.createAlias("funcionario", "f");
+			consulta.add(Restrictions.eq("f.id_funcionario", idfuncionario));
+			consulta.add(Restrictions.between("fecha", fechaInicial, fechaFinal));
+			consulta.setProjection(Projections.sum("presupuesto"));
+			BigDecimal presupuestoR = (BigDecimal) consulta.uniqueResult();
+			presupuestoR = (presupuestoR == null)? new BigDecimal("0"): presupuestoR; 
+			lista.add(presupuestoR);
+			
+			consulta.setProjection(Projections.sum("real"));
+			BigDecimal realR = (BigDecimal) consulta.uniqueResult();
+			realR = (realR == null)? new BigDecimal("0"): realR;
+			lista.add(realR);
 			
 			return lista;
 

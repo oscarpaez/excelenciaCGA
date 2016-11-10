@@ -115,6 +115,18 @@ public class OfertasPedidos implements Serializable{
 	
 	@Transient
 	private Long llamadaNoContestadas;
+	
+	@Transient
+	private Long presupuesto;
+	
+	@Transient
+	private Long valorNeto;
+	
+	@Transient
+	private BigDecimal porcentajeV;
+	
+	@Transient
+	private String imagenA;
 
 	public int getId() {
 		return id;
@@ -410,5 +422,37 @@ public class OfertasPedidos implements Serializable{
 
 	public void setLlamadaNoContestadas(Long llamadaNoContestadas) {
 		this.llamadaNoContestadas = llamadaNoContestadas;
+	}
+
+	public Long getPresupuesto() {
+		return presupuesto;
+	}
+
+	public void setPresupuesto(Long presupuesto) {
+		this.presupuesto = presupuesto;
+	}
+
+	public Long getValorNeto() {
+		return valorNeto;
+	}
+
+	public void setValorNeto(Long valorNeto) {
+		this.valorNeto = valorNeto;
+	}
+
+	public BigDecimal getPorcentajeV() {
+		return porcentajeV;
+	}
+
+	public void setPorcentajeV(BigDecimal porcentajeV) {
+		this.porcentajeV = porcentajeV;
+	}
+
+	public String getImagenA() {
+		return imagenA;
+	}
+
+	public void setImagenA(String imagenA) {
+		this.imagenA = imagenA;
 	}	
 }

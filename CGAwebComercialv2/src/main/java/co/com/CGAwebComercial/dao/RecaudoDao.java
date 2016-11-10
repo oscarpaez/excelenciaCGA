@@ -83,9 +83,11 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			Comision comision = daoC.buscar(funcionario.getComision().getIdComision());
 			for (int i=1; i<meses; i++){
 				Recaudo recaudoA = new Recaudo();
-				String fecInicial = "2016/0"+i+"/01";
+				Recursos recurso = new Recursos();
+				int year = recurso.yearActual();
+				String fecInicial = year +"/0"+i+"/01";
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? "2016/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? "2016/0"+i+"/30" :"2016/0"+i+"/31";
+				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" : year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
 			
 				for (Zona_venta zona_venta : zona) {
@@ -164,13 +166,15 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			Date fechaFinal = null;
 			Date fechaInicial = null;
 			DateFormat formatoFecha = new SimpleDateFormat("yyyy/MM/dd");
+			Recursos recurso = new Recursos();
+			int year = recurso.yearActual();
 			for (int i=1; i<meses; i++){
-				String fecInicial = "2016/0"+i+"/01";
+				String fecInicial = year+"/0"+i+"/01";
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? "2016/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? "2016/0"+i+"/30" :"2016/0"+i+"/31";
+				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" : year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
-				//Criteria consulta = session.createCriteria(Detalle.class);
-				Criteria consulta = session.createCriteria(Detallesin.class);
+				Criteria consulta = session.createCriteria(Detalle.class);
+				//Criteria consulta = session.createCriteria(Detallesin.class);
 				consulta.add(Restrictions.eq(tipo, idPersona));
 				consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("valorNeto"));

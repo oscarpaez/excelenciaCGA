@@ -7,11 +7,14 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import co.com.CGAwebComercial.entyties.Detallesin;
 import co.com.CGAwebComercial.entyties.Llamadas;
 import co.com.CGAwebComercial.entyties.OfertasPedidos;
+import co.com.CGAwebComercial.entyties.Presupuesto;
 import co.com.CGAwebComercial.util.HibernateUtil;
 
 
@@ -30,6 +33,8 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			Criteria consulta = session.createCriteria(OfertasPedidos.class);
 			consulta.add(Restrictions.eq(tipo, idFun));
 			consulta.add(Restrictions.between("fechaEntOfe", fechaInicial, fechaFinal));
+			consulta.addOrder(Order.desc("valorOferta"));
+			consulta.addOrder(Order.asc("valorPedido"));
 			listaOferta = consulta.list();
 			return listaOferta;
 			
@@ -159,11 +164,53 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 					ofePed.setLlamadaEntrante(total1);
 					ofePed.setLlamadaSalientes(total2);
 					ofePed.setLlamadaNoContestadas(total3);
+					List<Long> listaPre = listarPresupuetoVenta(tipo,  idFun);
+					ofePed.setPresupuesto(listaPre.get(1));
+					ofePed.setValorNeto(listaPre.get(0) * -1);
+					System.out.println(ofePed.getValorNeto() + "valores" + ofePed.getPresupuesto());
+					BigDecimal por = new BigDecimal(ofePed.getValorNeto());
+					BigDecimal valN = new BigDecimal(ofePed.getPresupuesto());
+					por =  por.divide(valN, 4, BigDecimal.ROUND_HALF_UP ).multiply((new BigDecimal("100")));
+					
+					ofePed.setPorcentajeV((ofePed.getPresupuesto() == 0 || ofePed.getValorNeto() == 0)? new BigDecimal("0") : por ); 
+					ofePed.setImagenA((ofePed.getPorcentajeV().intValue() < 85)? "rojo.png" : "verde.png");
 		    	}
 		    }
-		    
-		    
 			return ofePed;
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
+	
+	/* Se listan El Presupuesto y Venta Facturada vendedor Interno */
+	public List<Long> listarPresupuetoVenta(String tipo, int idFun){
+		
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<Long> listaResul = new ArrayList<>();
+		try{
+			Date fechaFinal = fechaFinal();
+			Date fechaInicial = fechaInicial();
+			
+			Criteria consulta = session.createCriteria(Detallesin.class);
+			consulta.add(Restrictions.eq("funcionarioI", idFun));
+			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
+			consulta.setProjection(Projections.sum("valorNeto"));
+			Long totalWages = (Long) consulta.uniqueResult();
+			totalWages = (totalWages == null)? 0 : totalWages;
+			listaResul.add(totalWages);
+ 			
+			consulta = session.createCriteria(Presupuesto.class);
+			consulta.add(Restrictions.eq("funcionario", idFun));
+			consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
+			consulta.setProjection(Projections.sum("ingresos"));
+			BigDecimal totalP = (BigDecimal) consulta.uniqueResult();
+			totalP = (totalP == null)? new BigDecimal("0") : totalP; 
+			listaResul.add(totalP.longValue());
+			
+			return listaResul;
 			
 		} catch (RuntimeException ex) {
 			throw ex;
@@ -172,4 +219,101 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			session.close();
 		}
 	}
+	
+	
+	public List<BigDecimal> sumaValorOfertasPedidosPais(){
+
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<BigDecimal> listaOferta = new ArrayList<>();
+		try{
+			Date fechaFinal = fechaFinal();
+			Date fechaInicial = fechaInicial();
+
+			Criteria consulta = session.createCriteria(OfertasPedidos.class);
+			consulta.add(Restrictions.between("fechaEntOfe", fechaInicial, fechaFinal));
+			consulta.setProjection(Projections.sum("valorOferta"));
+			BigDecimal totalP = (BigDecimal) consulta.uniqueResult();
+			totalP = (totalP == null)? new BigDecimal("0") : totalP;
+			listaOferta.add(totalP);
+			
+			consulta.setProjection(Projections.sum("valorPedido"));
+			totalP = (BigDecimal) consulta.uniqueResult();
+			totalP = (totalP == null)? new BigDecimal("0") : totalP;
+			listaOferta.add(totalP);
+			
+			return listaOferta;
+
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
+	
+	
+	public List<BigDecimal> sumaValorOfertasPedidosSucursal(int oficina){
+
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<BigDecimal> listaOferta = new ArrayList<>();
+		try{
+			Date fechaFinal = fechaFinal();
+			Date fechaInicial = fechaInicial();
+
+			Criteria consulta = session.createCriteria(OfertasPedidos.class);
+			consulta.add(Restrictions.eq("codOficina", oficina));
+			consulta.add(Restrictions.between("fechaEntOfe", fechaInicial, fechaFinal));
+			consulta.setProjection(Projections.sum("valorOferta"));
+			BigDecimal totalP = (BigDecimal) consulta.uniqueResult();
+			totalP = (totalP == null)? new BigDecimal("0") : totalP;
+			listaOferta.add(totalP);
+			
+			consulta.setProjection(Projections.sum("valorPedido"));
+			totalP = (BigDecimal) consulta.uniqueResult();
+			totalP = (totalP == null)? new BigDecimal("0") : totalP;
+			listaOferta.add(totalP);
+			
+			return listaOferta;
+
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
+	
+	public List<BigDecimal> sumaValorOfertasPedidosVendedor(String tipo, int codFun){
+
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<BigDecimal> listaOferta = new ArrayList<>();
+		try{
+			Date fechaFinal = fechaFinal();
+			Date fechaInicial = fechaInicial();
+
+			tipo = (tipo.equals("funcionario")) ? "codEspecialista": "codInterno";
+			
+			Criteria consulta = session.createCriteria(OfertasPedidos.class);
+			consulta.add(Restrictions.eq(tipo, codFun));
+			consulta.add(Restrictions.between("fechaEntOfe", fechaInicial, fechaFinal));
+			consulta.setProjection(Projections.sum("valorOferta"));
+			BigDecimal totalP = (BigDecimal) consulta.uniqueResult();
+			totalP = (totalP == null)? new BigDecimal("0") : totalP;
+			listaOferta.add(totalP);
+			
+			consulta.setProjection(Projections.sum("valorPedido"));
+			totalP = (BigDecimal) consulta.uniqueResult();
+			totalP = (totalP == null)? new BigDecimal("0") : totalP;
+			listaOferta.add(totalP);
+			
+			return listaOferta;
+
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
+
 }
