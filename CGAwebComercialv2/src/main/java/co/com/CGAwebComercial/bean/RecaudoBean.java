@@ -110,7 +110,7 @@ public class RecaudoBean implements Serializable{
 			}
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
-			Messages.addGlobalError("Error no se Cargo la cartera Internos");
+			Messages.addGlobalError("Error no se Cargo la Recaudo Internos");
 		}
 
 	}
@@ -154,7 +154,7 @@ public class RecaudoBean implements Serializable{
 			}
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
-			Messages.addGlobalError("Error no seEEEEE Cargo la lista de cartera vendedores Internos");
+			Messages.addGlobalError("Error no se Cargo la comision de los vendedores Internos");
 		}
 	}
 	
@@ -217,7 +217,6 @@ public class RecaudoBean implements Serializable{
 			totalAjuste = 0;
 			habilitar = "true";
 			for (Ajuste ajuste : listaVendedoresAjuste) {
-				Messages.addGlobalInfo(ajuste.getFechaAjuste()+"te");
 				totalAjuste += ajuste.getValorajuste();
 				liquidacion.setValorAjuste(totalAjuste);
 				ajuste.setFechaAjuste(fecha);

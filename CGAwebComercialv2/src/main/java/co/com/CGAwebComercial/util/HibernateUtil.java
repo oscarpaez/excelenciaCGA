@@ -13,6 +13,7 @@ import org.hibernate.service.ServiceRegistry;
 public class HibernateUtil {
 	
 	private static final SessionFactory sessionFactory = crearFabricadeSecciones() ;
+	private static final SessionFactory sessionFactory1 = crearFabricadeSecciones1() ;
 
     public static SessionFactory getSessionfactory() {
 		return sessionFactory;
@@ -48,6 +49,26 @@ public class HibernateUtil {
         }
     }
 
-    
+	private static SessionFactory crearFabricadeSecciones1() {
+        try {
+            // Create the SessionFactory from hibernate.cfg.xml
+        	Configuration configuracion = new Configuration().configure("/hibernate.cfg2.xml");
+            ServiceRegistry servicio = new StandardServiceRegistryBuilder().applySettings(configuracion.getProperties()).build();
+            SessionFactory fabrica = configuracion.buildSessionFactory(servicio);
+            
+            return fabrica;
+			    
+        }
+        catch (Throwable ex) {
+            // Make sure you log the exception, as it might be swallowed
+            System.err.println("Initial SessionFactory creation failed." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
+
+
+	public static SessionFactory getSessionfactory1() {
+		return sessionFactory1;
+	}
 
 }

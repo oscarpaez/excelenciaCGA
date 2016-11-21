@@ -44,18 +44,26 @@
 		            	<p:column rowspan="2" headerText="Acciones" width="80" rendered="#{incidenciaBean.proNeg == 'PR'}" />
 		            	<p:column rowspan="2" headerText="N° Oferta" width="80"/>
 		            	<p:column rowspan="2" headerText="Oficina" filterBy="#{incidencia.ciudad.nombre}" filterMatchMode="contains" width="90" filterStyle="width:90%"/>
-		            	<p:column rowspan="2" headerText="Tipo de Negocio" width="150"/>
+		            	<p:column rowspan="2" headerText="Tipo de Negocio" width="150"
+		            		rendered="#{incidenciaBean.proNeg != 'SI'}"/>
 		            	<p:column rowspan="2" headerText="Cliente" filterBy="#{incidencia.cliente}" filterMatchMode="contains" width="150"/>
-		            	<p:column rowspan="2" headerText="Necesidad Cliente" width="250" />
+		            	<p:column rowspan="2" headerText="Necesidad Cliente" width="250" 
+		            		rendered="#{incidenciaBean.proNeg != 'SI'}"/>
 		            	<p:column rowspan="2" headerText="Probabilidad de Concretar el Negocio" width="100" filterBy="#{incidencia.probabilidadConNeg}" filterMatchMode="contains" filterStyle="width:90%"/>
-		            	<p:column rowspan="2" headerText="Causa " width="100"/>
+		            	<p:column rowspan="2" headerText="Causa " width="100"
+		            		rendered="#{incidenciaBean.proNeg != 'SI'}"/>
 		            	<p:column colspan="1" headerText="Precio oferta" width="90"/>
-		             	<p:column colspan="1" headerText="Rentabilidad Plan" width="80"/>
-		            	<p:column colspan="1" headerText="Nombre Competencia" width="150"/>
-		            	<p:column colspan="1" headerText="Precio Competencia" width="90"/>
-		            	<p:column colspan="1" headerText="Rentabilidad Requeridad" width="80"/>
+		             	<p:column colspan="1" headerText="Rentabilidad Plan" width="80"
+		             		rendered="#{incidenciaBean.proNeg != 'SI'}"/>
+		            	<p:column colspan="1" headerText="Nombre Competencia" width="150"
+		            		rendered="#{incidenciaBean.proNeg != 'SI'}"/>
+		            	<p:column colspan="1" headerText="Precio Competencia" width="90"
+		            		rendered="#{incidenciaBean.proNeg != 'SI'}"/>
+		            	<p:column colspan="1" headerText="Rentabilidad Requeridad" width="80"
+		            		rendered="#{incidenciaBean.proNeg != 'SI'}"/>
 		            	<p:column colspan="1" headerText="Resultado de la Negociacion" width="70" filterBy="#{incidencia.resultaNegocio}" filterMatchMode="contains" filterStyle="width:90%"/>
-		            	<p:column colspan="1" headerText="Medio de contacto" width="100"/>
+		            	<p:column colspan="1" headerText="Medio de contacto" width="100"
+		            		rendered="#{incidenciaBean.proNeg != 'SI'}"/>
 		            	<p:column rowspan="2" headerText="Fecha" style="text-align: center;" width="100" />  
 		            </p:row>
 		            
@@ -72,26 +80,23 @@
 					</p:column>
 				
 					<p:column >
-						<h:outputText value="#{incidencia.noferta}" >
-							<f:convertNumber locale="en_US" />
-						</h:outputText>
+						<h:outputText value="#{incidencia.noferta}" />
 					</p:column>
 					
 					<p:column >
-						<h:outputText value="#{incidencia.ciudad.nombre}" >
-							<f:convertNumber locale="en_US" />
-						</h:outputText>
+						<h:outputText value="#{incidencia.ciudad.nombre}"  />
 					</p:column>
 					
-					<p:column >
+					<p:column rendered="#{incidenciaBean.proNeg != 'SI'}" >
 						<h:outputText value="#{incidencia.linea.nombre}" />
 					</p:column>
 					
-					<p:column headerText="comision"    style="text-align: center">
+					<p:column   style="text-align: center">
 						<h:outputText value="#{incidencia.cliente}" />
 					</p:column>
 					
-					<p:column headerText="comision"    style="text-align: center">
+					<p:column headerText="comision"    style="text-align: center"
+						rendered="#{incidenciaBean.proNeg != 'SI'}">
 						<h:outputText value="#{incidencia.necesidad}" />
 					</p:column>	
 									
@@ -99,39 +104,45 @@
 						<h:outputText value="#{incidencia.probabilidadConNeg} %" />
 					</p:column>	
 					
-					<p:column headerText="comision"    style="text-align: center">
+					<p:column headerText="comision"    style="text-align: center"
+						rendered="#{incidenciaBean.proNeg != 'SI'}">
 						<h:outputText value="#{incidencia.causaPerdida.descripcion}" />
 					</p:column>
 					
-					<p:column headerText="comision"    style="text-align: right">
+					<p:column   style="text-align: right">
 						<h:outputText value="#{incidencia.valorVenta}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="0" pattern="#,##0;(#,##0)" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="rP"    style="text-align: center">
-						<h:outputText value="#{incidencia.rentabilidad}" />
+					<p:column headerText="rP"    style="text-align: center"
+						rendered="#{incidenciaBean.proNeg != 'SI'}">
+						<h:outputText value="#{incidencia.rentabilidad} %" />
 					</p:column>
 				 	
-					<p:column headerText="nC"    style="text-align: center">
+					<p:column headerText="nC"    style="text-align: center"
+						rendered="#{incidenciaBean.proNeg != 'SI'}">
 						<h:outputText value="#{incidencia.nombreCompetencia}" />
 					</p:column>
 					
-					<p:column headerText="pC"    style="text-align: center">
+					<p:column headerText="pC"    style="text-align: center"
+						rendered="#{incidenciaBean.proNeg != 'SI'}">
 						<h:outputText value="#{incidencia.precioCompetencia}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="0" pattern="#,##0;(#,##0)" />
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="rP"    style="text-align: center">
-						<h:outputText value="#{incidencia.rentabilidadRequerida}" />
+					<p:column headerText="rP"    style="text-align: center"
+						rendered="#{incidenciaBean.proNeg != 'SI'}">
+						<h:outputText value="#{incidencia.rentabilidadRequerida} %" />
 					</p:column>
 					
 					<p:column headerText="rP"    style="text-align: center">
 						<h:outputText value="#{incidencia.resultaNegocio}" />
 					</p:column>
 					
-					<p:column headerText="rP"    style="text-align: center">
+					<p:column headerText="rP"    style="text-align: center"
+						rendered="#{incidenciaBean.proNeg != 'SI'}">
 						<h:outputText value="#{incidencia.canalesContacto}" />
 					</p:column>	
 					
@@ -145,18 +156,19 @@
 			            	<p:column colspan="1" style="text-align:right"/>
 			            	<p:column colspan="1" style="text-align:right"/>
 			            	<p:column colspan="1" style="text-align:right"/>
-			            	<p:column colspan="1" style="text-align:right"/>
-			            	<p:column colspan="1" style="text-align:right"/>
-			            	<p:column colspan="1" style="text-align:right"/>
+			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
+			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
+			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
 			            	<p:column colspan="1" footerText="Totales"  style="text-align:right"/>
 			            	<p:column colspan="" footerText="#{incidenciaBean.valorTotal}" style="text-align:right" />
-			       	    	<p:column colspan="" footerText="" />
+			       	    	<p:column colspan="1" style="text-align:right" />
 			             	<p:column colspan="1" style="text-align:right"/>
-			            	<p:column colspan="" footerText="#{incidenciaBean.valorTotalC}" style="text-align:right" />
-			            	<p:column colspan="1" style="text-align:right"/>
-			            	<p:column colspan="1" style="text-align:right"/>
-			            	<p:column colspan="1" style="text-align:right"/>
-			            	<p:column colspan="1" style="text-align:right"/>  	
+			            	<p:column colspan="1" footerText="#{incidenciaBean.valorTotalC}" style="text-align:right" 
+			            				rendered="#{incidenciaBean.proNeg != 'SI'}"/>
+			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
+			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
+			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
+			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>  	
 			            </p:row>
 			        </p:columnGroup>
 			        
@@ -168,7 +180,7 @@
 			    </p:panel>    
 			</h:form>
 			
-			<p:dialog header="Crear Nueva Proyecto" widgetVar="dlgNue" draggable="false" 
+			<p:dialog header="Editar Negocios Programados" widgetVar="dlgNue" draggable="false" 
 				resizable="false" closable="true" appendTo="@(body)" modal="true" height="400" 
 				width="40%"	>
 			<h:form id="frmNuePro" enctype="multipart/form-data">

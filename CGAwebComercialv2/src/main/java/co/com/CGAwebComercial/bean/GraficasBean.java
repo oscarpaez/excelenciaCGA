@@ -31,9 +31,11 @@ import co.com.CGAwebComercial.dao.IncidenciaDao;
 import co.com.CGAwebComercial.dao.LineaDao;
 import co.com.CGAwebComercial.dao.OfertasPedidosDao;
 import co.com.CGAwebComercial.dao.PedidosEnProcesoDao;
+import co.com.CGAwebComercial.dao.PedidosProyectadosDao;
 import co.com.CGAwebComercial.dao.PresupuestoDao;
 import co.com.CGAwebComercial.dao.PromedioVentaDao;
 import co.com.CGAwebComercial.dao.RecaudoDao;
+import co.com.CGAwebComercial.dao.ValorProyectoDao;
 import co.com.CGAwebComercial.dao.Zona_FuncionarioDao;
 import co.com.CGAwebComercial.dao.Zona_ventaDao;
 import co.com.CGAwebComercial.entyties.Ciudad;
@@ -69,6 +71,7 @@ public class GraficasBean implements Serializable{
 	private BigDecimal pedidosPerdidos;
 	private BigDecimal pedidosGanados;
 	private BigDecimal presupuestoRecaudo;
+	private BigDecimal proyectos;
 	private BigDecimal realRecaudo;
 	private BigDecimal kpiOfertas;
 	private BigDecimal kpiOpoNeg;
@@ -118,8 +121,6 @@ public class GraficasBean implements Serializable{
 				LineChartSeries realD = new LineChartSeries();
 				LineChartSeries leyenda1 = new LineChartSeries();
 
-
-
 				List <BigDecimal> listaRecaudo = new ArrayList<>();
 				String titulo = "";
 				RecaudoDao dao = new RecaudoDao();
@@ -164,7 +165,7 @@ public class GraficasBean implements Serializable{
 				
 				for (int i=0; i<listaRecaudo.size()/4;  i++) {
 					tem = listaRecaudo.get(j).divide(new BigDecimal("1000000")).abs();
-					System.out.println(tem + "primer dato");
+
 					b = tem.abs().longValue();
 					reca[i] = (int)(long)b;
 					tem = listaRecaudo.get(j+1).divide(new BigDecimal("1000000")).abs();
@@ -380,24 +381,23 @@ public class GraficasBean implements Serializable{
 			/**/
 			Zona_ventaDao doaZ = new Zona_ventaDao();
 			List<Zona_venta> listaZona = ( autenticacion.getUsuarioLogin().getPerfil().getId() == 20)? doaZ.buscarZonaSucursal(idCiudad) : doaZ.buscarZonaSucursal(zona.getCiudad().getId());
-			System.out.println("ciuddddddddddddd" + idCiudad);
 			IncidenciaDao daoI = new IncidenciaDao();
 			List<BigDecimal>  totalWages = daoI.valorPedidosPerdidosSucursal(listaZona, idCiudad);
 			pedidosPerdidos = totalWages.get(0);
 			pedidosGanados = totalWages.get(1);
-			pedidosProyectados = totalWages.get(2);
-			
-			
+			//pedidosProyectados = totalWages.get(2);
 			
 			//int sucursal = (zona.getCiudad().getId() == 1)? 1000 : (zona.getCiudad().getId() == 7)? 2000 : (zona.getCiudad().getId()+1)*1000;
 			PedidosEnProcesoDao daoEP = new PedidosEnProcesoDao();
 			pedidosProceso =  daoEP.valorPedidosProcesoOficina(ciudad);
 			
-//			PedidosProyectadosDao daoPe = new PedidosProyectadosDao();
-//			pedidosProyectados = ( autenticacion.getUsuarioLogin().getPerfil().getId() == 20)? daoPe.valorPedidosProyectadosOficina(idCiudad): daoPe.valorPedidosProyectadosOficina(zona.getCiudad().getId());
+			PedidosProyectadosDao daoPe = new PedidosProyectadosDao();
+			pedidosProyectados = ( autenticacion.getUsuarioLogin().getPerfil().getId() == 20)? daoPe.valorPedidosProyectadosOficina(idCiudad): daoPe.valorPedidosProyectadosOficina(zona.getCiudad().getId());
 			
-			pedidosTotal =pedidosProceso.add(pedidosProyectados.add(new BigDecimal(realMes)));
+			ValorProyectoDao daoV = new ValorProyectoDao();
+			proyectos = new BigDecimal(daoV.sumaProyectosOficina(idCiudad));
 			
+			pedidosTotal =pedidosProceso.add(pedidosGanados.add(new BigDecimal(realMes)).add(proyectos));
 			
 			OfertasPedidosDao daoOF = new OfertasPedidosDao();
 			List<BigDecimal> listaOferta = daoOF.sumaValorOfertasPedidosSucursal(ciudad);
@@ -405,10 +405,10 @@ public class GraficasBean implements Serializable{
 			kpiOfertas = (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0"): listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
 			kpiOimagen = (kpiOfertas.intValue() > 80)? "verde.png" : (kpiOfertas.intValue() > 40 &&  kpiOfertas.intValue() < 80)? "amarillo.jpg"  : "rojo.png";
 			
-			listaOferta= daoI.valorOportunidadNegocioOficina(idCiudad);			
+			//listaOferta= daoI.valorOportunidadNegocioOficina(idCiudad);			
 			
-			kpiOpoNeg = (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0") :listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-			kpiNimagen = (kpiOpoNeg.intValue() > 1 && kpiOpoNeg.intValue() < 20)? "verde.png" : (kpiOpoNeg.intValue() > 20 &&  kpiOpoNeg.intValue() < 40)? "amarillo.jpg"  : "rojo.png";
+			kpiOpoNeg = (listaOferta.get(2).intValue() == 0 || listaOferta.get(3).intValue() == 0)? new BigDecimal("0") :listaOferta.get(3).divide(listaOferta.get(2), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+			kpiNimagen = (kpiOpoNeg.intValue() > 80)? "verde.png" : (kpiOpoNeg.intValue() > 60 &&  kpiOpoNeg.intValue() < 80)? "amarillo.jpg"  : "rojo.png";
 			
 //			if( autenticacion.getUsuarioLogin().getPerfil().getId() == 20){				
 //				pedidosTotal =pedidosProceso.add(pedidosProyectados.add(new BigDecimal(realMes)));
@@ -479,15 +479,14 @@ public class GraficasBean implements Serializable{
 			kpiOfertas = (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0"): listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
 			kpiOimagen = (kpiOfertas.intValue() > 80)? "verde.png" : (kpiOfertas.intValue() > 60 &&  kpiOfertas.intValue() < 80)? "amarillo.jpg"  : "rojo.png";
 			
-			IncidenciaDao daoI = new IncidenciaDao();
-			listaOferta= daoI.valorOportunidadNegocioPais();
+//			IncidenciaDao daoI = new IncidenciaDao();
+//			listaOferta= daoI.valorOportunidadNegocioPais();
 			
-			kpiOpoNeg = (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0"): listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-			kpiNimagen = (kpiOpoNeg.intValue() > 1 && kpiOpoNeg.intValue() < 20)? "verde.png" : (kpiOpoNeg.intValue() > 20 &&  kpiOpoNeg.intValue() < 40)? "amarillo.jpg"  : "rojo.png";
+			kpiOpoNeg = (listaOferta.get(2).intValue() == 0 || listaOferta.get(3).intValue() == 0)? new BigDecimal("0"): listaOferta.get(3).divide(listaOferta.get(2), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+			kpiNimagen = (kpiOpoNeg.intValue() > 80)? "verde.png" : (kpiOpoNeg.intValue() > 60 &&  kpiOpoNeg.intValue() < 80)? "amarillo.jpg"  : "rojo.png";
 			
 			porV =(pedidosTotal.longValue() == 0)? new BigDecimal("0"): pedidosTotal.divide(listaPre.get(2), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			V = porV.intValue();
-			System.out.println(V + " WWW "+ pedidosTotal + " --- " + listaPre.get(2) );
 			interval.add(3,(V >100)? V:100); 
 			meterGaugeModelA = new MeterGaugeChartModel(V, interval);
 			meterGaugeModelA.setTitle("Cumplimiento " + mesActual + " Pedidos Facturados Y Proyectados" );
@@ -597,7 +596,7 @@ public class GraficasBean implements Serializable{
 				System.out.println(string);
 			}
 			int mes = Integer.parseInt("" + diaArray[1]);
-			System.out.println(mes);
+			
 			String[] periodo = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
 					"Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 			
@@ -888,5 +887,11 @@ public class GraficasBean implements Serializable{
 	}
 	public void setKpiNimagen(String kpiNimagen) {
 		this.kpiNimagen = kpiNimagen;
+	}
+	public BigDecimal getProyectos() {
+		return proyectos;
+	}
+	public void setProyectos(BigDecimal proyectos) {
+		this.proyectos = proyectos;
 	}
 }

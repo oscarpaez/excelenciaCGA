@@ -27,7 +27,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			Criteria consulta = session.createCriteria(Incidencia.class);
 //			consulta.createAlias("zona", "z");
 //			consulta.add(Restrictions.eq("z.id_zona_venta", zona));
-			consulta.createAlias("funcionario", "f");
+			consulta.createAlias(zona, "f");
 			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
 			consulta.add(Restrictions.eq("resultaNegocio", "NO"));
 			consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
@@ -38,7 +38,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			listaV.add(totalWages);
 			
 			consulta = session.createCriteria(Incidencia.class);
-			consulta.createAlias("funcionario", "f");
+			consulta.createAlias(zona, "f");
 			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
 			consulta.add(Restrictions.eq("resultaNegocio", "SI"));
 			consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
@@ -49,7 +49,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			listaV.add(totalWages1);
 			
 			consulta = session.createCriteria(Incidencia.class);
-			consulta.createAlias("funcionario", "f");
+			consulta.createAlias(zona, "f");
 			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
 			consulta.add(Restrictions.eq("resultaNegocio", "PR"));
 			consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
@@ -125,7 +125,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Incidencia> valorPedidosPerdidosUsuarios(String zona, int idFun){
+	public List<Incidencia> valorPedidosPerdidosUsuarios(String usuario, String estado, int idFun){
 
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		List<Incidencia> listaIncidencia = new ArrayList<>();
@@ -136,15 +136,15 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			Criteria consulta = session.createCriteria(Incidencia.class);
 			//consulta.createAlias("zona", "z");
 			//consulta.add(Restrictions.eq("z.id_zona_venta", zona));
-			consulta.createAlias("funcionario", "f");
-			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
-			
-			if(zona.equals("")  || zona == null){
-				
+			if(usuario.equals("funcionarioI")){
+				consulta.createAlias("funcionarioI", "f");
+				consulta.add(Restrictions.eq("resultaNegocio", estado));
 			}
 			else{
-				consulta.add(Restrictions.eq("resultaNegocio", zona));
+				consulta.createAlias("funcionario", "f");
+				consulta.add(Restrictions.eq("resultaNegocio", estado));
 			}
+			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
 			//consulta.add(Restrictions.eq("resultaNegocio", "NO"));
 			consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
 			listaIncidencia = consulta.list();

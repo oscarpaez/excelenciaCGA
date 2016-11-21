@@ -50,7 +50,6 @@ public class Registro_IngresosBean implements Serializable {
 				for (Fechas fecha: listaFechas) {
 					fechaConsulta  = (fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes(): fechaConsulta;
 				}
-				System.out.println("TTTT");
 				listarRegistro();
 			}
 
@@ -63,7 +62,6 @@ public class Registro_IngresosBean implements Serializable {
 	public void listarRegistro(){
 		
 		try{
-			System.out.println("RRR");
 			Registro_IngresosDao daoR = new Registro_IngresosDao();
 			listaRegistros = daoR.listaIngresos(fechaBusqueda, fechaBusquedaYear);
 			
@@ -82,7 +80,7 @@ public class Registro_IngresosBean implements Serializable {
 			listaRegistros = daoR.listaIngresosUsuarios(fechaBusqueda, fechaBusquedaYear, idFun);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
-			Messages.addGlobalError("Error no se Lista de Registros");
+			Messages.addGlobalError("Error no se Lista de Registros Usuario");
 		}
 	}
 

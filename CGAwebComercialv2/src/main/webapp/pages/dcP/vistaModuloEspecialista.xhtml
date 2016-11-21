@@ -143,6 +143,22 @@
 										<f:param name="tipo" value=""/>
 									</p:button>  -->
 									
+									<p:outputLabel  value="Proyectos Mes" 
+										    	style="font-size: 14px; " 
+										    	rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}"/>
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
+												value="#{vendedorLBRBean.proyectos}"  disabled="true" 
+												rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}" >
+												<f:convertNumber pattern="#,##0;"/>
+									</p:inputText>
+									
+										<!--  			<p:button icon="ui-icon-search" title="Detalle Pedidos en Proceso"
+										outcome="/pages/ve/detallePedidosEnProceso.xhtml?faces-redirect=true"
+										onclick="showLoading()" >
+										<f:param name="perId" value=""/>
+										<f:param name="tipo" value=""/>
+									</p:button>  -->
+									
 									<p:outputLabel  value="Pedidos Proyectados " 
 										    	style="font-size: 14px; " />
 									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"

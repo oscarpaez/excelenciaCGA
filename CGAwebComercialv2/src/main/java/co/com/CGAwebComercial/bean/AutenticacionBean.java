@@ -93,7 +93,7 @@ public class AutenticacionBean implements Serializable {
 				registro.setFuncionario(funcionario);
 				daoR.salvar(registro);
 			}	
-			System.out.println("Usuarios "+ usuarioLogin.getPerfil().getId());
+			//System.out.println("Usuarios "+ usuarioLogin.getPerfil().getId());
 			if(usuarioLogin == null){
 				Messages.addGlobalError("El usuario o la cantraseña son incorrectas", "info");
 				return null;
@@ -104,7 +104,8 @@ public class AutenticacionBean implements Serializable {
 			}
 			else if(usuarioLogin.getPerfil().getId() == 6 ){
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
-				return "ve/vistaModulo.xhtml?faces-redirect=true";
+				return "ve/vistaModulo2.xhtml?faces-redirect=true";
+				//return "ve/vistaModulo.xhtml?faces-redirect=true";
 			}
 			
 			else if(usuarioLogin.getPerfil().getId() == 2 || usuarioLogin.getPerfil().getId() == 12){

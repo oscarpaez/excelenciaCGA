@@ -10,6 +10,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import co.com.CGAwebComercial.bean.directorGBean;
+import co.com.CGAwebComercial.dao.CiudadDao;
 import co.com.CGAwebComercial.dao.DetalleDao;
 import co.com.CGAwebComercial.dao.FuncionarioDao;
 import co.com.CGAwebComercial.dao.LineaDao;
@@ -132,6 +133,7 @@ public class UsuarioTest {
 	}
 	
 	@Test
+	@Ignore
 	public void listaIngresos(){
 		
 		Registro_IngresosDao dao = new Registro_IngresosDao();
@@ -141,6 +143,14 @@ public class UsuarioTest {
 		for (Registro_Ingresos r : listaR) {
 			System.out.println(r.getPersona().getNombre());			
 		}
+	}
+	
+	@Test
+	public void pruebaBase(){
+		
+		CiudadDao dao = new CiudadDao();
+		dao.prueba();
+		
 	}
 	
 	

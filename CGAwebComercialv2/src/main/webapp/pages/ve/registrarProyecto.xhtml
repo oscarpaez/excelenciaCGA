@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+
+	<ui:define name="contenido">
+		<f:metadata>
+			<f:event listener="#{valorProyectoBean.listarAsesor()}"
+				type="preRenderView" />
+		</f:metadata>
+
+		<f:facet name="header">
+			<p:outputLabel
+				value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+
+			<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
+				title="Volver" iconPos="right" styleClass="excel "
+				style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
+				rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}"
+				outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true"
+				onclick="showLoading(); " />
+
+			<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
+				title="Volver" iconPos="right" styleClass="excel "
+				style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
+				rendered="#{autenticacionBean.usuarioLogin.perfil.id == 6}"
+				outcome="/pages/ve/vistaModulo.xhtml?faces-redirect=true"
+				onclick="showLoading();" />
+
+			<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
+				title="Volver" iconPos="right" styleClass="excel "
+				style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
+				rendered="#{autenticacionBean.usuarioLogin.perfil.id == 7}"
+				outcome="/pages/dr/vistaModulo2.xhtml?faces-redirect=true"
+				onclick="showLoading();" />
+
+
+
+		</f:facet>
+
+		<h:form id="frmNueIci">
+			<p:panel style="" styleClass="">
+				<div class="ui-grid ui-grid-responsive">
+
+					<div class="ui-grid-row">
+
+						<div class="ui-grid-col-4" style="width: 100%">
+							<p:panel id="pnlNueIci" style="border: 1px solid #50bf22;"
+								styleClass="">
+								<f:facet name="header">
+									<p:outputLabel value="Registrar Proyecto" />
+								</f:facet>
+								<p:panelGrid columns="4" id="pnlGps" styleClass="pnlGpsA"
+									columnClasses="columnA,columnB,columnC,columnD">
+									
+									<p:outputLabel value="Asesor Comercial: " style="font-size: 16px "  />
+									<p:inputText
+										value="#{valorProyectoBean.proyecto.funcionario.persona.nombre}"
+										style="width:90%; opacity: 0.9; " disabled="true" />
+
+									<p:outputLabel value="Cod Sap:" style="font-size: 16px "  />
+									<p:inputText
+										value="#{valorProyectoBean.proyecto.funcionario.id_funcionario}"
+										style="width:90%; opacity: 0.9; " disabled="true" />
+
+									<p:outputLabel value="Oficina Ventas: " style="font-size: 16px "  />
+									<p:inputText value="#{valorProyectoBean.proyecto.ciudad.nombre}"
+										style="width:90%; opacity: 0.9; " disabled="true" />
+
+									<p:outputLabel value="Nombre del Proyecto: " style="font-size: 16px "  />
+									<p:inputText value="#{valorProyectoBean.proyecto.nombreProyecto}"
+										style="width:90%; opacity: 0.9; " />
+
+
+									<p:outputLabel value="Valor Mes Proyecto:"
+										style="font-size: 16px " />
+									<p:inputNumber id="precioCom"
+										value="#{valorProyectoBean.proyecto.valorMes}"
+										placeholder="0 $" symbol=" $" symbolPosition="s"
+										thousandSeparator="," decimalPlaces="0" inputStyle="width:90%"
+										required="true"
+										requiredMessage="Campo Precio de la Competencia es obligatorio" />
+
+									<p:outputLabel value="Valor total Proyecto:"
+										style="font-size: 16px " />
+									<p:inputNumber id="retanbilidadR"
+										value="#{valorProyectoBean.proyecto.valorTotal}"
+										placeholder="0 $" symbol=" $" symbolPosition="s"
+										thousandSeparator=","  decimalPlaces="0"
+										inputStyle="width:90%" required="true"
+										requiredMessage="El Campo Rentabilidad Requerida es obligatorio" />
+
+									<p:outputLabel value="N° Oferta:" style="font-size: 16px " />
+									<p:inputText style="width:90%" value="#{valorProyectoBean.proyecto.nOferta}" 
+										required="true" requiredMessage="Campo Oferta es obligatorio ">
+										 <f:convertNumber />
+									</p:inputText>
+						
+
+									<p:outputLabel value="Fecha Registro:" style="font-size: 16px " />
+									<p:calendar value="#{valorProyectoBean.proyecto.fechaRegistro}"
+										required="true" Style="width:100%"
+										requiredMessage="El Fecha Registro es obligatorio" />
+
+									<p:commandButton value="Salvar" icon="ui-icon-disk"
+										actionListener="#{valorProyectoBean.salvarProyecto()}"
+										update=":frmNueIci:pnlNueIci :msgGlobal  " />
+								</p:panelGrid>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

@@ -102,7 +102,7 @@
 						<p:panel style="height:80px; width:400px;">
 							<h:form>
 								<h:panelGrid columns="3">
-									<p:outputLabel value="KPI Ofertas y Pedidos"
+									<p:outputLabel value="KPI Ofertas y Pedidos $"
 										style="font-size: 14px; " />
 									<p:inputText size="8"
 										style="color:#0000ff; opacity: .90; text-align: right;
@@ -153,20 +153,35 @@
 										<f:param name="tipo" value=""/>
 									</p:button>
 									
-									<p:outputLabel  value="Pedidos Proyectados " 
+									<p:outputLabel  value="Proyectos Mes" 
+										    	style="font-size: 14px; " />
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
+												value="#{graficasBean.proyectos}"  disabled="true" >
+												<f:convertNumber pattern="#,##0;"/>
+									</p:inputText>
+									
+									<p:button icon="ui-icon-search" title="Detalle Pedidos Perdidos"
+											outcome="/pages/dr/detalleProyectos.xhtml?faces-redirect=true"
+											onclick="showLoading()" 
+											>
+											<f:param name="perId" value="#{autenticacionBean.usuarioLogin.id}"/>
+											<f:param name="tipo" value=""/>
+									</p:button>
+									
+									<p:outputLabel  value="Negocios Proyectados" 
 										    	style="font-size: 14px; " />
 									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
 												value="#{graficasBean.pedidosProyectados}"  disabled="true" >
 												<f:convertNumber pattern="#,##0;(#,##0)"/>
 									</p:inputText>
 									<p:button icon="ui-icon-search"  title="Detalle Pedidos Proyectados"
-										outcome="/pages/dr/vistaIncidencia.xhtml?faces-redirect=true"
+										outcome="/pages/dr/detallePedidosProyectados.xhtml?faces-redirect=true"
 										onclick="showLoading()">
 										<f:param name="perId" value="PR"/>
 										<f:param name="tipo" value=""/>
 									</p:button>
 									
-									<p:outputLabel  value="Oportunidad de Negocio Ganado" 
+									<p:outputLabel  value="Oferta Oportunidad de Negocio >= 80%" 
 										    	style="font-size: 14px; " />
 									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
 												value="#{graficasBean.pedidosGanados}"  disabled="true" >
@@ -179,7 +194,7 @@
 										<f:param name="tipo" value=""/>
 									</p:button>
 									
-									<p:outputLabel  value="Oportunidad de Negocio Perdido" 
+									<p:outputLabel  value="Negocios Perdidos" 
 										    	style="font-size: 14px; " />
 									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
 												value="#{graficasBean.pedidosPerdidos}"  disabled="true" >
@@ -202,16 +217,16 @@
 										<f:param name="tipo" value=""/>
 									</p:button>
 								</div>
-								<br />   -->
+								<br />   
 								<div style="text-align:center;">
 									<p:button icon="ui-icon-document"  value="Registrar Oportunidad de Negocio"
-										outcome="/pages/vi/oportunidadNegocio.xhtml?faces-redirect=true"
+										outcome="/pages/vi/registroPedidosProgramados.xhtml?faces-redirect=true"
 										style="width:350px; font-size: 16px"
 										onclick="showLoading()">
 										<f:param name="perId" value=""/>
 										<f:param name="tipo" value=""/>
 									</p:button>
-								</div>
+								</div> -->
 								<br />
 								<h:panelGrid columns="2">
 									<p:outputLabel  value="Recaudo Mes " 

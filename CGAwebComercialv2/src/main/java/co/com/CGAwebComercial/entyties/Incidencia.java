@@ -77,6 +77,10 @@ public class Incidencia  implements Serializable {
 	
 	@OneToOne
 	@JoinColumn(nullable = false)
+	private Funcionario funcionarioI;
+	
+	@OneToOne
+	@JoinColumn(nullable = false)
 	private Ciudad ciudad;
 	
 	@Transient	
@@ -246,5 +250,11 @@ public class Incidencia  implements Serializable {
 	}
 	public void setNoferta(Long noferta) {
 		Noferta = noferta;
+	}
+	public Funcionario getFuncionarioI() {
+		return funcionarioI;
+	}
+	public void setFuncionarioI(Funcionario funcionarioI) {
+		this.funcionarioI = funcionarioI;
 	}
 }

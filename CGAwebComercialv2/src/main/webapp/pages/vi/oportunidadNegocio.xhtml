@@ -29,7 +29,17 @@
 								  style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
 								  rendered="#{autenticacionBean.usuarioLogin.perfil.id == 6}"
 								  outcome="/pages/ve/vistaModulo.xhtml?faces-redirect=true"
-								  onclick="showLoading();"/>					  
+								  onclick="showLoading();"/>
+				
+				<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+								  iconPos="right" styleClass="excel "
+								  style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
+								  rendered="#{autenticacionBean.usuarioLogin.perfil.id == 7}"
+								  outcome="/pages/dr/vistaModulo2.xhtml?faces-redirect=true"
+								  onclick="showLoading();"/>	
+				
+				
+								  			  					  
 		</f:facet>					
 		
 		<h:form id="frmNueIci"> 
@@ -112,7 +122,7 @@
 								<p:outputLabel value="Precio de la Competencia: " style="font-size: 16px " />
 								<p:inputNumber id="precioCom" value="#{incidenciaBean.incidencia.precioCompetencia}" placeholder="0 $" symbol=" $" symbolPosition="s" 
 			                               thousandSeparator=","   decimalPlaces="0"
-			                               style="width: 100%;" size="35" required="true" 
+			                               inputStyle="width:90%" required="true" 
 			                               requiredMessage="Campo Precio de la Competencia es obligatorio"/>
 								
 								<p:outputLabel  value="Tipo de Negocio: " style="font-size: 16px " />
@@ -129,13 +139,13 @@
 								<p:outputLabel value="Rentabilidad Requerida:"  style="font-size: 16px "/>
 								<p:inputNumber id="retanbilidadR" value="#{incidenciaBean.incidencia.rentabilidadRequerida}" placeholder="0 %" symbol=" %" symbolPosition="s" 
 			                               thousandSeparator=","  maxValue="999" decimalPlaces="0" 
-			                               style="width: 100%;" size="35" required="true" 
+			                               inputStyle="width:90%" required="true" 
 			                               requiredMessage="El Campo Rentabilidad Requerida es obligatorio"/>  						
 								
 								<p:outputLabel value="Precio Ofertado:" style="font-size: 16px " />
 								<p:inputNumber id="valor" value="#{incidenciaBean.incidencia.valorVenta}" placeholder="0 $" symbol=" $" symbolPosition="s" 
 			                               thousandSeparator=","  decimalPlaces="0"
-			                               style="width: 100%;" size="35"
+			                               inputStyle="width:90%"
 			                               validatorMessage="Ingrese un valor superior a 5,000,000" 
 			                               required="true" 
 			                               requiredMessage="El Campo Rentabilidad Requerida es obligatorio">
@@ -158,7 +168,7 @@
 			                    <p:outputLabel value="Rentabilidad Plan:"  style="font-size: 16px "/>
 								<p:inputNumber id="retanbilidad" value="#{incidenciaBean.incidencia.rentabilidad}" placeholder="0 %" symbol=" %" symbolPosition="s" 
 			                               thousandSeparator="," maxValue="999" decimalPlaces="0"
-			                               style="width: 100%;" size="35"  required="true" 
+			                               inputStyle="width:90%" required="true" 
 			                               requiredMessage="El Campo Rentabilidad Plan es obligatorio"/>             
 			               		
 			               		<p:outputLabel for="e" value="Causa de Perdida: "  style="font-size: 16px "/>
@@ -187,7 +197,7 @@
 								
 								<p:outputLabel value="Fecha Registro:" style="font-size: 16px " />
 								<p:calendar value="#{incidenciaBean.incidencia.fechaRegistro}" 
-									size="35" required="true"
+									required="true" Style="width:100%" 
 									requiredMessage="El Fecha Registro es obligatorio" />
 								
 								<p:commandButton value="Salvar" icon="ui-icon-disk"

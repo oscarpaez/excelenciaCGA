@@ -18,6 +18,7 @@ import co.com.CGAwebComercial.entyties.OficinaVendedorInterno;
 import co.com.CGAwebComercial.entyties.Presupuesto;
 import co.com.CGAwebComercial.entyties.PresupuestoE;
 import co.com.CGAwebComercial.entyties.codUEN;
+import co.com.CGAwebComercial.entyties.HelpDesk.Vista_helpdesk;
 import co.com.CGAwebComercial.util.ComisionVendedores;
 import co.com.CGAwebComercial.util.HibernateUtil;
 
@@ -581,5 +582,41 @@ public class CiudadDao extends GenericDao<Ciudad>{
 			session.close();
 		}
 
+	}
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public void prueba(){
+		
+		Session session = HibernateUtil.getSessionfactory1().openSession();
+		List<Vista_helpdesk> prueba = new ArrayList<>();
+//		List<Ciudad> prueba = new ArrayList<>();
+		
+		try{
+//			Vista_helpdeskDao dao= new Vista_helpdeskDao();
+//			prueba = dao.listar();
+//			
+			
+//			Criteria consulta = session.createCriteria(Ciudad.class);
+//			prueba = consulta.list();
+			
+			Criteria consulta = session.createCriteria(Vista_helpdesk.class);
+			prueba = consulta.list();
+			
+			System.out.println(prueba.size()+ "####");
+//			for (Ciudad ciudad : prueba) {
+//				System.out.println(ciudad.getNombre() + "id search");
+//			}
+//			for (Vista_helpdesk v : prueba) {				
+//				System.out.println(v.getArea() + "id search");
+//			}
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			//session.close();
+		}
+		
 	}
 }

@@ -202,10 +202,8 @@ public class directorGBean implements Serializable{
 				Calendar fechas = Calendar.getInstance();
 				int month = fechas.get(Calendar.MONTH)+1;
 				for (Fechas fecha: listaFechas) {
-					System.out.println(fecha.getValorMes() + "/////////////////" + month);
 					fechaConsulta  = (month<10)?(fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes():fechaConsulta:(fecha.getValorMes().equals(String.valueOf(""+month)))? fecha.getMes(): fechaConsulta;
 				}
-				System.out.println(fechaConsulta + "$$$$$$$$$$");
 				listarVendedoresLinea();
 			}
 
@@ -363,7 +361,6 @@ public class directorGBean implements Serializable{
 				Calendar fechas = Calendar.getInstance();
 				int month = fechas.get(Calendar.MONTH)+1;
 				for (Fechas fecha: listaFechas) {
-					System.out.println(fecha.getValorMes() + "/////////////////" + month);
 					fechaConsulta  = (month<10)?(fecha.getValorMes().equals(String.valueOf("0"+month)))? fecha.getMes():fechaConsulta:(fecha.getValorMes().equals(String.valueOf(""+month)))? fecha.getMes(): fechaConsulta;
 				}
 				listarVendedores();
@@ -467,14 +464,11 @@ public class directorGBean implements Serializable{
 					if(autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
 						listaV = dao.listarDetalleVendedoresOficina(idCiudad, tipo, fechaBusqueda, fechaBusquedaYear);
 						ListaZona = daoV.buscarZonaSucursal(idCiudad);
-						System.out.println( "Entro lista" + idCiudad);
 					}
 					else{
 						listaV = dao.listarDetalleVendedoresOficina(zonaF.getCiudad().getId(), tipo, fechaBusqueda, fechaBusquedaYear);
 						ListaZona = daoV.buscarZonaSucursal(zonaF.getCiudad().getId());
 					}
-					System.out.println(ListaZona.size() + "Valor lista");
-					
 					listaVendedor  = daoF.listarVendedoresParaDirector(ListaZona);
 				}	
 			}
@@ -482,7 +476,6 @@ public class directorGBean implements Serializable{
 			for (Object object : listaV) {
 				Object[] obc = (Object[]) object;
 				Integer fun = (Integer) obc[1];
-				System.out.println(sumaIngresoR + "--" + fun);
 				
 				for (int i =0;  i<listaVendedor.size(); i++) {
 					
@@ -490,11 +483,9 @@ public class directorGBean implements Serializable{
 						listaVendedor.remove(i);
 						//i = listaVendedor.size();
 					}
-									
 				}
-				//System.out.println(fun + "!!!!!!!!!");
 				Funcionario fun1 = daoF.buscar(fun);
-				System.out.println(fun1.getId_funcionario());
+				
 				if(fun1 != null){
 					valorReal = new BigDecimal("0.00");
 					valorUtilidad = new BigDecimal("0.00");
@@ -518,7 +509,6 @@ public class directorGBean implements Serializable{
 					}
 					 
 					sumaIngresoR = new BigDecimal(((Long) obc[0] == 0)? (Long) obc[0] : (Long) obc[0] * -1);
-					System.out.println(zonaV);
 					if(zonaV.size() > 0 ){
 						PresupuestoDao daoP = new PresupuestoDao();
 						if(tipo.equals("funcionario")){
@@ -595,9 +585,7 @@ public class directorGBean implements Serializable{
 						
 						TPresupuesto = TPresupuesto.add(new BigDecimal(vendedores.getPresupuesto()));
 						TIngresoR= TIngresoR.add(new BigDecimal(vendedores.getIngresoReal()));				
-						
 					}
-					
 				}
 			
 			

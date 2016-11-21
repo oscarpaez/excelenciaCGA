@@ -18,6 +18,7 @@ import co.com.CGAwebComercial.entyties.PresupuestoE;
 import co.com.CGAwebComercial.entyties.Recaudo;
 import co.com.CGAwebComercial.entyties.Zona_venta;
 import co.com.CGAwebComercial.entyties.bajaRotacion;
+import co.com.CGAwebComercial.resource.Recursos;
 import co.com.CGAwebComercial.util.HibernateUtil;
 
 public class PresupuestoDao extends GenericDao<Presupuesto>{
@@ -631,22 +632,82 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			BigDecimal valLBR = (totalWages == null)? new BigDecimal("0"): new BigDecimal(totalWages);
 			lista.add(valLBR);
 			
+			
 			consulta = session.createCriteria(Recaudo.class);
-			consulta.createAlias("funcionario", "f");
-			consulta.add(Restrictions.eq("f.id_funcionario", idfuncionario));
+			if(tipo.equals("funcionarioI")){
+				OficinaVendedorInternoDao dao = new OficinaVendedorInternoDao();
+				int ciudad =  dao.ciudadInterno(idfuncionario);
+				Recursos r = new Recursos();
+				ciudad = r.idOficinaDivsion(ciudad);
+				Zona_ventaDao daoV = new Zona_ventaDao();
+				List<Zona_venta> listaZ = daoV.buscarZonaSucursal(ciudad);
+				System.out.println(ciudad + "######" + listaZ.size());
+				BigDecimal suma = new BigDecimal("0");
+				BigDecimal sumaR = new BigDecimal("0");
+				consulta.createAlias("zonaVenta", "z");
+				for (Zona_venta zona : listaZ) {					
+					
+					List <BigDecimal> lista1 =valorRecaudoZona(zona.getId_zona_venta());
+					suma = suma.add(lista1.get(0));
+					sumaR = sumaR.add(lista1.get(1));
+				}
+				System.out.println(sumaR + "######" + suma);
+				lista.add(suma);
+				lista.add(sumaR);
+			}
+			else{
+				
+				consulta.createAlias("funcionario", "f");
+				consulta.add(Restrictions.eq("f.id_funcionario", idfuncionario));
+				consulta.add(Restrictions.between("fecha", fechaInicial, fechaFinal));
+				consulta.setProjection(Projections.sum("presupuesto"));
+				BigDecimal presupuestoR = (BigDecimal) consulta.uniqueResult();
+				presupuestoR = (presupuestoR == null)? new BigDecimal("0"): presupuestoR; 
+				lista.add(presupuestoR);
+				
+				consulta.setProjection(Projections.sum("real"));
+				BigDecimal realR = (BigDecimal) consulta.uniqueResult();
+				realR = (realR == null)? new BigDecimal("0"): realR;
+				lista.add(realR);
+				
+			}
+			
+			return lista;
+
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
+	
+	public List <BigDecimal> valorRecaudoZona(String zona){
+		
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List <BigDecimal> lista = new ArrayList<>();
+		try{
+			Date fechaFinal = fechaFinal();
+			Date fechaInicial = fechaInicial();
+			
+			
+			Criteria consulta = session.createCriteria(Recaudo.class);
+			consulta.createAlias("zonaVenta", "z");
+			consulta.add(Restrictions.eq("z.id_zona_venta", zona));
 			consulta.add(Restrictions.between("fecha", fechaInicial, fechaFinal));
-			consulta.setProjection(Projections.sum("presupuesto"));
+			consulta.setProjection(Projections.property("presupuesto"));
 			BigDecimal presupuestoR = (BigDecimal) consulta.uniqueResult();
 			presupuestoR = (presupuestoR == null)? new BigDecimal("0"): presupuestoR; 
+			System.out.println("P##P" + presupuestoR);
 			lista.add(presupuestoR);
 			
 			consulta.setProjection(Projections.sum("real"));
 			BigDecimal realR = (BigDecimal) consulta.uniqueResult();
 			realR = (realR == null)? new BigDecimal("0"): realR;
+			System.out.println("r##r" + realR);
 			lista.add(realR);
 			
 			return lista;
-
 		} catch (RuntimeException ex) {
 			throw ex;
 		}

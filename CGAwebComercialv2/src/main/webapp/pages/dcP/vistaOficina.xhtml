@@ -35,7 +35,7 @@
 			
 			<div class="ui-grid-row">
 				<div class="ui-grid-col-4" style="width: 410px">
-				   <p:panel style="width:400px;" styleClass="promedio">				  		
+				   <p:panel style="width:400px; height:380px; " styleClass="promedio">				  		
 				  		<h:form >
 							<h:panelGrid columns="2">
 								<p:outputLabel  value="Venta Mes Real " 
@@ -63,7 +63,7 @@
 				<div class="ui-grid-row" style="width:840px">
 					<div class="ui-grid-col-5" style="padding-left: 10px; width:62%;">	
 					<h:form id="frmDesRec" enctype="multipart/form-data">
-						<p:panel style="height:340px; width:430px">
+						<p:panel style="height:380px; width:430px">
 							<h:form >
 								<h:panelGrid columns="3">
 									
@@ -74,6 +74,20 @@
 												<f:convertNumber pattern="#,##0;"/>
 									</p:inputText>
 							<!--	<p:button icon="ui-icon-search" title="Detalle Pedidos en Proceso"
+										outcome="/pages/dr/detallePedidosEnProceso.xhtml?faces-redirect=true"
+										onclick="showLoading()">
+										<f:param name="perId" value=""/>
+										<f:param name="tipo" value=""/>
+									</p:button> -->
+									
+									<p:outputLabel  value="Proyectos Mes" 
+										    	style="font-size: 14px; " />
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
+												value="#{graficasBean.proyectos}"  disabled="true" >
+												<f:convertNumber pattern="#,##0;"/>
+									</p:inputText>
+									
+									<!--	<p:button icon="ui-icon-search" title="Detalle Pedidos en Proceso"
 										outcome="/pages/dr/detallePedidosEnProceso.xhtml?faces-redirect=true"
 										onclick="showLoading()">
 										<f:param name="perId" value=""/>
@@ -165,7 +179,7 @@
 					
 					<div class="ui-grid-col-5" style="padding-left: 10px; width:50%;">
 						<h:form id="frmDesRec1" enctype="multipart/form-data">
-							<p:panel style="height:340px; width:390px">
+							<p:panel style="height:380px; width:390px">
 								<h:form >
 									<h:panelGrid columns="2">
 										<p:outputLabel  value="Venta Mes Proyectada" 

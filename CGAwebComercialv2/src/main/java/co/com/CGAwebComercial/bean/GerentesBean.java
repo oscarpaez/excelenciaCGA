@@ -93,7 +93,7 @@ public class GerentesBean implements Serializable{
 			int t = 0;
 			int progress1 = 100 /listaDirectores.size();
 			for (Funcionario funcionario : listaDirectores) {
-				System.out.println(funcionario.getPersona().getNombre());
+				
 				if(funcionario.getComision().getIdComision() == 9){
 					
 					sucursales = daoC.comisionDirectores(1, funcionario, fechaBusqueda, fechaBusquedaYear);
@@ -226,7 +226,6 @@ public class GerentesBean implements Serializable{
 			BigDecimal comi = funcionario.getComision().getValorBaseVenta().multiply(new BigDecimal("0.8"));
 			comi = comi.multiply(cum);
 			
-			System.out.println(cum.multiply(new BigDecimal("100")).intValue() );			
 			totalComision = (cum.multiply(new BigDecimal("100")).intValue() >= 85)? new DecimalFormat("###,###").format(comi): new DecimalFormat("###,###").format(0);
 			totalCumplimiento = new DecimalFormat("###,###.##").format(cum.multiply(new BigDecimal("100").setScale(2, BigDecimal.ROUND_HALF_UP)));
 		} catch (RuntimeException ex) {

@@ -70,7 +70,7 @@ public class PedidosEnProcesoDao  extends GenericDao<PedidosEnProceso>{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PedidosEnProceso> pedidosProcesoUsuario(int idFun){
+	public List<PedidosEnProceso> pedidosProcesoUsuario(String tipo, int idFun){
 
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		List<PedidosEnProceso> listaPedidosProceso = new ArrayList<>();
@@ -79,7 +79,7 @@ public class PedidosEnProcesoDao  extends GenericDao<PedidosEnProceso>{
 			Date fechaInicial = fechaInicial();
 			
 			Criteria consulta = session.createCriteria(PedidosEnProceso.class);
-			consulta.add(Restrictions.eq("codEspecialista", idFun));
+			consulta.add(Restrictions.eq(tipo , idFun));
 			consulta.add(Restrictions.between("fechaEntrega", fechaInicial , fechaFinal));
 			listaPedidosProceso = consulta.list();
 			return listaPedidosProceso;

@@ -127,53 +127,75 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 							Projections.sum("valorPedido")));			
 		    results = consulta.list();
 		    
-		    consulta = session.createCriteria(Llamadas.class);
-		    consulta.add(Restrictions.eq("extension", extension));
-		    consulta.add(Restrictions.eq("tipoLlamada", "Llamada entrante respondida"));
-		    consulta.setProjection(Projections.rowCount());
-		    Long total1 = (Long) consulta.uniqueResult();
-		    total1 = (total1 == null)? 0 : total1; 
-		    
-		    consulta = session.createCriteria(Llamadas.class);
-		    consulta.add(Restrictions.eq("extension", extension));
-		    consulta.add(Restrictions.eq("tipoLlamada", "Llamada Saliente"));
-		    consulta.setProjection(Projections.rowCount());
-		    Long total2 = (Long) consulta.uniqueResult();
-		    total2 = (total2 == null)? 0 : total2;
-		    
-		    consulta = session.createCriteria(Llamadas.class);
-		    consulta.add(Restrictions.eq("extension", extension));
-		    consulta.add(Restrictions.eq("tipoLlamada", "Llamada entrante sin respuesta"));
-		    consulta.setProjection(Projections.rowCount());
-		    Long total3 = (Long) consulta.uniqueResult();
-		    total3 = (total3 == null)? 0 : total3;
-		    
 		    OfertasPedidos ofePed = new OfertasPedidos();
-		    System.out.println(results.size() + "tamaño");		    
-		    for (Object[] objects : results) {
-		    	System.out.println(objects[1] +""+ objects[2]+""+ objects[3]+ "datoa ingreso" + objects[0] + " - " + idFun + " - "  + extension  );
-				
+		    if(tipo.equals("codInterno")){
+
+		    	consulta = session.createCriteria(Llamadas.class);
+		    	consulta.add(Restrictions.eq("extension", extension));
+		    	consulta.add(Restrictions.eq("tipoLlamada", "Llamada entrante respondida"));
+		    	consulta.setProjection(Projections.rowCount());
+		    	Long total1 = (Long) consulta.uniqueResult();
+		    	total1 = (total1 == null)? 0 : total1; 
+
+		    	consulta = session.createCriteria(Llamadas.class);
+		    	consulta.add(Restrictions.eq("extension", extension));
+		    	consulta.add(Restrictions.eq("tipoLlamada", "Llamada Saliente"));
+		    	consulta.setProjection(Projections.rowCount());
+		    	Long total2 = (Long) consulta.uniqueResult();
+		    	total2 = (total2 == null)? 0 : total2;
+
+		    	consulta = session.createCriteria(Llamadas.class);
+		    	consulta.add(Restrictions.eq("extension", extension));
+		    	consulta.add(Restrictions.eq("tipoLlamada", "Llamada entrante sin respuesta"));
+		    	consulta.setProjection(Projections.rowCount());
+		    	Long total3 = (Long) consulta.uniqueResult();
+		    	total3 = (total3 == null)? 0 : total3;
+
+
 		    	
-		    	if(objects[0] != null){
-			    	ofePed.setCodEspecialista(((Integer)objects[0] == null)?idFun : (Integer)objects[0]);
-					ofePed.setEspecialista((String) objects[1]);
-					ofePed.setValorOferta(new BigDecimal(((BigDecimal) objects[2] == null)? "0" : objects[2].toString()));
-					ofePed.setValorPedido(new BigDecimal(((BigDecimal) objects[3] == null)? "0" :objects[3].toString()));
-					ofePed.setPorcentaje((ofePed.getValorOferta().intValue() == 0 || ofePed.getValorPedido().intValue() == 0)? new BigDecimal("0") : ofePed.getValorPedido().divide(ofePed.getValorOferta(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
-					ofePed.setImagen((ofePed.getPorcentaje().intValue() < 81)? "rojo.png" :(ofePed.getPorcentaje().intValue() >= 81 && ofePed.getPorcentaje().intValue() <= 95 )? "amarillo.jpg" : (ofePed.getPorcentaje().intValue() >= 96  && ofePed.getPorcentaje().intValue() <= 100)? "verde.png": "violeta.jpg");
-					ofePed.setLlamadaEntrante(total1);
-					ofePed.setLlamadaSalientes(total2);
-					ofePed.setLlamadaNoContestadas(total3);
-					List<Long> listaPre = listarPresupuetoVenta(tipo,  idFun);
-					ofePed.setPresupuesto(listaPre.get(1));
-					ofePed.setValorNeto(listaPre.get(0) * -1);
-					System.out.println(ofePed.getValorNeto() + "valores" + ofePed.getPresupuesto());
-					BigDecimal por = new BigDecimal(ofePed.getValorNeto());
-					BigDecimal valN = new BigDecimal(ofePed.getPresupuesto());
-					por =  por.divide(valN, 4, BigDecimal.ROUND_HALF_UP ).multiply((new BigDecimal("100")));
-					
-					ofePed.setPorcentajeV((ofePed.getPresupuesto() == 0 || ofePed.getValorNeto() == 0)? new BigDecimal("0") : por ); 
-					ofePed.setImagenA((ofePed.getPorcentajeV().intValue() < 85)? "rojo.png" : "verde.png");
+		    	System.out.println(results.size() + "tamaño");		    
+		    	for (Object[] objects : results) {
+		    		System.out.println(objects[1] +""+ objects[2]+""+ objects[3]+ "datoa ingreso" + objects[0] + " - " + idFun + " - "  + extension  );
+
+
+		    		if(objects[0] != null){
+		    			ofePed.setCodEspecialista(((Integer)objects[0] == null)?idFun : (Integer)objects[0]);
+		    			ofePed.setEspecialista((String) objects[1]);
+		    			ofePed.setValorOferta(new BigDecimal(((BigDecimal) objects[2] == null)? "0" : objects[2].toString()));
+		    			ofePed.setValorPedido(new BigDecimal(((BigDecimal) objects[3] == null)? "0" :objects[3].toString()));
+		    			ofePed.setPorcentaje((ofePed.getValorOferta().intValue() == 0 || ofePed.getValorPedido().intValue() == 0)? new BigDecimal("0") : ofePed.getValorPedido().divide(ofePed.getValorOferta(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
+		    			ofePed.setImagen((ofePed.getPorcentaje().intValue() < 81)? "rojo.png" :(ofePed.getPorcentaje().intValue() >= 81 && ofePed.getPorcentaje().intValue() <= 95 )? "amarillo.jpg" : (ofePed.getPorcentaje().intValue() >= 96  && ofePed.getPorcentaje().intValue() <= 100)? "verde.png": "violeta.jpg");
+		    			ofePed.setLlamadaEntrante(total1);
+		    			ofePed.setLlamadaSalientes(total2);
+		    			ofePed.setLlamadaNoContestadas(total3);
+		    			List<Long> listaPre = listarPresupuetoVenta(tipo,  idFun);
+		    			ofePed.setPresupuesto(listaPre.get(1));
+		    			ofePed.setValorNeto(listaPre.get(0) * -1);
+		    			System.out.println(ofePed.getValorNeto() + "valores" + ofePed.getPresupuesto());
+		    			BigDecimal por = new BigDecimal(ofePed.getValorNeto());
+		    			BigDecimal valN = new BigDecimal(ofePed.getPresupuesto());
+		    			por = (por.intValue() == 0 || valN.intValue() == 0)? new BigDecimal("0") :por.divide(valN, 4, BigDecimal.ROUND_HALF_UP ).multiply((new BigDecimal("100")));
+
+		    			ofePed.setPorcentajeV((ofePed.getPresupuesto() == 0 || ofePed.getValorNeto() == 0)? new BigDecimal("0") : por ); 
+		    			ofePed.setImagenA((ofePed.getPorcentajeV().intValue() < 85)? "rojo.png" : "verde.png");
+		    		}
+		    	}
+		    }
+		    else{
+		    	for (Object[] objects : results) {
+		    		System.out.println(objects[1] +""+ objects[2]+""+ objects[3]+ "datoa ingreso" + objects[0] + " - " + idFun + " - "  + extension  );
+
+
+		    		if(objects[0] != null){
+		    			ofePed.setCodEspecialista(((Integer)objects[0] == null)?idFun : (Integer)objects[0]);
+		    			ofePed.setEspecialista((String) objects[1]);
+		    			ofePed.setValorOferta(new BigDecimal(((BigDecimal) objects[2] == null)? "0" : objects[2].toString()));
+		    			ofePed.setValorPedido(new BigDecimal(((BigDecimal) objects[3] == null)? "0" :objects[3].toString()));
+		    			ofePed.setPorcentaje((ofePed.getValorOferta().intValue() == 0 || ofePed.getValorPedido().intValue() == 0)? new BigDecimal("0") : ofePed.getValorPedido().divide(ofePed.getValorOferta(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
+		    			ofePed.setImagen((ofePed.getPorcentaje().intValue() < 81)? "rojo.png" :(ofePed.getPorcentaje().intValue() >= 81 && ofePed.getPorcentaje().intValue() <= 95 )? "amarillo.jpg" : (ofePed.getPorcentaje().intValue() >= 96  && ofePed.getPorcentaje().intValue() <= 100)? "verde.png": "violeta.jpg");
+		    			ofePed.setPresupuesto(new Long(0));
+		    			ofePed.setValorNeto(new Long(0));
+		    		}
 		    	}
 		    }
 			return ofePed;
@@ -207,7 +229,9 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("ingresos"));
 			BigDecimal totalP = (BigDecimal) consulta.uniqueResult();
+			System.out.println(totalP + "*****");
 			totalP = (totalP == null)? new BigDecimal("0") : totalP; 
+			System.out.println(totalP + "////////");
 			listaResul.add(totalP.longValue());
 			
 			return listaResul;
@@ -239,6 +263,20 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			consulta.setProjection(Projections.sum("valorPedido"));
 			totalP = (BigDecimal) consulta.uniqueResult();
 			totalP = (totalP == null)? new BigDecimal("0") : totalP;
+			listaOferta.add(totalP);
+			
+			consulta.setProjection(Projections.count("id"));
+			Long t = (Long) consulta.uniqueResult();
+			totalP = (t == null)? new BigDecimal("0") : new BigDecimal(t);
+			listaOferta.add(totalP);
+			
+			System.out.println(t + " CCCCCC");
+			
+			consulta.add(Restrictions.not(Restrictions.eq("nPedido", new Long(0))));
+			//consulta.add(Restrictions.ne("valorPedido", new Long(0)));
+			consulta.setProjection(Projections.count("valorPedido"));
+			t = (Long) consulta.uniqueResult();
+			totalP = (t == null)? new BigDecimal("0") : new BigDecimal(t);
 			listaOferta.add(totalP);
 			
 			return listaOferta;
@@ -273,6 +311,23 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			totalP = (totalP == null)? new BigDecimal("0") : totalP;
 			listaOferta.add(totalP);
 			
+			consulta.setProjection(Projections.count("id"));
+			Long t = (Long) consulta.uniqueResult();
+			totalP = (t == null)? new BigDecimal("0") : new BigDecimal(t);
+			listaOferta.add(totalP);
+			
+			System.out.println(t + " CCCCCC");
+			
+			consulta.add(Restrictions.not(Restrictions.eq("nPedido", new Long(0))));
+			//consulta.add(Restrictions.ne("valorPedido", new Long(0)));
+			consulta.setProjection(Projections.count("valorPedido"));
+			t = (Long) consulta.uniqueResult();
+			totalP = (t == null)? new BigDecimal("0") : new BigDecimal(t);
+			listaOferta.add(totalP);
+			
+			
+			System.out.println(t + "FFFFFFFFFff");
+			
 			return listaOferta;
 
 		} catch (RuntimeException ex) {
@@ -306,6 +361,22 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			totalP = (totalP == null)? new BigDecimal("0") : totalP;
 			listaOferta.add(totalP);
 			
+			consulta.setProjection(Projections.count("id"));
+			Long t = (Long) consulta.uniqueResult();
+			totalP = (t == null)? new BigDecimal("0") : new BigDecimal(t);
+			listaOferta.add(totalP);
+			
+			System.out.println(t + " CCCCCC");
+			
+			consulta.add(Restrictions.not(Restrictions.eq("nPedido", new Long(0))));
+			//consulta.add(Restrictions.ne("valorPedido", new Long(0)));
+			consulta.setProjection(Projections.count("valorPedido"));
+			t = (Long) consulta.uniqueResult();
+			totalP = (t == null)? new BigDecimal("0") : new BigDecimal(t);
+			listaOferta.add(totalP);
+			
+			
+			System.out.println(t + "FFFFFFFFFff");
 			return listaOferta;
 
 		} catch (RuntimeException ex) {
@@ -315,5 +386,26 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			session.close();
 		}
 	}
+	
+	/* Se listan las ofertas Buscadas por el numero de oferta */
+	@SuppressWarnings("unchecked")
+	public List<OfertasPedidos> listaBusquedaOferta(Long oferta){
+		
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<OfertasPedidos> listaOferta = new ArrayList<>();
+		try{
+			Criteria consulta = session.createCriteria(OfertasPedidos.class);
+			consulta.add(Restrictions.eq("nOferta", oferta));			
+			listaOferta = consulta.list();
+			return listaOferta;
+			
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
+	
 
 }

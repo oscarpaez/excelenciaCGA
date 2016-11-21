@@ -32,8 +32,25 @@
 			 	 	<p:commandButton  styleClass="salir" icon="ui-icon-power" value="Salir" actionListener="#{autenticacionBean.salir}" 
 			 	 		update="@this"
 			 	 		rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
-			 	 <p:commandLink value="Cambiar Contraseña" actionListener="#{autenticacionBean.ventanaContrasena()}" styleClass="salirL"
-			 	 	rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
+			 	 		
+			 	 	<p:button  styleClass="salir" icon="ui-icon-document" value="Ayuda" 
+			 	 		outcome="/pages/vi/manual2.xhtml?faces-redirect=true" 
+			 	 		update="@this"
+			 	 		rendered="#{autenticacionBean.usuarioLogin.perfil.id == 7 || autenticacionBean.usuarioLogin.perfil.id == 8}"/>
+			 	 	
+			 	 	<p:button  styleClass="salir" icon="ui-icon-document" value="Ayuda" 
+			 	 		outcome="/pages/vi/manual.xhtml?faces-redirect=true" 
+			 	 		update="@this"
+			 	 		rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1 || autenticacionBean.usuarioLogin.perfil.id == 6}"/>
+			 	 
+			 	 	
+			 	 	<p:button  styleClass="salir" icon="ui-icon-video" value="Video Ayuda" 
+			 	 		outcome="/pages/vi/video.xhtml?faces-redirect=true" 
+			 	 		update="@this"
+			 	 		rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
+			 	 				
+			 		 <p:commandLink value="Cambiar Contraseña" actionListener="#{autenticacionBean.ventanaContrasena()}" styleClass="salirL"
+			 	 		rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
 			 	 </h:form>
 			 </div>
 		</p:layoutUnit>		

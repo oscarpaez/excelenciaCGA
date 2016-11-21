@@ -254,9 +254,7 @@ public class BajaRotacionBean implements Serializable {
 					vendedor.setConcepto("LBR");
 					BajaRotacionDao daoB = new BajaRotacionDao();
 					listaFacturas = daoB.listaLBR(tipo, funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
-					System.out.println(tipo +  funcionario.getId_funcionario()+ fechaBusqueda + fechaBusquedaYear);
 					for ( bajaRotacion LBR : listaFacturas) {
-						System.out.println(LBR + "" +listaFacturas.size());
 						Funcionario fun = daoF.buscar(LBR.getCodVendedorInt());
 						if(  fun == null ||  fun.getEstado() != 1){
 							vendedor.setIngresoReal( vendedor.getIngresoReal() + LBR.getValorNeto());
@@ -442,7 +440,6 @@ public class BajaRotacionBean implements Serializable {
 		try{
 			listaEspecialistaCambio = new ArrayList<>();
 			if(listaAjusteVendedor != null){
-				System.out.println("listaAjusteVendedor");
 				listaAjusteVendedor.removeAll(listaAjusteVendedor);
 			}
 			listaAjusteVendedor = new ArrayList<>();
@@ -480,7 +477,6 @@ public class BajaRotacionBean implements Serializable {
 		try{
 			listaEspecialistaCambio = new ArrayList<>();
 			if(listaAjusteVendedor != null){
-				System.out.println("listaAjusteVendedor");
 				listaAjusteVendedor.removeAll(listaAjusteVendedor);
 			}
 			listaAjusteVendedor = new ArrayList<>();
@@ -552,7 +548,6 @@ public class BajaRotacionBean implements Serializable {
 				ajusteVendedor.setNombreCliente(clienteD.getDescripcion());
 				ajusteVendedor.setObservacion(observacion);
 
-				System.out.println(clienteD.getDescripcion() + "Clientes");
 				listaAjusteVendedor.add(ajusteVendedor);
 				disable = "false";
 				clienteD = null;
@@ -563,8 +558,6 @@ public class BajaRotacionBean implements Serializable {
 				ajusteVendedor.setCodSapA(vendedorR.getId_funcionario());
 				ajusteVendedor.setNombreA(vendedorR.getPersona().getNombre());
 				ajusteVendedor.setObservacion(observacion);
-				System.out.println(vendedorR.getPersona().getNombre() + "Asesor");
-				//System.out.println(clienteD.getDescripcion() + "Asesor");
 				listaAjusteVendedor.add(ajusteVendedor);
 				vendedorA = null;
 				vendedorR = null; 
@@ -578,8 +571,6 @@ public class BajaRotacionBean implements Serializable {
 				ajusteVendedor.setCodLineaA(lineaA.getId());
 				ajusteVendedor.setNombreLineaA(lineaA.getNombre());
 				ajusteVendedor.setObservacion(observacion);	
-				System.out.println(lineaA.getNombre());
-				//System.out.println(clienteD.getDescripcion() + "Lineass");
 				listaAjusteVendedor.add(ajusteVendedor);
 				vendedorA = null;
 				linea = null;

@@ -91,7 +91,6 @@ public class AjusteRecaudoBean implements Serializable{
 				if(numero == 1){
 					vendedoresInt.setComisionS(new DecimalFormat("###.##").format(cumplimiento));
 					vendedoresInt.setComision(cumplimiento.multiply(comision.getValorBaseRecaudo()).divide(new BigDecimal("100")).intValue());
-
 				}
 				else{
 					vendedoresInt.setComisionS(new DecimalFormat("###.##").format(cumplimiento));
@@ -374,5 +373,4 @@ public class AjusteRecaudoBean implements Serializable{
 	public void setRecaudo(Recaudo recaudo) {
 		this.recaudo = recaudo;
 	}
-	
 }

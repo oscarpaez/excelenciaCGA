@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+<ui:insert name="metadata"/>	
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>CGAwebComercial</title>	
+	<link href='http://localhost:8080/CGAwebComercial/resources/images/logo-pagina.png' rel='shortcut icon' type='image/png'/>
+	<h:outputStylesheet library="css" name="header.css" />	
+	<h:outputStylesheet library="css" name="estilos.css"/>
+	<h:outputScript  library="js" name="validacion.js"/>
+</h:head>
+<h:body>
+	<p:growl id="msgGlobal" />
+	<p:idleMonitor timeout="900000" >
+        <p:ajax event="idle" listener="#{autenticacionBean.salir()}" update="msgGlobal" />        
+    </p:idleMonitor>
+    
+    <p:ajaxStatus  onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+ 
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+			    <p:graphicImage library="images" name="mundo.gif" />
+			</p:dialog>
+	
+	<p:layout  fullPage="true">
+		<p:layoutUnit position="north" >
+			 <div  class="header">
+			 	<h:form styleClass="salirF" >
+			 	<p:graphicImage library="images"  name="logo-actual.png" />			 	
+			 	 	<p:commandButton  styleClass="salir" icon="ui-icon-power" value="Salir" actionListener="#{autenticacionBean.salir}" 
+			 	 		update="@this"
+			 	 		rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
+			 	 	
+			 	 	<p:button  styleClass="salir" icon="ui-icon-document" value="Ayuda" 
+			 	 		outcome="/pages/vi/manual2.xhtml?faces-redirect=true" 
+			 	 		update="@this"
+			 	 		rendered="#{autenticacionBean.usuarioLogin.perfil.id == 7 || autenticacionBean.usuarioLogin.perfil.id == 8}"/>
+			 	 	
+			 	 	<p:button  styleClass="salir" icon="ui-icon-document" value="Ayuda" 
+			 	 		outcome="/pages/vi/manual.xhtml?faces-redirect=true" 
+			 	 		update="@this"
+			 	 		rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1 || autenticacionBean.usuarioLogin.perfil.id == 6}"/>
+			 	 
+			 	 	
+			 	 	<p:button  styleClass="salir" icon="ui-icon-video" value="Video Ayuda" 
+			 	 		outcome="/pages/vi/video.xhtml?faces-redirect=true" 
+			 	 		update="@this"
+			 	 		rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
+			 	 			
+			 	 	<p:commandLink value="Cambiar Contraseña" actionListener="#{autenticacionBean.ventanaContrasena()}" styleClass="salirL"
+			 	 		rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
+			 	 </h:form>
+			 </div>
+		</p:layoutUnit>		
+		
+		<p:layoutUnit position="center" resizable="true" >	
+			<ui:insert name="menu" />		
+			<ui:insert name="contenido"/>
+		</p:layoutUnit>
+		
+		<p:layoutUnit position="south">
+			 <div  class="footer">
+				<div class="hir_left">Copyrights 2016 - CGA - All Rights
+					Reserved</div>
+					
+				<div class="hir_logoImex"
+						onclick="window.open('http://localhost:8080/CGAwebComercial/pages/login.xhtml', '_blank');">
+				</div>		
+				
+				<div class="hir_right">POWERED BY:</div>
+			</div>
+			
+		</p:layoutUnit>
+	</p:layout>
+
+</h:body>
+</html>

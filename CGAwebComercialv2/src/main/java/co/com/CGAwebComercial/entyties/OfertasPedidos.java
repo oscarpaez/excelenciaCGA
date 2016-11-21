@@ -98,6 +98,10 @@ public class OfertasPedidos implements Serializable{
 	
 	private int motivoRechazoPed;
 	
+	private int oportunidadNeg;
+	
+	private int ofertaPerdida;
+	
 	@Column(length =32)
 	private String descripcionMotRecPed;
 	
@@ -454,5 +458,21 @@ public class OfertasPedidos implements Serializable{
 
 	public void setImagenA(String imagenA) {
 		this.imagenA = imagenA;
+	}
+
+	public int getOportunidadNeg() {
+		return oportunidadNeg;
+	}
+
+	public void setOportunidadNeg(int oportunidadNeg) {
+		this.oportunidadNeg = oportunidadNeg;
+	}
+
+	public int getOfertaPerdida() {
+		return ofertaPerdida;
+	}
+
+	public void setOfertaPerdida(int ofertaPerdida) {
+		this.ofertaPerdida = ofertaPerdida;
 	}	
 }

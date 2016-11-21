@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-<ui:composition template="/templates/modeloGeneral.xhtml">
+<ui:composition template="/templates/modeloGeneral3.xhtml">
 	
 	<ui:define name="contenido">
 		<f:metadata>
@@ -59,9 +59,33 @@
 						</h:form>
 				  		
 				  		<p:chart type="metergauge" 	model="#{vendedorLBRBean.meterGaugeModel}"
-								style="width:350px;height:250px" />						
-						
-				  		<!-- 
+								style="width:350px;height:250px" />
+
+						<h:form>
+							<h:panelGrid columns="2">
+								<p:outputLabel value="Recaudo Mes " style="font-size: 14px; " 
+									rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}"/>
+								<p:inputText size="15"
+									style="color:#0000ff; opacity: .90; text-align: right;
+											border: 1px solid #FF9800;"
+									value="#{vendedorLBRBean.realRecaudo}" disabled="true"
+									rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}" >
+									<f:convertNumber pattern="#,##0;(#,##0)" />
+								</p:inputText>
+
+								<p:outputLabel value="Presupuesto Recaudo"
+									style="font-size: 14px; " 
+									rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}"/>
+								<p:inputText size="15"
+									style="color:#0000ff; opacity: .90; text-align: right;
+											border: 1px solid #FF9800;"
+									value="#{vendedorLBRBean.presupuestoRecaudo}" disabled="true"
+									rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}" >
+									<f:convertNumber pattern="#,##0;(#,##0)" />
+								</p:inputText>
+							</h:panelGrid>
+						</h:form>
+						<!-- 
 				  		<h:form id="frmProVen" styleClass="frmProVen" enctype="multipart/form-data">
 							<p:outputLabel  id="tituloVenta" styleClass="tituloVenta" value="Promedio de venta  #{vendedorLBRBean.mesActual}" 
 							    	style="color: #0000ff; font-style: italic;"/> <br />
@@ -113,7 +137,7 @@
 						<p:panel style="height:80px; width:390px;">
 							<h:form>
 								<h:panelGrid columns="3">
-									<p:outputLabel value="KPI Ofertas y Pedidos"
+									<p:outputLabel value="KPI Ofertas y Pedidos $"
 										style="font-size: 14px; " />
 									<p:inputText size="8"
 										style="color:#0000ff; opacity: .90; text-align: right;
@@ -162,20 +186,39 @@
 										<f:param name="tipo" value=""/>
 									</p:button>
 									
-									<p:outputLabel  value="Pedidos Proyectados " 
-										    	style="font-size: 14px; " />
+									<p:outputLabel  value="Proyectos Mes" 
+										    	style="font-size: 14px; " 
+										    	rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}"/>
 									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
-												value="#{vendedorLBRBean.pedidosProyectados}"  disabled="true" >
+												value="#{vendedorLBRBean.proyectos}"  disabled="true" 
+												rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}" >
+												<f:convertNumber pattern="#,##0;"/>
+									</p:inputText>
+									<p:button icon="ui-icon-search" title="Detalle Pedidos Perdidos"
+											outcome="/pages/ve/detalleProyectos.xhtml?faces-redirect=true"
+											onclick="showLoading()" 
+											rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}">
+											<f:param name="perId" value="#{autenticacionBean.usuarioLogin.id}"/>
+											<f:param name="tipo" value=""/>
+									</p:button>
+									
+									<p:outputLabel  value="Negocios Proyectados " 
+										    	style="font-size: 14px; " 
+										    	rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}"/>
+									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
+												value="#{vendedorLBRBean.pedidosProyectados}"  disabled="true"
+												rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}" >
 												<f:convertNumber pattern="#,##0;(#,##0)"/>
 									</p:inputText>
 									<p:button icon="ui-icon-search"  title="Detalle Pedidos en Proceso"
-										outcome="/pages/ve/vistaIncidencia2.xhtml?faces-redirect=true"
-										onclick="showLoading()" >
+										outcome="/pages/ve/detallePedidosProyectados.xhtml?faces-redirect=true"
+										onclick="showLoading()" 
+										rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}">
 										<f:param name="perId" value="PR"/>
 										<f:param name="tipo" value=""/>
 									</p:button>
 									
-									<p:outputLabel  value="Oportunidad de Negocio Ganado" 
+									<p:outputLabel  value="Oferta Oportunidad de Negocio >= 80%" 
 										    	style="font-size: 14px; " />
 									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
 												value="#{vendedorLBRBean.pedidosGanados}"  disabled="true" >
@@ -188,7 +231,7 @@
 										<f:param name="tipo" value=""/>
 									</p:button>
 									
-									<p:outputLabel  value="Oportunidad de Negocio Perdido" 
+									<p:outputLabel  value="Negocios Perdidos" 
 										    	style="font-size: 14px; " />
 									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right"
 												value="#{vendedorLBRBean.pedidosPerdidos}"  disabled="true" >
@@ -202,37 +245,51 @@
 									</p:button>
 									
 								</h:panelGrid>
-						<!--		<div style="text-align:center;">
+								<br />
+								<div style="text-align:center;">
 									<p:button icon="ui-icon-document"  value="Registrar Pedidos Proyectados"
 										style="width:340px; font-size: 16px;"
 										outcome="/pages/vi/registroPedidosProgramados.xhtml?faces-redirect=true"
-										onclick="showLoading()">
+										onclick="showLoading()"
+										rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}">
 										<f:param name="perId" value=""/>
 										<f:param name="tipo" value=""/>
 									</p:button>
-								</div>  -->
-								<br />
-								<div style="text-align:center;">	
+								</div> 
+								<br />	
+								<div style="text-align:center;">
+									<p:button icon="ui-icon-document"  value="Registrar Proyecto"
+										style="width:340px; font-size: 16px;"
+										outcome="/pages/ve/registrarProyecto.xhtml?faces-redirect=true"
+										onclick="showLoading()"
+										rendered="#{autenticacionBean.usuarioLogin.perfil.id != 6}">
+										<f:param name="perId" value=""/>
+										<f:param name="tipo" value=""/>
+									</p:button>
+								</div> 
+					<!--			<div style="text-align:center;">	
 									 <p:button icon="ui-icon-document" value="Registrar Oportunidad de Negocio"
 											style="width:340px;  font-size: 16px;"
 											outcome="/pages/vi/oportunidadNegocio.xhtml?faces-redirect=true"
 											onclick="showLoading()" />	
-								</div>
-								<br />
+								</div>  
+								<br />  -->
 								<h:panelGrid columns="2">
 									<p:outputLabel  value="Recaudo Mes " 
-										    	style="font-size: 14px; " />
+										    	style="font-size: 14px; " rendered="#{autenticacionBean.usuarioLogin.perfil.id == 6}"/>
 									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right;
 											border: 1px solid #FF9800;"
-												value="#{vendedorLBRBean.realRecaudo}"  disabled="true" >
+												value="#{vendedorLBRBean.realRecaudo}"  disabled="true" 
+												rendered="#{autenticacionBean.usuarioLogin.perfil.id == 6}">
 												<f:convertNumber pattern="#,##0;(#,##0)"/>
 									</p:inputText>
 									
 									<p:outputLabel  value="Presupuesto Recaudo" 
-										    	style="font-size: 14px; " />
+										    	style="font-size: 14px; " rendered="#{autenticacionBean.usuarioLogin.perfil.id == 6}"/>
 									<p:inputText  size="15"  style="color:#0000ff; opacity: .90; text-align: right;
 											border: 1px solid #FF9800;"
-												value="#{vendedorLBRBean.presupuestoRecaudo}"  disabled="true" >
+												value="#{vendedorLBRBean.presupuestoRecaudo}"  disabled="true" 
+												rendered="#{autenticacionBean.usuarioLogin.perfil.id == 6}" >
 												<f:convertNumber pattern="#,##0;(#,##0)"/>
 									</p:inputText>
 								</h:panelGrid>
@@ -273,7 +330,7 @@
 				</div>
 			</div>
 			
-			<br />
+			<br /><br />
 			
 			<div class="ui-grid-row">
 				<div class="ui-grid-col-4" style="width:410px;" >
@@ -298,8 +355,34 @@
 			</div>	
 			
 			<br />
-			<div class="ui-grid-row" style="text-align:center;">
-				<div style="display:block; text-align:center; margin: 0 auto;">
+			<div class="ui-grid-row" style="">
+				<div class="ui-grid-col-4" style="width:410px; " >
+						<p:panel style="height:340px; width:400px;">
+							<h:form id="frmProVen" styleClass="frmProVen" enctype="multipart/form-data">
+								<div style="text-align:center;">
+								<p:outputLabel  id="tituloVenta" styleClass="tituloVenta" value="Promedio de venta  #{vendedorLBRBean.mesActual}" 
+								    	style="color: #0000ff; font-style: italic;"/> 
+								</div>								
+								<br />
+								<h:panelGrid columns="2" id="pnlProVen">
+								    
+								    <p:outputLabel  value="Valor Promedio X pedido " 
+								    	style="font-size: 14px; " />
+									<p:inputText id="descripcion" size="15"  style="color:#0000ff; opacity: .90; text-align: right"
+										value="#{vendedorLBRBean.promedioMes}"  disabled="true" >
+										<f:convertNumber pattern="#,##0;(#,##0)"/>
+									</p:inputText>
+									
+									<p:outputLabel value="Meta Venta Mes X pedido" style="font-size: 14px; " />
+									<p:inputText id="cantidad" size="15" value="#{vendedorLBRBean.promedioVenta.meta}" 
+										style="color:#0000ff; opacity: .90; text-align: right" disabled="true"> 
+										 <f:convertNumber pattern="#,##0;(#,##0)"/>
+									</p:inputText>
+								</h:panelGrid>
+							</h:form>
+						</p:panel>
+				</div>		
+				<div class="ui-grid-col-5" style="padding-left: 10px; width:35%;">
 					<h:form id="frmDesRec2" enctype="multipart/form-data">
 						<p:panel style="height:340px; width:850px">
 							<h:panelGrid  id="pnlDesRec">
@@ -311,6 +394,8 @@
 			</div>
 			
 		 </div>
+		 
+		
 	</ui:define>
 
 </ui:composition>

@@ -11,7 +11,7 @@
 		<ui:define name="contenido">
 		
 		<f:metadata>
-			<f:event listener="#{ofertaPedidoBean.listarOfertaPedidosOficina()}" type="preRenderView" />
+			<f:event listener="#{ofertaPedidoBean.listarOfertaPedidosOficina1()}" type="preRenderView" />
 		</f:metadata>
 			
 		<h:form id="frmInc" >	
@@ -26,7 +26,7 @@
 					
 	 			    <p:columnGroup type="header">
 			            <p:row>
-			            	<p:column colspan="1" headerText="Cod SAP" width="" filterBy="#{oferta.cliente}" filterMatchMode="contains"/>
+			            	<p:column colspan="1" headerText="Cod SAP" width="" />
 			            	<p:column colspan="1" headerText="Nombre" width=""/>
 			            	<p:column colspan="1" headerText="Total Oferta" width="12%"/>
 			            	<p:column colspan="1" headerText="Total Pedido " width="12%" filterBy="" filterMatchMode="contains"/>
@@ -55,9 +55,9 @@
 						</h:outputText>
 					</p:column>
 					
-					<p:column  >
-						<h:outputText value="#{oferta.porcentaje}"  >
-							 <f:convertNumber locale="en_US" maxFractionDigits="2"/>
+					<p:column style="text-align: right" >
+						<h:outputText value="#{oferta.porcentaje} %" >
+							 <f:convertNumber locale="en_US" maxFractionDigits="0"/>
 						</h:outputText>
 					</p:column>
 					
@@ -91,7 +91,23 @@
 				</p:dataTable>
 			</h:form>	
 		
-			
+			<div style="background-color: #dfe4e6; height: 50px">
+			<h:form style="padding: 6px">
+				<h:panelGrid columns="4" style="width:70%" styleClass="pnlVen">
+				
+					<p:outputLabel value="Tipo de vendedor" style="width:160px;" />
+					
+					<p:selectOneMenu value="#{autenticacionBean.tipoVendedor}" style="width:200px;" >
+						<f:selectItem itemValue="E" itemLabel="Vendedor Externo" />
+						<f:selectItem itemValue="I" itemLabel="Vendedor Interno" />
+					</p:selectOneMenu>
+	
+					<p:commandButton value="Cargar" actionListener="#{ofertaPedidoBean.listarOfertaPedidosOficina1()}"
+						update=" :frmInc:tblPlan" style="background: #b94a48; width:100px;" onclick="showLoading();"/>
+					
+				</h:panelGrid>
+			</h:form>
+		</div>
 	
 		</ui:define>
 	</ui:composition>

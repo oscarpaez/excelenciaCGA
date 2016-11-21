@@ -20,31 +20,36 @@
 					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
 								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
 								outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true"
-								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1} "
+								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 51} "
 								onclick="showLoading()" />
 					
 					<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
 								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
 								outcome="/pages/ve/vistaModulo.xhtml?faces-redirect=true"
-								rendered="#{autenticacionBean.usuarioLogin.perfil.id != 1} "
+								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 61} "
 								onclick="showLoading()" />			
 							
 					<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+								  outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true"
 								  iconPos="right" styleClass="excel "
 								  style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
-								  onclick="showLoading(); history.back()"/>
+								  onclick="showLoading(); "/>
 		</f:facet>	
 		
 		<h:form id="frmInc" >	
+			<p:growl id="msgs" showDetail="true"/>
 			
 			<p:dataTable styleClass="tblPla" id="tblPlan"
 					emptyMessage="No se encontraron registros" value="#{ofertaPedidoBean.listaOfertaPedidos}" var="oferta"
 					filteredValue="#{ofertaPedidoBean.listaFiltrarOfePed}"
-					scrollRows="50" scrollable="true" liveScroll="true" scrollHeight="320">
+					scrollRows="50" scrollable="true" liveScroll="true" scrollHeight="320"
+					editable="true" editMode="cell">
 					
 					<f:facet name="header">
 						Lista de Oferta Pedidos 
 					</f:facet>
+					
+					
 					
 	 			    <p:columnGroup type="header">
 			            <p:row>
@@ -59,7 +64,9 @@
 			            	<p:column colspan="1" headerText="N° pedido" width="7%" filterBy="#{oferta.nPedido}" filterMatchMode="contains" filterStyle="width:90%"/>
 			            	<p:column colspan="1" headerText="Fecha Creacion pedido" width="8%" />
 			            	<p:column colspan="1" headerText="Fecha Entrega Oferta" width="8%"  filterBy="" filterMatchMode="contains"/>
-			            	<p:column colspan="1" headerText="Valor Pedido " width="7%" filterBy="" filterMatchMode="contains"/>			            	
+			            	<p:column colspan="1" headerText="Valor Pedido " width="7%" filterBy="" filterMatchMode="contains"/>
+			            	<p:column colspan="1" headerText="Oferta  Oportunidad de negocio 80%" width="7%" />
+			            	<p:column colspan="1" headerText="" width="3%" />			            	
 			           </p:row>
 			        </p:columnGroup> 
 			        
@@ -115,6 +122,34 @@
 						</h:outputText>
 					</p:column>
 					
+					<p:column >
+				           <p:cellEditor>
+				               <f:facet name="output"><h:outputText value="#{oferta.oportunidadNeg} %" /></f:facet>
+				               <f:facet name="input">
+				                   <p:selectOneMenu value="#{incidenciaBean.idFun}" style="width:100%"
+				                   	   disabled="#{oferta.oportunidadNeg > 0 || oferta.ofertaPerdida > 0}"
+				                   	   >
+				                   	   <f:selectItem noSelectionOption="true" itemLabel="Seleccione un Item" />
+				                       <f:selectItem itemValue="80" itemLabel="80%" />
+									   <f:selectItem itemValue="85" itemLabel="85%" />
+									   <f:selectItem itemValue="90" itemLabel="90%" />
+									   <f:selectItem itemValue="95" itemLabel="95%" />
+									   <f:selectItem itemValue="100" itemLabel="100%" />
+									   <p:ajax event="change"  listener="#{ofertaPedidoBean.salvarIncidencia(oferta, incidenciaBean.idFun)}" update=":frmInc:msgs :frmInc:tblPlan" />
+				                   </p:selectOneMenu>
+				               </f:facet>
+				           </p:cellEditor>
+				       </p:column>
+				       
+				       <p:column>
+				           <p:commandButton icon="ui-icon-pencil" title="Editar"
+				           		disabled="#{oferta.ofertaPerdida > 0  || oferta.oportunidadNeg > 0}"
+								action="#{ofertaPedidoBean.cargaDialogo(oferta)}"
+								update=" :frmNuePro:pnlNuePro "
+								oncomplete="PF('dlgNue').show();">
+							</p:commandButton>
+				       </p:column>
+					
 					<p:columnGroup type="footer">
 			            <p:row>
 			            	<p:column colspan="1" footerText="" style="text-align: right" />
@@ -128,7 +163,9 @@
 			            	<p:column colspan="1" footerText="" style="text-align: right" />
 			            	<p:column colspan="1" footerText="" style="text-align: right" />
 			            	<p:column colspan="1" footerText="Totales" style="text-align: right" />
-			            	<p:column footerText="$ #{ofertaPedidoBean.valorTotalP}"  style="text-align: right"/>		 
+			            	<p:column footerText="$ #{ofertaPedidoBean.valorTotalP}"  style="text-align: right"/>
+			            	<p:column colspan="1" footerText="" style="text-align: right" />
+			            	<p:column colspan="1" footerText="" style="text-align: right" />		 
 			            </p:row>
 			        </p:columnGroup>
 					
@@ -136,7 +173,100 @@
 						
 					</f:facet>
 				</p:dataTable>
-			</h:form>	
+			</h:form>
+			
+			<p:dialog header="Registrar Negocios Perdidos" widgetVar="dlgNue" draggable="false" 
+				resizable="false" closable="true" appendTo="@(body)" modal="true" height="400" 
+				width="45%"	>
+			<h:form id="frmNuePro" enctype="multipart/form-data">
+				<p:panelGrid columns="2" id="pnlNuePro"  
+					 columnClasses="column1,column2">
+					
+					<p:outputLabel  value="N° Oferta:" style="font-size: 16px"/>
+					<p:outputLabel  value="#{ofertaPedidoBean.incidencia1.noferta}" />
+					
+					<p:outputLabel  value="Cliente:" style="font-size: 16px" />
+					<p:inputText style="width:90%; opacity: .90;" value="#{ofertaPedidoBean.incidencia1.cliente}" 
+									required="true" requiredMessage="Campo Cliente es obligatorio "
+									disabled="true"/>
+					
+					<p:outputLabel  value="Nesecidad Cliente:" style="font-size: 16px"/>
+					<p:inputTextarea  value="#{ofertaPedidoBean.incidencia1.necesidad}" cols="40"  rows="3" autoResize="false" 
+									style="width:90%" requiredMessage="Campo Necesidad Cliente es obligatorio " required="true"/>		
+						
+					<p:outputLabel  value="Nombre Competencia:" style="font-size: 16px"/>
+					<p:inputText style="width:90%" value="#{ofertaPedidoBean.incidencia1.nombreCompetencia}" 
+										requiredMessage="Campo Nombre de la Competencia es obligatorio " required="true"/>
+								
+					
+					<p:outputLabel  value="Precio Competencia:" style="font-size: 16px"/>
+					<p:inputNumber id="precioCom" value="#{ofertaPedidoBean.incidencia1.precioCompetencia}" placeholder="0 $" symbol=" $" symbolPosition="s" 
+			                               thousandSeparator=","   decimalPlaces="0"
+			                               inputStyle="width:90%" required="true" 
+			                               requiredMessage="Campo Precio de la Competencia es obligatorio"/>
+
+					<p:outputLabel  value="Rentabilidad Plan:" style="font-size: 16px"/>
+					<p:inputNumber id="retanbilidad" value="#{ofertaPedidoBean.incidencia1.rentabilidad}" placeholder="0 %" symbol=" %" symbolPosition="s" 
+			                               thousandSeparator="," maxValue="999" decimalPlaces="0"
+			                               inputStyle="width:90%" required="true" 
+			                               requiredMessage="El Campo Rentabilidad Plan es obligatorio"/>             
+			               		
+					
+					
+					<p:outputLabel  value="Rentabilidad Requerida:" style="font-size: 16px"/>
+					<p:inputNumber id="retanbilidadR" value="#{ofertaPedidoBean.incidencia1.rentabilidadRequerida}" placeholder="0 %" symbol=" %" symbolPosition="s" 
+			                               thousandSeparator=","  maxValue="999" decimalPlaces="0" 
+			                               inputStyle="width:90%" required="true" 
+			                               requiredMessage="El Campo Rentabilidad Requerida es obligatorio"/>  						
+								
+					
+					<p:outputLabel  value="Causa:" style="font-size: 16px" />
+					<p:selectOneMenu id="e" filter="true" style="width:83%"
+									value="#{ofertaPedidoBean.incidencia1.causaPerdida}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="Campo Estado es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItems value="#{ofertaPedidoBean.listaCausa}" var="causa"
+										itemValue="#{causa}" itemLabel="#{causa.descripcion}" />
+								</p:selectOneMenu>
+								
+					<p:outputLabel for="estado" value="Regularidad Negocio: " style="font-size: 16px " />
+								<p:selectOneMenu id="estado" filter="true" style="width:83%"
+									value="#{ofertaPedidoBean.incidencia1.regularidad}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="El Campo Regularidad Negocio es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItems value="#{ofertaPedidoBean.listaRegularidad}" var="regularidad"
+										itemValue="#{regularidad}" itemLabel="#{regularidad.descripcionR}" />
+								</p:selectOneMenu>			
+					
+					<p:outputLabel  value="Medio de Contacto:" style="font-size: 16px" />
+					<p:selectOneMenu  filter="true" style="width:83%"
+									value="#{ofertaPedidoBean.incidencia1.canalesContacto}"
+									converter="omnifaces.SelectItemsConverter" required="true"
+									requiredMessage="El Campo Medio de Contacto es obligatorio">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione un Item" />
+									<f:selectItem itemValue="Otro" itemLabel="Otro" />
+									<f:selectItem itemValue="Pagina Web" itemLabel="Pagina Web" />
+									<f:selectItem itemValue="Ventas Internas" itemLabel="Ventas Internas" />
+									<f:selectItem itemValue="Ventas Externas" itemLabel="Ventas Externas" />
+								</p:selectOneMenu>					
+					
+					
+				</p:panelGrid>
+				
+				<h:panelGrid columns="2">	
+					<p:commandButton value="Salvar" actionListener="#{ofertaPedidoBean.salvarIncidenciaPerdidos()}"
+						update=":msgGlobal :frmInc:tblPlan "   
+						oncomplete="PF('dlgNue').hide();"/>
+					<p:commandButton value="Cerrar" oncomplete="PF('dlgNue').hide();"
+						/>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>	
 		</ui:define>
 	</ui:composition>
 </html>

@@ -18,9 +18,10 @@
 				<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 				
 				<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+							outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true"	  
 								  iconPos="right" styleClass="excel "
 								  style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
-								  onclick="showLoading(); history.back()"/>
+								  onclick="showLoading(); "/>
 		</f:facet>					
 		
 		<h:form id="frmNueIci"> 
@@ -42,7 +43,7 @@
 							<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
 								style="background:#449d44;" 
 								outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true" 
-								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1}"
+								rendered="#{autenticacionBean.usuarioLogin.perfil.id == 50}"
 								onclick="showLoading()"/>
 							
 							<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"

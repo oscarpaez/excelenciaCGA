@@ -94,10 +94,10 @@ public class IncidenciaBean implements Serializable{
 			IncidenciaDao dao = new IncidenciaDao();
 			
 			if(autenticacion.getUsuarioLogin().getPerfil().getId() == 6){
-				listaIncidencia = dao.valorPedidosPerdidosUsuarios("", autenticacion.getUsuarioLogin().getId());
+				listaIncidencia = dao.valorPedidosPerdidosUsuarios("funcionarioI", proNeg, autenticacion.getUsuarioLogin().getId());
 			}
 			else if(autenticacion.getUsuarioLogin().getPerfil().getId() == 1){
-				listaIncidencia = dao.valorPedidosPerdidosUsuarios(proNeg, autenticacion.getUsuarioLogin().getId());
+				listaIncidencia = dao.valorPedidosPerdidosUsuarios("funcionario",proNeg, autenticacion.getUsuarioLogin().getId());
 			}
 			else if(autenticacion.getUsuarioLogin().getPerfil().getId() == 7 || autenticacion.getUsuarioLogin().getPerfil().getId() == 8){
 				
@@ -107,7 +107,6 @@ public class IncidenciaBean implements Serializable{
 				//listaIncidencia = dao.listar();
 			}
 			
-			System.out.println(listaIncidencia.size());
 			Long sumaTotal = (long) 0;
 			Long sumaTotalC = (long) 0;
 			int i =0;
@@ -123,7 +122,6 @@ public class IncidenciaBean implements Serializable{
 				         Linea linea = daoL.buscar(codigo);
 				         lineas = lineas +"\n"+ linea.getNombre();
 				    }
-					System.out.println(lineas + "lineas");
 					listaIncidencia.get(i).getLinea().setNombre(lineas);
 				}
 				i++;
@@ -161,9 +159,7 @@ public class IncidenciaBean implements Serializable{
 				OficinaVendedorInternoDao daoOF = new OficinaVendedorInternoDao();
 				venI = daoOF.ciudadInterno(autenticacion.getUsuarioLogin().getId());
 				venI = venI / 1000; 
-				System.out.println(venI + "wwwwwww");
 				ciudad = daoCi.buscar(venI);
-				//System.out.println(ciudad.getNombre() + venI);
 			}
 			else if (autenticacion.getUsuarioLogin().getPerfil().getId() == 1){
 				List<Zona_venta > zonaL = dao.buscarZona(autenticacion.getUsuarioLogin().getId());
@@ -182,9 +178,6 @@ public class IncidenciaBean implements Serializable{
 				incidencia.setZonaId(zonaV.get(0).getId_zona_venta());
 			}
 			
-			//List<Zona_venta > zonaL = dao.buscarZona(autenticacion.getUsuarioLogin().getId());
-			
-			
 			CausaPerdidaVentaDao daoC = new CausaPerdidaVentaDao();
 			listaCausa = daoC.listar();
 			
@@ -197,7 +190,6 @@ public class IncidenciaBean implements Serializable{
 //			CiudadDao daoCi = new CiudadDao();
 //			listaCiudad = daoCi.listar();
 			
-			System.out.println(autenticacion.getUsuarioLogin().getId() +" - " + zona);
 			//incidencia.setZona(zonaL.get(0));
 			incidencia.setFuncionario(funcionario);
 			incidencia.setCiudad(ciudad);
@@ -205,7 +197,7 @@ public class IncidenciaBean implements Serializable{
 			
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
-			Messages.addGlobalError("Error se cargaron los datos Asesor.");
+			Messages.addGlobalError("Error no se cargaron los datos Asesor.");
 		}
 	}
 	
@@ -213,10 +205,8 @@ public class IncidenciaBean implements Serializable{
 		
 		try{
 			IncidenciaDao dao = new IncidenciaDao();
-			System.out.println( "ffff"  + selectTipoNegocio.length);
 			String lineas = "";
 			for (int i = 0; i < selectTipoNegocio.length; i++) {
-				System.out.println(selectTipoNegocio[i] + "linea");
 				LineaDao daoL = new LineaDao();
 				int a = Integer.parseInt(selectTipoNegocio[i]);
 				Linea linea = daoL.buscar(a);
@@ -251,7 +241,6 @@ public class IncidenciaBean implements Serializable{
 	
 	public void salvarProyectados(){
 		try{
-			System.out.println("Entro a SALVAAR");
 			PedidosProyectadosDao dao = new PedidosProyectadosDao();
 			pedidosProyectados.setFuncionario(incidencia.getZona().getFuncionario());
 			pedidosProyectados.setFechaInicio(new Date());
@@ -261,7 +250,6 @@ public class IncidenciaBean implements Serializable{
 
 				if(materialO.equals("")){
 
-					System.out.println("Entro a cliente y material select");
 					ClienteDao  daoC = new ClienteDao();
 					Cliente clienteB = daoC.buscar(cliente.getId());
 					pedidosProyectados.setCliente(clienteB);
@@ -281,7 +269,6 @@ public class IncidenciaBean implements Serializable{
 					pedidosProyectados.setCiudad(ciudadB);					
 				}
 				else{
-					System.out.println("Entro a cliente select y material input");
 					MaterialDao daoM = new MaterialDao();
 					Material materialB = new Material();
 					materialB.setId_material(9999999);
@@ -310,7 +297,6 @@ public class IncidenciaBean implements Serializable{
 				
 				if(materialO.equals("")){
 					
-					System.out.println("Entro a  cliente input y material select");
 					ClienteDao  daoC = new ClienteDao();
 					Cliente clienteB = new Cliente();
 					clienteB.setId(9999999);
@@ -334,7 +320,6 @@ public class IncidenciaBean implements Serializable{
 					pedidosProyectados.setCiudad(ciudadB);
 				}
 				else{
-					System.out.println("Entro a  cliente input y material input");
 					ClienteDao  daoC = new ClienteDao();
 					Cliente clienteB = new Cliente();
 					clienteB.setId(9999999);
@@ -378,12 +363,10 @@ public class IncidenciaBean implements Serializable{
 	public void popular(){
 
 		try {
-			System.out.println("codigo :" + material.getId());
+			
 			if(material.getId() != 0){
-				System.out.println("codigoooo :" + material.getDescripcion());
 				MaterialDao dao = new MaterialDao();
 				material = dao.buscar( material.getId());
-				System.out.println("Linea" + material.getLinea().getId());
 				listaLinea = dao.buscarPorLinea(material.getLinea().getId());
 			}			
 			else{
@@ -456,7 +439,7 @@ public class IncidenciaBean implements Serializable{
 			List<Zona_venta > zonaL = dao.buscarZona(autenticacion.getUsuarioLogin().getId());
 			
 			IncidenciaDao daoI = new IncidenciaDao();
-			listaIncidencia = daoI.valorPedidosPerdidosUsuarios(zonaL.get(0).getId_zona_venta(), zonaL.get(0).getFuncionario().getId_funcionario());
+			listaIncidencia = daoI.valorPedidosPerdidosUsuarios("",zonaL.get(0).getId_zona_venta(), zonaL.get(0).getFuncionario().getId_funcionario());
 			
 			Long sumaTotal = (long) 0;
 			for (Incidencia incidencia : listaIncidencia) {
@@ -498,13 +481,13 @@ public class IncidenciaBean implements Serializable{
 			Long sumaTotalR = (long) 0;
 			for (Incidencia incidencia : listaIncidencia) {
 				sumaTotal += incidencia.getValorVenta();
-				sumaTotalR += incidencia.getPrecioCompetencia();
+				//sumaTotalR += incidencia.getPrecioCompetencia().;
 			}
 			valorTotal = new DecimalFormat("###,###").format(sumaTotal);
 			valorTotalC = new DecimalFormat("###,###").format(sumaTotalR);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
-			Messages.addGlobalError("Error No se cargo la lista de Incidencias");
+			Messages.addGlobalError("Error No se cargo la lista de Incidencias Por sucursales");
 		}
 	}
 	
@@ -512,7 +495,10 @@ public class IncidenciaBean implements Serializable{
 
 		try{
 			PedidosEnProcesoDao dao = new PedidosEnProcesoDao();
-			listaPedidosEnProceso = dao.pedidosProcesoUsuario(autenticacion.getUsuarioLogin().getId());
+			
+			String tipo = (autenticacion.getUsuarioLogin().getPerfil().getId() == 1)? "codEspecialista" : "codInterno";
+			
+			listaPedidosEnProceso = dao.pedidosProcesoUsuario(tipo ,autenticacion.getUsuarioLogin().getId());
 			
 			Long sumaTotal = (long) 0;
 			for (PedidosEnProceso pep : listaPedidosEnProceso) {
@@ -521,7 +507,7 @@ public class IncidenciaBean implements Serializable{
 			valorTotal = new DecimalFormat("###,###").format(sumaTotal);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
-			Messages.addGlobalError("Error No se cargo la lista de Incidencias");
+			Messages.addGlobalError("Error No se cargo la lista los pedidos en proceso");
 		}
 	}
 	
@@ -541,7 +527,7 @@ public class IncidenciaBean implements Serializable{
 			valorTotalR = new DecimalFormat("###,###").format(sumaTotalR);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
-			Messages.addGlobalError("Error No se cargo la lista de Incidencias");
+			Messages.addGlobalError("Error No se cargo la lista de Proceso en Pais");
 		}
 	}
 	
@@ -571,7 +557,7 @@ public class IncidenciaBean implements Serializable{
 			valorTotal = new DecimalFormat("###,###").format(sumaTotal);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
-			Messages.addGlobalError("Error No se cargo la lista de Incidencias");
+			Messages.addGlobalError("Error No se cargo la lista de Proceso por Oficina");
 		}
 	}
 	
@@ -588,7 +574,7 @@ public class IncidenciaBean implements Serializable{
 			valorTotal = new DecimalFormat("###,###").format(sumaTotal);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
-			Messages.addGlobalError("Error No se cargo la lista de Incidencias");
+			Messages.addGlobalError("Error No se cargo la lista pedidos Proyectados por usuario");
 		}
 	}
 	
@@ -620,16 +606,14 @@ public class IncidenciaBean implements Serializable{
 			valorTotal = new DecimalFormat("###,###").format(sumaTotal);
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
-			Messages.addGlobalError("Error No se cargo la lista de Incidencias");
+			Messages.addGlobalError("Error No se cargo la lista  pedidos Proyectados por Oficina");
 		}
 	}
 	
 	public void editar(Incidencia incidencia1){
 
 		try {
-
-
-			System.out.println(incidencia1.getNoferta());
+			
 			incidencia = incidencia1;
 //			String lineas = "";
 ////			if(incidencia.getIdLineas() != null){

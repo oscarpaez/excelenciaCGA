@@ -148,4 +148,16 @@ min-width: 0 !important;
 	padding: 0; 
 }
 
+/* tamaño de celdas del Grid */
+.columnA{width: 20%;height:auto; padding: 20px}
+.columnB{width: 35%;height:auto; padding: 1}
+.columnC{width: 23%;height:auto; padding: 1}
+.columnD{width: 40%;height:auto; padding: 1}
+
+.pnlGpsA.ui-panelgrid>*>tr,
+.pnlGpsA.ui-panelgrid .ui-panelgrid-cell {
+    border-style: none;
+	padding: 2px 3px; 
+}
+
       

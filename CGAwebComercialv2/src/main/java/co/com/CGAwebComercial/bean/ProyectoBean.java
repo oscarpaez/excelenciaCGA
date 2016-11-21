@@ -45,7 +45,6 @@ public class ProyectoBean implements Serializable {
 	@PostConstruct
 	public void listar(){
 		try{
-			System.out.println(autenticacion+ "WWWWWW");
 			ProyectoDao daoP = new ProyectoDao();
 			listaProyecto = daoP.listaProyectosInactivos(autenticacion.getUsuarioLogin().getId());
 		} catch (RuntimeException ex) {
@@ -71,7 +70,6 @@ public class ProyectoBean implements Serializable {
 				
 				float porDias =  (diasH / dias) * 100 ;
 				proyecto.setImagen((porDias < proyecto.getAvance())? "azul.jpg": (porDias == proyecto.getAvance())? "verde.jpg" :(porDias-10 > proyecto.getAvance())? "amarillo.jpg": "rojo.png");
-				System.out.println(diasH  + "DIASSS " + dias + " " + porDias);
 				/*
 				if(proyecto.getEstado().getId() == 1){
 					System.out.println("amarillo.jpg");
@@ -163,7 +161,6 @@ public class ProyectoBean implements Serializable {
 			listaEstado = new ArrayList<>();
 			listaPrioridad = new ArrayList<>();
 			//proyecto = (Proyecto) event.getComponent().getAttributes().get("proyectoSelecionado");
-			System.out.println(proyec.getId());
 			proyecto = proyec; 
 			
 			EstadoProyectoDao daoE = new EstadoProyectoDao();

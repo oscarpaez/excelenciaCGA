@@ -33,15 +33,15 @@ import co.com.CGAwebComercial.dao.GerentesDao;
 import co.com.CGAwebComercial.dao.IncidenciaDao;
 import co.com.CGAwebComercial.dao.OfertasPedidosDao;
 import co.com.CGAwebComercial.dao.PedidosEnProcesoDao;
+import co.com.CGAwebComercial.dao.PedidosProyectadosDao;
 import co.com.CGAwebComercial.dao.PresupuestoDao;
 import co.com.CGAwebComercial.dao.PromedioVentaDao;
 import co.com.CGAwebComercial.dao.RecaudoDao;
-import co.com.CGAwebComercial.dao.Zona_ventaDao;
+import co.com.CGAwebComercial.dao.ValorProyectoDao;
 import co.com.CGAwebComercial.entyties.ContadoAnticipo;
 import co.com.CGAwebComercial.entyties.Funcionario;
 import co.com.CGAwebComercial.entyties.PromedioVenta;
 import co.com.CGAwebComercial.entyties.Recaudo;
-import co.com.CGAwebComercial.entyties.Zona_venta;
 import co.com.CGAwebComercial.resource.Recursos;
 import co.com.CGAwebComercial.util.ComisionVendedores;
 import co.com.CGAwebComercial.util.Fechas;
@@ -85,6 +85,7 @@ public class vendedorLBRBean implements Serializable{
 	private BigDecimal pedidosGanados;
 	private BigDecimal pedidosProceso;
 	private BigDecimal pedidosProyectados;
+	private BigDecimal proyectos;
 	private BigDecimal pedidosTotal;
 	private BigDecimal presupuestoRecaudo;
 	private BigDecimal realRecaudo;	
@@ -432,27 +433,29 @@ public class vendedorLBRBean implements Serializable{
 				
 				/**/
 				if(autenticacion.getUsuarioLogin().getPerfil().getId() == 1 || autenticacion.getUsuarioLogin().getPerfil().getId() == 20){
-					Zona_ventaDao daoZ = new Zona_ventaDao();
+					//Zona_ventaDao daoZ = new Zona_ventaDao();
 					//List<Zona_venta> zona = daoZ.buscarZona(funcionario.getId_funcionario());
-					List<Zona_venta> zona = daoZ.buscarZona(funcionario_id);
+					//List<Zona_venta> zona = daoZ.buscarZona(funcionario_id);
 					
 					IncidenciaDao daoI  = new IncidenciaDao();
-					List<Long> valorPer  = daoI.valorPedidosPerdidos(zona.get(0).getId_zona_venta(), funcionario_id);
+					List<Long> valorPer  = daoI.valorPedidosPerdidos("funcionario", funcionario_id);
 					
-					System.out.println(valorPer.size() + " Tamaño");
 					pedidosPerdidos = new BigDecimal(valorPer.get(0));
 					pedidosGanados =  new BigDecimal(valorPer.get(1));
-					pedidosProyectados = new BigDecimal(valorPer.get(2));
+					//pedidosProyectados = new BigDecimal(valorPer.get(2));
 					
 					PedidosEnProcesoDao daoP = new PedidosEnProcesoDao();
 					//pedidosProceso  = daoP.valorPedidosProceso(tipo, funcionario.getId_funcionario());
 					pedidosProceso  = daoP.valorPedidosProceso(tipo, funcionario_id);
 					
-					//PedidosProyectadosDao daoPe = new PedidosProyectadosDao();
+					PedidosProyectadosDao daoPe = new PedidosProyectadosDao();
 					//pedidosProyectados = daoPe.valorPedidosProyectados(funcionario.getId_funcionario());
-					//pedidosProyectados = daoPe.valorPedidosProyectados(funcionario_id);
+					pedidosProyectados = daoPe.valorPedidosProyectados(funcionario_id);
 					
-					pedidosTotal =pedidosProceso.add(pedidosProyectados.add(realMes).add(lbr));
+					ValorProyectoDao daoV = new ValorProyectoDao();
+					proyectos = new BigDecimal(daoV.listarProyectos(funcionario_id));
+					
+					pedidosTotal =pedidosProceso.add(pedidosGanados.add(totalRealMes).add(proyectos));
 					
 					
 					OfertasPedidosDao daoOF = new OfertasPedidosDao();
@@ -461,10 +464,9 @@ public class vendedorLBRBean implements Serializable{
 					kpiOfertas = (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0"):listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
 					kpiOimagen = (kpiOfertas.intValue() > 80)? "verde.png" : (kpiOfertas.intValue() > 60 &&  kpiOfertas.intValue() < 80)? "amarillo.jpg"  : "rojo.png";
 					
-					listaOferta= daoI.valorOportunidadNegocioVendedor(funcionario_id);
-					
-					kpiOpoNeg =  (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0"): listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-					kpiNimagen = (kpiOpoNeg.intValue() > 1 && kpiOpoNeg.intValue() < 20)? "verde.png" : (kpiOpoNeg.intValue() > 20 &&  kpiOpoNeg.intValue() < 40)? "amarillo.jpg"  : "rojo.png";
+					//listaOferta= daoI.valorOportunidadNegocioVendedor(funcionario_id);
+					kpiOpoNeg =  (listaOferta.get(3).intValue() == 0 || listaOferta.get(2).intValue() == 0)? new BigDecimal("0"): listaOferta.get(3).divide(listaOferta.get(2), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+					kpiNimagen = (kpiOpoNeg.intValue() > 80)? "verde.png" : (kpiOpoNeg.intValue() > 60 &&  kpiOpoNeg.intValue() < 80)? "amarillo.jpg"  : "rojo.png";
 					
 					List<Number> intervalA = new ArrayList<Number>(){{
 						add(60);
@@ -484,17 +486,52 @@ public class vendedorLBRBean implements Serializable{
 					meterGaugeModelA.setSeriesColors("ff0000, ffff00, 009933 ");
 				}
 				else{
+					/*valores para el interno*/
+					String tipo = "funcionarioI";
+					IncidenciaDao daoI  = new IncidenciaDao();
+					List<Long> valorPer  = daoI.valorPedidosPerdidos(tipo, funcionario_id);
+					
+					pedidosPerdidos = new BigDecimal(valorPer.get(0));
+					pedidosGanados =  new BigDecimal(valorPer.get(1));
+					pedidosProyectados = new BigDecimal(valorPer.get(2));
+					
+					PedidosEnProcesoDao daoP = new PedidosEnProcesoDao();
+					pedidosProceso  = daoP.valorPedidosProceso(tipo, funcionario_id);
+					
+					pedidosTotal =pedidosProceso.add(pedidosGanados.add(realMes).add(lbr));
+					
+					/**/
+					
+					
 					OfertasPedidosDao daoOF = new OfertasPedidosDao();
 					List<BigDecimal> listaOferta = daoOF.sumaValorOfertasPedidosVendedor(tipo, funcionario_id);
 					
 					kpiOfertas = (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0"):listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
 					kpiOimagen = (kpiOfertas.intValue() > 80)? "verde.png" : (kpiOfertas.intValue() > 60 &&  kpiOfertas.intValue() < 80)? "amarillo.jpg"  : "rojo.png";
 					
-					IncidenciaDao daoI  = new IncidenciaDao();
-					listaOferta= daoI.valorOportunidadNegocioVendedor(funcionario_id);
+					//listaOferta= daoI.valorOportunidadNegocioVendedor(funcionario_id);
 					
-					kpiOpoNeg = (listaOferta.get(1).intValue() == 0 || listaOferta.get(0).intValue() == 0)? new BigDecimal("0"):listaOferta.get(1).divide(listaOferta.get(0), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-					kpiNimagen = (kpiOpoNeg.intValue() > 1 && kpiOpoNeg.intValue() < 20)? "verde.png" : (kpiOpoNeg.intValue() > 20 &&  kpiOpoNeg.intValue() < 40)? "amarillo.jpg"  : "rojo.png";
+					kpiOpoNeg =  (listaOferta.get(3).intValue() == 0 || listaOferta.get(2).intValue() == 0)? new BigDecimal("0"): listaOferta.get(3).divide(listaOferta.get(2), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+					kpiNimagen = (kpiOpoNeg.intValue() > 80)? "verde.png" : (kpiOpoNeg.intValue() > 60 &&  kpiOpoNeg.intValue() < 80)? "amarillo.jpg"  : "rojo.png";
+				
+					/**/
+					List<Number> intervalA = new ArrayList<Number>(){{
+						add(60);
+						add(85);
+						add(100);
+					}};				
+
+					
+					porV = (pedidosTotal.longValue() == 0 || ventaMes.get(1).intValue() == 0 )? new BigDecimal("0"):pedidosTotal.divide(ventaMes.get(1), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+					V = porV.intValue();
+					
+					intervalA.add(3,(V >100)? V:100); 
+					
+					meterGaugeModelA = new MeterGaugeChartModel(V, intervalA);
+					meterGaugeModelA.setTitle("Cumplimiento " + mesActual + " Pedidos Facturados y Proyectados");
+					meterGaugeModelA.setGaugeLabel( V +"%");
+					meterGaugeModelA.setSeriesColors("ff0000, ffff00, 009933 ");	
+					/**/
 					
 				}
 				/**/
@@ -555,7 +592,7 @@ public class vendedorLBRBean implements Serializable{
 				System.out.println(string);
 			}
 			int mes = Integer.parseInt("" + diaArray[1]);
-			System.out.println(mes);
+			
 			String[] periodo = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
 					"Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 
@@ -784,5 +821,11 @@ public class vendedorLBRBean implements Serializable{
 	}
 	public void setKpiNimagen(String kpiNimagen) {
 		this.kpiNimagen = kpiNimagen;
+	}
+	public BigDecimal getProyectos() {
+		return proyectos;
+	}
+	public void setProyectos(BigDecimal proyectos) {
+		this.proyectos = proyectos;
 	}
 }
