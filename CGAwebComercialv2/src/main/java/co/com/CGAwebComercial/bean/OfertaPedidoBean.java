@@ -95,13 +95,14 @@ public class OfertaPedidoBean implements Serializable{
 	public void listarOfertaPedidos(){
 
 		try {
+			
 			if(detalleIdFun > 0){
 				idFun = detalleIdFun;
 				tipo = "codEspecialista";
 			}
 			else if(detalleIdFunG > 0){
-				
-				if(autenticacion.getTipoVendedor().equals("E")){
+				System.out.println(autenticacion.getTipoVendedor()+ "#####");
+				if(autenticacion.getTipoVendedor().equals("E") || autenticacion.getTipoVendedor().equals("")){
 					idFun = detalleIdFunG;
 					tipo = "codEspecialista";
 				}
@@ -113,7 +114,8 @@ public class OfertaPedidoBean implements Serializable{
 			else{
 				tipo = (autenticacion.getUsuarioLogin().getPerfil().getId() == 1)? "codEspecialista" : "codInterno";
 				idFun = autenticacion.getUsuarioLogin().getId();
-			}			
+			}
+			System.out.println(idFun + " Revision " + tipo);
 			OfertasPedidosDao dao = new OfertasPedidosDao();
 			listaOfertaPedidos = dao.listarOfertaPedidos(tipo, idFun );
 			sumaOfe = new BigDecimal("0");

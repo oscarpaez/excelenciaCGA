@@ -21,7 +21,7 @@ public class Recursos {
 
 		listaFechas = new ArrayList<>();	
 		Fechas fechas = new Fechas();
-		/*
+		
 		fechas.setValorMes("01");
 		fechas.setMes( "Enero");
 		listaFechas.add(0,fechas);
@@ -54,7 +54,7 @@ public class Recursos {
 		fechas = new Fechas();
 		fechas.setValorMes("07");
 		fechas.setMes( "Julio");
-		listaFechas.add(fechas);*/
+		listaFechas.add(fechas);
 
 		fechas = new Fechas();
 		fechas.setValorMes("08");

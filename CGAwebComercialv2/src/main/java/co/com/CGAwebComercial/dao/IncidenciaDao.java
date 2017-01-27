@@ -25,8 +25,8 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			Date fechaInicial = fechaInicial();
 
 			Criteria consulta = session.createCriteria(Incidencia.class);
-//			consulta.createAlias("zona", "z");
-//			consulta.add(Restrictions.eq("z.id_zona_venta", zona));
+			//			consulta.createAlias("zona", "z");
+			//			consulta.add(Restrictions.eq("z.id_zona_venta", zona));
 			consulta.createAlias(zona, "f");
 			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
 			consulta.add(Restrictions.eq("resultaNegocio", "NO"));
@@ -36,7 +36,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			System.out.println(totalWages + " Tamaño");
 			totalWages =(totalWages == null)? 0: totalWages;
 			listaV.add(totalWages);
-			
+
 			consulta = session.createCriteria(Incidencia.class);
 			consulta.createAlias(zona, "f");
 			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
@@ -47,7 +47,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			System.out.println(totalWages1 + " Tamaño");
 			totalWages1 =(totalWages1 == null)? 0: totalWages1;
 			listaV.add(totalWages1);
-			
+
 			consulta = session.createCriteria(Incidencia.class);
 			consulta.createAlias(zona, "f");
 			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
@@ -58,7 +58,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			System.out.println(totalWages + " Tamaño");
 			totalWages =(totalWages == null)? 0: totalWages;
 			listaV.add(totalWages);
-			
+
 			return listaV;
 		} catch (RuntimeException ex) {
 			throw ex;
@@ -81,39 +81,39 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 
 			//for (Zona_venta zona: lista) {
 
-				Criteria consulta = session.createCriteria(Incidencia.class);
-				//consulta.createAlias("zona", "z");
-				consulta.createAlias("ciudad", "c");
-				//consulta.add(Restrictions.eq("z.id_zona_venta", zona.getId_zona_venta()));
-				consulta.add(Restrictions.eq("c.id", idCiudad));
-				consulta.add(Restrictions.eq("resultaNegocio", "NO"));
-				consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
-				consulta.setProjection(Projections.sum("valorVenta"));
-				Long total = (Long) consulta.uniqueResult();			
-				total= (total == null)? 0: total;
-				System.out.println(total + " ** " + idCiudad);
-				totalWages.add(new BigDecimal(total));
-				
-				consulta = session.createCriteria(Incidencia.class);
-				consulta.createAlias("ciudad", "c");
-				consulta.add(Restrictions.eq("c.id", idCiudad));
-				consulta.add(Restrictions.eq("resultaNegocio", "SI"));
-				consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
-				consulta.setProjection(Projections.sum("valorVenta"));
-				total = (Long) consulta.uniqueResult();			
-				total= (total == null)? 0: total;
-				totalWages.add(new BigDecimal(total));
-				
-				consulta = session.createCriteria(Incidencia.class);
-				consulta.createAlias("ciudad", "c");
-				consulta.add(Restrictions.eq("c.id", idCiudad));
-				consulta.add(Restrictions.eq("resultaNegocio", "PR"));
-				consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
-				consulta.setProjection(Projections.sum("valorVenta"));
-				total = (Long) consulta.uniqueResult();			
-				total= (total == null)? 0: total;
-				totalWages.add(new BigDecimal(total));				
-				
+			Criteria consulta = session.createCriteria(Incidencia.class);
+			//consulta.createAlias("zona", "z");
+			consulta.createAlias("ciudad", "c");
+			//consulta.add(Restrictions.eq("z.id_zona_venta", zona.getId_zona_venta()));
+			consulta.add(Restrictions.eq("c.id", idCiudad));
+			consulta.add(Restrictions.eq("resultaNegocio", "NO"));
+			consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
+			consulta.setProjection(Projections.sum("valorVenta"));
+			Long total = (Long) consulta.uniqueResult();			
+			total= (total == null)? 0: total;
+			System.out.println(total + " ** " + idCiudad);
+			totalWages.add(new BigDecimal(total));
+
+			consulta = session.createCriteria(Incidencia.class);
+			consulta.createAlias("ciudad", "c");
+			consulta.add(Restrictions.eq("c.id", idCiudad));
+			consulta.add(Restrictions.eq("resultaNegocio", "SI"));
+			consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
+			consulta.setProjection(Projections.sum("valorVenta"));
+			total = (Long) consulta.uniqueResult();			
+			total= (total == null)? 0: total;
+			totalWages.add(new BigDecimal(total));
+
+			consulta = session.createCriteria(Incidencia.class);
+			consulta.createAlias("ciudad", "c");
+			consulta.add(Restrictions.eq("c.id", idCiudad));
+			consulta.add(Restrictions.eq("resultaNegocio", "PR"));
+			consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
+			consulta.setProjection(Projections.sum("valorVenta"));
+			total = (Long) consulta.uniqueResult();			
+			total= (total == null)? 0: total;
+			totalWages.add(new BigDecimal(total));				
+
 			//}
 			return totalWages;
 		} catch (RuntimeException ex) {
@@ -123,7 +123,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			session.close();
 		}	
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Incidencia> valorPedidosPerdidosUsuarios(String usuario, String estado, int idFun){
 
@@ -157,7 +157,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 		}	
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Incidencia> pedidosPerdidosSucursal(List<Zona_venta> listaZona, int idCiudad, String zona){
 
@@ -166,21 +166,21 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 		try{
 			Date fechaFinal = fechaFinal();
 			Date fechaInicial = fechaInicial();
-			
+
 			listaZona.get(0).getCiudad().getId();
-				
-				Criteria consulta = session.createCriteria(Incidencia.class);
-				consulta.createAlias("ciudad", "c");
-				consulta.add(Restrictions.eq("c.id", idCiudad));
-				if(zona.equals("")  || zona == null){
-					
-				}
-				else{
-					consulta.add(Restrictions.eq("resultaNegocio", zona));
-				}				
-				consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
-				listaIncidencia = consulta.list();
-			
+
+			Criteria consulta = session.createCriteria(Incidencia.class);
+			consulta.createAlias("ciudad", "c");
+			consulta.add(Restrictions.eq("c.id", idCiudad));
+			if(zona.equals("")  || zona == null){
+
+			}
+			else{
+				consulta.add(Restrictions.eq("resultaNegocio", zona));
+			}				
+			consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
+			listaIncidencia = consulta.list();
+
 			return listaIncidencia;
 		} catch (RuntimeException ex) {
 			throw ex;
@@ -190,7 +190,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 		}	
 
 	}
-	
+
 	//* suma el valor total del pais de las oportunidades de negocio. *//
 	public List<BigDecimal> valorOportunidadNegocioPais(){
 
@@ -224,7 +224,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			session.close();
 		}	
 	}
-	
+
 	//* suma el valor total de la oficna de las oportunidades de negocio. *//
 	public List<BigDecimal> valorOportunidadNegocioOficina(int oficina){
 
@@ -259,7 +259,7 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			session.close();
 		}	
 	}
-	
+
 	//* suma el valor total del vendedor de las oportunidades de negocio. *//
 	public List<BigDecimal> valorOportunidadNegocioVendedor(int codFun){
 
@@ -294,8 +294,8 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 			session.close();
 		}	
 	}
-	
-	
+
+
 	@SuppressWarnings("unchecked")
 	public List<Incidencia> pedidosPerdidosPais(Date fechaIni, Date fechaFin){
 
@@ -314,7 +314,73 @@ public class IncidenciaDao extends GenericDao<Incidencia>{
 		}
 		finally{
 			session.close();
-		}	
-
+		}
 	}
+
+	//*Se listan las incidencias con probabilidad mayor a 80% */
+	@SuppressWarnings("unchecked")
+	public List<Incidencia> listarIncidenciaSi(){
+
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<Incidencia> listaIncidencia = new ArrayList<>();
+		try{
+			Date fechaFinal = fechaFinal();
+			Date fechaInicial = fechaInicial();
+			Criteria consulta = session.createCriteria(Incidencia.class);
+			consulta.add(Restrictions.eq("resultaNegocio", "SI"));
+			consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
+			listaIncidencia = consulta.list();
+
+			return listaIncidencia;
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}	
+	}
+
+	//*Se listan las incidencias con Negocios Perdidos*/
+	@SuppressWarnings("unchecked")
+	public List<Incidencia> listarIncidenciaNO(){
+
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<Incidencia> listaIncidencia = new ArrayList<>();
+		try{
+			Date fechaFinal = fechaFinal();
+			Date fechaInicial = fechaInicial();
+			Criteria consulta = session.createCriteria(Incidencia.class);
+			consulta.add(Restrictions.eq("resultaNegocio", "NO"));
+			consulta.add(Restrictions.between("fechaRegistro", fechaInicial , fechaFinal));
+			listaIncidencia = consulta.list();
+
+			return listaIncidencia;
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}	
+	}
+	
+	//*Se buscar las ofertas por N Oferta en la tabla Incidencia*/
+		@SuppressWarnings("unchecked")
+		public List<Incidencia> buscarOferta(Long oferta){
+
+			Session session = HibernateUtil.getSessionfactory().openSession();
+			List<Incidencia> listaIncidencia = new ArrayList<>();
+			try{
+				
+				Criteria consulta = session.createCriteria(Incidencia.class);
+				consulta.add(Restrictions.eq("Noferta", oferta));
+				listaIncidencia = consulta.list();
+
+				return listaIncidencia;
+			} catch (RuntimeException ex) {
+				throw ex;
+			}
+			finally{
+				session.close();
+			}	
+		}
 }

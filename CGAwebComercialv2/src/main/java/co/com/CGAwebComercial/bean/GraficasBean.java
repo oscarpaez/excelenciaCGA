@@ -363,7 +363,7 @@ public class GraficasBean implements Serializable{
 			presupuestoRecaudo = listaPre.get(3);
 			realRecaudo = listaPre.get(4);
 			listaPre.add(1, new BigDecimal(realMes));
-			BigDecimal porV =(listaPre.get(1).longValue() == 0)? new BigDecimal("0"): listaPre.get(1).divide(listaPre.get(0), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			BigDecimal porV =(listaPre.get(1).longValue() == 0 || listaPre.get(0).longValue() == 0)? new BigDecimal("0"): listaPre.get(1).divide(listaPre.get(0), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			int V = porV.intValue();
 			
 			interval = new ArrayList<Number>(){{
@@ -418,7 +418,7 @@ public class GraficasBean implements Serializable{
 //			}			
 			
 			
-			porV =(pedidosTotal.longValue() == 0)? new BigDecimal("0"): pedidosTotal.divide(listaPre.get(0), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			porV =(pedidosTotal.longValue() == 0 || listaPre.get(0).intValue() == 0)? new BigDecimal("0"): pedidosTotal.divide(listaPre.get(0), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			V = porV.intValue();
 			interval.add(3,(V >100)? V:100); 
 			meterGaugeModelA = new MeterGaugeChartModel(V, interval);
@@ -485,7 +485,7 @@ public class GraficasBean implements Serializable{
 			kpiOpoNeg = (listaOferta.get(2).intValue() == 0 || listaOferta.get(3).intValue() == 0)? new BigDecimal("0"): listaOferta.get(3).divide(listaOferta.get(2), 4, BigDecimal.ROUND_HALF_UP ).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
 			kpiNimagen = (kpiOpoNeg.intValue() > 80)? "verde.png" : (kpiOpoNeg.intValue() > 60 &&  kpiOpoNeg.intValue() < 80)? "amarillo.jpg"  : "rojo.png";
 			
-			porV =(pedidosTotal.longValue() == 0)? new BigDecimal("0"): pedidosTotal.divide(listaPre.get(2), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			porV =(pedidosTotal.longValue() == 0  || listaPre.get(2).intValue() == 0)? new BigDecimal("0"): pedidosTotal.divide(listaPre.get(2), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			V = porV.intValue();
 			interval.add(3,(V >100)? V:100); 
 			meterGaugeModelA = new MeterGaugeChartModel(V, interval);
@@ -496,8 +496,8 @@ public class GraficasBean implements Serializable{
 			
 			
 			
-			List<BigDecimal> listaPreA = daoPr.listaPresupuestoPaisAcumulado("2016");
-			porV = listaPreA.get(0).divide(listaPreA.get(2), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			List<BigDecimal> listaPreA = daoPr.listaPresupuestoPaisAcumulado("2017");
+			porV =(listaPreA.get(0).intValue() == 0 || listaPreA.get(2).intValue() == 0)? new BigDecimal("0") : listaPreA.get(0).divide(listaPreA.get(2), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			V = (porV.abs().intValue() > 100)? 100 : porV.abs().intValue();
 			
 			descuentoP = new MeterGaugeChartModel(V, interval);
@@ -534,8 +534,8 @@ public class GraficasBean implements Serializable{
 				sumaPresupuestoU = sumaPresupuestoU.add(oficina.getUtilpresupuesto());
 				sumaRealU = sumaRealU.add(oficina.getUtilidadReal());
 			}
-			cumplimiento = sumaReal.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
-			cumplimientoU = sumaRealU.divide(sumaPresupuestoU, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimiento = (sumaReal.intValue() ==0 || sumaPresupuesto.intValue() ==0)? new BigDecimal("0") : sumaReal.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU =(sumaRealU.intValue() ==0 || sumaPresupuestoU.intValue() ==0)? new BigDecimal("0"): sumaRealU.divide(sumaPresupuestoU, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			totalPreO =  new DecimalFormat("###,###").format(sumaPresupuesto);
 			totolRealO =  new DecimalFormat("###,###").format(sumaReal);
 			totalCumO =  new DecimalFormat("###,###").format(cumplimiento);
@@ -567,8 +567,8 @@ public class GraficasBean implements Serializable{
 				sumaPresupuestoU = sumaPresupuestoU.add(linea.getUtilpresupuesto());
 				sumaRealU = sumaRealU.add(linea.getUtilidadReal());
 			}
-			cumplimiento = sumaReal.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
-			cumplimientoU = sumaRealU.divide(sumaPresupuestoU, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimiento =(sumaReal.intValue() == 0 || sumaPresupuesto.intValue() == 0)? new BigDecimal("0"): sumaReal.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU = (sumaRealU.intValue() == 0 || sumaPresupuestoU.intValue() ==0 )? new BigDecimal("0") : sumaRealU.divide(sumaPresupuestoU, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			totalPreL =  new DecimalFormat("###,###").format(sumaPresupuesto);
 			totolRealL =  new DecimalFormat("###,###").format(sumaReal);
 			totalCumL =  new DecimalFormat("###,###").format(cumplimiento);

@@ -21,14 +21,26 @@
     <param-name>primefaces.THEME</param-name>
     <param-value>start</param-value>
   </context-param>
+  
+   <!-- Definiçion de Mecanismo de Upload -->
   <context-param>
     <param-name>primefaces.UPLOADER</param-name>
     <param-value>native</param-value>
   </context-param>
+  
+  <!-- Cargamento de Hibernate -->
   <listener>
     <listener-class>co.com.CGAwebComercial.util.HibernateContexto</listener-class>
   </listener>
   
+  <!-- Integracion Quartz -->
+	<listener>
+		<listener-class>
+			org.quartz.ee.servlet.QuartzInitializerListener
+		</listener-class>
+	</listener>
+	
+  <!-- URL Rewrite configuration -->
   <filter>
     <filter-name>Pretty Filter</filter-name>
     <filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>

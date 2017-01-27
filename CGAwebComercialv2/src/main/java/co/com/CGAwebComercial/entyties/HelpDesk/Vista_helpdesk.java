@@ -16,7 +16,7 @@ import org.hibernate.annotations.Synchronize;
 @Entity
 @Subselect("SELECT t.ticket_id, t.number, t.closed, t.created, t.lastmessage, t.lastresponse, t.status_id, "
                   + " s.firstname, s.lastname, s.username, "
-                  + " h.topic, c.Area, c.CSOPOR, c.priority, c.`subject`, c.ZTIPO, c.ZUSD1, "
+                  + " h.topic, h.topic_pid, c.Area, c.CSOPOR, c.priority, c.`subject`, c.ZTIPO, c.ZUSD1, "
                   + " st.state, "
                   + " p.priority_desc "	
                   + " FROM ost_ticket t "
@@ -24,14 +24,12 @@ import org.hibernate.annotations.Synchronize;
                   + " INNER JOIN  ost_help_topic h on h.topic_id = t.topic_id "
                   + " INNER JOIN  ost_ticket__cdata c on c.ticket_id = t.ticket_id "
                   + " INNER JOIN  ost_ticket_status st on st.id  = t.status_id "
-                  + " INNER JOIN  ost_ticket_priority p on p.priority_id = c.priority  ")
+                  + " INNER JOIN  ost_ticket_priority p on p.priority_id = c.priority ")
 
 @Synchronize({"ost_ticket", "ost_staff, ost_help_topic, ost_ticket__cdata, ost_ticket_status, ost_ticket_priority"} )
 public class Vista_helpdesk implements Serializable {
 	
-	@Id
-	public String id;
-	
+	 
 	@Lob
 	private String area;
 
@@ -70,6 +68,7 @@ public class Vista_helpdesk implements Serializable {
 	@Lob
 	private String subject;
 
+	@Id
 	private int ticket_id;
 
 	private String topic;
@@ -81,14 +80,8 @@ public class Vista_helpdesk implements Serializable {
 
 	@Lob
 	private String zusd1;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	
+	private int topic_pid;
 
 	public String getArea() {
 		return area;
@@ -240,5 +233,13 @@ public class Vista_helpdesk implements Serializable {
 
 	public void setZusd1(String zusd1) {
 		this.zusd1 = zusd1;
+	}
+
+	public int getTopic_pid() {
+		return topic_pid;
+	}
+
+	public void setTopic_pid(int topic_pid) {
+		this.topic_pid = topic_pid;
 	}
 }

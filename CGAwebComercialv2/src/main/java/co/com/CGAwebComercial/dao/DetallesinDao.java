@@ -142,7 +142,6 @@ public class DetallesinDao extends GenericDao<Detallesin>{
 			detalle = consulta.list();
 
 			for (Detallesin detallesin : detalle) {
-				System.out.println(detallesin.getLinea() + "WWW" +  idLinea);
 				detallesin.setLinea(idLinea);				
 				editar(detallesin);
 			}

@@ -82,6 +82,14 @@
 	background: #5cb85c;
 }
 
+.oficina1 .ui-widget-header {
+	background: #5cb85c;
+}
+
+.oficina1{
+	background: #eeeeee;
+}
+
 /*////ocultar calendario/////*/
 .promedio{
 	position:absolute;
@@ -159,5 +167,16 @@ min-width: 0 !important;
     border-style: none;
 	padding: 2px 3px; 
 }
+
+.columnf{width: 100%;height:50px; padding: 1}
+.columnF{width: 50%;height:50px; }
+.columnG{width: 50%;height:50px; }
+
+.ui-icon.myList{
+    background-image: url(../resources/images/list.png) !important;
+}
+
+
+
 
       

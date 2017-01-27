@@ -20,55 +20,57 @@ public class Ost_ticket implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int ticket_Id;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date closed;
-
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date created;
-
+	private String number;
+	
+	private int user_id;
+	
+	private int user_email_id;
+	
+	private int status_id;
 	
 	private int dept_id;
-
+	
+	private int sla_id;
+	
+	private int topic_id;
+	
+	private int staff_id;
+	
+	private int team_id;
+	
+	private int email_id;
+	
+	private int flags;
+	
+	private String ip_address;
+	
+	private String source;
+	
+	private byte isoverdue;
+	
+	private byte isanswered;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date duedate;
-
-	private int email_id;
-
-	private int flags;
-
-	private String ip_address;
-
-	private byte isanswered;
-
-	private byte isoverdue;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date reopened;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date closed;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastmessage;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastresponse;
-
-	private String number;
-
+	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date reopened;
+	private Date created;
 
-	private int sla_id;
-
-	private String source;
-
-	private int staff_id;
-
-	private int status_id;
-
-	private int team_id;
-
-	private int topic_id;
-
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date updated;
-
-	private int user_email_id;
 
 	private int userId;
 
@@ -80,20 +82,36 @@ public class Ost_ticket implements Serializable {
 		this.ticket_Id = ticket_Id;
 	}
 
-	public Date getClosed() {
-		return closed;
+	public String getNumber() {
+		return number;
 	}
 
-	public void setClosed(Date closed) {
-		this.closed = closed;
+	public void setNumber(String number) {
+		this.number = number;
 	}
 
-	public Date getCreated() {
-		return created;
+	public int getUser_id() {
+		return user_id;
 	}
 
-	public void setCreated(Date created) {
-		this.created = created;
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
+
+	public int getUser_email_id() {
+		return user_email_id;
+	}
+
+	public void setUser_email_id(int user_email_id) {
+		this.user_email_id = user_email_id;
+	}
+
+	public int getStatus_id() {
+		return status_id;
+	}
+
+	public void setStatus_id(int status_id) {
+		this.status_id = status_id;
 	}
 
 	public int getDept_id() {
@@ -104,12 +122,36 @@ public class Ost_ticket implements Serializable {
 		this.dept_id = dept_id;
 	}
 
-	public Date getDuedate() {
-		return duedate;
+	public int getSla_id() {
+		return sla_id;
 	}
 
-	public void setDuedate(Date duedate) {
-		this.duedate = duedate;
+	public void setSla_id(int sla_id) {
+		this.sla_id = sla_id;
+	}
+
+	public int getTopic_id() {
+		return topic_id;
+	}
+
+	public void setTopic_id(int topic_id) {
+		this.topic_id = topic_id;
+	}
+
+	public int getStaff_id() {
+		return staff_id;
+	}
+
+	public void setStaff_id(int staff_id) {
+		this.staff_id = staff_id;
+	}
+
+	public int getTeam_id() {
+		return team_id;
+	}
+
+	public void setTeam_id(int team_id) {
+		this.team_id = team_id;
 	}
 
 	public int getEmail_id() {
@@ -136,12 +178,12 @@ public class Ost_ticket implements Serializable {
 		this.ip_address = ip_address;
 	}
 
-	public byte getIsanswered() {
-		return isanswered;
+	public String getSource() {
+		return source;
 	}
 
-	public void setIsanswered(byte isanswered) {
-		this.isanswered = isanswered;
+	public void setSource(String source) {
+		this.source = source;
 	}
 
 	public byte getIsoverdue() {
@@ -150,6 +192,38 @@ public class Ost_ticket implements Serializable {
 
 	public void setIsoverdue(byte isoverdue) {
 		this.isoverdue = isoverdue;
+	}
+
+	public byte getIsanswered() {
+		return isanswered;
+	}
+
+	public void setIsanswered(byte isanswered) {
+		this.isanswered = isanswered;
+	}
+
+	public Date getDuedate() {
+		return duedate;
+	}
+
+	public void setDuedate(Date duedate) {
+		this.duedate = duedate;
+	}
+
+	public Date getReopened() {
+		return reopened;
+	}
+
+	public void setReopened(Date reopened) {
+		this.reopened = reopened;
+	}
+
+	public Date getClosed() {
+		return closed;
+	}
+
+	public void setClosed(Date closed) {
+		this.closed = closed;
 	}
 
 	public Date getLastmessage() {
@@ -168,68 +242,12 @@ public class Ost_ticket implements Serializable {
 		this.lastresponse = lastresponse;
 	}
 
-	public String getNumber() {
-		return number;
+	public Date getCreated() {
+		return created;
 	}
 
-	public void setNumber(String number) {
-		this.number = number;
-	}
-
-	public Date getReopened() {
-		return reopened;
-	}
-
-	public void setReopened(Date reopened) {
-		this.reopened = reopened;
-	}
-
-	public int getSla_id() {
-		return sla_id;
-	}
-
-	public void setSla_id(int sla_id) {
-		this.sla_id = sla_id;
-	}
-
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
-	}
-
-	public int getStaff_id() {
-		return staff_id;
-	}
-
-	public void setStaff_id(int staff_id) {
-		this.staff_id = staff_id;
-	}
-
-	public int getStatus_id() {
-		return status_id;
-	}
-
-	public void setStatus_id(int status_id) {
-		this.status_id = status_id;
-	}
-
-	public int getTeam_id() {
-		return team_id;
-	}
-
-	public void setTeam_id(int team_id) {
-		this.team_id = team_id;
-	}
-
-	public int getTopic_id() {
-		return topic_id;
-	}
-
-	public void setTopic_id(int topic_id) {
-		this.topic_id = topic_id;
+	public void setCreated(Date created) {
+		this.created = created;
 	}
 
 	public Date getUpdated() {
@@ -240,14 +258,6 @@ public class Ost_ticket implements Serializable {
 		this.updated = updated;
 	}
 
-	public int getUser_email_id() {
-		return user_email_id;
-	}
-
-	public void setUser_email_id(int user_email_id) {
-		this.user_email_id = user_email_id;
-	}
-
 	public int getUserId() {
 		return userId;
 	}
@@ -255,4 +265,6 @@ public class Ost_ticket implements Serializable {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
+	
+	
 }

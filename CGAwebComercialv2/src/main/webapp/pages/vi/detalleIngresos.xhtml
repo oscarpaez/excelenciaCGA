@@ -12,6 +12,8 @@
 	
 	<f:metadata>
 		<f:viewParam name="perId" value="#{registro_IngresosBean.idFun}"/>
+		<f:viewParam name="fecIni" value="#{registro_IngresosBean.fechaIniS}" />
+		<f:viewParam name="fecFin" value="#{registro_IngresosBean.fechaFinS}" />
 		<f:event listener="#{registro_IngresosBean.listaRegistroUsuarios()}" type="preRenderView" />	
 	</f:metadata>
 
@@ -53,12 +55,15 @@
 					</p:column>
 
 					<p:column headerText="Acciones" style="text-align:center;">
-						<h:outputText value="#{registro.horaIngreso}" />
+						<h:outputText value="#{registro.horaIngreso}">
+							<f:convertDateTime pattern="HH:mm:ss"/>
+						</h:outputText>
 					</p:column>
 
 					<f:facet name="footer">
-						<p:commandButton value="Volver" icon="ui-icon-arrowreturn-1-w"
-							style="background:#449d44;" onclick="history.back(); " />
+						<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
+							style="background:#449d44;" 
+							outcome="/pages/vi/vistaIngresos.xhtml?faces-redirect=true" />							
 					</f:facet>
 				</p:dataTable>
 			</h:form>

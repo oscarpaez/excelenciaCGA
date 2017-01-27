@@ -87,7 +87,6 @@ public class LineaDao extends GenericDao<Linea> {
 				listaPlan.add(plan);
 				idPlan ++;
 
-
 			}
 			////*fin*///
 			return listaPlan;

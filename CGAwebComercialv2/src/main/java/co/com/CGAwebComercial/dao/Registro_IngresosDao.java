@@ -16,16 +16,16 @@ import co.com.CGAwebComercial.util.HibernateUtil;
 
 public class Registro_IngresosDao extends GenericDao<Registro_Ingresos> {
 
-	
+
 	@SuppressWarnings({ "unchecked"})
 	public List<Registro_Ingresos> listaIngresos(String fecMes, String fecYear){
-		
+
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		List<Registro_Ingresos> listaR = new ArrayList<>();
 		try{
 			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
 			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
-			System.out.println(fechaInicial +"--" + fechaFinal);
+			
 			Criteria consulta = session.createCriteria(Registro_Ingresos.class);
 			consulta.createAlias("persona", "p");
 			consulta.createAlias("funcionario", "f");
@@ -34,11 +34,11 @@ public class Registro_IngresosDao extends GenericDao<Registro_Ingresos> {
 					Projections.groupProperty("persona")).add(Projections.groupProperty("funcionario")).add(
 							Projections.rowCount(), "p.cedula"));				
 			List<Object[]> results = consulta.list();
-			
+
 			System.out.println(results.size());
 			for (Object[] objects : results) {
 				Registro_Ingresos registro = new Registro_Ingresos();
-				System.out.println(objects[0] + "EEEEE" + objects[1] + " 22 " +objects[2] );
+				//System.out.println(objects[0] + "EEEEE" + objects[1] + " 22 " +objects[2] );
 				Persona persona = (Persona) objects[0];
 				long id = (long) objects[2];
 				Funcionario funcionario = (Funcionario) objects[1];
@@ -49,7 +49,30 @@ public class Registro_IngresosDao extends GenericDao<Registro_Ingresos> {
 				listaR.add(registro);
 			}
 			return  listaR;
-			
+
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Registro_Ingresos> listaIngresosUsuarios(String fecMes, String fecYear, int idFun){
+
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<Registro_Ingresos> listaR = new ArrayList<>();
+		try{
+			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
+			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
+			Criteria consulta = session.createCriteria(Registro_Ingresos.class);
+			consulta.createAlias("funcionario", "f");
+			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
+			consulta.add(Restrictions.between("fechaIngreso", fechaInicial, fechaFinal));
+			listaR = consulta.list();
+			return  listaR;
+
 		} catch (RuntimeException ex) {
 			throw ex;
 		}
@@ -58,26 +81,25 @@ public class Registro_IngresosDao extends GenericDao<Registro_Ingresos> {
 		}
 	}
 	
-@SuppressWarnings("unchecked")
-public List<Registro_Ingresos> listaIngresosUsuarios(String fecMes, String fecYear, int idFun){
-		
+	@SuppressWarnings("unchecked")
+	public List<Registro_Ingresos> buscarIngresos(Date fechaIni, Date fechaFin){
+
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		List<Registro_Ingresos> listaR = new ArrayList<>();
 		try{
-			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
-			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
-			System.out.println(fechaInicial +"--" + fechaFinal);
-			Criteria consulta = session.createCriteria(Registro_Ingresos.class);
-			consulta.createAlias("funcionario", "f");
-			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
-			consulta.add(Restrictions.between("fechaIngreso", fechaInicial, fechaFinal));
-			listaR = consulta.list();
 			
-			/*
+			Criteria consulta = session.createCriteria(Registro_Ingresos.class);
+			consulta.createAlias("persona", "p");
+			consulta.createAlias("funcionario", "f");
+			consulta.add(Restrictions.between("fechaIngreso", fechaIni, fechaFin));
+			consulta.setProjection(Projections.projectionList().add(
+					Projections.groupProperty("persona")).add(Projections.groupProperty("funcionario")).add(
+							Projections.rowCount(), "p.cedula"));				
+			List<Object[]> results = consulta.list();
+
 			System.out.println(results.size());
 			for (Object[] objects : results) {
 				Registro_Ingresos registro = new Registro_Ingresos();
-				System.out.println(objects[0] + "EEEEE" + objects[1] + " 22 " +objects[2] );
 				Persona persona = (Persona) objects[0];
 				long id = (long) objects[2];
 				Funcionario funcionario = (Funcionario) objects[1];
@@ -86,9 +108,9 @@ public List<Registro_Ingresos> listaIngresosUsuarios(String fecMes, String fecYe
 				registro.setId_Registro((int) id);
 				registro.setFuncionario(funcionario);
 				listaR.add(registro);
-			}*/
+			}
 			return  listaR;
-			
+
 		} catch (RuntimeException ex) {
 			throw ex;
 		}
@@ -97,5 +119,25 @@ public List<Registro_Ingresos> listaIngresosUsuarios(String fecMes, String fecYe
 		}
 	}
 	
-	
+	@SuppressWarnings("unchecked")
+	public List<Registro_Ingresos> listaIngresosUsuariosF(Date fecIni, Date fecFin, int idFun){
+
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<Registro_Ingresos> listaR = new ArrayList<>();
+		try{
+			
+			Criteria consulta = session.createCriteria(Registro_Ingresos.class);
+			consulta.createAlias("funcionario", "f");
+			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
+			consulta.add(Restrictions.between("fechaIngreso", fecIni, fecFin));
+			listaR = consulta.list();
+			return  listaR;
+
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}
 }

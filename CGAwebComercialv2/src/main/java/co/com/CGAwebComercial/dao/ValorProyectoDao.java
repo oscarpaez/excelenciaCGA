@@ -101,15 +101,11 @@ public class ValorProyectoDao extends GenericDao<ValorProyecto>{
 			Date fechaFinal = fechaFinal();
 			Date fechaInicial = fechaInicial();
 			
-			System.out.println(idCiu  + "$$$");
-			
 			Criteria consulta = session.createCriteria(ValorProyecto.class);
 			consulta.createAlias("ciudad", "c");
 			consulta.add(Restrictions.eq("c.id", idCiu));
 			consulta.add(Restrictions.between("fechaRegistro", fechaInicial, fechaFinal));			
 			listaProyecto =  consulta.list();
-			
-			System.out.println(listaProyecto.size()  + "$$$");
 			
 			return listaProyecto;
 		} catch (RuntimeException ex) {

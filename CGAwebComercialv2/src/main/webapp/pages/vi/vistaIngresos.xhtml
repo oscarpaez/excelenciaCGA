@@ -7,63 +7,99 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 <ui:composition template="/templates/modeloGeneral.xhtml">
-	
+
 	<ui:define name="contenido">
-	
-	<f:metadata>
-		<f:event listener="#{registro_IngresosBean.inicioVistaRegistro()}" type="preRenderView" />	
-	</f:metadata>
+		
+		<f:facet name="header">
+			<p:outputLabel
+				value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+			
+			<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+								  iconPos="right" styleClass="excel "
+								  style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
+								  onclick="showLoading(); history.back()"/>	
+			
+		</f:facet>
 
+		<f:metadata>
+			<f:event listener="#{registro_IngresosBean.inicioVistaRegistro()}"
+				type="preRenderView" />
+		</f:metadata>
+		
 		<p:panel>
-			<p:dataTable styleClass="tblPla" id="tblIng"
-				emptyMessage="No se encontraron registros"
-				value="#{registro_IngresosBean.listaRegistros}" var="registro"
-				draggableColumns="true" draggableRows="true">
+			
+			<h:form id="frmPlan">
+				<p:dataTable styleClass="tblPla" id="tblIng" widgetVar="tblIng"
+					emptyMessage="No se encontraron registros"
+					value="#{registro_IngresosBean.listaRegistros}" var="registro"
+					draggableColumns="true" draggableRows="true" scrollRows="40"
+					scrollable="true" liveScroll="true" scrollHeight="300"
+					scrollWidth="97%">
 
-				<f:facet name="header">
+					<f:facet name="header">
 						Lista de Ingresos Excelencia Comercial
 					</f:facet>
 
-				<p:columnGroup type="header">
-					<p:row>
-						<p:column colspan="1" headerText="Cod SAP" width="5%" />
-						<p:column colspan="1" headerText="Nombre" width="10%" />
-						<p:column colspan="1" headerText="Cargo" width="10%" />
-						<p:column colspan="1" headerText="Cantidad Ingresos" width="4%" />
-						<p:column colspan="1" headerText="Acciones" width="9%"
-							style="text-align:center" />
-					</p:row>
-				</p:columnGroup>
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column colspan="1" headerText="Cod SAP" width="5%" />
+							<p:column colspan="1" headerText="Nombre" width="10%" />
+							<p:column colspan="1" headerText="Cargo" width="10%" />
+							<p:column colspan="1" headerText="Cantidad Ingresos" width="4%" />
+							<p:column colspan="1" headerText="Acciones" width="9%"
+								style="text-align:center" />
+						</p:row>
+					</p:columnGroup>
 
-				<p:column headerText="">
-					<h:outputText value="#{registro.funcionario.id_funcionario}" />
-				</p:column>
+					<p:column headerText="">
+						<h:outputText value="#{registro.funcionario.id_funcionario}" />
+					</p:column>
 
-				<p:column headerText="">
-					<h:outputText value="#{registro.persona.nombre}" />
-				</p:column>
+					<p:column headerText="">
+						<h:outputText value="#{registro.persona.nombre}" />
+					</p:column>
 
-				<p:column headerText="">
-					<h:outputText value="#{registro.funcionario.descripcion}" />
-				</p:column>
+					<p:column headerText="">
+						<h:outputText value="#{registro.funcionario.descripcion}" />
+					</p:column>
 
-				<p:column style="text-align:center;">
-					<h:outputText value="#{registro.id_Registro}" />
-				</p:column>
-				<p:column headerText="Acciones" style="text-align:center;">
-					<p:button icon="ui-icon-search"  title="Detalle Ingresos"
+					<p:column style="text-align:center;">
+						<h:outputText value="#{registro.id_Registro}" />
+					</p:column>
+					<p:column headerText="Acciones" style="text-align:center;">
+						<p:button icon="ui-icon-search" title="Detalle Ingresos"
 							outcome="/pages/vi/detalleIngresos.xhtml?faces-redirect=true"
-							onclick="showLoading()"	 >
-						<f:param name="perId" value="#{registro.funcionario.id_funcionario}"/>	
-					</p:button>
-												
-				</p:column>
+							onclick="showLoading()">
+							<f:param name="perId" value="#{registro.funcionario.id_funcionario}" />
+							<f:param name="fecIni" value="#{registro_IngresosBean.fechaIni}" />
+							<f:param name="fecFin" value="#{registro_IngresosBean.fechaFin}" />
+						</p:button>
 
-				<f:facet name="footer">
+					</p:column>
 
-				</f:facet>
-			</p:dataTable>
+					<f:facet name="footer">
+
+					</f:facet>
+				</p:dataTable>
+			</h:form>
+
+			<h:form>
+				<h:panelGrid columns="8">
+					<p:outputLabel value="Fecha Inicio:" />
+					<p:calendar value="#{registro_IngresosBean.fechaIni}" size="35"
+						 />
+
+					<p:outputLabel value="Fecha Final:" />
+					<p:calendar value="#{registro_IngresosBean.fechaFin}" size="35" />
+
+					<p:commandButton value="Buscar"
+						actionListener="#{registro_IngresosBean.buscarRegistroFecha()}"
+						style="background: #b94a48" update=" :frmPlan:tblIng " />
+
+				</h:panelGrid>
+			</h:form>
 		</p:panel>
-	</ui:define>	
+
+	</ui:define>
 </ui:composition>
 </html>

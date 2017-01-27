@@ -18,6 +18,12 @@
 		<f:facet name="header">
 			<p:outputLabel
 				value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+			
+			<p:button  icon="ui-icon-person" iconPos="right" styleClass="excel" title="Inicio" 
+					   value="Ingresos" 	
+					   style="text-align: left; float:right;  height:24px; background:#ff6666; font-size: 12px"
+							    outcome="/pages/vi/vistaIngresos.xhtml?faces-redirect=true"
+					   rendered="#{autenticacionBean.usuarioLogin.id == 12}"		    />	
 		</f:facet>
 		<br />
 		<div class="ui-grid ui-grid-responsive">

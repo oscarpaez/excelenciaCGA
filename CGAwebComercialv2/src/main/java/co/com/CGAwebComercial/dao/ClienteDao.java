@@ -27,7 +27,6 @@ public class ClienteDao extends GenericDao<Cliente> {
 			Criteria consulta = session.createCriteria(Cliente.class);
 			consulta.add(Property.forName("id_cliente").eq(maxId));
 			listaM = consulta.list();
-			System.out.println(listaM.get(0).getId());
 			cliente = listaM.get(0);
 			return cliente;
 		} catch (RuntimeException ex) {

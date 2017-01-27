@@ -745,7 +745,6 @@ public class DetalleDao extends GenericDao<Detalle> {
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorNeto"));
 			Long  totalWages = (Long) consulta.uniqueResult();
-			System.out.println(totalWages  + "--" +  idPersona);
 			totalWages = (totalWages == null )? 0 : totalWages *  -1;
 			plan.setIngreso_Real(new BigDecimal(totalWages));	
 

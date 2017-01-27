@@ -230,14 +230,6 @@ public class Incidencia  implements Serializable {
 		this.zonaId = zonaId;
 	}
 
-	public Zona_venta getZona() {
-		return zona;
-	}
-
-	public void setZona(Zona_venta zona) {
-		this.zona = zona;
-	}
-
 	public String getIdLineas() {
 		return idLineas;
 	}
@@ -256,5 +248,13 @@ public class Incidencia  implements Serializable {
 	}
 	public void setFuncionarioI(Funcionario funcionarioI) {
 		this.funcionarioI = funcionarioI;
+	}
+
+	public Zona_venta getZona() {
+		return zona;
+	}
+
+	public void setZona(Zona_venta zona) {
+		this.zona = zona;
 	}
 }

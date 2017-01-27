@@ -17,6 +17,7 @@ public class HibernateUtilTest {
 	}
 	
 	@Test
+	@Ignore
 	public void conectar1(){
 		
 		Session session = HibernateUtil.getSessionfactory1().openSession();

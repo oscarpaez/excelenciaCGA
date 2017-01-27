@@ -592,7 +592,7 @@ public class CiudadDao extends GenericDao<Ciudad>{
 		Session session = HibernateUtil.getSessionfactory1().openSession();
 		List<Vista_helpdesk> prueba = new ArrayList<>();
 //		List<Ciudad> prueba = new ArrayList<>();
-		
+//		List<Ost_ticket> prueba = new ArrayList<>();
 		try{
 //			Vista_helpdeskDao dao= new Vista_helpdeskDao();
 //			prueba = dao.listar();
@@ -608,9 +608,9 @@ public class CiudadDao extends GenericDao<Ciudad>{
 //			for (Ciudad ciudad : prueba) {
 //				System.out.println(ciudad.getNombre() + "id search");
 //			}
-//			for (Vista_helpdesk v : prueba) {				
-//				System.out.println(v.getArea() + "id search");
-//			}
+			for (Vista_helpdesk v : prueba) {				
+				System.out.println(v.getArea() + " -- " + v.getFirstname());
+			}
 		} catch (RuntimeException ex) {
 			throw ex;
 		}

@@ -14,6 +14,7 @@ import co.com.CGAwebComercial.dao.CiudadDao;
 import co.com.CGAwebComercial.dao.DetalleDao;
 import co.com.CGAwebComercial.dao.FuncionarioDao;
 import co.com.CGAwebComercial.dao.LineaDao;
+import co.com.CGAwebComercial.dao.OfertasPedidosDao;
 import co.com.CGAwebComercial.dao.PersonaDao;
 import co.com.CGAwebComercial.dao.Registro_IngresosDao;
 import co.com.CGAwebComercial.dao.UsuarioDao;
@@ -146,13 +147,27 @@ public class UsuarioTest {
 	}
 	
 	@Test
+	@Ignore
 	public void pruebaBase(){
 		
-		CiudadDao dao = new CiudadDao();
-		dao.prueba();
+		OfertasPedidosDao dao = new OfertasPedidosDao();
+		dao.listaOfertaMotivoR();
 		
 	}
 	
+	@Test
+	@Ignore
+	public void pruebaBaseA(){
+		
+		CiudadDao dao = new CiudadDao();
+		dao.prueba();		
+	}
 	
-	
+	@Test	
+	public void fechaFinal(){
+		
+		CiudadDao dao = new CiudadDao();
+		dao.fechaFinal("2", "2016");		
+		
+	}
 }

@@ -25,7 +25,7 @@
         
          <!-- Base servidor Aplicacion en produccion  -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://192.168.0.15:3306/mesa_de_ayuda</property>
+        <property name="connection.url">jdbc:mysql://192.168.0.15:3306/mesa_de_ayuda1</property>
         <property name="connection.username">excelenciacga</property>
         <property name="connection.password">E1825cGA*-</property>   
         
@@ -72,10 +72,19 @@
         
         <!-- Mapeo de las Entidades   
         
-        <mapping class = "co.com.CGAwebComercial.entyties.HelpDesk.Vista_helpdesk"/>-->
+        <mapping class = "co.com.CGAwebComercial.entyties.HelpDesk.Vista_helpdesk"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.HelpDesk.Ost_Ticket__Cdata"/> 
+        <mapping class = "co.com.CGAwebComercial.entyties.HelpDesk.Ost_help_topic"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.HelpDesk.Ost_Ticket_Status"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.HelpDesk.Ost_Ticket_Priority"/>-->
         <mapping class = "co.com.CGAwebComercial.entyties.HelpDesk.Ost_ticket"/>     
         <mapping class = "co.com.CGAwebComercial.entyties.HelpDesk.Ost_staff"/>
-        <mapping class = "co.com.CGAwebComercial.entyties.HelpDesk.Vista_helpdesk"/> 
+        <mapping class = "co.com.CGAwebComercial.entyties.HelpDesk.Vista_helpdesk"/>
+         
+        
+        
+        
+        
         
         
                 

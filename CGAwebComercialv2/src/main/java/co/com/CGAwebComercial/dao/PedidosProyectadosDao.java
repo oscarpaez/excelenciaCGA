@@ -23,8 +23,6 @@ public class PedidosProyectadosDao extends GenericDao<PedidosProyectados> {
 			Date fechaFinal = fechaFinal();
 			Date fechaInicial = fechaInicial();
 
-			//tipo =(tipo == "funcionario")? "codEspecialista": "codInterno";
-			System.out.println("IDDDDDD"+ idFun);
 			Criteria consulta = session.createCriteria(PedidosProyectados.class);
 			consulta.createAlias("funcionario", "f");
 			consulta.add(Restrictions.eq("f.id_funcionario", idFun));
@@ -51,7 +49,7 @@ public class PedidosProyectadosDao extends GenericDao<PedidosProyectados> {
 			Date fechaInicial = fechaInicial();
 
 			//tipo =(tipo == "funcionario")? "codEspecialista": "codInterno";
-			System.out.println();
+			
 			//for (Zona_venta zona: lista) {
 
 				Criteria consulta = session.createCriteria(PedidosProyectados.class);

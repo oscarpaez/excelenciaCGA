@@ -25,7 +25,6 @@ public class PedidosEnProcesoDao  extends GenericDao<PedidosEnProceso>{
 			Date fechaInicial = fechaInicial();
 			
 			tipo =(tipo == "funcionario")? "codEspecialista": "codInterno";
-			System.out.println("RRR"+ tipo);
 			Criteria consulta = session.createCriteria(PedidosEnProceso.class);
 			consulta.add(Restrictions.eq(tipo, idFun));
 			consulta.add(Restrictions.between("fechaEntrega", fechaInicial , fechaFinal));

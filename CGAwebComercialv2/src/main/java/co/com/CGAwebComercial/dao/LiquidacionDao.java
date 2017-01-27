@@ -132,8 +132,7 @@ public class LiquidacionDao extends GenericDao<Liquidacion>{
 		}
 	}
 	
-	//*Verifica si el usuario ya fue liquidado*//
-	
+	//*Verifica si el usuario ya fue liquidado*//	
 	@SuppressWarnings("unchecked")
 	public List<Liquidacion>  buscarLiquidacion(String concepto, int codSap){
 		

@@ -212,7 +212,8 @@ public class GenericDao<Entidad> {
 			Date fechaActual= new Date();	   
 			DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar cal = Calendar.getInstance();
-			int mes = Integer.parseInt("" + fecMes.charAt(1));
+			int mes = Integer.parseInt(fecMes);
+			//int mes = Integer.parseInt("" + fecMes.charAt(1));
 			mes = mes-1;
 			int year = Integer.parseInt(fecYear);
 			cal.set(year, mes, 1);

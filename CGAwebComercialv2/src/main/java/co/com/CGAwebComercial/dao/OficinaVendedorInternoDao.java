@@ -23,8 +23,7 @@ public class OficinaVendedorInternoDao  extends GenericDao<OficinaVendedorIntern
 		try{
 			Criteria consulta = session.createCriteria(OficinaVendedorInterno.class);
 			consulta.add(Restrictions.eq("oficinadeventas", codSucursal));
-			listaOfiVenInt = consulta.list();
-			
+			listaOfiVenInt = consulta.list();			
 			return listaOfiVenInt;
 			
 		} catch (RuntimeException ex) {

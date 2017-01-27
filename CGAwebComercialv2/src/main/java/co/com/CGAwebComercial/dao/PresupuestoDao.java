@@ -27,8 +27,9 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 	public List<Presupuesto> datoPorLinea(int codigo, int idPersona, Date fechaInicial, Date fechaFinal){
 
 		Session session = HibernateUtil.getSessionfactory().openSession();
-		List<Presupuesto> presupuesto = null;
+		List<Presupuesto> presupuesto = new ArrayList<>();
 		try{
+			System.out.println(codigo + "--" + idPersona + "--" + fechaInicial + "--" + fechaFinal);
 			Criteria consulta = session.createCriteria(Presupuesto.class);			
 			consulta.add(Restrictions.eq("linea", codigo));
 			consulta.add(Restrictions.eq("funcionario", idPersona));
@@ -152,6 +153,7 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("ingresos"));
 			BigDecimal valor = (BigDecimal) consulta.uniqueResult();
+			valor = (valor == null)? new BigDecimal("0"): valor;
 			lista.add(valor);
 			
 			consulta = session.createCriteria(Detalle.class);
@@ -741,9 +743,11 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("ingresos"));
 			BigDecimal valor = (BigDecimal) consulta.uniqueResult();
+			valor = (valor == null )? new BigDecimal("0"): valor;
 			listaTotal.add(valor);
 			consulta.setProjection(Projections.sum("utilidad"));
 			valor = (BigDecimal) consulta.uniqueResult();
+			valor = (valor == null )? new BigDecimal("0"): valor;
 			listaTotal.add(valor);
 
 			return listaTotal;
@@ -770,18 +774,22 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorNeto"));
 			Long  totalWages = (Long) consulta.uniqueResult();
+			totalWages = (totalWages == null)? 0: totalWages;
 			listaTotal.add(new BigDecimal(totalWages));
 			consulta.setProjection(Projections.sum("costoTotal"));
 			totalWages = (Long) consulta.uniqueResult();
+			totalWages = (totalWages == null)? 0: totalWages;
 			listaTotal.add(new BigDecimal(totalWages));
 
 			consulta = session.createCriteria(PresupuestoE.class);			
 			consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("ingresos"));
 			BigDecimal valor = (BigDecimal) consulta.uniqueResult();
+			valor =(valor == null)?new BigDecimal("0"):valor;
 			listaTotal.add(valor);
 			consulta.setProjection(Projections.sum("utilidad"));
 			valor = (BigDecimal) consulta.uniqueResult();
+			valor =(valor == null)?new BigDecimal("0"):valor;
 			listaTotal.add(valor);
 
 			return listaTotal;

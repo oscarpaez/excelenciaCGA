@@ -64,3 +64,58 @@ function showMaterial(){
 	}
 	
 }
+
+function showHijo() {
+	
+	var inputs = PF('hijo').inputs;
+	
+	if (inputs[0].checked) {
+		alert('v ' + inputs[0].value);
+		PF('canH1').jq.show();
+		$('#canH').show();
+	}
+	else{
+		alert('v2 ' + inputs[1].value);
+	}
+//    for (var i = 0; i < inputs.length; i++) {
+//        if (inputs[i].checked) {
+//        	alert('v ' + inputs[i].value);
+//        }
+//    }
+	
+	
+}
+
+function showCamposHijo() {
+	
+	/*alert('Car');
+	PF('canH1').jq.show();
+	$('#labL').show();*/	
+}
+
+PrimeFaces.locales['es'] = {
+        closeText: 'Cerrar',
+        prevText: 'Anterior',
+        nextText: 'Siguiente',
+        monthNames: ['Enero','Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+        dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+        dayNamesShort: ['Dom','Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+        dayNamesMin: ['D','L','M','M','J','V','S'],
+        weekHeader: 'Semana',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: '',
+        timeOnlyTitle: 'Sólo hora',
+        timeText: 'Tiempo',
+        hourText: 'Hora',
+        minuteText: 'Minuto',
+        secondText: 'Segundo',
+        currentText: 'Fecha actual',
+        ampm: false,
+        month: 'Mes',
+        week: 'Semana',
+        day: 'Día',
+        allDayText : 'Todo el día'
+};

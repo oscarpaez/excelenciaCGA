@@ -159,7 +159,8 @@ public class AutenticacionBean implements Serializable {
 			umbral = null;
 			index = 0;
 			Messages.addGlobalWarn("Se cerro la session");
-			Faces.redirect("./index");
+			Faces.redirect("./index");	
+			iniciar();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

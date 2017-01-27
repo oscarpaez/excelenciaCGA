@@ -34,7 +34,6 @@ public class ComisionDao extends GenericDao<Comision>{
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		ComisionVendedores sucursales =  new ComisionVendedores();
 		try{
-			System.out.println(fecYear + "" + fecMes );
 			Date fechaFinal = (fecMes.equals("") || fecMes == null)? fechaFinal():fechaFinal(fecMes, fecYear);
 			Date fechaInicial =(fecYear.equals("") || fecYear == null) ? fechaInicial() : fechaInicial(fecMes, fecYear);
 
@@ -109,10 +108,7 @@ public class ComisionDao extends GenericDao<Comision>{
 			else{
 				sucursales.setCumplimientoVP(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
 			}
-			System.out.println(sucursales.getIngresoRealB());
-			System.out.println(sucursales.getPresupuestoB());
-			System.out.println(sucursales.getCumplimientoVP());
-			System.out.println(esquema.getUmbralComision().intValue());
+			
 			if(sucursales.getCumplimientoVP().intValue() >= esquema.getUmbralComision().intValue()){
 				BigDecimal comision = funcionario.getComision().getValorBaseVenta().multiply(esquema.getVentaPais());
 				sucursales.setComisionVentaPais(comision.multiply(sucursales.getCumplimiento()).divide(new BigDecimal("100")));
@@ -429,8 +425,8 @@ public class ComisionDao extends GenericDao<Comision>{
 				totalWages = (totalWages == null)? 0: totalWages;
 				sucursales.setIngresoRealB(new BigDecimal(totalWages* -1));
 
-				System.out.println(sucursales.getIngresoRealB());
-				System.out.println(sucursales.getPresupuestoB());
+				//System.out.println(sucursales.getIngresoRealB());
+				//System.out.println(sucursales.getPresupuestoB());
 
 				if(sucursales.getIngresoRealB().intValue() == 0 || sucursales.getPresupuestoB().intValue() == 0 ){
 					sucursales.setCumplimientoML(new BigDecimal("0"));
@@ -441,11 +437,11 @@ public class ComisionDao extends GenericDao<Comision>{
 
 				if(sucursales.getCumplimientoML().intValue() >= esquema.getUmbralComision().intValue()){
 					BigDecimal distribucion = sucursales.getPresupuestoB().divide(totalPre, 4, BigDecimal.ROUND_HALF_UP);
-					System.out.println(distribucion + "Cumplimiento XX");
+					//System.out.println(distribucion + "Cumplimiento XX");
 					BigDecimal comision = funcionario.getComision().getValorBaseVenta().multiply(esquema.getMixLinea());
 					sucursales.setComisionMixLinea(comision.multiply(distribucion));
 					sucursales.setImagen1("verde.png");
-					System.out.println(sucursales.getComisionMixLinea() + "Comision Mix de linea");
+					//System.out.println(sucursales.getComisionMixLinea() + "Comision Mix de linea");
 					totalMix = totalMix.add(sucursales.getComisionMixLinea());
 				}
 				else{
@@ -474,7 +470,7 @@ public class ComisionDao extends GenericDao<Comision>{
 					sucursales.setIngresoRealB(sucursales.getIngresoRealB());
 				}
 				else{
-					System.out.println( recaudo.get(0).getPresupuesto() + " ####### " + recaudo.size());
+					//System.out.println( recaudo.get(0).getPresupuesto() + " ####### " + recaudo.size());
 					sucursales.setPresupuestoB(sucursales.getPresupuestoB().add(recaudo.get(0).getPresupuesto()));
 					sucursales.setIngresoRealB(sucursales.getIngresoRealB().add(recaudo.get(0).getReal()));
 				}
@@ -988,7 +984,6 @@ public class ComisionDao extends GenericDao<Comision>{
 	}
 
 	//*Detalle mix de lineas Comision Director Comercial  "gh" "detalleML" *//
-
 	public List<ComisionVendedores> detalleML(Funcionario funcionario, String fecMes, String fecYear){
 
 		Session session = HibernateUtil.getSessionfactory().openSession();
@@ -1229,9 +1224,6 @@ public class ComisionDao extends GenericDao<Comision>{
 					listaLineas.add(sucursales); 
 				}
 
-				//sucursales.setComisionZonasCargo(totalZonasCargo);
-				
-				
 				return listaLineas;
 			} catch (RuntimeException ex) {
 				throw ex;

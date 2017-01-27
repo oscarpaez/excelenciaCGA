@@ -35,7 +35,8 @@
 						<p:outputLabel value="Usuario" />
 						<p:selectOneMenu value="#{autenticacionBean.persona.cedula}"
 							filter="true" style="width:350px;" required="true"
-							requiredMessage="El campo Usuario es Obligatorio">
+							requiredMessage="El campo Usuario es Obligatorio"
+							filterMatchMode="contains">
 							<f:selectItem noSelectionOption="true"
 								itemLabel="Selecione Usuario" />
 							<f:selectItems value="#{autenticacionBean.listaUsuario}"

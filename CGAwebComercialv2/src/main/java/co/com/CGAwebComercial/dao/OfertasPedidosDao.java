@@ -32,7 +32,7 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			
 			Criteria consulta = session.createCriteria(OfertasPedidos.class);
 			consulta.add(Restrictions.eq(tipo, idFun));
-			consulta.add(Restrictions.between("fechaEntOfe", fechaInicial, fechaFinal));
+			consulta.add(Restrictions.between("fechaCreOfe", fechaInicial, fechaFinal));
 			consulta.addOrder(Order.desc("valorOferta"));
 			consulta.addOrder(Order.asc("valorPedido"));
 			listaOferta = consulta.list();
@@ -60,7 +60,7 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			
 			Criteria consulta = session.createCriteria(OfertasPedidos.class);
 			consulta.add(Restrictions.eq(tipo, idFun));
-			consulta.add(Restrictions.between("fechaEntOfe", fechaInicial, fechaFinal));
+			consulta.add(Restrictions.between("fechaCreOfe", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.projectionList().add(
 					Projections.property(tipo)).add(
 							Projections.property(nombre)).add(
@@ -87,7 +87,7 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			
 			Criteria consulta = session.createCriteria(OfertasPedidos.class);
 			consulta.add(Restrictions.eq("codOficina", idCiudad));
-			consulta.add(Restrictions.between("fechaEntOfe", fechaInicial, fechaFinal));
+			consulta.add(Restrictions.between("fechaCreOfe", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.projectionList().add(
 					Projections.property("oficina")).add(
 							Projections.sum("valorOferta")).add(
@@ -119,7 +119,7 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			
 			Criteria consulta = session.createCriteria(OfertasPedidos.class);
 			consulta.add(Restrictions.eq(tipo, idFun));
-			consulta.add(Restrictions.between("fechaEntOfe", fechaInicial, fechaFinal));
+			consulta.add(Restrictions.between("fechaCreOfe", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.projectionList().add(
 					Projections.property(tipo)).add(
 							Projections.property(nombre)).add(
@@ -229,9 +229,7 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("ingresos"));
 			BigDecimal totalP = (BigDecimal) consulta.uniqueResult();
-			System.out.println(totalP + "*****");
 			totalP = (totalP == null)? new BigDecimal("0") : totalP; 
-			System.out.println(totalP + "////////");
 			listaResul.add(totalP.longValue());
 			
 			return listaResul;
@@ -254,7 +252,7 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			Date fechaInicial = fechaInicial();
 
 			Criteria consulta = session.createCriteria(OfertasPedidos.class);
-			consulta.add(Restrictions.between("fechaEntOfe", fechaInicial, fechaFinal));
+			consulta.add(Restrictions.between("fechaCreOfe", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorOferta"));
 			BigDecimal totalP = (BigDecimal) consulta.uniqueResult();
 			totalP = (totalP == null)? new BigDecimal("0") : totalP;
@@ -269,8 +267,6 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			Long t = (Long) consulta.uniqueResult();
 			totalP = (t == null)? new BigDecimal("0") : new BigDecimal(t);
 			listaOferta.add(totalP);
-			
-			System.out.println(t + " CCCCCC");
 			
 			consulta.add(Restrictions.not(Restrictions.eq("nPedido", new Long(0))));
 			//consulta.add(Restrictions.ne("valorPedido", new Long(0)));
@@ -300,7 +296,7 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 
 			Criteria consulta = session.createCriteria(OfertasPedidos.class);
 			consulta.add(Restrictions.eq("codOficina", oficina));
-			consulta.add(Restrictions.between("fechaEntOfe", fechaInicial, fechaFinal));
+			consulta.add(Restrictions.between("fechaCreOfe", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorOferta"));
 			BigDecimal totalP = (BigDecimal) consulta.uniqueResult();
 			totalP = (totalP == null)? new BigDecimal("0") : totalP;
@@ -316,17 +312,12 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			totalP = (t == null)? new BigDecimal("0") : new BigDecimal(t);
 			listaOferta.add(totalP);
 			
-			System.out.println(t + " CCCCCC");
-			
 			consulta.add(Restrictions.not(Restrictions.eq("nPedido", new Long(0))));
 			//consulta.add(Restrictions.ne("valorPedido", new Long(0)));
 			consulta.setProjection(Projections.count("valorPedido"));
 			t = (Long) consulta.uniqueResult();
 			totalP = (t == null)? new BigDecimal("0") : new BigDecimal(t);
 			listaOferta.add(totalP);
-			
-			
-			System.out.println(t + "FFFFFFFFFff");
 			
 			return listaOferta;
 
@@ -350,7 +341,7 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			
 			Criteria consulta = session.createCriteria(OfertasPedidos.class);
 			consulta.add(Restrictions.eq(tipo, codFun));
-			consulta.add(Restrictions.between("fechaEntOfe", fechaInicial, fechaFinal));
+			consulta.add(Restrictions.between("fechaCreOfe", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorOferta"));
 			BigDecimal totalP = (BigDecimal) consulta.uniqueResult();
 			totalP = (totalP == null)? new BigDecimal("0") : totalP;
@@ -366,8 +357,6 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			totalP = (t == null)? new BigDecimal("0") : new BigDecimal(t);
 			listaOferta.add(totalP);
 			
-			System.out.println(t + " CCCCCC");
-			
 			consulta.add(Restrictions.not(Restrictions.eq("nPedido", new Long(0))));
 			//consulta.add(Restrictions.ne("valorPedido", new Long(0)));
 			consulta.setProjection(Projections.count("valorPedido"));
@@ -375,8 +364,6 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 			totalP = (t == null)? new BigDecimal("0") : new BigDecimal(t);
 			listaOferta.add(totalP);
 			
-			
-			System.out.println(t + "FFFFFFFFFff");
 			return listaOferta;
 
 		} catch (RuntimeException ex) {
@@ -407,5 +394,28 @@ public class OfertasPedidosDao extends GenericDao<OfertasPedidos>{
 		}
 	}
 	
-
+	/* Se listan las ofertas Buscadas por el numero de oferta */
+	@SuppressWarnings("unchecked")
+	public List<OfertasPedidos> listaOfertaMotivoR(){
+		
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		List<OfertasPedidos> listaOferta = new ArrayList<>();
+		try{
+			Date fechaFinal = fechaFinal();
+			Date fechaInicial = fechaInicial();
+			
+			Criteria consulta = session.createCriteria(OfertasPedidos.class);			
+			consulta.add(Restrictions.or(Restrictions.ne("motivoRechazo", 0),
+					Restrictions.ne("motivoRechazoPed", 0)));
+//			consulta.add(Restrictions.ne("motivoRechazoPed", 0));
+			consulta.add(Restrictions.between("fechaCreOfe", fechaInicial , fechaFinal));		
+			listaOferta = consulta.list();
+			return listaOferta;			
+		} catch (RuntimeException ex) {
+			throw ex;
+		}
+		finally{
+			session.close();
+		}
+	}	
 }
