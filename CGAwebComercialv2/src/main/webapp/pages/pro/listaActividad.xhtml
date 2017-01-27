@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral.xhtml">
+	
+	<ui:define name="contenido">
+		<p:growl id="menssage"/>
+		
+		<h:form id="frmPlan">
+			<p:panel>
+				<f:facet name="header">
+					<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+					<h:commandLink >
+						<p:graphicImage library="images" name="excel.png" width="24" styleClass="excel"/>
+						<p:dataExporter type="xls" target="tblPlan" fileName="Lista_de_Actividades" />
+					</h:commandLink>
+	
+					<h:commandLink>
+						<p:graphicImage library="images" name="csv.png" width="24" styleClass="cvs" />
+						<p:dataExporter type="csv" target="tblPlan" fileName="Lista_de_Actividades" />
+					</h:commandLink>
+				</f:facet>
+
+	 		<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" value="#{actividadesBean.listaActividades}" var="actividad"
+					draggableColumns="true" rowKey="#{actividad.actividad}"  selection="#{actividadesBean.activida}"  selectionMode="single"
+					draggableRows="true">
+					
+					<f:facet name="header">
+						Lista de Actividades
+					</f:facet>
+					
+	 			    <p:columnGroup type="header">
+			            <p:row>
+			            	<p:column colspan="1" headerText="Item" width="4%" />
+			            	<p:column colspan="1" headerText="Nombre" width="10%"/>
+			            	<p:column colspan="1" headerText="Actividad" />
+			            	<p:column colspan="1" headerText="Avance" width="7%"  />
+			            	<p:column colspan="1" headerText="Fecha Creacion" width="8%"/>
+			            	<p:column colspan="1" headerText="Fecha Inicio" width="8%"/>
+			            	<p:column colspan="1" headerText="Fecha Final" width="8%"/>
+			            	<p:column colspan="1" headerText="Sub Actividades" width="8%" />
+			            	<p:column colspan="1" headerText="Prioridad" width="8%"/>
+			            	<p:column colspan="1" headerText="Estado" width="8%"/>
+			            	<p:column colspan="1" headerText="Acciones" width="9%" style="text-align:center"/>
+			           </p:row>
+			        </p:columnGroup> 
+			        
+			        <p:column >
+						<h:outputText value="#{actividad.id}" />
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{actividad.usuario.persona.nombre}" />
+					</p:column>
+					
+				    <p:column >
+						<h:outputText value="#{actividad.actividad}" />
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{actividad.avance}" />
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{actividad.fechaCreacion}" />
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{actividad.fechaInicio}" />
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{actividad.fechaFinal}" />
+					</p:column>
+					
+					<p:column >
+						<p:rowToggler />
+						<p:commandButton    icon=".ui-icon.myList" value="Actividades"  
+							oncomplete="PF('dlgSubA').show();"
+							actionListener="#{actividadesBean.iniciarSubA(actividad)}"
+							update=":menssage :frmNuePro:pnlNuePro" >
+							
+						</p:commandButton>	
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{actividad.prioridad.nombre}" />
+					</p:column>
+					
+					<p:column >
+						<h:outputText value="#{actividad.estado.nombre}" />
+					</p:column>					
+					
+					<p:column headerText="Acciones">
+						<p:commandButton icon="ui-icon-pencil"
+							action ="#{actividadesBean.editarActividad(actividad)}"
+							update=":menssage :frmNuePro:pnlNuePro"
+							oncomplete="PF('dlgNue').show();" title="Editar">
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+						
+						<p:commandButton icon="ui-icon-trash" actionListener="#{actividadesBean.borrarActividad(actividad)}"
+										update=" :frmPlan:tblPlan" title="Borrar">
+							<p:confirm header="Confirmar"
+								message="Desea borrar la actividad?" icon="ui-icon-alert" />
+						</p:commandButton>	
+					</p:column>
+					
+					<p:rowExpansion >
+						<p:dataTable id="tblPlanSubA" 
+									emptyMessage="No se encontraron registros" value="#{actividad.listaSA}" var="subA"
+									draggableRows="true" style="width:50%; text-aling:center">
+							 <p:columnGroup type="header">
+					            <p:row>
+					            	<p:column colspan="1" headerText="Item" style="background: #d02424" width="10%"/>
+					            	<p:column colspan="1" headerText="Actividad" style="background: #d02424"/>
+					            	<p:column colspan="1" headerText="Avance" style="background: #d02424" width="20%"/>
+					            	<p:column colspan="1" headerText="Etidar" style="background: #d02424" width="15%"/>
+					            </p:row>	
+							</p:columnGroup>
+							
+							<p:column >
+								<h:outputText value="#{subA.id}" />
+							</p:column>
+							
+							<p:column >
+								<h:outputText value="#{subA.nombre}" />
+							</p:column>
+							
+							<p:column >
+								<h:outputText value="#{subA.avance}" />
+							</p:column>
+							
+							<p:column style="text-align:center;">
+								<p:commandButton icon="ui-icon-pencil"
+									oncomplete="PF('dlgSubA').show();"
+									actionListener="#{actividadesBean.editarSubActividad(subA)}"
+									update=":menssage :frmNueSubA:pnlNueSubA"
+									title="Editar"
+									style="border: 1px solid #c38080; background: #d02424;" >
+									<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+								</p:commandButton>
+								
+								<p:commandButton icon="ui-icon-trash" actionListener="#{actividadesBean.borrarSubActividad(subA)}"
+										update=" :menssage :frmNuePro:pnlNuePro :frmPlan:tblPlan" title="Borrar"
+										style="background: #5cb85c;">
+							<p:confirm header="Confirmar"
+								message="Desea borrar la actividad?" icon="ui-icon-alert" />
+						</p:commandButton>	
+							</p:column>
+					
+							
+							<f:facet name="footer">
+			                	
+							</f:facet>	
+							
+						</p:dataTable>            
+			        </p:rowExpansion>
+					
+					<f:facet name="footer">
+						<p:commandButton value="Nuevo Actividad" style="height:35px" 
+							oncomplete="PF('dlgNue').show();" actionListener="#{actividadesBean.cargarActividad()}"
+							update=":frmNuePro:pnlNuePro" >
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+					</f:facet>
+				</p:dataTable>
+				
+				<p:confirmDialog global="true">
+					<p:commandButton value="Si" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check"  />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog> 
+			</p:panel>
+		</h:form>
+		
+		<p:dialog header="Crear una Nueva Actividad" widgetVar="dlgNue" draggable="false" 
+				resizable="false"  closable="true" appendTo="@(body)" modal="true" >
+			<h:form id="frmNuePro" enctype="multipart/form-data">
+				<h:panelGrid columns="2" id="pnlNuePro">
+					
+					<p:outputLabel  value="Actividad:" />
+					<p:inputText  size="30" maxlength="50" 
+						value="#{actividadesBean.activida.actividad}" required="true" requiredMessage="Campo Nombre es obligatorio"/>
+					
+					<p:outputLabel  value="Avance" />
+					<p:selectOneMenu id="prioridadA" filter="true" style="width:322px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo prioridad es obligatorio" 
+						value="#{actividadesBean.activida.avance}">
+						<f:selectItem noSelectionOption="true" itemLabel="Seleccione el avance"/>
+						<f:selectItem itemValue="10%" itemLabel="10%"/>
+						<f:selectItem itemValue="20%" itemLabel="20%"/>
+						<f:selectItem itemValue="30%" itemLabel="30%"/>
+						<f:selectItem itemValue="40%" itemLabel="40%"/>
+						<f:selectItem itemValue="50%" itemLabel="50%"/>
+						<f:selectItem itemValue="60%" itemLabel="60%"/>
+						<f:selectItem itemValue="70%" itemLabel="70%"/>
+						<f:selectItem itemValue="80%" itemLabel="80%"/>
+						<f:selectItem itemValue="90%" itemLabel="90%"/>
+						<f:selectItem itemValue="100%" itemLabel="100%"/>
+					</p:selectOneMenu>	
+					
+					<p:outputLabel  value="Fecha Creación" />
+					<p:calendar  size="30" required="true" requiredMessage="El campo fecha Creación es Obligatorio"
+						value="#{actividadesBean.activida.fechaCreacion}" />
+						
+					<p:outputLabel  value="Fecha Inicio" />
+					<p:calendar  size="30" required="true" requiredMessage="El campo fecha Creación es Obligatorio"
+						value="#{actividadesBean.activida.fechaInicio}" />
+					
+					<p:outputLabel  value="Fecha Entrega" />
+					<p:calendar  size="30" required="true" requiredMessage="El campo fecha Creación es Obligatorio"
+						value="#{actividadesBean.activida.fechaFinal}" />
+							
+					<p:outputLabel  for="prioridad" value="Prioridad: " />
+					<p:selectOneMenu id="prioridad" filter="true" style="width:322px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo prioridad es obligatorio" 
+						value="#{actividadesBean.activida.prioridad}">
+						<f:selectItem noSelectionOption="true" itemLabel="Seleccione la Prioridad"/>
+						<f:selectItems value="#{actividadesBean.listaPrioridad}" var="prioridad"
+							itemValue="#{prioridad}" itemLabel="#{prioridad.nombre}" />
+					</p:selectOneMenu>	 
+					
+					<p:outputLabel for="estado" value="Estado: " />
+					<p:selectOneMenu id="estado" filter="true" style="width:322px"
+						value="#{actividadesBean.activida.estado}"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo Estado es obligatorio">
+						<f:selectItem noSelectionOption="true" itemLabel="Seleccione el Estado"/>
+						<f:selectItems value="#{actividadesBean.listaEstado}" var="estado"
+							itemValue="#{estado}" itemLabel="#{estado.nombre}" />
+					</p:selectOneMenu>	
+					
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">	
+					<p:commandButton value="Salvar" actionListener="#{actividadesBean.guardarActividad()}"
+						update=" :menssage :frmNuePro:pnlNuePro  :frmPlan:tblPlan" 
+						oncomplete="PF('dlgNue').hide();"
+						/>
+					<p:commandButton value="Cerrar" oncomplete="PF('dlgNue').hide();"
+						 />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog header="Crear una nueva Sub Actividad" widgetVar="dlgSubA" 
+			draggable="false" resizable="false"  closable="true" appendTo="@(body)" modal="true"
+			styleClass="liquidar" >
+			
+			<h:form id="frmNueSubA" enctype="multipart/form-data">
+				<h:panelGrid columns="2" id="pnlNueSubA">
+					<p:outputLabel  value="Actividad:" />
+					<p:inputText  size="30" maxlength="50" 
+						value="#{actividadesBean.subActiva.nombre}" required="true" requiredMessage="Campo Nombre es obligatorio"/>
+					
+					<p:outputLabel  value="Avance:" />
+					<p:inputText  size="30" maxlength="50" 
+						value="#{actividadesBean.subActiva.avance}" required="true" requiredMessage="Campo Nombre es obligatorio"/>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">	
+					<p:commandButton value="Salvar" actionListener="#{actividadesBean.guardarSubActividad()}"
+						update=" :menssage :frmNueSubA:pnlNueSubA  :frmPlan:tblPlan" 
+						oncomplete="PF('dlgSubA').hide();"
+						/>
+					<p:commandButton value="Cerrar" oncomplete="PF('dlgSubA').hide();"
+						 />
+				</h:panelGrid>				
+			</h:form>	
+		
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>
+</html>

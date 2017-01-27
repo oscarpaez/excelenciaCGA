@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+		<ui:define name="contenido">
+		
+			<f:metadata>
+				<f:viewParam name="perId" value="#{incidenciaBean.proNeg}"/>
+				<f:event listener="#{incidenciaBean.listarIncidencias()}" type="preRenderView" />
+			</f:metadata>
+			
+			
+			
+
+		<h:form id="frmPlan">
+			
+			
+			
+			<p:panel>
+			
+			<f:facet name="header">
+				<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+				
+				<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+								outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true"
+								onclick="showLoading()" />	
+				
+				<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+								  iconPos="right" styleClass="excel "
+								  style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
+								  onclick="showLoading(); history.back()"/>
+			
+			</f:facet>
+			
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros"
+					value="#{incidenciaBean.listaIncidencia}" var="incidencia"
+					rows="15" filteredValue="#{incidenciaBean.listaFiltrarIncidencia}"
+					scrollRows="40" scrollable="true" liveScroll="true"
+					scrollHeight="330" scrollWidth="97%">
+
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column rowspan="2" headerText="N° Oferta" width="70" />
+							<p:column rowspan="2" headerText="Oficina"
+								filterBy="#{incidencia.ciudad.nombre}"
+								filterMatchMode="contains" width="90" filterStyle="width:90%" />
+							<p:column rowspan="2" headerText="Cliente"
+								filterBy="#{incidencia.cliente}" filterMatchMode="contains"
+								width="150" />
+							<p:column rowspan="2"
+								headerText="Probabilidad de Concretar el Negocio" width="100"
+								filterBy="#{incidencia.probabilidadConNeg}"
+								filterMatchMode="contains" filterStyle="width:90%" />
+							<p:column colspan="1" headerText="Precio oferta" width="90" />
+							<p:column colspan="1" headerText="Resultado de la Negociacion"
+								width="70"  />
+							<p:column rowspan="2" headerText="Fecha"
+								style="text-align: center;" width="90" />
+						</p:row>
+
+
+					</p:columnGroup>
+
+					<p:column>
+						<h:outputText value="#{incidencia.noferta}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{incidencia.ciudad.nombre}" />
+					</p:column>
+
+
+					<p:column style="text-align: center">
+						<h:outputText value="#{incidencia.cliente}" />
+					</p:column>
+
+
+					<p:column headerText="comision" style="text-align: center">
+						<h:outputText value="#{incidencia.probabilidadConNeg} %" />
+					</p:column>
+
+
+					<p:column style="text-align: right">
+						<h:outputText value="#{incidencia.valorVenta}">
+							<f:convertNumber locale="en_US" maxFractionDigits="0"
+								pattern="#,##0;(#,##0)" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="rP" style="text-align: center">
+						<h:outputText value="#{incidencia.resultaNegocio}" />
+					</p:column>
+
+					<p:column headerText="comision" style="text-align: center">
+						<h:outputText value="#{incidencia.fechaRegistro}" />
+					</p:column>
+
+					<p:columnGroup type="footer">
+						<p:row>
+							<p:column colspan="1" style="text-align:right"
+								rendered="#{incidenciaBean.proNeg == 'PR'}" />
+							<p:column colspan="1" style="text-align:right" />
+							<p:column colspan="1" style="text-align:right" />
+							<p:column colspan="1" style="text-align:right" />	
+							<p:column colspan="1" footerText="Totales"
+								style="text-align:right" />
+							<p:column colspan="" footerText="#{incidenciaBean.valorTotal}"
+								style="text-align:right" />
+							<p:column colspan="1" style="text-align:right" />
+							<p:column colspan="1" style="text-align:right" />								
+						</p:row>
+					</p:columnGroup>
+
+					<f:facet name="footer">
+					</f:facet>
+
+
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+
+		<p:dialog header="Editar Negocios Programados" widgetVar="dlgNue" draggable="false" 
+				resizable="false" closable="true" appendTo="@(body)" modal="true" height="400" 
+				width="40%"	>
+			<h:form id="frmNuePro" enctype="multipart/form-data">
+				<p:panelGrid columns="2" id="pnlNuePro" 
+					 columnClasses="column1,column2">
+					
+					<p:outputLabel  value="N° Oferta:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.noferta}" />
+					
+					<p:outputLabel  value="Oficina:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.ciudad.nombre}" />
+					
+					<p:outputLabel  value="Tipo de Negocio:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.linea.nombre}" />
+					
+					<p:outputLabel  value="Cliente:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.cliente}" />
+					
+					<p:outputLabel  value="Nesecidad Cliente:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.necesidad}" />
+					
+					<p:outputLabel  value="Probabilidad de Concretar el Negocio:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.probabilidadConNeg} %" />
+					
+					<p:outputLabel  value="Causa:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.causaPerdida.descripcion}" />
+					
+					<p:outputLabel  value="Precio Oferta:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.valorVenta}" />
+					
+					<p:outputLabel  value="Rentabilidad Plan:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.rentabilidad}" />
+					
+					<p:outputLabel  value="Nombre Competencia:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.nombreCompetencia}" />
+					
+					<p:outputLabel  value="Precio Competencia:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.precioCompetencia}" />
+					
+					<p:outputLabel  value="Rentabilidad Requerida:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.rentabilidadRequerida}" />
+					
+					<p:outputLabel  value="Resultado de la negociación:" />
+					<p:selectOneMenu filter="true" style="width:83%"
+						value="#{incidenciaBean.incidencia.resultaNegocio}"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="El Campo Resultado de la Negociación es obligatorio">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="Seleccione un Item" />
+						<f:selectItem itemValue="SI" itemLabel="SI" />
+						<f:selectItem itemValue="NO" itemLabel="NO" />
+						<f:selectItem itemValue="PR" itemLabel="PROYECTADO" />
+					</p:selectOneMenu>
+
+					<p:outputLabel  value="Medio de Contacto:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.canalesContacto}" />
+					
+					<p:outputLabel  value="Fecha:" />
+					<p:outputLabel  value="#{incidenciaBean.incidencia.fechaRegistro}" />
+					
+				</p:panelGrid>
+				
+				<h:panelGrid columns="2">	
+					<p:commandButton value="Salvar" actionListener="#{incidenciaBean.editar()}"
+						update=":msgGlobal :frmNuePro:pnlNuePro  :frmPlan:tblPlan"   
+						oncomplete="PF('dlgNue').hide();"/>
+					<p:commandButton value="Cerrar" oncomplete="PF('dlgNue').hide();"
+						/>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		</ui:define>
+	</ui:composition>	
+</html>	

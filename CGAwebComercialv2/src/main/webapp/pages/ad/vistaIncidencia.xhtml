@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+		
+		<ui:define name="contenido">
+		
+			<f:metadata>
+				<f:event listener="#{encuestaBean.listarRegistrados()}" type="preRenderView" />
+			</f:metadata>
+			
+			<f:facet name="header">
+				<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+				
+				<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
+								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+								onclick="showLoading()" />	
+				
+				<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
+								  iconPos="right" styleClass="excel "
+								  style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
+								  onclick="showLoading(); history.back()"/>
+			</f:facet>	
+			
+			<h:form id="frmPlan">
+			<p:panel>
+				<f:facet name="header" >
+				           <h:outputText value="Fecha #{autenticacionBean.fechaActual}" /> 			       
+				        	
+				        	<h:commandLink title="Exportar a Excel" >
+									<p:graphicImage library="images" name="excel.png" width="24" styleClass="excel"/>
+									<p:dataExporter type="xls" target="tblPlan" fileName="Actualizacion de datos" />
+						    </h:commandLink>
+				</f:facet>	
+			<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" 
+						value="#{encuestaBean.listaPersona}" var="persona" rows="15"
+						filteredValue="#{incidenciaBean.listaFiltrarIncidencia}"
+						scrollRows="40" scrollable="true"  liveScroll="true" scrollHeight="250"
+						scrollWidth="97%"  >
+					
+					<p:columnGroup type="header">
+		            <p:row>
+		            	<p:column rowspan="1" headerText="Nombre"  width="150" />
+		            	<p:column rowspan="2" headerText="Cedula"  filterBy="" filterMatchMode="contains" width="150"/>
+		            	<p:column rowspan="2" headerText="Genero" filterBy="" filterMatchMode="contains" width="90" filterStyle="width:90%"/>
+		            	<p:column rowspan="2" headerText="RH" width="150"/>
+		            	<p:column rowspan="2" headerText="Barrio vive" filterBy="" filterMatchMode="contains" width="150"/>
+		            	<p:column rowspan="2" headerText="Dirección" width="250" />
+		            	<p:column rowspan="2" headerText="Estrato" width="100" filterBy="" filterMatchMode="contains" filterStyle="width:90%"/>
+		            	<p:column rowspan="2" headerText="Tipo de vivienda " width="100"/>
+		            	<p:column colspan="1" headerText="Medio Transaporte" width="90"/>
+		             	<p:column colspan="1" headerText="Teléfono" width="80"/>
+		            	<p:column colspan="1" headerText="Celular" width="150"/>
+		            	<p:column colspan="1" headerText="Correo" width="90"/>
+		            	<p:column colspan="1" headerText="Fecha Nacimiento" width="80"/>
+		            	<p:column colspan="1" headerText="Estado Civil" width="70"/>
+		            	<p:column colspan="1" headerText="Con quien vive" width="100"/>
+		            	<p:column rowspan="2" headerText="Datos en caso de Emergecia" style="text-align: center;" width="100" />
+		            	<p:column colspan="1" headerText="Persona en condición de discapacidad" width="100"/>
+		            	<p:column colspan="1" headerText="Tiene Hijos" width="100"/>
+		            	<p:column colspan="1" headerText="Hijo 1" width="100"/>
+		            	<p:column colspan="1" headerText="Fecha Nacimiento Hijo 1" width="100"/>
+		            	<p:column colspan="1" headerText="Hijo 2" width="100"/>
+		            	<p:column colspan="1" headerText="Fecha Nacimiento Hijo 2" width="100"/>
+		            	<p:column colspan="1" headerText="Hijo 3" width="100"/>
+		            	<p:column colspan="1" headerText="Fecha Nacimiento Hijo 3" width="100"/>
+		            	<p:column colspan="1" headerText="Hijo 4" width="100"/>
+		            	<p:column colspan="1" headerText="Fecha Nacimiento Hijo 4" width="100"/>
+		            	<p:column colspan="1" headerText="Hijo 5" width="100"/>
+		            	<p:column colspan="1" headerText="Fecha Nacimiento Hijo 5" width="100"/>
+		            	<p:column colspan="1" headerText="Estado cónyugue" width="100"/>
+		            	<p:column colspan="1" headerText="Cargo" width="100"/>
+		            	<p:column colspan="1" headerText="Sucursal" width="100"/>
+		            	<p:column colspan="1" headerText="Fecha de Ingreso" width="100"/>
+		            	<p:column colspan="1" headerText="Area" width="100"/>
+		            	<p:column colspan="1" headerText="Contrato" width="100"/>
+		            	<p:column colspan="1" headerText="Horario" width="100"/>
+		            	<p:column colspan="1" headerText="Ingreso" width="100"/>
+		            	<p:column colspan="1" headerText="Fondo Cesantias" width="100"/>
+		            	<p:column colspan="1" headerText="Fondo Exequial" width="100"/>
+		            	<p:column colspan="1" headerText="Nivel de Estudio" width="100"/>
+		            	<p:column colspan="1" headerText="Titulo Obtenido" width="100"/>
+		            	<p:column colspan="1" headerText="Institución" width="100"/>
+		            	<p:column colspan="1" headerText="Formacion Completa" width="100"/>
+		            	<p:column colspan="1" headerText="Dotación" width="100"/>
+		            	<p:column colspan="1" headerText="Chaqueta" width="100"/>
+		            	<p:column colspan="1" headerText="Camisa" width="100"/>
+		            	<p:column colspan="1" headerText="Bata" width="100"/>
+		            	<p:column colspan="1" headerText="Botas" width="100"/>
+		            	<p:column colspan="1" headerText="Pantalón" width="100"/>
+		            	<p:column colspan="1" headerText="Salud" width="100"/>
+		            	<p:column colspan="1" headerText="Agudeza visual" width="100"/>
+		            	<p:column colspan="1" headerText="Agudeza Auditiva" width="100"/>
+		            	<p:column colspan="1" headerText="Resistencia, fuerza y Coordinación" width="100"/>
+		            	<p:column colspan="1" headerText="Nutrición" width="100"/>
+		            	<p:column colspan="1" headerText="Actividad física" width="100"/>
+		            	<p:column colspan="1" headerText="Deporte que te gusta" width="100"/>
+		            	<p:column colspan="1" headerText="Actividad artística" width="100"/>
+		            	<p:column colspan="1" headerText="Taller artístico" width="100"/>
+		            	<p:column colspan="1" headerText="Actividades culturales hijos" width="100"/>
+		            	<p:column colspan="1" headerText="Actividades culturales a realizar" width="100"/>
+		            	<p:column colspan="1" headerText="Fecha de actualización" width="100"/>
+		            	 
+		            </p:row>
+		            
+		            
+		        </p:columnGroup>
+				
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.nombre}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.cedula}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.genero.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.rh}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.barrio}" />
+					</p:column>					
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.direccion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.estrato.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.vivienda.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.transporte.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.telefono}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.celular}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.correo}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.fechaNacimiento}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.estadoCivil.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.conquienvives}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.conemergencia}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.convivesdiscapacidad}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.th}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.h1}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.f1}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.h2}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.f2}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.h3}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.f3}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.h4}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.f4}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.h5}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.f5}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.estadoConyuge.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.cargo}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.sucursal.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.fechaIngreso}" />						
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.area.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.contrato.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.horario.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.ingreso.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.fondoCesantias}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.fondoexcequial}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.estudio.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.tituloestudio}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.institucionestudio}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.completarformacion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.dotacion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.chaqueta}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.camisa}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.bata}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.botas}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.pantalon}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.sesacionSalud}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.agudezaVisual}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.agudezaAuditiva}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.resistensia}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.nutricion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.actividadFisica}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.deporte.descripcion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.actividad}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.tallerformacion}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.hijosactividades}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.tiposactividades}" />
+					</p:column>
+					
+					<p:column  style="text-align: center">
+						<h:outputText value="#{persona.fechaActualizacion}" />
+					</p:column>
+					
+					<p:columnGroup type="footer">
+			            <p:row>
+			            	<p:column colspan="1" style="text-align:right"/>
+			            	<p:column colspan="1" style="text-align:right"/>
+			            	<p:column colspan="1" style="text-align:right"/>
+			            	<p:column colspan="1" style="text-align:right"/>
+			            	<p:column colspan="1" style="text-align:right"/>
+			            	<p:column colspan="1" style="text-align:right"/>
+			            	<p:column colspan="1" footerText="Totales"  style="text-align:right"/>
+			            	<p:column colspan="" footerText="#{incidenciaBean.valorTotal}" style="text-align:right" />
+			       	    	<p:column colspan="" footerText="" />
+			             	<p:column colspan="1" style="text-align:right"/>
+			            	<p:column colspan="" footerText="#{incidenciaBean.valorTotalC}" style="text-align:right" />
+			            	<p:column colspan="1" style="text-align:right"/>
+			            	<p:column colspan="1" style="text-align:right"/>
+			            	<p:column colspan="1" style="text-align:right"/>
+			            	<p:column colspan="1" style="text-align:right"/>  	
+			            </p:row>
+			        </p:columnGroup>
+			        
+			        <f:facet name="footer">
+					</f:facet>
+					
+					
+			        </p:dataTable>
+			    </p:panel>    
+			</h:form>
+			
+			<h:form>
+			<h:panelGrid columns="8">
+				<p:outputLabel value="Fecha Inicio:" />
+				<p:calendar value="#{incidenciaBean.fechaIni}" 
+									size="35" />
+
+				<p:outputLabel value="Fecha Final:" />
+				<p:calendar value="#{incidenciaBean.fechaFin}" 
+									size="35"  />
+
+				<p:commandButton value="Buscar" update=":frmPlan:tblPlan "
+					actionListener="#{incidenciaBean.listarIncidencias()}" style="background: #b94a48"/>
+				
+			</h:panelGrid>
+		</h:form>
+		
+		</ui:define>
+	</ui:composition>	
+</html>	

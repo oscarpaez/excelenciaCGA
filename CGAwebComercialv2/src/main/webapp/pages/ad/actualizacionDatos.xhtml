@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	
+	<ui:composition template="/templates/modeloGeneral.xhtml">
+	<ui:define name="contenido">
+		
+		<f:facet name="header" >
+				<p:outputLabel value="Actualización de datos CGA " />	
+		</f:facet>	
+		
+		<br />
+		<h:form  id="frmM" style="padding-left: 15%; padding-right: 15%;" styleClass="act"> 
+			
+		<p:growl id="growl" autoUpdate="true"/>
+			
+		<p:wizard flowListener="#{encuestaBean.onFlowProcess}" nextLabel="Siguiente" backLabel="Atras"
+				styleClass="actCga"  >
+			 	<p:tab id="personal" title="Aspectos Personales">
+					<p:panel style="width:100%; "
+						 styleClass="oficina1" header="Aspectos Personales"  >
+
+						<h:panelGrid columns="1" columnClasses="columnf">
+							<p:outputLabel value="Por favor escribe tus Apellidos y Nombres:" />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.nombre}" required="true"
+								requiredMessage="Campo Nombre es obligatorio " placeholder="Nombre"/>
+
+							<p:outputLabel value="CUÁL ES TU # CÉDULA DE CIUDADANÍA? " />
+							<p:inputNumber style="width:100%" value="#{encuestaBean.cedula}" 
+								required="true"  decimalPlaces="0"
+								requiredMessage="Campo Cedula es obligatorio " placeholder="Cedula" />
+
+							<p:outputLabel value="ELIGE TU GÉNERO: " />
+							<p:selectOneRadio id="console" value="#{encuestaBean.genero}" required="true"
+								requiredMessage="Campo Genero es obligatorio ">
+								<f:selectItem itemLabel="Masculino" itemValue="1" />
+								<f:selectItem itemLabel="Femenino" itemValue="2" />
+							</p:selectOneRadio>
+
+							<p:outputLabel value="CUÁL ES TU TIPO DE SANGRE - RH " />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.rh}" required="true"
+								requiredMessage="Campo Tipo de Sangre es obligatorio " placeholder="RH"/>
+
+							<p:outputLabel value="EN QUE BARRIO VIVES? " />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.barrio}" required="true"
+								requiredMessage="Campo Barrio es obligatorio " placeholder="Barrio"/>
+
+							<p:outputLabel value="CUÁL ES TU DIRECCIÓN DE RESIDENCIA?" />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.direccion}" required="true"
+								requiredMessage="Campo Dirección es obligatorio " placeholder="Dirección"/>
+								
+							<p:outputLabel value="QUE ESTRATO SOCIO ECONÓMICO TIENES?" />
+							<p:selectOneMenu  filter="true" style="width:97%"
+								value="#{encuestaBean.persona.estrato}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Estrato es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un estrato" />
+								<f:selectItems value="#{encuestaBean.listaEstrato}"
+									var="estrato" itemValue="#{estrato}"
+									itemLabel="#{estrato.descripcion}" />
+							</p:selectOneMenu>	
+
+							<p:outputLabel value="ACTUALMENTE TU VIVIENDA ES? " />
+							<p:selectOneMenu id="estado" filter="true" style="width:97%"
+								value="#{encuestaBean.persona.vivienda}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Vivienda Negocio es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione el Tipo de Vivienda" />
+								<f:selectItems value="#{encuestaBean.listaVivienda}"
+									var="vivienda" itemValue="#{vivienda}"
+									itemLabel="#{vivienda.descripcion}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="QUE MEDIO DE TRANSPORTE UTILIZAS? " />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.transporte}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Transporte Negocio es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione el medio de transporte" />
+								<f:selectItems value="#{encuestaBean.listaTransporte}"
+									var="transporte" itemValue="#{transporte}"
+									itemLabel="#{transporte.descripcion}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="CUÁL ES TU TELÉFONO FIJO DE CONTACTO? " />
+							<p:inputMask  value="#{encuestaBean.persona.telefono}" mask="999-9999" style="width:100%" required="true"
+									requiredMessage="El Campo Teléfono es obligatorio" placeholder="Teléfono">
+							</p:inputMask>
+
+							<p:outputLabel value="CUÁL ES TU N° DE CELULAR? " />
+							<p:inputMask value="#{encuestaBean.persona.celular}" mask="999-999-9999" style="width:100%"  required="true"
+								requiredMessage="El Campo Celular es obligatorio" placeholder="Celular"/>
+
+							<p:outputLabel value="CUÁL ES TU CORREO ELECTRÓNICO PERSONAL? " />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.correo}" required="true" placeholder="ejemplo@gmail.com"
+								requiredMessage="Campo Correo es obligatorio " >
+								<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" 
+										/>
+							</p:inputText>
+
+							<p:outputLabel value="CUÁL ES TU FECHA DE NACIMIENTO?  " />
+							<p:calendar  locale="es" navigator="true"  placeholder="Año-Mes-Dia"  pattern="yyyy-MM-dd"
+								value="#{encuestaBean.persona.fechaNacimiento}" required="true" 
+								requiredMessage="Campo Fecha de Nacimiento es obligatorio " />
+
+							<p:outputLabel value="CUÁL ES TU ESTADO CIVIL?  " />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.estadoCivil}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Estado Civil es obligatorio">
+								<f:selectItem noSelectionOption="true" itemLabel="Seleccione un Item" />
+								<f:selectItems value="#{encuestaBean.listaEstadoCivil}"
+									var="ecivil" itemValue="#{ecivil}"
+									itemLabel="#{ecivil.descripcion}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="CON QUIEN VIVES? " />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.conquienvives}" required="true"
+								requiredMessage="Campo Con quien vives es obligatorio " placeholder="Con quien Vives" />
+
+							<p:outputLabel
+								value="CON QUIEN NOS COMUNICAMOS EN CASO DE EMERGENCIA? (Por favor relaciona nombre, parentesco, celular/contacto)" />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.conemergencia}" required="true"
+								requiredMessage="Campo En caso de emergencia es obligatorio " />
+
+							<p:outputLabel
+								value="CONVIVES CON ALGUNA PERSONA EN SITUACIÓN DE DISCAPACIDAD? SI ¿CUAL? " />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.convivesdiscapacidad}" required="true"
+									requiredMessage="Campo Persina con discapacidad es obligatorio " />
+
+							<p:outputLabel value="TIENES HIJOS?: " />
+							<p:selectOneRadio value="#{encuestaBean.persona.tieneHijos}"  widgetVar="hijo"
+								required="true" requiredMessage="Campo Tiene hijos es obligatorio "
+								onclick=""
+								>
+								<f:selectItem itemLabel="Si" itemValue="1" />
+								<f:selectItem itemLabel="No" itemValue="2" />
+							</p:selectOneRadio>
+							
+							<p:outputLabel value="Nombre completo de tu HIJO N°1" />
+							<p:inputText id="n1"  style="width:100%" value="#{encuestaBean.persona.h1}" 
+									 />
+
+							<p:outputLabel value="Fecha de nacimiento de tu HIJO N°1" />
+							<p:calendar  locale="es" navigator="true"  placeholder="Año-Mes-Dia"
+								  pattern="yyyy-MM-dd" value="#{encuestaBean.persona.f1}"  />
+							
+							
+							<p:outputLabel value="Nombre completo de tu HIJO N°2" />
+							<p:inputText id="n2"  style="width:100%" value="#{encuestaBean.persona.h2}" />
+
+							<p:outputLabel value="Fecha de nacimiento de tu HIJO N°2" />
+							<p:calendar  locale="es" navigator="true"  placeholder="Año-Mes-Dia"
+								  pattern="yyyy-MM-dd" value="#{encuestaBean.persona.f2}"  />
+							
+							
+							<p:outputLabel value="Nombre completo de tu HIJO N°3" />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.h3}" />
+
+							<p:outputLabel value="Fecha de nacimiento de tu HIJO N°3" />
+							<p:calendar  locale="es" navigator="true"  placeholder="Año-Mes-Dia"
+								  pattern="yyyy-MM-dd" value="#{encuestaBean.persona.f3}"  /> 
+							
+							
+							<p:outputLabel value="Nombre completo de tu HIJO N°4" />
+							<p:inputText style="width:90%" value="#{encuestaBean.persona.h4}" />
+
+							<p:outputLabel value="Fecha de nacimiento de tu HIJO N°4" />
+							<p:calendar  locale="es" navigator="true"  placeholder="Año-Mes-Dia"  
+								pattern="yyyy-MM-dd" value="#{encuestaBean.persona.f4}"  />
+							
+							
+							<p:outputLabel value="Nombre completo de tu HIJO N°5" />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.h5}" />
+
+							<p:outputLabel value="Fecha de nacimiento de tu HIJO N°5" />
+							<p:calendar  locale="es" navigator="true"  placeholder="Año-Mes-Dia" 
+								 pattern="yyyy-MM-dd" value="#{encuestaBean.persona.f5}"  />
+							
+							
+
+							<p:outputLabel value="ACTUALMENTE TU CÓNYUGE " />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.estadoConyuge}"
+								converter="omnifaces.SelectItemsConverter" >
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un Item" />
+								<f:selectItems value="#{encuestaBean.listaEstadoConyuge}"
+									var="econyuge" itemValue="#{econyuge}"
+									itemLabel="#{econyuge.descripcion}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</p:panel>
+				</p:tab> 
+				 
+				<p:tab id="laborales" title="Aspectos Laborales">
+					<p:panel style="width:100%; " styleClass="oficina1" header="Aspectos Laborales">
+						
+						<h:panelGrid columns="1" columnClasses="columnf" style="width:100%;">
+						
+							<p:outputLabel value="QUE CARGO TIENES?" />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.cargo}" required="true"
+								requiredMessage="El Campo Cargo es obligatorio " placeholder="Cargo"/>
+
+							<p:outputLabel value="EN CUAL SUCURSAL TRABAJAS? " />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.sucursal}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Sucursal Negocio es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un Item" />
+								<f:selectItems value="#{encuestaBean.listaSucursal}"
+									var="sucursal" itemValue="#{sucursal}"
+									itemLabel="#{sucursal.descripcion}" />									
+							</p:selectOneMenu>
+
+							<p:outputLabel value="EN QUE FECHA INGRESASTE?" />
+							<p:calendar  locale="es" navigator="true"  placeholder="Año-Mes-Dia"  pattern="yyyy-MM-dd" 
+								value="#{encuestaBean.persona.fechaIngreso}" required="true"
+								requiredMessage="El Campo Fecha de Ingreso Negocio es obligatorio"/>
+							
+
+							<p:outputLabel value="CUAL ES TU ÁREA DE TRABAJO? " />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.area}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Area Negocio es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un Item" />
+								<f:selectItems value="#{encuestaBean.listaArea}"
+									var="area" itemValue="#{area}"
+									itemLabel="#{area.descripcion}" />							
+							</p:selectOneMenu>
+
+							<p:outputLabel value="QUE TIPO DE CONTRATO TIENES? " />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.contrato}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Contrato Negocio es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un Item" />
+								<f:selectItems value="#{encuestaBean.listaContrato}"
+									var="contrato" itemValue="#{contrato}"
+									itemLabel="#{contrato.descripcion}" />		
+							</p:selectOneMenu>
+
+
+							<p:outputLabel value="CUÁL ES TU HORARIO DE TRABAJO? " />
+							<p:selectOneRadio value="#{encuestaBean.horario.id}"  style="width:75%"
+								required="true" requiredMessage="El Campo Horario Negocio es obligatorio">>
+								<f:selectItem itemLabel="Por Turnos" itemValue="1" />
+								<f:selectItem itemLabel="Lunes a Viernes" itemValue="2" />
+								
+							</p:selectOneRadio>
+
+							<p:outputLabel value="CUÁL ES TU PROMEDIO DE INGRESO?  " />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.ingreso}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Regularidad Negocio es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un Item" />
+								<f:selectItems value="#{encuestaBean.listaIngreso}"
+									var="ingreso" itemValue="#{ingreso}"
+									itemLabel="#{ingreso.descripcion}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="CUAL ES EL TU FONDO DE CESANTÍAS?" />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.fondoCesantias}" required="true"
+								requiredMessage="Campo Fondo Cesantías es obligatorio " placeholder="Fondo de Cesantías"/>
+
+							<p:outputLabel
+								value="ESTÁS AFILIADO A ALGÚN FONDO DE PREVISIÓN EXEQUIAL. CUAL? *" />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.fondoexcequial}" required="true"
+								requiredMessage="Campo Fondo Exequial es obligatorio " placeholder="Fondo de Prevensión Exequial"/>
+						</h:panelGrid>
+					</p:panel>
+				</p:tab>   
+			 	 
+				<p:tab id="academica" title="Formación Académica">
+					<p:panel style="width:100%; " styleClass="oficina1" header="Formación Académica">
+						<h:panelGrid columns="1" columnClasses="columnf" style="width:100%;" >
+							
+							<p:outputLabel value="CUAL ES TU NIVEL DE ESTUDIO?" />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.estudio}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Nivel Estudio Negocio es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione el nivel de estudios" />
+								<f:selectItems value="#{encuestaBean.listaEstudio}"
+									var="estudio" itemValue="#{estudio}"
+									itemLabel="#{estudio.descripcion}" />
+								
+							</p:selectOneMenu>
+
+							<p:outputLabel value="QUE TITULO OBTUVISTE? " />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.tituloestudio}" required="true"
+								requiredMessage="El Campo Titulo es obligatorio " placeholder="Título"/>
+
+							<p:outputLabel value="EN QUE INSTITUCIÓN? " />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.institucionestudio}" required="true"
+								requiredMessage="Campo Institución es obligatorio " placeholder="Institución"/>
+
+
+							<p:outputLabel value="COMPLETASTE LA FORMACIÓN?" />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.completarformacion}" required="true"
+								requiredMessage="El Campo Formación es obligatorio " placeholder="Completo la Formación"/>
+
+						</h:panelGrid>
+					</p:panel>
+				</p:tab> 
+			 	
+				<p:tab id="hseq" title="HSEQ">
+					<p:panel  style="width:100%; " styleClass="oficina1" header="HSEQ">
+						<h:panelGrid columns="2" columnClasses="columnF, columnG" style="width:100%; ">
+
+							<p:outputLabel value="Aplica dotación: " />
+							<p:selectOneRadio value="#{encuestaBean.persona.dotacion}" required="true"
+								requiredMessage="Campo Dotación es obligatorio "  style="width:45%">
+								<f:selectItem itemLabel="Si" itemValue="1" />
+								<f:selectItem itemLabel="No" itemValue="2" />
+							</p:selectOneRadio>
+							
+							<p:outputLabel value="Por favor indica las tallas según sea el caso: " />
+							<p:outputLabel value=" " />
+							
+							<p:outputLabel value="Chaqueta" />
+							<p:selectOneMenu filter="true" style="width:90%"
+								value="#{encuestaBean.persona.chaqueta}"
+								converter="omnifaces.SelectItemsConverter" >
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione la talla" />
+								<f:selectItem itemValue="Talla S" itemLabel="Talla S" />
+								<f:selectItem itemValue="Talla M" itemLabel="Talla M" />
+								<f:selectItem itemValue="Talla L" itemLabel="Talla L" />
+								<f:selectItem itemValue="Talla XL" itemLabel="Talla XL" />
+								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Camisa" />
+							<p:selectOneMenu filter="true" style="width:90%"
+								value="#{encuestaBean.persona.camisa}"
+								converter="omnifaces.SelectItemsConverter" >
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione la talla" />
+								<f:selectItem itemValue="Talla S" itemLabel="Talla S" />
+								<f:selectItem itemValue="Talla M" itemLabel="Talla M" />
+								<f:selectItem itemValue="Talla L" itemLabel="Talla L" />
+								<f:selectItem itemValue="Talla XL" itemLabel="Talla XL" />
+								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Bata" />
+							<p:selectOneMenu filter="true" style="width:90%"
+								value="#{encuestaBean.persona.bata}"
+								converter="omnifaces.SelectItemsConverter" >
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione la talla" />
+								<f:selectItem itemValue="Talla S" itemLabel="Talla S" />
+								<f:selectItem itemValue="Talla M" itemLabel="Talla M" />
+								<f:selectItem itemValue="Talla L" itemLabel="Talla L" />
+								<f:selectItem itemValue="Talla XL" itemLabel="Talla XL" />
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Por favor indica las tallas según sea el caso: " />
+							<p:outputLabel value=" " />
+							
+							<p:outputLabel value="Botas" />
+							<p:selectOneMenu filter="true" style="width:90%"
+								value="#{encuestaBean.persona.botas}"
+								converter="omnifaces.SelectItemsConverter" >
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione la talla" />
+								<f:selectItem itemValue="28" itemLabel="28" />
+								<f:selectItem itemValue="30" itemLabel="30" />
+								<f:selectItem itemValue="32" itemLabel="32" />
+								<f:selectItem itemValue="34" itemLabel="34" />
+								<f:selectItem itemValue="35" itemLabel="35" />
+								<f:selectItem itemValue="36" itemLabel="36" />
+								<f:selectItem itemValue="37" itemLabel="37" />
+								<f:selectItem itemValue="38" itemLabel="38" />
+								<f:selectItem itemValue="39" itemLabel="39" />
+								<f:selectItem itemValue="40" itemLabel="40" />
+								<f:selectItem itemValue="41" itemLabel="41" />
+								<f:selectItem itemValue="42" itemLabel="42" />
+								<f:selectItem itemValue="43" itemLabel="43" />
+								<f:selectItem itemValue="44" itemLabel="44" />
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Pantalon" />
+							<p:selectOneMenu filter="true" style="width:90%"
+								value="#{encuestaBean.persona.pantalon}"
+								converter="omnifaces.SelectItemsConverter" >
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione la talla" />
+								<f:selectItem itemValue="28" itemLabel="28" />
+								<f:selectItem itemValue="30" itemLabel="30" />
+								<f:selectItem itemValue="32" itemLabel="32" />
+								<f:selectItem itemValue="34" itemLabel="34" />
+								<f:selectItem itemValue="35" itemLabel="35" />
+								<f:selectItem itemValue="36" itemLabel="36" />
+								<f:selectItem itemValue="37" itemLabel="37" />
+								<f:selectItem itemValue="38" itemLabel="38" />
+								<f:selectItem itemValue="39" itemLabel="39" />
+								<f:selectItem itemValue="40" itemLabel="40" />
+								<f:selectItem itemValue="41" itemLabel="41" />
+								<f:selectItem itemValue="42" itemLabel="42" />
+								<f:selectItem itemValue="43" itemLabel="43" />
+								<f:selectItem itemValue="44" itemLabel="44" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</p:panel>
+				</p:tab>  
+				
+				<p:tab id="bienestar" title="Bienestar">
+					<p:panel style="width:100%; " styleClass="oficina1" header="Bienestar">
+						<h:panelGrid columns="1" columnClasses="columnf, column2">
+
+							<p:outputLabel value="Cuál es tu grado de satisfacción sobre estos aspectos relacionados con tu salud? *" />
+							
+							<p:outputLabel value="1-sensación de salud" />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.sesacionSalud}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Sensación de Salud es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un item" />
+								<f:selectItem itemValue="MUY SATISFECHO" itemLabel="MUY SATISFECHO" />
+								<f:selectItem itemValue="SATISFECHO" itemLabel="SATISFECHO" />
+								<f:selectItem itemValue="ACEPTABLE" itemLabel="ACEPTABLE" />
+								<f:selectItem itemValue="INSATISFECHO" itemLabel="INSATISFECHO" />								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="2-Agudeza visual" />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.agudezaVisual}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Agudeza visual es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un item" />
+								<f:selectItem itemValue="MUY SATISFECHO" itemLabel="MUY SATISFECHO" />
+								<f:selectItem itemValue="SATISFECHO" itemLabel="SATISFECHO" />
+								<f:selectItem itemValue="ACEPTABLE" itemLabel="ACEPTABLE" />
+								<f:selectItem itemValue="INSATISFECHO" itemLabel="INSATISFECHO" />								
+							</p:selectOneMenu>
+							
+							
+							<p:outputLabel value="3-Agudeza auditiva" />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.agudezaAuditiva}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Agudeza auditiva es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un item" />
+								<f:selectItem itemValue="MUY SATISFECHO" itemLabel="MUY SATISFECHO" />
+								<f:selectItem itemValue="SATISFECHO" itemLabel="SATISFECHO" />
+								<f:selectItem itemValue="ACEPTABLE" itemLabel="ACEPTABLE" />
+								<f:selectItem itemValue="INSATISFECHO" itemLabel="INSATISFECHO" />								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="4-Resistencia, fuerza y coordinación" />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.resistensia}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Resistencia es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un item" />
+								<f:selectItem itemValue="MUY SATISFECHO" itemLabel="MUY SATISFECHO" />
+								<f:selectItem itemValue="SATISFECHO" itemLabel="SATISFECHO" />
+								<f:selectItem itemValue="ACEPTABLE" itemLabel="ACEPTABLE" />
+								<f:selectItem itemValue="INSATISFECHO" itemLabel="INSATISFECHO" />							
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="5-Nutrición" />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.nutricion}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Nutricion es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un item" />
+								<f:selectItem itemValue="MUY SATISFECHO" itemLabel="MUY SATISFECHO" />
+								<f:selectItem itemValue="SATISFECHO" itemLabel="SATISFECHO" />
+								<f:selectItem itemValue="ACEPTABLE" itemLabel="ACEPTABLE" />
+								<f:selectItem itemValue="INSATISFECHO" itemLabel="INSATISFECHO" />							
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="6-Actividad física" />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.actividadFisica}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Actividad física es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un item" />
+								<f:selectItem itemValue="MUY SATISFECHO" itemLabel="MUY SATISFECHO" />
+								<f:selectItem itemValue="SATISFECHO" itemLabel="SATISFECHO" />
+								<f:selectItem itemValue="ACEPTABLE" itemLabel="ACEPTABLE" />
+								<f:selectItem itemValue="INSATISFECHO" itemLabel="INSATISFECHO" />								
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="En el siguiente listado encontrarás varios deportes, señala el que más te guste y cuál practicarías a nivel de torneo interno o para abrir espacios y practicarlo." />
+							<p:selectOneMenu filter="true" style="width:97%"
+								value="#{encuestaBean.persona.deporte}"
+								converter="omnifaces.SelectItemsConverter" required="true"
+								requiredMessage="El Campo Deportes es obligatorio">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="Seleccione un deporte" />
+								<f:selectItems value="#{encuestaBean.listaDeporte}"
+									var="deporte" itemValue="#{deporte}"
+									itemLabel="#{deporte.descripcion}" />
+															
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="¿Practicas alguna actividad artística en la actualidad? SI/NO ¿CUAL? " />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.actividad}" required="true"
+								requiredMessage="Campo actividad artística es obligatorio " />
+								
+							<p:outputLabel value="¿Estarías interesado en tomar un taller de formación artística? SI/NO ¿CUAL? " />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.tallerformacion}" required="true"
+								requiredMessage="Campo formación artística es obligatorio " />
+							
+							<p:outputLabel value="¿Tus hijos practican actividades culturales? SI/NO ¿CUAL? " />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.hijosactividades}" required="true"
+								requiredMessage="Campo tus hijos practican actividades culturales es obligatorio " />
+							
+							<p:outputLabel value="¿Qué tipos de actividades culturales te gustaría realizar/aprender?" />
+							<p:inputText style="width:100%" value="#{encuestaBean.persona.tiposactividades}" required="true"
+								requiredMessage="Campo actividades culturales es obligatorio " />			
+								
+						</h:panelGrid>
+						 <p:commandButton value="Salvar"  update=":frmM  :msgGlobal :frmM:growl" 
+						     actionListener="#{encuestaBean.salvar()}"  />				 
+					</p:panel>						
+				</p:tab>   					
+			</p:wizard>
+				 
+		</h:form>
+	
+	</ui:define>
+</ui:composition>
+</html>

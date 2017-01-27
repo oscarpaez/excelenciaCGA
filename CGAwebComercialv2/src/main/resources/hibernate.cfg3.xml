@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- Database connection settings   -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://192.168.0.15:3306/encuesta</property>
+        <property name="connection.username">excelenciacga</property>
+        <property name="connection.password">E1825cGA*-</property>   
+        
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop and re-create the database schema on startup -->
+        <property name="hbm2ddl.auto">update</property>
+        
+        <!--  hibernate c3p0 settings -->
+
+        <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+        <property name="hibernate.c3p0.acquire_increment">1</property>
+        <property name="hibernate.c3p0.idle_test_period">100</property>
+        <property name="hibernate.c3p0.min_size">3</property>
+        <property name="hibernate.c3p0.max_size">100</property>
+        <property name="hibernate.c3p0.max_statements">10</property>
+        <property name="hibernate.c3p0.timeout">200</property>
+        <property name="hibernate.c3p0.preferredTestQuery">select 1</property>
+        <property name="hibernate.c3p0.testConnectionOnCheckout">true</property>
+        
+        <!-- Mapeo de las Entidades -->  
+        
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Area"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Deporte"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Dotacion"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Estadocivil"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Estadoconyuge"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Estrato"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Estudio"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Genero"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Hijo"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Horario"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Ingreso"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Mediotransporte"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Persona"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Salud"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Sucursal"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Talla"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Tipocontrato"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Tipodotacion"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Tiposatisfaccion"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Tipovivienda"/>
+        <mapping class = "co.com.CGAwebComercial.entyties.encuesta.Valorsalud"/>   
+         
+    </session-factory>
+
+</hibernate-configuration>
