@@ -37,6 +37,16 @@
 	
 }
 
+.tblPlaC {
+	font-size: 12px !important;	
+}
+
+.tblPlaC .ui-widget-header {
+	background: #ff8040;
+	text-align: center;
+	border-color: #ff8000;
+}
+
 
 
 /*////////////////////////////*/
@@ -75,7 +85,7 @@
 }
 
 .liquidar .ui-widget-header {
-	background: #4FC021;
+	background: #4FC021;	
 }
 
 .oficina .ui-widget-header {

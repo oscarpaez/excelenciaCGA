@@ -113,7 +113,15 @@
         <mapping class = "co.com.CGAwebComercial.entyties.Llamadas" />
         <mapping class = "co.com.CGAwebComercial.entyties.ValorProyecto" />
         <mapping class = "co.com.CGAwebComercial.entyties.Actividades" />
-        <mapping class = "co.com.CGAwebComercial.entyties.SubActividades" />   
+        <mapping class = "co.com.CGAwebComercial.entyties.SubActividades" />  
+        <mapping class = "co.com.CGAwebComercial.entyties.Materiales" />
+        <mapping class = "co.com.CGAwebComercial.entyties.TrabajoArea" />
+        <mapping class = "co.com.CGAwebComercial.entyties.HistoricaCargaTrabajo" />
+        <mapping class = "co.com.CGAwebComercial.entyties.HistoricaMateriales" />
+        <mapping class = "co.com.CGAwebComercial.entyties.CargaTrabajo" />
+        
+        
+             
              
     </session-factory>
 

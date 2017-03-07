@@ -5,219 +5,213 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-	
-	<ui:composition template="/templates/modeloGeneral.xhtml">
-		
-		<ui:define name="contenido">
-		
-			<f:metadata>
-				
-				<f:event listener="#{vista_helpdeskBean.listarVistaKpi()}" type="preRenderView" />
-			</f:metadata>
-			
-			
-			<f:facet name="header">
-				<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
-				
-				<p:button icon="ui-icon-home" iconPos="right" styleClass="excel"  title="Inicio"
-								style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
-								outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true"
-								onclick="showLoading()" />	
-				
-				<p:button value="Volver" icon="ui-icon-arrowreturn-1-w" title="Volver"
-								  iconPos="right" styleClass="excel "
-								  style="text-align: left; float:right; height:24px; font-size: 12px; background: #5cb85c; "
-								  onclick="showLoading(); history.back()"/>
-			</f:facet>	
-			
-			<h:form id="frmPlan">
-			<p:panel>
-					
-			<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" 
-						value="#{vista_helpdeskBean.listaVista}" var="vista"
-						
-						scrollRows="40" scrollable="true"  liveScroll="true" scrollHeight="330"
-						scrollWidth="97%"  >
-					
-					<p:columnGroup type="header">
-		            <p:row>
-		            	<p:column colspan="2" rowspan="2" headerText="Resumen Infraestructura" width="150" />
-		            	<p:column rowspan="2" headerText="Ene" width="80" />
-		            	<p:column rowspan="2" headerText="Feb" width="80" />
-		            	<p:column rowspan="2" headerText="Mar" width="80" />
-		            	<p:column rowspan="2" headerText="Abr" width="80" />
-		            	<p:column rowspan="2" headerText="May" width="80" />
-		            	<p:column rowspan="2" headerText="Jun" width="80" />
-		            	<p:column rowspan="2" headerText="Jul" width="80" />
-		            	<p:column rowspan="2" headerText="Ago" width="80" />
-		            	<p:column rowspan="2" headerText="Sep" width="80" />
-		            	<p:column rowspan="2" headerText="Oct" width="80" />
-		            	<p:column rowspan="2" headerText="Nov" width="80" />
-		            	<p:column rowspan="2" headerText="Dic" width="80" />
-		            </p:row>
-		            
-		            
-		        </p:columnGroup>
-		        	
-		        	<p:column >
-						<h:outputText value="A" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="B" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="A" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="B" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="A" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="B" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="A" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="B" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="A" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="B" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="A" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="B" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="A" />
-					</p:column>
-					
-					<p:column >
-						<h:outputText value="B" />
-					</p:column>
-					
-					<p:columnGroup type="footer">
-			            <p:row>
-			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg == 'PR'}"/>
-			            	<p:column colspan="1" style="text-align:right"/>
-			            	<p:column colspan="1" style="text-align:right"/>
-			            	<p:column colspan="1" style="text-align:right"/>
-			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
-			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
-			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
-			            	<p:column colspan="1" footerText="Totales"  style="text-align:right"/>
-			            	<p:column colspan="" footerText="#{incidenciaBean.valorTotal}" style="text-align:right" />
-			       	    	<p:column colspan="1" style="text-align:right" />
-			             	<p:column colspan="1" style="text-align:right"/>
-			            	<p:column colspan="1" footerText="#{incidenciaBean.valorTotalC}" style="text-align:right" 
-			            				rendered="#{incidenciaBean.proNeg != 'SI'}"/>
-			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
-			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
-			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>
-			            	<p:column colspan="1" style="text-align:right" rendered="#{incidenciaBean.proNeg != 'SI'}"/>  	
-			            </p:row>
-			        </p:columnGroup>
-			        
-			        <f:facet name="footer">
-					</f:facet>
-					
-					
-			        </p:dataTable>
-			    </p:panel>    
-			</h:form>
-			
-			<p:dialog header="Editar Negocios Programados" widgetVar="dlgNue" draggable="false" 
-				resizable="false" closable="true" appendTo="@(body)" modal="true" height="400" 
-				width="40%"	>
-			<h:form id="frmNuePro" enctype="multipart/form-data">
-				<p:panelGrid columns="2" id="pnlNuePro" 
-					 columnClasses="column1,column2">
-					
-					<p:outputLabel  value="N° Oferta:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.noferta}" />
-					
-					<p:outputLabel  value="Oficina:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.ciudad.nombre}" />
-					
-					<p:outputLabel  value="Tipo de Negocio:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.linea.nombre}" />
-					
-					<p:outputLabel  value="Cliente:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.cliente}" />
-					
-					<p:outputLabel  value="Nesecidad Cliente:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.necesidad}" />
-					
-					<p:outputLabel  value="Probabilidad de Concretar el Negocio:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.probabilidadConNeg} %" />
-					
-					<p:outputLabel  value="Causa:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.causaPerdida.descripcion}" />
-					
-					<p:outputLabel  value="Precio Oferta:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.valorVenta}" />
-					
-					<p:outputLabel  value="Rentabilidad Plan:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.rentabilidad}" />
-					
-					<p:outputLabel  value="Nombre Competencia:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.nombreCompetencia}" />
-					
-					<p:outputLabel  value="Precio Competencia:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.precioCompetencia}" />
-					
-					<p:outputLabel  value="Rentabilidad Requerida:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.rentabilidadRequerida}" />
-					
-					<p:outputLabel  value="Resultado de la negociación:" />
-					<p:selectOneMenu filter="true" style="width:83%"
-						value="#{incidenciaBean.incidencia.resultaNegocio}"
-						converter="omnifaces.SelectItemsConverter" required="true"
-						requiredMessage="El Campo Resultado de la Negociación es obligatorio">
-						<f:selectItem noSelectionOption="true"
-							itemLabel="Seleccione un Item" />
-						<f:selectItem itemValue="SI" itemLabel="SI" />
-						<f:selectItem itemValue="NO" itemLabel="NO" />
-						<f:selectItem itemValue="PR" itemLabel="PROYECTADO" />
-					</p:selectOneMenu>
 
-					<p:outputLabel  value="Medio de Contacto:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.canalesContacto}" />
-					
-					<p:outputLabel  value="Fecha:" />
-					<p:outputLabel  value="#{incidenciaBean.incidencia.fechaRegistro}" />
-					
-				</p:panelGrid>
+<ui:composition template="/templates/modeloGeneral2.xhtml">
+
+	<ui:define name="contenido">
+
+		<f:metadata>
+
+			<f:event listener="#{vista_helpdeskBean.listarVistaKpi()}"
+				type="preRenderView" />
+		</f:metadata>
+
+		<h:form id="frmPlan">
+			<p:poll interval="60" listener="#{vista_helpdeskBean.listarVistaKpi()}" 
+				update=":frmPlan:tblPlan  :frmPlan:tblPlanS :frmPlan:kpiF  :frmPlan:kpiS" />
+			<p:panel>
+
+				<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" scrollRows="40"
+					scrollable="true" liveScroll="true" scrollHeight="100"
+					value="#{vista_helpdeskBean.listaVista}" var="kpi"
+					filteredValue="#{vista_helpdeskBean.listaVistaFiltro}"
+					scrollWidth="97%">
+
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column rowspan="1" colspan="2"
+								headerText="Resumen Infraestructura" width="150" />
+							<p:column rowspan="1" headerText="Ene" width="60" />
+							<p:column rowspan="1" headerText="Feb" width="60" />
+							<p:column rowspan="1" headerText="Mar" width="60" />
+							<p:column rowspan="1" headerText="Abr" width="60" />
+							<p:column rowspan="1" headerText="May" width="60" />
+							<p:column rowspan="1" headerText="Jun" width="60" />
+							<p:column rowspan="1" headerText="Jul" width="60" />
+							<p:column rowspan="1" headerText="Ago" width="60" />
+							<p:column rowspan="1" headerText="Sep" width="60" />
+							<p:column rowspan="1" headerText="Oct" width="60" />
+							<p:column rowspan="1" headerText="Nov" width="60" />
+							<p:column rowspan="1" headerText="Dic" width="60" />
+						</p:row>
+
+					</p:columnGroup>
+
+					<p:column rowspan="3" rendered="#{kpi.reder == 1}"
+						style="text-align:center">
+						<p:graphicImage library="images" name="ticket.png" height="60"
+							width="60" />
+					</p:column>
+
+					<p:column style="background:#0078ae; color:white">
+						<h:outputText value="#{kpi.etiqueta}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE1}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE2}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE3}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE4}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE5}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE6}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE7}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE8}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE9}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE10}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE11}" />
+					</p:column>
+
+				</p:dataTable>
+
+				<p:dataTable styleClass="tblPla" id="tblPlanS"
+					emptyMessage="No se encontraron registros" scrollRows="40"
+					scrollable="true" liveScroll="true" scrollHeight="100"
+					value="#{vista_helpdeskBean.listaVistaS}" var="kpi"
+					filteredValue="#{vista_helpdeskBean.listaVistaFiltro}"
+					scrollWidth="97%">
+
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column rowspan="1" colspan="2"
+								headerText="Resumen Infraestructura" width="150" />
+							<p:column rowspan="1" headerText="Ene" width="60" />
+							<p:column rowspan="1" headerText="Feb" width="60" />
+							<p:column rowspan="1" headerText="Mar" width="60" />
+							<p:column rowspan="1" headerText="Abr" width="60" />
+							<p:column rowspan="1" headerText="May" width="60" />
+							<p:column rowspan="1" headerText="Jun" width="60" />
+							<p:column rowspan="1" headerText="Jul" width="60" />
+							<p:column rowspan="1" headerText="Ago" width="60" />
+							<p:column rowspan="1" headerText="Sep" width="60" />
+							<p:column rowspan="1" headerText="Oct" width="60" />
+							<p:column rowspan="1" headerText="Nov" width="60" />
+							<p:column rowspan="1" headerText="Dic" width="60" />
+						</p:row>
+
+					</p:columnGroup>
+
+					<p:column rowspan="3" rendered="#{kpi.reder == 1}"
+						style="text-align:center">
+						<p:graphicImage library="images" name="sap.png" height="60"
+							width="70" />
+					</p:column>
+
+					<p:column style="background:#0078ae; color:white">
+						<h:outputText value="#{kpi.etiqueta}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE1}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE2}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE3}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE4}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE5}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE6}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE7}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE8}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE9}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE10}" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="#{kpi.itemE11}" />
+					</p:column>
+
+				</p:dataTable>
 				
-				<h:panelGrid columns="2">	
-					<p:commandButton value="Salvar" actionListener="#{incidenciaBean.editar()}"
-						update=":msgGlobal :frmNuePro:pnlNuePro  :frmPlan:tblPlan"   
-						oncomplete="PF('dlgNue').hide();"/>
-					<p:commandButton value="Cerrar" oncomplete="PF('dlgNue').hide();"
-						/>
-				</h:panelGrid>
-			</h:form>
-		</p:dialog>
-		
-		</ui:define>
-	</ui:composition>	
-</html>	
+				<div class="ui-grid-row">
+				<div class="ui-grid-col-4" style="width:620px; padding-left: 10px">
+					<p:panel>
+						<p:chart id="kpiF" type="line" model="#{vista_helpdeskBean.kpi}"
+									style="width:550px;height:250px" />
+					</p:panel>					
+				</div>	
+				<div class="ui-grid-col-4" style="width: 620px; padding-left: 20px">
+					<p:panel>
+						<p:chart id="kpiS" type="line" model="#{vista_helpdeskBean.kpiS}"
+								style="width:550px;height:250px" />	
+					</p:panel>			
+				</div>
+				</div>								
+
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

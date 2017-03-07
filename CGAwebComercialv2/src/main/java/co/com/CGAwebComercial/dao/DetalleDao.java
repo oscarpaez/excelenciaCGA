@@ -1253,12 +1253,12 @@ public class DetalleDao extends GenericDao<Detalle> {
 	public List<Detalle> fucionarioPais(String tipo, int idPersona){
 		
 		Session session = HibernateUtil.getSessionfactory().openSession();
-
+		List<Detalle> totalWages = new ArrayList<>();	
 		try{
 			System.out.println(tipo + " es "+ idPersona );
 			Criteria consulta = session.createCriteria(Detalle.class);
 			consulta.add(Restrictions.eq(tipo, idPersona));
-			List<Detalle> totalWages =  consulta.list();
+			totalWages =  consulta.list();
 			return totalWages;			
 
 		} catch (RuntimeException ex) {

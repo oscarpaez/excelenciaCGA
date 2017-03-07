@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral2.xhtml">
+
+	<ui:define name="contenido">
+		
+		<f:metadata>
+
+		</f:metadata>
+		<p:growl id="menssage" />
+	<h:form id="frmPlan">
+	
+		<p:poll interval="30" listener="#{cargaTrabajoBean.listarCarga()}" 
+				update=":frmPlan:tblPlan" 
+				rendered="#{cargaTrabajoBean.autenticacion.usuarioLogin.perfil.id != 22}"/>
+				
+		<p:dataTable styleClass="tblPlaC" id="tblPlan"
+					emptyMessage="No se encontraron registros" scrollRows="40"
+					scrollable="true" liveScroll="true" scrollHeight="350" 
+					value="#{cargaTrabajoBean.team}" var="carg"
+					filteredValue="#{cargaTrabajoBean.filtroCargaTrabajo}"
+					scrollWidth="97%">
+
+			<p:columnGroup type="header">
+				<p:row>					
+					<p:column rowspan="3" headerText="Equipo" width="70" sortBy="#{carga.equipo}" />
+					<p:column rowspan="3" headerText="Capacidad Tecnica del equipo" width="70" />
+					<p:column rowspan="1" headerText="Disponibilidad" width="25" />
+					<p:column rowspan="1" colspan="2" headerText="Carga de Trabajo Contratada" width="70" />
+					<p:column rowspan="1" colspan="2" headerText="Disponibilidad de máquina según carga actual" width="80" />
+					<p:column rowspan="3" headerText="Observaciones" width="80" />
+					<p:column rowspan="3" headerText="Acciones" width="25" rendered="#{autenticacionBean.usuarioLogin.perfil.id == 22}" />
+				</p:row>
+				<p:row>
+					<p:column rowspan="1" headerText="Horas/Día" width="60" sortBy="#{carga.horaDia}"/>
+					<p:column rowspan="1" headerText="Horas Contratadas" width="60" sortBy="#{carga.horaContratadas}"/>
+					<p:column rowspan="1" headerText="Fecha" width="60" />
+					<p:column rowspan="1" headerText="Fecha" width="60" />
+					<p:column rowspan="1" headerText="Hora" width="60" />
+				</p:row>
+
+			</p:columnGroup>
+			
+			 <p:subTable var="carga" value="#{carg.stats}" >
+		            <f:facet name="header" >
+		                <h:outputText value="#{carg.name}" />
+		            </f:facet>
+				
+				<p:column style="">
+						<h:outputText value="#{carga.equipo}" />
+				</p:column>
+				
+				<p:column style="">
+						<h:outputText value="#{carga.capacidad}" />
+				</p:column>
+				
+				<p:column style="text-align:center">
+						<h:outputText value="#{carga.horaDia}" />
+				</p:column>
+				
+				<p:column style="text-align:center">
+						<h:outputText value="#{carga.horaContratadas}" />
+				</p:column>
+				
+				<p:column >
+						<h:outputText value="#{carga.fechaContratada}" />
+				</p:column>
+				
+				<p:column >
+						<h:outputText value="#{carga.fechaDisponibilidad}" />
+				</p:column>
+				
+				<p:column style="text-align:center">
+						<h:outputText value="#{carga.horaDisponible}" />
+				</p:column>
+				
+				<p:column style="text-align:center">
+						<h:outputText value="#{carga.observacion}" />
+							
+				</p:column>
+				
+				<p:column style="text-align:center" rendered="#{autenticacionBean.usuarioLogin.perfil.id == 22}">
+						<p:commandButton icon="ui-icon-pencil"
+							action="#{cargaTrabajoBean.editar(carga)}"
+							update=" :frmNueCar:pnlNueCar"
+							oncomplete="PF('dlgNue').show();" title="Editar">
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+						
+					<p:commandButton icon="ui-icon-trash"	
+							actionListener="#{cargaTrabajoBean.borrarCargaTrabajo(carga)}"					    
+							update=":frmPlan:tblPlan " title="Borrar">							
+					</p:commandButton>		
+				</p:column>				
+			</p:subTable>	
+			
+			 <f:facet name="footer">
+			 	<p:commandButton value="Nuevo Equipo" style="height:35px" 
+							oncomplete="PF('dlgNue').show();" 
+							actionListener="#{cargaTrabajoBean.editar(carga)}"
+							update=" :frmNueCar:pnlNueCar" 
+							rendered="#{autenticacionBean.usuarioLogin.perfil.id == 22}">							
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+				</p:commandButton>
+			 </f:facet>
+			
+		</p:dataTable>
+	</h:form>
+	
+	<p:dialog header="Crear Carga Trabajo" widgetVar="dlgNue" draggable="false" 
+				resizable="false"  closable="true" appendTo="@(body)" modal="true" 
+				styleClass="liquidar" width="650" height="540" >
+			<h:form id="frmNueCar" enctype="multipart/form-data">
+				<h:panelGrid columns="2" id="pnlNueCar">				
+				
+					<p:outputLabel  value="Equipo:" />
+					<p:inputText  style="width: 90%;" maxlength="50" 
+						value="#{cargaTrabajoBean.carga.equipo}" required="true" requiredMessage="Campo Codigo es obligatorio"/>
+					
+					<p:outputLabel  value="Capacidad Tecnica del equipo" />
+					<p:inputTextarea  cols="32" rows="3" autoResize="true"
+						value="#{cargaTrabajoBean.carga.capacidad}" required="true" requiredMessage="Campo Descripcion es obligatorio"
+						style="width: 90%;"/>
+					
+					<p:outputLabel  value="Hora dia" />
+					<p:inputNumber id="horaD" value="#{cargaTrabajoBean.carga.horaDia}" 
+							 placeholder="0"  decimalPlaces="0"
+			              	 thousandSeparator=","  required="true" size="28"
+			                 />
+					
+					<p:outputLabel  value="Horas contratadas" />
+					<p:inputNumber id="horasC" value="#{cargaTrabajoBean.carga.horaContratadas}" 
+							 placeholder="0"  decimalPlaces="0"
+			              	 thousandSeparator=","  required="true"
+			                 size="28"/>
+			                 
+					<p:outputLabel  value="Fecha Contratada" />
+					<p:calendar  value="#{cargaTrabajoBean.carga.fechaContratada}" 
+							    required="true" size="28" pattern="yyyy-MM-dd" mask="true"
+							    locale="es"/>
+					
+					<p:outputLabel  value="Fecha Disponibilidad" />
+					<p:calendar  value="#{cargaTrabajoBean.carga.fechaDisponibilidad}" 
+							 required="true" size="28" pattern="yyyy-MM-dd" mask="true" 
+							 locale="es"/>
+			                 
+					<p:outputLabel  value="Hora Disponibilidad" />
+					<p:inputText  value="#{cargaTrabajoBean.carga.horaDisponible}" 
+							 required="true" style="width: 90%;" />
+			        
+			        <p:outputLabel  value="Observacion" />
+					<p:inputTextarea cols="32" rows="3" autoResize="true"
+							 value="#{cargaTrabajoBean.carga.observacion}" 
+							 required="true"  style="width: 90%;" />
+							 
+					<p:outputLabel for="sucursal" value="Sucursal: " />
+					<p:selectOneMenu id="sucursal" filter="true" style="width:280px"
+						converter="omnifaces.SelectItemsConverter" 
+						value="#{cargaTrabajoBean.carga.sucursal}"
+						required="true">
+						<f:selectItem noSelectionOption="true" itemLabel="Seleccione el Estado"/>
+						<f:selectItems value="#{cargaTrabajoBean.listaSucursal}" var="sucursal"
+								itemValue="#{sucursal}" itemLabel="#{sucursal.nombre}"/>
+					</p:selectOneMenu>
+					
+					<p:outputLabel  value="Area: " />
+					<p:selectOneMenu filter="true" style="width:280px"
+						converter="omnifaces.SelectItemsConverter" 
+						value="#{cargaTrabajoBean.carga.trabajoArea}"
+						required="true">
+						<f:selectItem noSelectionOption="true" itemLabel="Seleccione el Estado"/>
+						<f:selectItems value="#{cargaTrabajoBean.listaTA}" var="ta" 
+								itemValue="#{ta}"  itemLabel="#{ta.descripcion}"/>
+					</p:selectOneMenu>
+							          
+				</h:panelGrid>
+				<br />
+				
+				<h:panelGrid columns="2">	
+					<p:commandButton value="Salvar" 
+							actionListener="#{cargaTrabajoBean.editarCargaTrabajo()}"
+							update=" :frmNueCar:pnlNueCar  :frmPlan:tblPlan :menssage"
+						/>
+					<p:commandButton value="Cerrar" oncomplete="PF('dlgNue').hide();"
+						 />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>	
+	</ui:define>
+</ui:composition>
+</html>

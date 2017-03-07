@@ -126,7 +126,7 @@ public class RecaudoBean implements Serializable{
 			}
 			Sucursal ciudad = daoC.buscarSucursal(idCiudad);
 			RecaudoDao daoR = new RecaudoDao(); 
-			List<OficinaVendedorInterno> listaVenInt = daoR. listaVendedorInterno(ciudad.getId());
+			List<OficinaVendedorInterno> listaVenInt = daoR. listaVendedorInterno(ciudad.getId().intValue());
 			for (OficinaVendedorInterno Interno : listaVenInt) {
 				LiquidacionDao daoL = new LiquidacionDao();
 				List<Liquidacion> liquidacion = daoL.buscarLiquidacion("Cartera", Interno.getCodigosap());

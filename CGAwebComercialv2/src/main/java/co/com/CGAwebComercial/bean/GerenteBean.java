@@ -204,9 +204,9 @@ public class GerenteBean implements Serializable{
 				sumaUtilidadP = sumaUtilidadP.add(vendedor.getUtilidad());
 				sumaRealU = sumaRealU.add(vendedor.getUtilidad_Real());
 			}
-			cumplimiento = sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimiento = (sumaIngresoR.intValue() == 0 || sumaPresupuesto.intValue() == 0 )? new BigDecimal("0"): sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimiento = cumplimiento.setScale(2, BigDecimal.ROUND_HALF_UP);
-			cumplimientoU = sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU = (sumaRealU.intValue() == 0 || sumaUtilidadP.intValue() == 0)? new BigDecimal("0") :sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimientoU = cumplimientoU.setScale(2, BigDecimal.ROUND_HALF_UP);
 			totalPresupuesto = new DecimalFormat("###,###").format(sumaPresupuesto);
 			totalReal = new DecimalFormat("###,###").format(sumaIngresoR);
@@ -251,9 +251,9 @@ public class GerenteBean implements Serializable{
 				sumaRealU = sumaRealU.add(plan.getUtilidadReal());
 				ListaComisionVendedores.add(plan);
 			}
-			cumplimiento = sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimiento = (sumaIngresoR.intValue() == 0 || sumaPresupuesto.intValue() == 0)? new BigDecimal("0"):sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimiento = cumplimiento.setScale(2, BigDecimal.ROUND_HALF_UP);
-			cumplimientoU = sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU = (sumaRealU.intValue() == 0 || sumaUtilidadP.intValue() == 0)? new BigDecimal("0"):sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimientoU = cumplimientoU.setScale(2, BigDecimal.ROUND_HALF_UP);
 			totalPresupuesto = new DecimalFormat("###,###").format(sumaPresupuesto);
 			totalReal = new DecimalFormat("###,###").format(sumaIngresoR);
@@ -305,9 +305,9 @@ public class GerenteBean implements Serializable{
 				sumaUtilidadP = sumaUtilidadP.add(vendedor.getUtilpresupuesto());
 				sumaRealU = sumaRealU.add(vendedor.getUtilidadReal());
 			}
-			cumplimiento = sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimiento = (sumaIngresoR.intValue() == 0 || sumaPresupuesto.intValue() == 0 )? new BigDecimal("0"): sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimiento = cumplimiento.setScale(2, BigDecimal.ROUND_HALF_UP);
-			cumplimientoU = sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU = (sumaRealU.intValue() == 0 || sumaUtilidadP.intValue() == 0 )? new BigDecimal("0") :sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimientoU = cumplimientoU.setScale(2, BigDecimal.ROUND_HALF_UP);
 			totalPresupuesto = new DecimalFormat("###,###").format(sumaPresupuesto);
 			totalReal = new DecimalFormat("###,###").format(sumaIngresoR);
@@ -626,9 +626,9 @@ public class GerenteBean implements Serializable{
 				sumaUtilidadP = listaPresupuesto.get(3);
 				sumaIngresoR = listaPresupuesto.get(0).abs();
 				sumaRealU = listaPresupuesto.get(0).abs().subtract(listaPresupuesto.get(1));	
-				cumplimiento = sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+				cumplimiento = (sumaIngresoR.intValue() == 0 || sumaPresupuesto.intValue() == 0 )? new BigDecimal("0"):sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 				cumplimiento = cumplimiento.setScale(2, BigDecimal.ROUND_HALF_UP);
-				cumplimientoU = sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+				cumplimientoU = (sumaRealU.intValue() == 0 || sumaUtilidadP.intValue() == 0 )? new BigDecimal("0"):sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 				cumplimientoU = cumplimientoU.setScale(2, BigDecimal.ROUND_HALF_UP);
 				totalPresupuesto = new DecimalFormat("###,###").format(sumaPresupuesto);
 				totalReal = new DecimalFormat("###,###").format(sumaIngresoR);
@@ -679,9 +679,9 @@ public class GerenteBean implements Serializable{
 				sumaUtilidadP = sumaUtilidadP.add(vendedor.getUtilpresupuesto());
 				sumaRealU = sumaRealU.add(vendedor.getUtilidadReal());
 			}
-			cumplimiento = sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimiento = (sumaIngresoR.intValue() == 0 || sumaPresupuesto.intValue()== 0)? new BigDecimal("0"):sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimiento = cumplimiento.setScale(2, BigDecimal.ROUND_HALF_UP);
-			cumplimientoU = sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU = (sumaRealU.intValue()== 0 || sumaUtilidadP.intValue() == 0)?new BigDecimal("0"):sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimientoU = cumplimientoU.setScale(2, BigDecimal.ROUND_HALF_UP);
 			totalPresupuesto = new DecimalFormat("###,###").format(sumaPresupuesto);
 			totalReal = new DecimalFormat("###,###").format(sumaIngresoR);
@@ -719,9 +719,9 @@ public class GerenteBean implements Serializable{
 				sumaUtilidadP = sumaUtilidadP.add(vendedor.getUtilpresupuesto());
 				sumaRealU = sumaRealU.add(vendedor.getUtilidadReal());
 			}
-			cumplimiento = sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimiento = (sumaIngresoR.intValue() == 0 || sumaPresupuesto.intValue()== 0)?new BigDecimal("0"):sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimiento = cumplimiento.setScale(2, BigDecimal.ROUND_HALF_UP);
-			cumplimientoU = sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU = (sumaRealU.intValue() == 0 ||sumaUtilidadP.intValue()== 0)?new BigDecimal("0"):sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimientoU = cumplimientoU.setScale(2, BigDecimal.ROUND_HALF_UP);
 			totalPresupuesto = new DecimalFormat("###,###").format(sumaPresupuesto);
 			totalReal = new DecimalFormat("###,###").format(sumaIngresoR);
@@ -758,9 +758,9 @@ public class GerenteBean implements Serializable{
 				sumaUtilidadP = sumaUtilidadP.add(vendedor.getUtilpresupuesto());
 				sumaRealU = sumaRealU.add(vendedor.getUtilidadReal());
 			}
-			cumplimiento = sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimiento =(sumaIngresoR.intValue() == 0 || sumaPresupuesto.intValue() == 0)?new BigDecimal("0") :sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimiento = cumplimiento.setScale(2, BigDecimal.ROUND_HALF_UP);
-			cumplimientoU = sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU = (sumaRealU.intValue()== 0 || sumaUtilidadP.intValue()==0)? new BigDecimal("0"):sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimientoU = cumplimientoU.setScale(2, BigDecimal.ROUND_HALF_UP);
 			totalPresupuesto = new DecimalFormat("###,###").format(sumaPresupuesto);
 			totalReal = new DecimalFormat("###,###").format(sumaIngresoR);
@@ -878,12 +878,13 @@ public class GerenteBean implements Serializable{
 			plan.setIngreso_Real(listaPresupuesto.get(0).abs());
 			
 			plan.setUtilidad_Real(listaPresupuesto.get(0).abs().subtract(listaPresupuesto.get(1)));	
-
-			plan.setIngreso_Cumplimiento(plan.getIngreso_Real().divide(plan.getIngreso(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
+			
+			System.out.println(plan.getIngreso_Real() +"  --  "+ plan.getIngreso());
+			plan.setIngreso_Cumplimiento((plan.getIngreso_Real().intValue() == 0 || plan.getIngreso().intValue() == 0 )? new BigDecimal("0") :plan.getIngreso_Real().divide(plan.getIngreso(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
 			plan.getIngreso_Cumplimiento();
 			String semaforo = (plan.getIngreso_Cumplimiento().intValue() >= esquema.get(0).getUmbralComision().intValue())? "verde.png" : "rojo.png";
 			plan.setImagen1(semaforo);
-			plan.setUtilidad_Cumplimiento(plan.getUtilidad_Real().divide(plan.getUtilidad(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
+			plan.setUtilidad_Cumplimiento((plan.getUtilidad_Real().intValue()== 0 || plan.getUtilidad().intValue() == 0)? new BigDecimal("0") :plan.getUtilidad_Real().divide(plan.getUtilidad(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
 			semaforo = (plan.getUtilidad_Cumplimiento().intValue() >= esquema.get(0).getUmbralComision().intValue())? "verde.png" : "rojo.png";
 			plan.setImagen(semaforo);
 			plan.setUmbral(esquema.get(0).getUmbralComision());
@@ -1070,12 +1071,12 @@ public class GerenteBean implements Serializable{
 				}
 				totalPresupuesto = new DecimalFormat("###,###").format(totalPresupuest);
 				totalReal = new DecimalFormat("###,###").format(totalValorReal);
-				valorUtilidad = totalValorReal.divide(totalPresupuest, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+				valorUtilidad = (totalValorReal.intValue() == 0 || totalPresupuest.intValue() == 0 )? new BigDecimal("0") :totalValorReal.divide(totalPresupuest, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 				valorUtilidad = valorUtilidad.setScale(2, BigDecimal.ROUND_HALF_UP);
 				totalCumplimiento = new DecimalFormat("###,###.##").format(valorUtilidad);
 				totalPresupuestoU = new DecimalFormat("###,###").format(totalPresupuestoUtilidad);
 				totalRealU = new DecimalFormat("###,###").format(totalValorUtilidad);
-				valorUtilidadR = totalValorUtilidad.divide(totalPresupuestoUtilidad, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+				valorUtilidadR = (totalValorUtilidad.intValue() == 0 || totalPresupuestoUtilidad.intValue() == 0)? new BigDecimal("0") :totalValorUtilidad.divide(totalPresupuestoUtilidad, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 				valorUtilidadR = valorUtilidadR.setScale(2, BigDecimal.ROUND_HALF_UP);
 				totalCumplimientoU = new DecimalFormat("###,###.##").format(valorUtilidadR);
 				if(progress > 90){

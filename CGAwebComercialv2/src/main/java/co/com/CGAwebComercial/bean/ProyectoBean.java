@@ -157,7 +157,6 @@ public class ProyectoBean implements Serializable {
 	public void editar(Proyecto proyec){
 		
 		try {
-			
 			listaEstado = new ArrayList<>();
 			listaPrioridad = new ArrayList<>();
 			//proyecto = (Proyecto) event.getComponent().getAttributes().get("proyectoSelecionado");

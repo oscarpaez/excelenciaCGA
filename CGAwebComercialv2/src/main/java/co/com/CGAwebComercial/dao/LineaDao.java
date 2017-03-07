@@ -880,7 +880,7 @@ public class LineaDao extends GenericDao<Linea> {
 //			List<Zona_venta> zona = daoZ.buscarZona(idfuncionario);
 			FuncionarioDao daoF = new FuncionarioDao();
 			Funcionario funcionario = daoF.buscar(idfuncionario);
-			
+			System.out.println(idfuncionario);
 			if(pre.get(0) != null || pre.get(1) != null){
 				vendedor.setPresupuestoB(pre.get(0));
 				vendedor.setUtilpresupuesto(pre.get(1));
@@ -892,13 +892,13 @@ public class LineaDao extends GenericDao<Linea> {
 				String semaforo = (vendedor.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";
 				vendedor.setImagen1(semaforo);
 				plan.setImagen1(semaforo);
-				vendedor.setCumplimientoU(vendedor.getUtilidadReal().divide(vendedor.getUtilpresupuesto(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
-				plan.setUtilidad_Cumplimiento(plan.getUtilidad_Real().divide(plan.getUtilidad(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				vendedor.setCumplimientoU((vendedor.getUtilidadReal().intValue() == 0 || vendedor.getUtilpresupuesto().intValue() == 0)? new BigDecimal("0") :vendedor.getUtilidadReal().divide(vendedor.getUtilpresupuesto(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
+				plan.setUtilidad_Cumplimiento((plan.getUtilidad_Real().intValue() == 0 || plan.getUtilidad().intValue() == 0)? new BigDecimal("0") :plan.getUtilidad_Real().divide(plan.getUtilidad(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP));
 				semaforo = (vendedor.getCumplimientoU().intValue() >= 85)? "verde.png" : "rojo.png";
 				plan.setImagen(semaforo);
 				vendedor.setImagen(semaforo);
 				
-				
+				System.out.println(funcionario.getPersona().getCedula() + "22" + funcionario.getPersona().getNombre());
 				vendedor.setCedula(funcionario.getPersona().getCedula());
 				vendedor.setNombre(funcionario.getPersona().getNombre());
 				vendedor.setId(funcionario.getId_funcionario());
@@ -991,14 +991,15 @@ public class LineaDao extends GenericDao<Linea> {
 				List<BigDecimal> pre = daoP.sumaPresupuestoUEN(codUEN.getId(),fechaInicial, fechaFinal);
 
 				if(pre != null){
-					vendedor.setPresupuestoB(pre.get(0).setScale(0, BigDecimal.ROUND_HALF_UP));
+					System.out.println(pre.get(0));
+					vendedor.setPresupuestoB((pre.get(0).intValue() == 0 )?new BigDecimal("0"):pre.get(0).setScale(0, BigDecimal.ROUND_HALF_UP));
 					vendedor.setUtilpresupuesto(pre.get(1).setScale(0, BigDecimal.ROUND_HALF_UP));
 
-					vendedor.setCumplimiento(vendedor.getIngresoRealB().divide(vendedor.getPresupuestoB(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+					vendedor.setCumplimiento((vendedor.getIngresoRealB().intValue() == 0 || vendedor.getPresupuestoB().intValue() == 0)?new BigDecimal("0"):vendedor.getIngresoRealB().divide(vendedor.getPresupuestoB(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
 					vendedor.setCumplimiento(vendedor.getCumplimiento().setScale(2, BigDecimal.ROUND_HALF_UP));
 					String semaforo = (vendedor.getCumplimiento().intValue() >= 85)? "verde.png" : "rojo.png";
 					vendedor.setImagen1(semaforo);
-					vendedor.setCumplimientoU(vendedor.getUtilidadReal().divide(vendedor.getUtilpresupuesto(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+					vendedor.setCumplimientoU((vendedor.getUtilidadReal().intValue() == 0 || vendedor.getUtilpresupuesto().intValue() == 0)? new BigDecimal("0"):vendedor.getUtilidadReal().divide(vendedor.getUtilpresupuesto(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
 					vendedor.setCumplimientoU(vendedor.getCumplimientoU().setScale(2, BigDecimal.ROUND_HALF_UP));
 					semaforo = (vendedor.getCumplimientoU().intValue() >= 85)? "verde.png" : "rojo.png";
 					vendedor.setImagen(semaforo);
@@ -1095,18 +1096,22 @@ public class LineaDao extends GenericDao<Linea> {
 			consulta.add(Restrictions.between("fechaCreacion", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("valorNeto"));
 			Long  totalWages = (Long) consulta.uniqueResult();
+			totalWages = (totalWages == null)? 0 : totalWages;
 			listaTotal.set(0, new BigDecimal(totalWages));
 			consulta.setProjection(Projections.sum("costoTotal"));
 			totalWages = (Long) consulta.uniqueResult();
+			totalWages = (totalWages == null)? 0 : totalWages;
 			listaTotal.set(1, new BigDecimal(totalWages));
 
 			consulta = session.createCriteria(PresupuestoE.class);			
 			consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("ingresos"));
 			BigDecimal valor = (BigDecimal) consulta.uniqueResult();
+			valor = (valor == null)? new BigDecimal("0"): valor;
 			listaTotal.set(2, valor);
 			consulta.setProjection(Projections.sum("utilidad"));
 			valor = (BigDecimal) consulta.uniqueResult();
+			valor = (valor == null)? new BigDecimal("0"): valor;
 			listaTotal.set(3, valor);
 
 			return listaTotal;

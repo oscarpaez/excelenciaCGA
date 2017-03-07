@@ -48,10 +48,12 @@ public class CiudadDao extends GenericDao<Ciudad>{
 				consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 				consulta.setProjection(Projections.sum("ingresos"));
 				BigDecimal valor = (BigDecimal) consulta.uniqueResult();
+				valor = (valor == null)? new BigDecimal("0"):valor;
 				sucursales.setPresupuestoB(valor);
 				
 				consulta.setProjection(Projections.sum("utilidad"));
 				valor = (BigDecimal) consulta.uniqueResult();
+				valor = (valor == null)? new BigDecimal("0"):valor;
 				sucursales.setUtilpresupuesto(valor);
 				
 				consulta = session.createCriteria(Detalle.class);
@@ -67,11 +69,12 @@ public class CiudadDao extends GenericDao<Ciudad>{
 				totalWages = (totalWages == null)? 0: totalWages;
 				sucursales.setUtilidadReal(sucursales.getIngresoRealB().subtract(new BigDecimal(totalWages)));
 
-				if(sucursales.getIngresoRealB().intValue() == 0 ){
+				if(sucursales.getIngresoRealB().intValue() == 0){
 					sucursales.setCumplimiento(new BigDecimal("0"));
 				}
 				else{
-					sucursales.setCumplimiento(sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+					System.out.println(sucursales.getIngresoRealB()+ "  --  " + sucursales.getPresupuestoB());
+					sucursales.setCumplimiento((sucursales.getIngresoRealB().intValue() ==0 || sucursales.getPresupuestoB().intValue() == 0)? new BigDecimal("0"):sucursales.getIngresoRealB().divide(sucursales.getPresupuestoB(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
 					sucursales.setCumplimiento(sucursales.getCumplimiento().setScale(2, BigDecimal.ROUND_HALF_UP));
 				}
 
@@ -82,7 +85,7 @@ public class CiudadDao extends GenericDao<Ciudad>{
 					sucursales.setCumplimientoU(new BigDecimal("0"));
 				}
 				else{
-					sucursales.setCumplimientoU(sucursales.getUtilidadReal().divide(sucursales.getUtilpresupuesto(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
+					sucursales.setCumplimientoU((sucursales.getUtilidadReal().intValue() == 0 || sucursales.getUtilpresupuesto().intValue() == 0)? new BigDecimal("0"):sucursales.getUtilidadReal().divide(sucursales.getUtilpresupuesto(), 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100")));
 					sucursales.setCumplimientoU(sucursales.getCumplimientoU().setScale(2, BigDecimal.ROUND_HALF_UP ));
 				}
 				semaforo = (sucursales.getCumplimientoU().intValue() >= 85)? "verde.png" : "rojo.png";

@@ -28,6 +28,15 @@ public class AutenticacionPhaseListener implements PhaseListener {
 		
 		esPaginaActual = paginaActual.contains("ad/actualizacionDatos.xhtml");
 		
+		if(!esPaginaActual )
+			esPaginaActual = paginaActual.contains("ma/kpi.xhtml");
+		
+		if(!esPaginaActual)
+			esPaginaActual = paginaActual.contains("iv/materiales.xhtml");
+		
+		if(!esPaginaActual)
+			esPaginaActual = paginaActual.contains("iv/cargaTrabajo.xhtml");
+		
 		if(!esPaginaActual){
 			   esPaginaActual = paginaActual.contains("login.xhtml");
 		}
@@ -42,7 +51,7 @@ public class AutenticacionPhaseListener implements PhaseListener {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("El usuario no esta autenticado ", ""));
 				Application application = context.getApplication();
 				NavigationHandler navigation = application.getNavigationHandler();
-				navigation.handleNavigation(context, null, "/pages/ad/actualizacionDatos.htmlx?faces-redirect=true");		
+				navigation.handleNavigation(context, null, "/pages/login.xhtml?faces-redirect=true");		
 			}
 		}
 		

@@ -137,6 +137,14 @@ public class AutenticacionBean implements Serializable {
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
 				return "dcP/vistaModulo2.xhtml?faces-redirect=true";
 			}
+			else if(usuarioLogin.getPerfil().getId() == 21){
+				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
+				return "iv/materiales.xhtml?faces-redirect=true";
+			}
+			else if(usuarioLogin.getPerfil().getId() == 22){
+				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
+				return "iv/cargaTrabajo.xhtml?faces-redirect=true";
+			}
 			else{
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
 				return "vistaModulo.xhtml?faces-redirect=true";

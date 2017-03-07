@@ -9,6 +9,7 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import co.com.CGAwebComercial.bean.MaterialesBean;
 import co.com.CGAwebComercial.bean.directorGBean;
 import co.com.CGAwebComercial.dao.CiudadDao;
 import co.com.CGAwebComercial.dao.DetalleDao;
@@ -19,6 +20,7 @@ import co.com.CGAwebComercial.dao.PersonaDao;
 import co.com.CGAwebComercial.dao.Registro_IngresosDao;
 import co.com.CGAwebComercial.dao.UsuarioDao;
 import co.com.CGAwebComercial.dao.Zona_ventaDao;
+import co.com.CGAwebComercial.dao.HelpDesk.Vista_helpdeskDao;
 import co.com.CGAwebComercial.entyties.Detalle;
 import co.com.CGAwebComercial.entyties.Funcionario;
 import co.com.CGAwebComercial.entyties.Persona;
@@ -151,7 +153,7 @@ public class UsuarioTest {
 	public void pruebaBase(){
 		
 		OfertasPedidosDao dao = new OfertasPedidosDao();
-		dao.listaOfertaMotivoR();
+		dao.listaOfertaMotivoR();	
 		
 	}
 	
@@ -160,14 +162,26 @@ public class UsuarioTest {
 	public void pruebaBaseA(){
 		
 		CiudadDao dao = new CiudadDao();
-		dao.prueba();		
+		dao.prueba();	
+		
+		Vista_helpdeskDao daoV = new Vista_helpdeskDao();
+		daoV.listar();
 	}
 	
-	@Test	
+	@Test
+	@Ignore
 	public void fechaFinal(){
 		
 		CiudadDao dao = new CiudadDao();
 		dao.fechaFinal("2", "2016");		
 		
+	}
+	
+	@Test
+	
+	public void pruebaListaMateriales(){
+		
+		MaterialesBean m = new MaterialesBean();
+		m.listarMaterial();
 	}
 }

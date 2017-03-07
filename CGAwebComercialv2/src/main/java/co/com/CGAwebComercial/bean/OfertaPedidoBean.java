@@ -222,7 +222,7 @@ public class OfertaPedidoBean implements Serializable{
 			}
 			valorTotal = new DecimalFormat("###,###").format(sumaOfe);
 			valorTotalP = new DecimalFormat("###,###").format(sumaPed);
-			sumPor = sumaPed.divide(sumaOfe, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			sumPor = (sumaPed.intValue() == 0 || sumaOfe.intValue() == 0 )? new BigDecimal("0") :sumaPed.divide(sumaOfe, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			valorPor =  new DecimalFormat("###,###").format(sumPor);
 			
 			valorTotalPre = (sumaPre == null)?  new DecimalFormat("###,###").format(0) : new DecimalFormat("###,###").format(sumaPre);

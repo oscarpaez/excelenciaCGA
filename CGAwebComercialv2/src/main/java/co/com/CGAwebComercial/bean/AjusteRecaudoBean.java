@@ -75,7 +75,7 @@ public class AjusteRecaudoBean implements Serializable{
 			}
 			Sucursal ciudad = daoC.buscarSucursal(idCiudad);
 			RecaudoDao daoR = new RecaudoDao();
-			List<OficinaVendedorInterno> listaVenInt = daoR. listaVendedorInterno(ciudad.getId());
+			List<OficinaVendedorInterno> listaVenInt = daoR. listaVendedorInterno(ciudad.getId().intValue());
 			for (OficinaVendedorInterno Interno : listaVenInt) {
 				ComisionDao dao = new ComisionDao();
 				Comision comision =dao.buscar(Interno.getTip());

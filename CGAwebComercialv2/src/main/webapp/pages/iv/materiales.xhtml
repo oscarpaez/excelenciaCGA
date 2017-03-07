@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral2.xhtml">
+
+	<ui:define name="contenido">
+		
+		<f:metadata>
+
+		</f:metadata>
+	<p:growl id="menssage" />	
+	<h:form id="frmPlan" >
+		<p:poll interval="300" listener="#{materialesBean.listarMaterial()}" 
+				update=":frmPlan:tblPlan  " 
+				rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id != 21}"/>		
+		
+		<p:dataTable styleClass="tblPla" id="tblPlan"
+					emptyMessage="No se encontraron registros" scrollRows="40"
+					scrollable="true" liveScroll="true" scrollHeight="410" 
+					value="#{materialesBean.listaMateriales}" var="mat" 
+					filteredValue="#{materialesBean.filtroMateriales}"
+					scrollWidth="97%">
+
+			<p:columnGroup type="header">
+				<p:row>					
+					<p:column rowspan="1" headerText="Sucursal" width="60" sortBy="#{mat.sucursal.nombre}" />
+					<p:column rowspan="1" headerText="Codigo" width="60" sortBy="" />
+					<p:column rowspan="1" headerText="Descripción" width="120" />
+					<p:column rowspan="1" headerText="Espesor" width="60" sortBy="#{mat.espesor}"/>
+					<p:column rowspan="1" headerText="Ancho" width="60" sortBy="#{mat.ancho}" />
+					<p:column rowspan="1" headerText="Largo" width="60" sortBy="#{mat.largo}"/>
+					<p:column rowspan="1" headerText="Unidad" width="60" />
+					<p:column rowspan="1" headerText="Teórico" width="60" sortBy="#{mat.teorico}"/>
+					<p:column rowspan="1" headerText="Imagen" width="60"/>
+					<p:column rowspan="1" headerText="Acciones" width="60" rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id == 21}"/>					
+				</p:row>
+
+			</p:columnGroup>
+				
+				<p:column style="">
+						<h:outputText value="#{mat.sucursal.nombre}" />
+				</p:column>
+				
+				<p:column style="">
+						<h:outputText value="#{mat.codigo}" />
+				</p:column>
+				
+				<p:column style="">
+						<h:outputText value="#{mat.descripcion}" />
+				</p:column>
+				
+				<p:column style="text-align:right">
+						<h:outputText value="#{mat.espesor}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>
+				</p:column>
+				
+				<p:column style="text-align:right">
+						<h:outputText value="#{mat.ancho}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>
+				</p:column>
+				
+				<p:column style="text-align:right">
+						<h:outputText value="#{mat.largo}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>
+				</p:column>
+				
+				<p:column style="text-align:center">
+						<h:outputText value="#{mat.unidad}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>
+				</p:column>
+				
+				<p:column style="text-align:right">
+						<h:outputText value="#{mat.teorico}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>
+				</p:column>
+				
+				<p:column style="text-align:center">
+						 
+						 <p:commandLink  actionListener="#{materialesBean.mostrarImagen(mat.imagen)}"
+						 		oncomplete="PF('dlgIma').show();" 
+						 		update=" :frmIma:pnlIma">
+						 	<p:graphicImage library="imagenesMateriales" name="#{mat.imagen}"
+						 		 height="25" width="25" />
+						 </p:commandLink>
+						 	
+						
+				</p:column>
+				
+				<p:column style="text-align:center" rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id == 21}">
+						<p:commandButton icon="ui-icon-pencil"
+							action="#{materialesBean.editar(mat)}"
+							update=" :frmNueMat:pnlNueMat"
+							oncomplete="PF('dlgNue').show();" title="Editar">
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+						
+					<p:commandButton icon="ui-icon-trash"	
+							actionListener="#{materialesBean.borrarMaterial(mat)}"					    
+							update=":frmPlan:tblPlan :menssage" title="Borrar">							
+					</p:commandButton>		
+				</p:column>				
+				
+			
+			 <f:facet name="footer">
+			 	<p:commandButton value="Nuevo Material" style="height:35px" 
+							oncomplete="PF('dlgNue').show();" 
+							actionListener="#{materialesBean.cargarMaterial()}"
+							update=" :frmNueMat:pnlNueMat" 
+							rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id == 21}">							
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+				</p:commandButton>
+			 </f:facet>
+
+		</p:dataTable>
+	</h:form>
+	
+	<p:dialog header="Crear Nuevo Material" widgetVar="dlgNue" draggable="false" 
+				resizable="false" closable="true" appendTo="@(body)" modal="true" 
+				styleClass="liquidar" width="600" height="480">
+				
+			<h:form id="frmNueMat" enctype="multipart/form-data" >
+				<h:panelGrid columns="2" id="pnlNueMat" >
+				
+					<p:outputLabel for="sucursal" value="Sucursal: " />
+					<p:selectOneMenu id="sucursal" filter="true" style="width:300px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo Estado es obligatorio"
+						value="#{materialesBean.materiales.sucursal}">
+						<f:selectItem noSelectionOption="true" itemLabel="Seleccione el Estado"/>
+						<f:selectItems value="#{materialesBean.listaSucursal}" var="sucursal"
+							itemValue="#{sucursal}" itemLabel="#{sucursal.nombre}" />
+					</p:selectOneMenu>
+					
+					<p:outputLabel  value="Codigo:" />
+					<p:inputNumber  id="codigo" placeholder="0"  decimalPlaces="0"
+			              	thousandSeparator=","  required="true" size="31" 
+							value="#{materialesBean.materiales.codigo}" 
+							requiredMessage="Campo Codigo es obligatorio"/>
+					
+					<p:outputLabel  value="Descripcion" />
+					<p:inputTextarea  cols="32" rows="3" autoResize="true"
+						value="#{materialesBean.materiales.descripcion}" required="true" requiredMessage="Campo Descripcion es obligatorio"
+						style="width: 90%;"/>
+					
+					<p:outputLabel  value="Espesor" />
+					<p:inputNumber id="Espesor" value="#{materialesBean.materiales.espesor}" 
+							 placeholder="0"  decimalPlaces="0"
+			              	 thousandSeparator=","  required="true" size="31"
+			                 />
+					
+					<p:outputLabel  value="Ancho" />
+					<p:inputNumber id="Ancho" value="#{materialesBean.materiales.ancho}" 
+							 placeholder="0"  decimalPlaces="0"
+			              	 thousandSeparator=","  required="true"
+			                 size="31"/>
+			                 
+					<p:outputLabel  value="Largo" />
+					<p:inputNumber id="Largo" value="#{materialesBean.materiales.largo}" 
+							 placeholder="0"  decimalPlaces="0"
+			              	 thousandSeparator=","  required="true"
+			                 size="31" />
+					
+					<p:outputLabel  value="Unidad" />
+					<p:inputNumber id="Unidad" value="#{materialesBean.materiales.unidad}" 
+							 placeholder="0"  decimalPlaces="0"
+			              	 thousandSeparator=","  required="true"
+			                 size="31" />
+			                 
+					<p:outputLabel  value="Teorico" />
+					<p:inputNumber id="Teorico" value="#{materialesBean.materiales.teorico}" 
+							 placeholder="0"  decimalPlaces="0"
+			              	 thousandSeparator=","  required="true"
+			                 size="31" />
+			                 
+			        <p:outputLabel for="upload" value="Imagen:" />
+						<p:fileUpload id="upload" mode="advanced"
+							fileUploadListener="#{materialesBean.upload}"							
+							update="" auto="false"
+							uploadLabel="Subir" /> 
+							       
+				</h:panelGrid>
+				<br />
+				
+				<h:panelGrid columns="2">	
+					<p:commandButton value="Salvar" 
+							actionListener="#{materialesBean.editarMaterial()}"
+							update=" :frmNueMat:pnlNueMat  :frmPlan:tblPlan :menssage"
+						/>
+					<p:commandButton value="Cerrar" oncomplete="PF('dlgNue').hide();"
+						 />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>	
+		
+		<p:dialog header="Imagen" widgetVar="dlgIma" draggable="false" 
+				resizable="false" closable="true" appendTo="@(body)" modal="true" 
+				styleClass="liquidar" width="600" height="430" position="center"
+				>
+				<h:form id="frmIma" enctype="multipart/form-data" >
+					<h:panelGrid columns="1" id="pnlIma" >
+						<p:graphicImage id="foto" library="imagenesMateriales" name="#{materialesBean.imagen}"
+								width="550" height="400">
+						</p:graphicImage>
+					</h:panelGrid>
+				</h:form>	
+		</p:dialog>			
+	</ui:define>
+</ui:composition>
+</html>

@@ -518,9 +518,11 @@ public class PresupuestoDao extends GenericDao<Presupuesto>{
 			consulta.add(Restrictions.between("periodo", fechaInicial, fechaFinal));
 			consulta.setProjection(Projections.sum("ingresos"));
 			BigDecimal valor = (BigDecimal) consulta.uniqueResult();
+			valor= (valor == null)? new BigDecimal("0"): valor;
 			lista.add(valor);
 			consulta.setProjection(Projections.sum("utilidad"));
 			valor = (BigDecimal) consulta.uniqueResult();
+			valor= (valor == null)? new BigDecimal("0"): valor;
 			lista.add(valor);
 			return lista;
 
