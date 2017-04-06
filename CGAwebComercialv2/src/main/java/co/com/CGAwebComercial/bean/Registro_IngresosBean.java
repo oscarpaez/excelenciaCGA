@@ -30,6 +30,7 @@ public class Registro_IngresosBean implements Serializable {
 	private AutenticacionBean autenticacion;
 	
 	private List<Registro_Ingresos> listaRegistros;	
+	private List<Registro_Ingresos> listaFiltroRegistros;	
 	private List<Fechas> listaFechas;
 	
 	private Recursos recurso;
@@ -84,17 +85,13 @@ public class Registro_IngresosBean implements Serializable {
 	public void listaRegistroUsuarios(){
 		
 		try{
-			
-			System.out.println(fechaFinS + " -////////- " + fechaIniS + " ///// "+ idFun);
 			if(fechaFinS.equals("null") || fechaIniS.equals("null")){
 				fechaBusqueda = autenticacion.getFechaBusqueda();
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
 				Registro_IngresosDao daoR = new Registro_IngresosDao();
-				System.out.println("uno" +fechaBusqueda +  " uno " + fechaBusquedaYear + "uno" + idFun );
 				listaRegistros = daoR.listaIngresosUsuarios(fechaBusqueda, fechaBusquedaYear, idFun);
 			}
 			else{
-				System.out.println("dos");
 				DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
 				fechaIni = format.parse(fechaIniS);				
 				fechaFin = format.parse(fechaFinS);				
@@ -110,8 +107,6 @@ public class Registro_IngresosBean implements Serializable {
 	public void buscarRegistroFecha(){
 		
 		try{
-			
-			System.out.println("Entrro");
 			Registro_IngresosDao dao = new Registro_IngresosDao();
 			listaRegistros = dao.buscarIngresos(fechaIni, fechaFin);
 		} catch (RuntimeException ex) {
@@ -214,5 +209,13 @@ public class Registro_IngresosBean implements Serializable {
 
 	public void setFechaFinS(String fechaFinS) {
 		this.fechaFinS = fechaFinS;
+	}
+
+	public List<Registro_Ingresos> getListaFiltroRegistros() {
+		return listaFiltroRegistros;
+	}
+
+	public void setListaFiltroRegistros(List<Registro_Ingresos> listaFiltroRegistros) {
+		this.listaFiltroRegistros = listaFiltroRegistros;
 	}
 }

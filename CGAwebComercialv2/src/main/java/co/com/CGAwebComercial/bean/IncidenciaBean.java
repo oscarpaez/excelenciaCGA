@@ -88,9 +88,15 @@ public class IncidenciaBean implements Serializable{
 	private int idFun;
 	private int idCiudad;
 	
+	public IncidenciaBean() {
+	}
+	
 	public void listarIncidencias(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			IncidenciaDao dao = new IncidenciaDao();
 			
 			if(autenticacion.getUsuarioLogin().getPerfil().getId() == 6){
@@ -139,6 +145,9 @@ public class IncidenciaBean implements Serializable{
 	public void listarAsesor(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			clienteO = null;
 			materialO = null;
 			material = new Material();
@@ -384,6 +393,9 @@ public class IncidenciaBean implements Serializable{
 	public void registroProyectados(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			pedidosProyectados = new PedidosProyectados();
 			clienteO = null;
 			materialO = null;
@@ -435,6 +447,9 @@ public class IncidenciaBean implements Serializable{
 	public void listarIncidenciasPorUsuario(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			Zona_ventaDao dao = new Zona_ventaDao();
 			List<Zona_venta > zonaL = dao.buscarZona(autenticacion.getUsuarioLogin().getId());
 			
@@ -455,7 +470,9 @@ public class IncidenciaBean implements Serializable{
 	public void listarIncidenciasPorSucursal(){
 
 		try{
-			
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			Zona_ventaDao dao = new Zona_ventaDao();
 			List<Zona_venta > zonaL = new ArrayList<>();
 			IncidenciaDao daoI = new IncidenciaDao();
@@ -494,6 +511,9 @@ public class IncidenciaBean implements Serializable{
 	public void listarPedidosProceso(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			PedidosEnProcesoDao dao = new PedidosEnProcesoDao();
 			
 			String tipo = (autenticacion.getUsuarioLogin().getPerfil().getId() == 1)? "codEspecialista" : "codInterno";
@@ -514,6 +534,9 @@ public class IncidenciaBean implements Serializable{
 	public void listarPedidosProcesoPais(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			PedidosEnProcesoDao dao = new PedidosEnProcesoDao();
 			listaPedidosEnProceso = dao.pedidosProcesoPais();
 			
@@ -534,7 +557,9 @@ public class IncidenciaBean implements Serializable{
 	public void listarPedidosProcesoOficina(){
 
 		try{
-			
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			int oficina = 0;
 			Recursos recurso = new Recursos();				
 			
@@ -564,6 +589,9 @@ public class IncidenciaBean implements Serializable{
 	public void listarPedidosProyectadosU(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			PedidosProyectadosDao dao = new PedidosProyectadosDao();
 			listaPedidosProyectados = dao.pedidosProyectadosUsuario(autenticacion.getUsuarioLogin().getId());
 			
@@ -581,7 +609,9 @@ public class IncidenciaBean implements Serializable{
 	public void listarPedidosProyectadosOficina(){
 
 		try{
-			
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			PedidosProyectadosDao dao = new PedidosProyectadosDao();
 			
 			if(idCiudad >0){

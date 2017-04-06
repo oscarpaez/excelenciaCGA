@@ -86,11 +86,28 @@ function showHijo() {
 	
 }
 
-function showCamposHijo() {
+function sumaTeorico() {
 	
-	/*alert('Car');
-	PF('canH1').jq.show();
-	$('#labL').show();*/	
+	if(PF('espesor').getValue() == null || PF('espesor').getValue() == 0
+			|| PF('largo').getValue() == null || PF('largo').getValue() == 0
+			|| PF('ancho').getValue() == null || PF('ancho').getValue() == 0){
+			
+		PF('unidad').setValue(0);			
+	}
+	else if(PF('unidad').getValue() > 0 ){
+		//alert(PF('unidad').getValue());
+		var t = PF('espesor').getValue() * PF('largo').getValue() * PF('ancho').getValue()* PF('unidad').getValue() * 0.00000785; 
+		//alert(t);
+		PF('teorico').setValue(t);
+	}
+	
+//	alert(PF('largo').getValue());
+//	alert(PF('ancho').getValue());
+//	alert(PF('unidad').getValue());
+//	var t = PF('espesor').getValue() * PF('largo').getValue() * PF('ancho').getValue()* PF('unidad').getValue() * 0.00000785; 
+//	PF('teorico').setValue(t);
+	
+		
 }
 
 PrimeFaces.locales['es'] = {
@@ -119,3 +136,5 @@ PrimeFaces.locales['es'] = {
         day: 'Día',
         allDayText : 'Todo el día'
 };
+
+

@@ -71,10 +71,17 @@ public class RecaudoBean implements Serializable{
 	private BigDecimal presupuestoB;
 	private BigDecimal realB;
 	private BigDecimal cumplimiento;
+	
+	public RecaudoBean() {
+		
+	}
 
 	public void listarRecaudo(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			Recursos recurso = new Recursos();
 			listaFechas = recurso.cargarFechasTotal();
 			RecaudoDao dao = new RecaudoDao();
@@ -94,6 +101,9 @@ public class RecaudoBean implements Serializable{
 	public void carteraInternos(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			recurso = new Recursos();			
 			RecaudoDao dao = new RecaudoDao();
 			if(autenticacion.getFechaBusqueda().equals("") || autenticacion.getFechaBusqueda().equals(null) ){			
@@ -118,6 +128,9 @@ public class RecaudoBean implements Serializable{
 	public void listarComisionInternos(){
 		    
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			listaCarteraInternos = new ArrayList<>();
 			SucursalDao daoC = new SucursalDao();
 			int numero = 0;

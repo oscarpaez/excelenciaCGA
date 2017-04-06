@@ -65,6 +65,9 @@ public class ContadoAnticipoBean implements Serializable{
 	public void listarContadoAnticipo(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			if(autenticacion.getFechaBusqueda() != null && autenticacion.getFechaBusquedaYear() != null){
 				fechaBusqueda = autenticacion.getFechaBusqueda();
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
@@ -84,6 +87,9 @@ public class ContadoAnticipoBean implements Serializable{
 	public void listarContadoAnticipoFechas(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			listaContado = new ArrayList<>(); 
 			List<Funcionario> listaVendedor = null;
 			FuncionarioDao daoF = new FuncionarioDao();
@@ -131,6 +137,9 @@ public class ContadoAnticipoBean implements Serializable{
 	public void listarContadoAnticipoN(){
 		
 		try {
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			List<Funcionario> listaVendedor = null;
 			List<ContadoAnticipo> listaRegistros;
 			listaContado = new ArrayList<>();

@@ -201,7 +201,6 @@ public class EncuestaBean implements Serializable {
 	public void verificarHijos(){
 		
 		try{
-			System.out.println(persona.getTieneHijos());
 			if(persona.getTieneHijos() == 1){
 				render = "true";
 			}
@@ -215,7 +214,6 @@ public class EncuestaBean implements Serializable {
 		
 		try{
 			PersonaDao dao = new PersonaDao();
-			System.out.println( genero + "Nombre persona" + persona.getNombre());
 			
 			GeneroDao daoG = new GeneroDao();
 			Genero generoA = daoG.buscar(genero);
@@ -240,11 +238,7 @@ public class EncuestaBean implements Serializable {
 			if(persona.getTieneHijos() == 1){
 				
 				for (Hijo h :listaHijo) {
-					System.out.println("nombre" + h.getNombre());
-					System.out.println("fecha" + h.getFechanacimiento());					
-					
 					if(h.getFechanacimiento() != null && !h.getNombre().equals("")){
-						System.out.println("persona" + p.getNombre());
 						h.setPersona(p);
 						HijosDao daoHi = new HijosDao();
 						daoHi.salvar(h);						

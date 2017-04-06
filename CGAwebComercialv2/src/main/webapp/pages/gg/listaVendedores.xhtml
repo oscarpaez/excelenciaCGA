@@ -27,7 +27,7 @@
 						<f:selectItem itemValue="I" itemLabel="Vendedor Interno" />
 					</p:selectOneMenu>
 	
-					<p:commandButton value="Cargar" actionListener="#{gerenteBean.llamadoListar}"
+					<p:commandButton value="Cargar" actionListener="#{gerenteBean.listarComisionVendedoresFechas()}"
 						update="frmPlan:tblPlan" style="background: #b94a48; width:100px;" 
 						 onclick="start(); PF('pbAjax').start(); PF('pbAjax').show();"/>
 					

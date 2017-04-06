@@ -17,6 +17,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.omnifaces.util.Faces;
@@ -74,24 +75,39 @@ public class AutenticacionBean implements Serializable {
 		}	
 	}
 	
+	public void registroIngreso(Usuario u){
+		
+		try{
+			if(u != null){
+				HttpServletRequest origRequest = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+				System.out.println(origRequest.getRequestURL());				
+				Registro_IngresosDao  daoR= new Registro_IngresosDao();
+				Registro_Ingresos registro = new Registro_Ingresos();
+				registro.setPersona(u.getPersona());
+				Date fechaIngreso = new Date(); 
+				FuncionarioDao daoF = new FuncionarioDao();
+				Funcionario funcionario = daoF.buscar(u.getId());
+				registro.setFechaIngreso(fechaIngreso);
+				registro.setHoraIngreso(fechaIngreso);
+				registro.setFuncionario(funcionario);
+				registro.setVista(origRequest.getRequestURL().toString());
+				daoR.salvar(registro);
+			}
+			
+			
+		}catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error en registro de ingreso" + ex.getMessage());
+		}
+	}
+	
 	public String entrar() {
 		try {
-			
-			
 			UsuarioDao dao = new UsuarioDao();
 			usuarioLogin = dao.autenticar(persona.getCedula(), usuarioLogin.getClave());
 			
 			if(usuarioLogin != null){
-				Registro_IngresosDao  daoR= new Registro_IngresosDao();
-				Registro_Ingresos registro = new Registro_Ingresos();
-				registro.setPersona(usuarioLogin.getPersona());
-				Date fechaIngreso = new Date(); 
-				FuncionarioDao daoF = new FuncionarioDao();
-				Funcionario funcionario = daoF.buscar(usuarioLogin.getId());
-				registro.setFechaIngreso(fechaIngreso);
-				registro.setHoraIngreso(fechaIngreso);
-				registro.setFuncionario(funcionario);
-				daoR.salvar(registro);
+				registroIngreso(usuarioLogin);
 			}	
 			//System.out.println("Usuarios "+ usuarioLogin.getPerfil().getId());
 			if(usuarioLogin == null){
@@ -137,13 +153,18 @@ public class AutenticacionBean implements Serializable {
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
 				return "dcP/vistaModulo2.xhtml?faces-redirect=true";
 			}
-			else if(usuarioLogin.getPerfil().getId() == 21){
+			else if(usuarioLogin.getPerfil().getId() == 21 || usuarioLogin.getPerfil().getId() == 23){
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
 				return "iv/materiales.xhtml?faces-redirect=true";
 			}
-			else if(usuarioLogin.getPerfil().getId() == 22){
+			else if(usuarioLogin.getPerfil().getId() == 22 || usuarioLogin.getPerfil().getId() == 24){
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
 				return "iv/cargaTrabajo.xhtml?faces-redirect=true";
+			}
+			else if(usuarioLogin.getPerfil().getId() == 25 || usuarioLogin.getPerfil().getId() == 26){
+				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
+				return "iv/materiales.xhtml?faces-redirect=true";
+				//return "iv/vistaDashboard.xhtml?faces-redirect=true";
 			}
 			else{
 				Messages.addGlobalInfo("Bienvenido: "+ usuarioLogin.getPersona().getNombre());
@@ -243,9 +264,6 @@ public class AutenticacionBean implements Serializable {
 			else{
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error las contraseña deben ser Mayor a 6 Caracteres", ""));
 			}
-			
-			
-			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

@@ -31,10 +31,11 @@
 					<p:columnGroup type="header">
 						<p:row>
 							<p:column colspan="1" headerText="Cod SAP" width="5%" />
-							<p:column colspan="1" headerText="Nombre" width="10%" />
-							<p:column colspan="1" headerText="Cargo" width="10%" />
+							<p:column colspan="1" headerText="Nombre" width="20%" />
+							<p:column colspan="1" headerText="Cargo" width="20%" />
 							<p:column colspan="1" headerText="Fecha de Ingreso" width="10%" />
 							<p:column colspan="1" headerText="Hora de Ingreso" width="10%" />
+							<p:column colspan="1" headerText="Modulo" width="35%" />
 						</p:row>
 					</p:columnGroup>
 
@@ -58,6 +59,10 @@
 						<h:outputText value="#{registro.horaIngreso}">
 							<f:convertDateTime pattern="HH:mm:ss"/>
 						</h:outputText>
+					</p:column>
+					
+					<p:column style="text-align:left;">
+						<h:outputText value="#{registro.vista}" />
 					</p:column>
 
 					<f:facet name="footer">

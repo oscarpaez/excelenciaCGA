@@ -15,21 +15,27 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ValueChangeEvent;
 
+
+import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import co.com.CGAwebComercial.dao.EstadoMaterialDao;
 import co.com.CGAwebComercial.dao.HistoricoMaterialesDao;
 import co.com.CGAwebComercial.dao.MaterialesDao;
 import co.com.CGAwebComercial.dao.SucursalDao;
 import co.com.CGAwebComercial.dao.Zona_FuncionarioDao;
+import co.com.CGAwebComercial.entyties.EstadoMaterial;
 import co.com.CGAwebComercial.entyties.HistoricaMateriales;
 import co.com.CGAwebComercial.entyties.Materiales;
 import co.com.CGAwebComercial.entyties.Sucursal;
 import co.com.CGAwebComercial.entyties.Zona_Funcionario;
+
 
 
 @SuppressWarnings("serial")
@@ -43,6 +49,7 @@ public class MaterialesBean implements Serializable{
 	private List<Materiales> listaMateriales;
 	private List<Materiales> filtroMateriales;
 	private List<Sucursal> listaSucursal;
+	private List<EstadoMaterial> listaEstado;
 
 	private Materiales materiales;
 	private Sucursal sucursal;
@@ -57,13 +64,22 @@ public class MaterialesBean implements Serializable{
 	public void listarMaterial(){
 
 		try{
+			autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			
 			imagen = "imagen.png";
 			listaMateriales = new ArrayList<>();
 			MaterialesDao dao = new MaterialesDao();
-
-			if (autenticacion.getUsuarioLogin().getPerfil() == null){
-				System.out.println("##");
+			
+			System.out.println(autenticacion.getUsuarioLogin().getId());
+			if(autenticacion.getUsuarioLogin().getId() == 0){
 				listaMateriales = dao.listar();
+			}
+			else if (autenticacion.getUsuarioLogin().getPerfil().getId() == 23 || autenticacion.getUsuarioLogin().getPerfil().getId() == 24
+					|| autenticacion.getUsuarioLogin().getPerfil().getId() == 25 || autenticacion.getUsuarioLogin().getPerfil().getId() == 6 
+					|| autenticacion.getUsuarioLogin().getPerfil().getId() == 1 || autenticacion.getUsuarioLogin().getPerfil().getId() == 7
+					|| autenticacion.getUsuarioLogin().getPerfil().getId() == 8 || autenticacion.getUsuarioLogin().getPerfil().getId() == 11
+					|| autenticacion.getUsuarioLogin().getPerfil().getId() == 20 || autenticacion.getUsuarioLogin().getPerfil().getId() == 26){
+				listaMateriales = dao.listar();	
 			}
 			else if (autenticacion.getUsuarioLogin().getPerfil().getId() == 21) {				
 				Zona_FuncionarioDao daoF = new Zona_FuncionarioDao(); 
@@ -77,6 +93,17 @@ public class MaterialesBean implements Serializable{
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se Cargo la lista de Materiales");
 		}
+	}
+	
+	public void inicioDashboard(){
+		
+		try{
+			listarMaterial();
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error no se pudo iniciar el dashboard");
+		}
+		
 	}
 	
 	public StreamedContent getFoto(String camino) throws IOException {
@@ -110,35 +137,49 @@ public class MaterialesBean implements Serializable{
 			MaterialesDao dao = new MaterialesDao();			
 			Materiales idMaterial = dao.merge(materiales);	
 			
-			System.out.println(materiales.getNombreImagen() + " Nombre original"  );
-			
 			if(materiales.getNombreImagen() != null){
 
 				String [] extension = materiales.getNombreImagen().split("\\.");			
-				System.out.println(extension.length);
 				Path origen = Paths.get(materiales.getImagen());
-				Path destino = Paths.get("C:\\Program Files\\Apache Software Foundation\\Tomcat 7.0\\webapps\\prueba\\resources\\imagenesMateriales\\" + idMaterial.getId() +"."+ extension[1]);
+				Path destino = Paths.get("C:\\Program Files\\Apache Software Foundation\\Tomcat 7.0\\webapps\\excelenciaCGA\\resources\\imagenesMateriales\\" + idMaterial.getId() +"."+ extension[1]);
+				//Path destino = Paths.get("C:\\Program Files\\Apache Software Foundation\\Tomcat 7.0\\webapps\\prueba\\resources\\imagenesMateriales\\" + idMaterial.getId() +"."+ extension[1]);
 				//Path destino = Paths.get("C:\\Users\\opaez\\Desktop\\git\\CGAwebComercialv2\\src\\main\\webapp\\resources\\imagenesMateriales\\" + idMaterial.getId() +"."+ extension[1]);
 				//Path destino = Paths.get("C:\\imagenesMateriales\\" + idMaterial +"."+ extension[1]);
 				Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
 
-				System.out.println(destino + "Nombre de la imagen destino"  );
 				idMaterial.setImagen(idMaterial.getId() +"."+ extension[1]);
+			}
+			else if(idMaterial.getImagen() == null){
+					//idMaterial.setNombreImagen("imagen.png");
+					//String [] extension = idMaterial.getNombreImagen().split("\\.");
+					//Path origen = Paths.get("C:\\Program Files\\Apache Software Foundation\\Tomcat 7.0\\webapps\\excelenciaCGA\\resources\\imagenesMateriales\\imagen.png");
+					//Path destino = Paths.get("C:\\Program Files\\Apache Software Foundation\\Tomcat 7.0\\webapps\\excelenciaCGA\\resources\\imagenesMateriales\\" + idMaterial.getId() +"."+ extension[1]);
+					//Path origen = Paths.get("C:\\Users\\opaez\\Desktop\\git\\CGAwebComercialv2\\src\\main\\webapp\\resources\\imagenesMateriales\\imagen.png");
+					//Path destino = Paths.get("C:\\Users\\opaez\\Desktop\\git\\CGAwebComercialv2\\src\\main\\webapp\\resources\\imagenesMateriales\\" + idMaterial.getId() +"."+ extension[1]);
+					//Files.copy(origen, destino, StandardCopyOption.REPLACE_EXISTING);
+					//idMaterial.setImagen(idMaterial.getId() +"."+ extension[1]);
+					idMaterial.setImagen("imagen.png");
 			}
 			dao.merge(idMaterial);
 			
 			HistoricaMateriales hm = new HistoricaMateriales();
-			hm.setAncho(materiales.getAncho());
-			hm.setCodigo(materiales.getCodigo());
-			hm.setDescripcion(materiales.getDescripcion());
-			hm.setEspesor(materiales.getEspesor());
+			hm.setAncho(idMaterial.getAncho());
+			hm.setCodigo(idMaterial.getCodigo());
+			hm.setDescripcion(idMaterial.getDescripcion());
+			hm.setEspesor(idMaterial.getEspesor());
 			hm.setFechaModificacion(new Date());
-			hm.setLargo(materiales.getLargo());
-			hm.setTeorico(materiales.getTeorico());
-			hm.setUnidad(materiales.getUnidad());
+			hm.setLargo(idMaterial.getLargo());
+			hm.setTeorico(idMaterial.getTeorico());
+			hm.setUnidad(idMaterial.getUnidad());
 			hm.setIdMaterial(idMaterial.getId());
-			hm.setImagen(materiales.getImagen());
-			hm.setSucursal(materiales.getSucursal());
+			hm.setImagen(idMaterial.getImagen());
+			hm.setSucursal(idMaterial.getSucursal());
+			hm.setPedido(idMaterial.getPedido());
+			hm.setEstadoMaterial(idMaterial.getEstadoMaterial());
+			hm.setUbicacion(idMaterial.getUbicacion());
+			hm.setOrdenProducto(idMaterial.getOrdenProducto());
+			hm.setAvance(idMaterial.getAvance());
+			hm.setUsuario(autenticacion.getUsuarioLogin());
 
 			HistoricoMaterialesDao daoM = new HistoricoMaterialesDao();
 			daoM.salvar(hm);
@@ -157,10 +198,14 @@ public class MaterialesBean implements Serializable{
 
 		try{
 			listaSucursal = new ArrayList<>();
+			listaEstado = new ArrayList<>();
 			materiales = m;
 
 			SucursalDao dao = new SucursalDao();
 			listaSucursal = dao.listar();
+			
+			EstadoMaterialDao daoE = new EstadoMaterialDao();
+			listaEstado = daoE.listar();
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se edito el Material ");
@@ -183,6 +228,12 @@ public class MaterialesBean implements Serializable{
 			hm.setIdMaterial(m.getId());
 			hm.setImagen(m.getImagen());
 			hm.setSucursal(m.getSucursal());
+			hm.setPedido(m.getPedido());
+			hm.setEstadoMaterial(m.getEstadoMaterial());
+			hm.setUbicacion(m.getUbicacion());
+			hm.setOrdenProducto(m.getOrdenProducto());
+			hm.setAvance(m.getAvance());
+			hm.setUsuario(autenticacion.getUsuarioLogin());
 
 			HistoricoMaterialesDao daoM = new HistoricoMaterialesDao();
 			daoM.salvar(hm);			
@@ -191,10 +242,16 @@ public class MaterialesBean implements Serializable{
 			MaterialesDao dao = new MaterialesDao();
 			dao.borrar(materiales);
 			
-			Path archivo = Paths.get("C:\\Program Files\\Apache Software Foundation\\Tomcat 7.0\\webapps\\prueba\\resources\\imagenesMateriales\\"  + materiales.getImagen());
-			//Path archivo = Paths.get("C:\\Users\\opaez\\Desktop\\git\\CGAwebComercialv2\\src\\main\\webapp\\resources\\imagenesMateriales\\"  + materiales.getImagen());
-			Files.deleteIfExists(archivo);			
-
+			if(materiales.getImagen().equals("imagen.png")){
+				
+			}
+			else{
+				Path archivo = Paths.get("C:\\Program Files\\Apache Software Foundation\\Tomcat 7.0\\webapps\\excelenciaCGA\\resources\\imagenesMateriales\\" + materiales.getImagen());
+				//Path archivo = Paths.get("C:\\Program Files\\Apache Software Foundation\\Tomcat 7.0\\webapps\\prueba\\resources\\imagenesMateriales\\"  + materiales.getImagen());
+				//Path archivo = Paths.get("C:\\Users\\opaez\\Desktop\\git\\CGAwebComercialv2\\src\\main\\webapp\\resources\\imagenesMateriales\\"  + materiales.getImagen());
+				Files.deleteIfExists(archivo);			
+			}
+			
 			materiales = new Materiales();
 			listarMaterial();
 		} catch (RuntimeException | IOException ex) {
@@ -241,6 +298,67 @@ public class MaterialesBean implements Serializable{
 			Messages.addFlashGlobalError("Error al mostrar la imagen");
 			erro.printStackTrace();
 		}
+	}
+	
+	public void calcularPeso(){
+		
+		try{
+			//materiales = m;
+			
+//			materiales.setUnidad(materiales.getUnidad());
+//			materiales.setEspesor(materiales.getEspesor());
+//			materiales.setAncho(materiales.getAncho());
+//			materiales.setLargo(materiales.getLargo());			
+//			if(materiales.getEspesor() != null){
+//				materiales.setEspesor(materiales.getEspesor());
+//				System.out.println(materiales.getEspesor()+ " A " + materiales.getUnidad()); 
+//			}	
+//			else if(materiales.getAncho() != null){
+//				materiales.setAncho(materiales.getAncho());
+//				System.out.println(materiales.getAncho()+ " B " + materiales.getUnidad());
+//			}	
+//			else if(materiales.getLargo() != null){
+//			    materiales.setLargo(materiales.getLargo());
+//			    System.out.println(materiales.getLargo()+ " B " + materiales.getUnidad());
+//			}    
+//			else 
+			if(materiales.getUnidad() > 0){				
+				//materiales.setTeorico(materiales.getAncho().multiply(materiales.getLargo().multiply(materiales.getEspesor().multiply(new BigDecimal(materiales.getUnidad()).multiply(new BigDecimal("0.00000785"))))));
+				System.out.println(materiales.getUnidad() + " ** " + materiales.getTeorico());
+			}	
+		} catch (RuntimeException erro) {
+			Messages.addFlashGlobalError("Error al mostrar la imagen");
+			erro.printStackTrace();
+		}
+		
+	}
+	
+	public void valueChangeListenerMethod(ValueChangeEvent e) {
+		System.out.println("valueChangeListener invoked:" 
+                + " OLD: " + e.getOldValue() 
+                + " NEW: " + e.getNewValue());
+	}
+	
+	
+	
+	public String cambioPagina(){
+
+		try{
+			if(autenticacion.getUsuarioLogin().getPerfil().getId() == 23){
+				System.out.println(autenticacion.getUsuarioLogin().getPerfil().getId());
+				listarMaterial();
+			}
+			else{
+			//Thread.sleep(4000);
+				Faces.redirect("./pages/iv/cargaTrabajo.xhtml");
+			}
+			//Faces.redirect("./pages/of/ofertaPedido2.xhtml");
+			return "of/materiales.xhtml?faces-redirect=true";
+		} catch (RuntimeException | IOException  ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error No se realizo la Gráfica de Gestion de llamadas");
+		}
+		return null;
 	}
 
 	public AutenticacionBean getAutenticacion() {
@@ -315,7 +433,6 @@ public class MaterialesBean implements Serializable{
 			
 		}
 		else{
-			System.out.println(camino + "2222");
 			Path imagen = Paths.get(camino);
 			InputStream flujo = Files.newInputStream(imagen);
 			foto = new DefaultStreamedContent(flujo);	
@@ -333,6 +450,14 @@ public class MaterialesBean implements Serializable{
 
 	public void setCamino(String camino) {
 		this.camino = camino;
+	}
+
+	public List<EstadoMaterial> getListaEstado() {
+		return listaEstado;
+	}
+
+	public void setListaEstado(List<EstadoMaterial> listaEstado) {
+		this.listaEstado = listaEstado;
 	}
 	
 }

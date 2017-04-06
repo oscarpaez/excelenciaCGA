@@ -83,12 +83,19 @@ public class BajaRotacionBean implements Serializable {
 	private int idfuncionario;
 	private int index = 0;
 	private int codSap= 0;
+	
+	public BajaRotacionBean() {
+			
+	}
 
 
 	@PostConstruct
 	public void listarVendedoresEspecialistas(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			recurso = new Recursos();
 			habilitar = "false";
 
@@ -286,6 +293,9 @@ public class BajaRotacionBean implements Serializable {
 	public void listarDetalle(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			if(autenticacion.getFechaBusqueda() != null && autenticacion.getFechaBusquedaYear() != null){
 				fechaBusqueda = autenticacion.getFechaBusqueda();
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();	
@@ -310,6 +320,9 @@ public class BajaRotacionBean implements Serializable {
 	public void directorNacional(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			listaVendedores = new ArrayList<>();
 			ComisionVendedores vendedor = new ComisionVendedores();
 			FuncionarioDao daoF = new FuncionarioDao();
@@ -438,6 +451,9 @@ public class BajaRotacionBean implements Serializable {
 	public void listaCodVededores(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			listaEspecialistaCambio = new ArrayList<>();
 			if(listaAjusteVendedor != null){
 				listaAjusteVendedor.removeAll(listaAjusteVendedor);

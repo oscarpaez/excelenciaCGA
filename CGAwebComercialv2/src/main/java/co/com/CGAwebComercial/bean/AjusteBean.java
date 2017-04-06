@@ -57,6 +57,9 @@ public class AjusteBean implements Serializable{
 	public void listarEmpleados(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			listaLiquidacion = new ArrayList<>();
 			LiquidacionDao daoL = new LiquidacionDao();
 			List<Integer> listCod = daoL.listaCod(autenticacion.getFechaBusqueda(), autenticacion.getFechaBusquedaYear());

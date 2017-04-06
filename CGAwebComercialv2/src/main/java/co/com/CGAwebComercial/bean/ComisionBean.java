@@ -83,6 +83,9 @@ public class ComisionBean implements Serializable{
 	public void listarComisionVendedores(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			recurso = new Recursos();
 			plan1 = new Plan();
 			int i = 0; 
@@ -240,6 +243,9 @@ public class ComisionBean implements Serializable{
 	public void listarComisionVendedoresFechas(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();	
 			int progress1  = 0;
@@ -449,6 +455,9 @@ public class ComisionBean implements Serializable{
 	public void listarPlan(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 
 			if(autenticacion.getFechaBusqueda().equals("")){
 

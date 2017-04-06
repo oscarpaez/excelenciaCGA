@@ -27,6 +27,7 @@ import co.com.CGAwebComercial.entyties.Persona;
 import co.com.CGAwebComercial.entyties.Registro_Ingresos;
 import co.com.CGAwebComercial.entyties.Usuario;
 import co.com.CGAwebComercial.entyties.Zona_venta;
+import co.com.CGAwebComercial.resource.Recursos;
 import co.com.CGAwebComercial.util.ComisionVendedores;
 
 public class UsuarioTest {
@@ -178,10 +179,16 @@ public class UsuarioTest {
 	}
 	
 	@Test
-	
+	@Ignore
 	public void pruebaListaMateriales(){
 		
 		MaterialesBean m = new MaterialesBean();
 		m.listarMaterial();
+	}
+	
+	@Test
+	public void diaMes(){
+		Recursos r = new Recursos();
+		r.ultimoDiaMes(2017, 3);
 	}
 }

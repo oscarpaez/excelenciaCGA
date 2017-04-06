@@ -15,10 +15,13 @@
 		
 		<p:messages id="msgData" showDetail="true" autoUpdate="true" closable="true" />
 		<f:facet name="header">			
-			<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+			<p:outputLabel value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre} " />
+			
+			<p:link value="Materiales" styleClass="excel"
+				style="text-align: left; float:right;  height:24px;  font-size: 12px;
+					    padding-right: 10px;"
+				outcome="/pages/iv/materiales.xhtmlfaces-redirect=true"/>
 		</f:facet>
-		
-		<br />
 		<div class="ui-grid ui-grid-responsive">
 			<div class="ui-grid-row">
 				<div class="ui-grid-col-4" style="width: 410px">

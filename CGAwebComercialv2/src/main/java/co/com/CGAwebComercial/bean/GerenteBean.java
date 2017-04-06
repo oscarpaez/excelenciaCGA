@@ -80,6 +80,9 @@ public class GerenteBean implements Serializable{
 	public void listarPais(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			listaplan = new ArrayList<>();
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();	
@@ -186,6 +189,9 @@ public class GerenteBean implements Serializable{
 	public void listarLineasPais(){
 
 		try {
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
 			BigDecimal sumaRealU = new BigDecimal("0.00");
@@ -226,6 +232,9 @@ public class GerenteBean implements Serializable{
 	public void listarVendedoresPorLinea(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			ListaComisionVendedores = new ArrayList<>();
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
@@ -287,6 +296,9 @@ public class GerenteBean implements Serializable{
 	public void listarOficinas(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			ListaComisionVendedores = new ArrayList<>();
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
@@ -326,6 +338,9 @@ public class GerenteBean implements Serializable{
 		public void listarOficinasPorLinea(){
 
 			try{
+				if(autenticacion != null){
+					autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+				}
 				ListaComisionVendedores = new ArrayList<>();
 				fechaBusqueda = autenticacion.getFechaBusqueda();
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
@@ -342,6 +357,9 @@ public class GerenteBean implements Serializable{
 	public void listarVendeoresPorCiudad(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			ListaComisionVendedores = new ArrayList<>();
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
@@ -369,7 +387,7 @@ public class GerenteBean implements Serializable{
 			}
 			cumplimiento = sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimiento = cumplimiento.setScale(2, BigDecimal.ROUND_HALF_UP);
-			cumplimientoU = sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU = (sumaRealU.intValue() == 0 || sumaUtilidadP.intValue() == 0)? new BigDecimal("0"):sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimientoU = cumplimientoU.setScale(2, BigDecimal.ROUND_HALF_UP);
 			totalPresupuesto = new DecimalFormat("###,###").format(sumaPresupuesto);
 			totalReal = new DecimalFormat("###,###").format(sumaIngresoR);
@@ -404,6 +422,9 @@ public class GerenteBean implements Serializable{
 	public void listarTotaldeLineasPais(){
 
 		try {
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
 			BigDecimal sumaRealU = new BigDecimal("0.00");
@@ -424,7 +445,7 @@ public class GerenteBean implements Serializable{
 			}
 			cumplimiento = sumaIngresoR.divide(sumaPresupuesto, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimiento = cumplimiento.setScale(2, BigDecimal.ROUND_HALF_UP);
-			cumplimientoU = sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
+			cumplimientoU = (sumaRealU.intValue() == 0 || sumaUtilidadP.intValue() == 0)? new BigDecimal("0"):sumaRealU.divide(sumaUtilidadP, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 			cumplimientoU = cumplimientoU.setScale(2, BigDecimal.ROUND_HALF_UP);
 			totalPresupuesto = new DecimalFormat("###,###").format(sumaPresupuesto);
 			totalReal = new DecimalFormat("###,###").format(sumaIngresoR);
@@ -443,6 +464,9 @@ public class GerenteBean implements Serializable{
 	public void listarOficinasPorLineas(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			ListaComisionVendedores = new ArrayList<>();
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
@@ -483,6 +507,9 @@ public class GerenteBean implements Serializable{
 	public void listarVendeoresPorCiudadPorLinea(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			ListaComisionVendedores = new ArrayList<>();
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
@@ -573,6 +600,9 @@ public class GerenteBean implements Serializable{
 	public void listarComisionVendedoresFechas(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();	
 			int progress1  = 0;
@@ -662,6 +692,9 @@ public class GerenteBean implements Serializable{
 	public void listarUEN(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
 			BigDecimal sumaRealU = new BigDecimal("0.00");
@@ -700,6 +733,9 @@ public class GerenteBean implements Serializable{
 	public void listarOficinasUEN(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			ListaComisionVendedores = new ArrayList<>();
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
@@ -740,6 +776,9 @@ public class GerenteBean implements Serializable{
 	public void listarLineasUEN(){
 
 		try {
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
 			
@@ -779,6 +818,9 @@ public class GerenteBean implements Serializable{
 	public void listarVendedoresUEN(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();	
 			int progress1  = 0;
@@ -855,7 +897,9 @@ public class GerenteBean implements Serializable{
 	public void listarPais1(){
 
 		try {
-			
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			
 			for (Fechas fecha: listaFechas) {
 				fechaConsulta = (fecha.getValorMes().equals(autenticacion.getFechaBusqueda()))? fecha.getMes() : fechaConsulta;
@@ -905,7 +949,9 @@ public class GerenteBean implements Serializable{
 	public void listaLineasFuncionario(){
 
 		try{
-			
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();	
 			total =  new BigDecimal("0.00");

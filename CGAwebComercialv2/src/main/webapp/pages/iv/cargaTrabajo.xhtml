@@ -13,36 +13,92 @@
 		<f:metadata>
 
 		</f:metadata>
+		
+		<f:facet name="header">
+			<p:outputLabel
+				value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+			
+			<p:button  icon="ui-icon-person" iconPos="right" styleClass="excel" title="Inicio" 
+					   value="Ingresos" 	
+					   style="text-align: left; float:right;  height:24px; background:#ff6666; font-size: 12px"
+							    outcome="/pages/vi/vistaIngresos.xhtml?faces-redirect=true"
+					   rendered="#{autenticacionBean.usuarioLogin.id == 28}"		    />
+					   
+			<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true" 
+						rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1 || autenticacionBean.usuarioLogin.perfil.id == 6}"
+						onclick="showLoading()" />
+			
+			<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/dr/vistaModulo2.xhtml?faces-redirect=true" 
+						rendered="#{autenticacionBean.usuarioLogin.perfil.id == 7 || autenticacionBean.usuarioLogin.perfil.id == 7}"
+						onclick="showLoading()" />
+			
+			<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/dcB/vistaModulo2.xhtml?faces-redirect=true" 
+						rendered="#{autenticacionBean.usuarioLogin.perfil.id == 8 }"
+						onclick="showLoading()" />	
+			
+			<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/gg/vistaModulo2.xhtml?faces-redirect=true" 
+						rendered="#{autenticacionBean.usuarioLogin.perfil.id == 11 }"
+						onclick="showLoading()" />
+			
+			<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/dcP/vistaModulo2.xhtml?faces-redirect=true" 
+						rendered="#{autenticacionBean.usuarioLogin.perfil.id == 20 }"
+						onclick="showLoading()" />															   	
+				
+			<p:link value="Materiales" styleClass="excel"
+				style="text-align: left; float:right;  height:24px;  font-size: 12px;
+					    padding-right: 10px;"
+				rendered="#{autenticacionBean.usuarioLogin.perfil.id == 25  || autenticacionBean.usuarioLogin.perfil.id == 6
+					|| autenticacionBean.usuarioLogin.perfil.id == 1  || autenticacionBean.usuarioLogin.perfil.id == 7
+					|| autenticacionBean.usuarioLogin.perfil.id == 8 || autenticacionBean.usuarioLogin.perfil.id == 11
+					|| autenticacionBean.usuarioLogin.perfil.id == 20 || autenticacionBean.usuarioLogin.perfil.id == 26}"
+				outcome="/pages/iv/materiales.xhtmlfaces-redirect=true"/>					   
+					   
+		</f:facet>
+		
+		
 		<p:growl id="menssage" />
+		
+		
+				
 	<h:form id="frmPlan">
 	
-		<p:poll interval="30" listener="#{cargaTrabajoBean.listarCarga()}" 
+		<p:poll interval="180" listener="#{cargaTrabajoBean.cambioPagina1()}" 
 				update=":frmPlan:tblPlan" 
-				rendered="#{cargaTrabajoBean.autenticacion.usuarioLogin.perfil.id != 22}"/>
+				rendered="#{autenticacionBean.usuarioLogin.perfil.id != 22}"/>
 				
 		<p:dataTable styleClass="tblPlaC" id="tblPlan"
 					emptyMessage="No se encontraron registros" scrollRows="40"
-					scrollable="true" liveScroll="true" scrollHeight="350" 
+					scrollable="true" liveScroll="true" scrollHeight="395" 
 					value="#{cargaTrabajoBean.team}" var="carg"
 					filteredValue="#{cargaTrabajoBean.filtroCargaTrabajo}"
-					scrollWidth="97%">
+					scrollWidth="100%"
+					>
 
 			<p:columnGroup type="header">
-				<p:row>					
-					<p:column rowspan="3" headerText="Equipo" width="70" sortBy="#{carga.equipo}" />
-					<p:column rowspan="3" headerText="Capacidad Tecnica del equipo" width="70" />
-					<p:column rowspan="1" headerText="Disponibilidad" width="25" />
-					<p:column rowspan="1" colspan="2" headerText="Carga de Trabajo Contratada" width="70" />
-					<p:column rowspan="1" colspan="2" headerText="Disponibilidad de máquina según carga actual" width="80" />
-					<p:column rowspan="3" headerText="Observaciones" width="80" />
-					<p:column rowspan="3" headerText="Acciones" width="25" rendered="#{autenticacionBean.usuarioLogin.perfil.id == 22}" />
+				<p:row>
+					<p:column rowspan="2" headerText="sucursal" width="2" />
+					<p:column rowspan="2" headerText="Fecha de Actualizacion" width="2" />					
+					<p:column rowspan="1" colspan="2" headerText="Equipo" width="40" />					
+					<p:column rowspan="1" colspan="3" headerText="Tiempos y proceso" width="90" />
+					<p:column rowspan="2" headerText="Observación" width="60" />
+					<p:column rowspan="2" headerText="Acciones" width="10" rendered="#{autenticacionBean.usuarioLogin.perfil.id == 22}" />
 				</p:row>
 				<p:row>
-					<p:column rowspan="1" headerText="Horas/Día" width="60" sortBy="#{carga.horaDia}"/>
-					<p:column rowspan="1" headerText="Horas Contratadas" width="60" sortBy="#{carga.horaContratadas}"/>
-					<p:column rowspan="1" headerText="Fecha" width="60" />
-					<p:column rowspan="1" headerText="Fecha" width="60" />
-					<p:column rowspan="1" headerText="Hora" width="60" />
+					<p:column rowspan="1" headerText="Descripción "  />
+					<p:column rowspan="1" headerText="Capacidad " />
+					<p:column rowspan="1" headerText="Fecha Disponibilidad" />
+					<p:column rowspan="1" headerText="Fecha compromiso entrega" />
+					<p:column rowspan="1" headerText="Novedades de proceso" />					
 				</p:row>
 
 			</p:columnGroup>
@@ -53,27 +109,27 @@
 		            </f:facet>
 				
 				<p:column style="">
+						<h:outputText value="#{carga.sucursal.nombre}" />
+				</p:column>
+				
+				<p:column >
+						<h:outputText value="#{carga.fechaRegistros}" />
+				</p:column>
+				
+				<p:column style="">
 						<h:outputText value="#{carga.equipo}" />
 				</p:column>
 				
 				<p:column style="">
 						<h:outputText value="#{carga.capacidad}" />
-				</p:column>
-				
-				<p:column style="text-align:center">
-						<h:outputText value="#{carga.horaDia}" />
-				</p:column>
-				
-				<p:column style="text-align:center">
-						<h:outputText value="#{carga.horaContratadas}" />
-				</p:column>
+				</p:column>	
 				
 				<p:column >
 						<h:outputText value="#{carga.fechaContratada}" />
 				</p:column>
 				
 				<p:column >
-						<h:outputText value="#{carga.fechaDisponibilidad}" />
+						<h:outputText value="#{carg.name == 'CNC' ? '--NA--' : carga.fechaDisponibilidad}" />
 				</p:column>
 				
 				<p:column style="text-align:center">
@@ -130,31 +186,20 @@
 						value="#{cargaTrabajoBean.carga.capacidad}" required="true" requiredMessage="Campo Descripcion es obligatorio"
 						style="width: 90%;"/>
 					
-					<p:outputLabel  value="Hora dia" />
-					<p:inputNumber id="horaD" value="#{cargaTrabajoBean.carga.horaDia}" 
-							 placeholder="0"  decimalPlaces="0"
-			              	 thousandSeparator=","  required="true" size="28"
-			                 />
-					
-					<p:outputLabel  value="Horas contratadas" />
-					<p:inputNumber id="horasC" value="#{cargaTrabajoBean.carga.horaContratadas}" 
-							 placeholder="0"  decimalPlaces="0"
-			              	 thousandSeparator=","  required="true"
-			                 size="28"/>
-			                 
-					<p:outputLabel  value="Fecha Contratada" />
+					<p:outputLabel  value="Fecha Disponibilidad" />
 					<p:calendar  value="#{cargaTrabajoBean.carga.fechaContratada}" 
 							    required="true" size="28" pattern="yyyy-MM-dd" mask="true"
 							    locale="es"/>
 					
-					<p:outputLabel  value="Fecha Disponibilidad" />
+					<p:outputLabel  value="Fecha compromiso entrega" rendered="#{cargaTrabajoBean.carga.trabajoArea.id != 4}" />
 					<p:calendar  value="#{cargaTrabajoBean.carga.fechaDisponibilidad}" 
 							 required="true" size="28" pattern="yyyy-MM-dd" mask="true" 
-							 locale="es"/>
+							 locale="es"
+							 rendered="#{cargaTrabajoBean.carga.trabajoArea.id != 4}"/>
 			                 
-					<p:outputLabel  value="Hora Disponibilidad" />
+					<p:outputLabel  value="Novedades de proceso" />
 					<p:inputText  value="#{cargaTrabajoBean.carga.horaDisponible}" 
-							 required="true" style="width: 90%;" />
+							  style="width: 90%;" />
 			        
 			        <p:outputLabel  value="Observacion" />
 					<p:inputTextarea cols="32" rows="3" autoResize="true"

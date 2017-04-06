@@ -3,6 +3,7 @@ package co.com.CGAwebComercial.entyties;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,6 +35,9 @@ public class Registro_Ingresos implements Serializable  {
 	@OneToOne
 	@JoinColumn(nullable = false)
 	private Funcionario funcionario;
+	
+	@Column (length = 255)
+	private String vista;	
 
 	public int getId_Registro() {
 		return id_Registro;
@@ -74,5 +78,13 @@ public class Registro_Ingresos implements Serializable  {
 
 	public void setFuncionario(Funcionario funcionario) {
 		this.funcionario = funcionario;
+	}
+
+	public String getVista() {
+		return vista;
+	}
+
+	public void setVista(String vista) {
+		this.vista = vista;
 	}
 }

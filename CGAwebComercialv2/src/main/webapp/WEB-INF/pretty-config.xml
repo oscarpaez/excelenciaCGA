@@ -83,128 +83,10 @@
 	    <view-id value="/pages/vistaModulo.xhtml" />
 	</url-mapping>
 	
-	<!-- Vistas Gerencia  -->
-	
-	<url-mapping id="gerVisMod">
-	    <pattern value="/gerencia" />
-	    <view-id value="/pages/gg/vistaModulo.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisIni">
-	    <pattern value="/gerencia/index" />
-	    <view-id value="/pages/gg/vistaInicial.xhtml" />
-	</url-mapping>
-	
-	
-	<!-- Menu 1  -->
-	<url-mapping id="gerVisMenu1">
-	    <pattern value="/gerencia/pais" />
-	    <view-id value="/pages/gg/plan.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu1Esp">
-	    <pattern value="/gerencia/pais/especialistas" />
-	    <view-id value="/pages/gg/listaVendedores.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu1EspLin">
-	    <pattern value="/gerencia/pais/especialistas/linea" />
-	    <view-id value="/pages/gg/linea.xhtml" />
-	</url-mapping>
-	
-	<!-- Fin  -->
-	
-	<!-- Menu 2  -->
-	<url-mapping id="gerVisMenu2">
-	    <pattern value="/gerencia/paisuen" />
-	    <view-id value="/pages/gg/plan4.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu2Uen">
-	    <pattern value="/gerencia/pais/uen" />
-	    <view-id value="/pages/gg/uen.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu2UenOfi">
-	    <pattern value="/gerencia/pais/uen/oficina" />
-	    <view-id value="/pages/gg/oficina4.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu2UenOfiLin">
-	    <pattern value="/gerencia/pais/uen/oficina/linea" />
-	    <view-id value="/pages/gg/linea4.xhtml" />
-	</url-mapping>
-	
-	<!-- Fin  -->
-	
-	<!-- Menu 3  -->
-	<url-mapping id="gerVisMenu3">
-	    <pattern value="/gerencia/paisof" />
-	    <view-id value="/pages/gg/plan1.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu3Ofi">
-	    <pattern value="/gerencia/pais/oficina/" />
-	    <view-id value="/pages/gg/oficina.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu3OfiLin">
-	    <pattern value="/gerencia/pais/oficina/linea" />
-	    <view-id value="/pages/gg/linea2.xhtml" />
-	</url-mapping>
-	
-	<!-- Fin  -->
-	
-	<!-- Menu 4  -->
-	<url-mapping id="gerVisMenu4">
-	    <pattern value="/gerencia/paissu" />
-	    <view-id value="/pages/gg/plan2.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu4Ofi">
-	    <pattern value="/gerencia/pais/sucursal" />
-	    <view-id value="/pages/gg/oficina2.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu4OfiEsp">
-	    <pattern value="/gerencia/pais/sucursal/especialista" />
-	    <view-id value="/pages/gg/listaVendedores2.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu4OfiEspLin">
-	    <pattern value="/gerencia/pais/sucursal/especialista/linea" />
-	    <view-id value="/pages/gg/linea5.xhtml" />
-	</url-mapping>
-	<!-- Fin  -->
-	
-	<!-- Menu 5  -->
-	<url-mapping id="gerVisMenu4">
-	    <pattern value="/gerencia/paisli" />
-	    <view-id value="/pages/gg/plan3.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu4">
-	    <pattern value="/gerencia/pais/linea" />
-	    <view-id value="/pages/gg/linea3.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu4">
-	    <pattern value="/gerencia/pais/linea/oficina" />
-	    <view-id value="/pages/gg/oficna3.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="gerVisMenu4">
-	    <pattern value="/gerencia/pais/linea/oficina/especialista" />
-	    <view-id value="/pages/gg/listaVendedores3.xhtml" />
-	</url-mapping>
-	<!-- Fin  -->
-	
-	<!-- Fin  modulo Gerente  -->
-	
 	<!-- Modulo Director Regional  -->
 	<url-mapping id="dirReg">
 	    <pattern value="/director" />
-	    <view-id value="/pages/dr/vistaModulo.xhtml" />
+	    <view-id value="/pages/dr/vistaModulo2.xhtml" />
 	</url-mapping>
 	
 	<url-mapping id="dirRegDet">
@@ -232,39 +114,38 @@
 	    <view-id value="/pages/dr/detalleZonasCargo.xhtml" />
 	</url-mapping>
 	
-	<!-- Fin  Director Regional -->
-	
-	<!-- Modulo Jefe Ventas Internas  -->
-	<url-mapping id="jefInt">
-	    <pattern value="/jefeInternos" />
-	    <view-id value="/pages/ji/vistaModulo.xhtml" />
+	<url-mapping id="dirRegOfe">
+	    <pattern value="/director/ofertaPedido" />
+	    <view-id value="/pages/dr/ofertaPedido.xhtml" />
 	</url-mapping>
 	
-	<url-mapping id="jefIntEsp">
-	    <pattern value="/jefeInternos/especialista" />
-	    <view-id value="/pages/ji/planji.xhtml" />
+	<url-mapping id="dirRegOfeDet">
+	    <pattern value="/director/ofertaPedido/detalle" />
+	    <view-id value="/pages/dr/detalleOfertaPedido.xhtml" />
 	</url-mapping>
 	
-	<url-mapping id="jefIntEspDet">
-	    <pattern value="/jefeInternos/especialista/detalle" />
-	    <view-id value="/pages/ji/detalle.xhtml" />
+	<url-mapping id="dirRegPedPer">
+	    <pattern value="/director/pedidoseperdidos" />
+	    <view-id value="/pages/dr/detallePedidosPerdidos.xhtml" />
 	</url-mapping>
 	
-	<url-mapping id="jefIntMix">
-	    <pattern value="/jefeInternos/mixlinea" />
-	    <view-id value="/pages/ji/mixLinea.xhtml" />
-	</url-mapping>
-	
-	<url-mapping id="jefIntMixDet">
-	    <pattern value="/jefeInternos/mixlinea/detalle" />
-	    <view-id value="/pages/ji/detalleMixLinea.xhtml" />
+	<url-mapping id="dirRegPedPer">
+	    <pattern value="/director/pedidoseproyectados" />
+	    <view-id value="/pages/dr/detallePedidosProyectados.xhtml" />
 	</url-mapping>
 	
 	
-	<!-- Modulo Director Comercial  -->
+	<!-- Fin  Director Regional -->	
+	
+	<!-- Modulo Director Comercial dcB -->
 	<url-mapping id="dirCom">
 	    <pattern value="/directorcomercial" />
 	    <view-id value="/pages/dcB/vistaModulo.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="dirCom2">
+	    <pattern value="/directorComercial" />
+	    <view-id value="/pages/dcB/vistaModulo2.xhtml" />
 	</url-mapping>
 	
 	
@@ -295,6 +176,45 @@
 	</url-mapping>
 	
 	<!-- Fin Director Comercial -->
+	
+	<!-- Modulo Director Comercial Pais dcP -->
+	<url-mapping id="dirComP">
+	    <pattern value="/directorpais" />
+	    <view-id value="/pages/dcP/vistaModulo2.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="dirComPofi">
+	    <pattern value="/directorpais/oficina" />
+	    <view-id value="/pages/dcP/vistaOficina.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="dirComPesp">
+	    <pattern value="/directorpais/vendedor" />
+	    <view-id value="/pages/dcP/vistaEspecialista.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="dirComPespMod">
+	    <pattern value="/directorpais/vendedor/modulo" />
+	    <view-id value="/pages/dcP/vistaModuloEspecialista.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="dirComPpedpro">
+	    <pattern value="/directorpais/pedidosenproceso" />
+	    <view-id value="/pages/dcP/detallePedidosEnProceso.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="dirComPpedper">
+	    <pattern value="/directorpais/pedidosperdidos" />
+	    <view-id value="/pages/dcP/detallePedidosPerdidos.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="dirComPpedpro">
+	    <pattern value="/directorpais/pedidosproyectados" />
+	    <view-id value="/pages/dcP/detallePedidosProyectados.xhtml" />
+	</url-mapping>	
+		
+	<!-- Fin Director Comercial Pais dcP-->
+	
 	
 	<!-- Modulo Director de linea  -->
 	<url-mapping id="dirLin">
@@ -327,11 +247,6 @@
 	    <view-id value="/pages/dl/cumplimientoPais.xhtml" />
 	</url-mapping>
 	
-	<url-mapping id="dirLinCum">
-	    <pattern value="/directorlinea/cumplimientopais" />
-	    <view-id value="/pages/dl/cumplimientoPais.xhtml" />
-	</url-mapping>
-	
 	<url-mapping id="dirLinCumEsp">
 	    <pattern value="/directorlinea/cumplimientopais/especialista" />
 	    <view-id value="/pages/dl/listaVendedores.xhtml" />
@@ -341,22 +256,316 @@
 	    <pattern value="/directorlinea/cumplimientopais/especialista/detalle" />
 	    <view-id value="/pages/dl/linea.xhtml" />
 	</url-mapping>
-	<!-- Fin Director de linea -->
+	<!-- Fin Director de linea -->	
+	
+	<!-- Vistas Gerencia  -->
+	
+	<url-mapping id="gerVisMod">
+	    <pattern value="/gerencia" />
+	    <view-id value="/pages/gg/vistaModulo2.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="gerVisIni">
+	    <pattern value="/gerencia/index" />
+	    <view-id value="/pages/gg/vistaInicial.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="gerpro">
+	    <pattern value="/gerencia/proyectos" />
+	    <view-id value="/pages/pro/proyectos.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="gerinc">
+	    <pattern value="/gerencia/incidencia" />
+	    <view-id value="/pages/pro/proyectos.xhtml" />
+	</url-mapping>
+	
+		<!-- Menu 1  -->
+		<url-mapping id="gerVisMenu1">
+		    <pattern value="/gerencia/pais" />
+		    <view-id value="/pages/gg/plan.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu1Esp">
+		    <pattern value="/gerencia/pais/especialistas" />
+		    <view-id value="/pages/gg/listaVendedores.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu1EspLin">
+		    <pattern value="/gerencia/pais/especialistas/linea" />
+		    <view-id value="/pages/gg/linea.xhtml" />
+		</url-mapping>
+		
+		<!-- Fin  -->
+		
+		<!-- Menu 2  -->
+		<url-mapping id="gerVisMenu2">
+		    <pattern value="/gerencia/paisuen" />
+		    <view-id value="/pages/gg/plan4.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu2Uen">
+		    <pattern value="/gerencia/pais/uen" />
+		    <view-id value="/pages/gg/uen.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu2UenOfi">
+		    <pattern value="/gerencia/pais/uen/oficina" />
+		    <view-id value="/pages/gg/oficina4.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu2UenOfiLin">
+		    <pattern value="/gerencia/pais/uen/oficina/linea" />
+		    <view-id value="/pages/gg/linea4.xhtml" />
+		</url-mapping>
+		
+		<!-- Fin  -->
+		
+		<!-- Menu 3  -->
+		<url-mapping id="gerVisMenu3">
+		    <pattern value="/gerencia/paisof" />
+		    <view-id value="/pages/gg/plan1.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu3Ofi">
+		    <pattern value="/gerencia/pais/oficina/" />
+		    <view-id value="/pages/gg/oficina.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu3OfiLin">
+		    <pattern value="/gerencia/pais/oficina/linea" />
+		    <view-id value="/pages/gg/linea2.xhtml" />
+		</url-mapping>
+		
+		<!-- Fin  -->
+		
+		<!-- Menu 4  -->
+		<url-mapping id="gerVisMenu4">
+		    <pattern value="/gerencia/paissu" />
+		    <view-id value="/pages/gg/plan2.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu4Ofi">
+		    <pattern value="/gerencia/pais/sucursal" />
+		    <view-id value="/pages/gg/oficina2.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu4OfiEsp">
+		    <pattern value="/gerencia/pais/sucursal/especialista" />
+		    <view-id value="/pages/gg/listaVendedores2.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu4OfiEspLin">
+		    <pattern value="/gerencia/pais/sucursal/especialista/linea" />
+		    <view-id value="/pages/gg/linea5.xhtml" />
+		</url-mapping>
+		<!-- Fin  -->
+		
+		<!-- Menu 5  -->
+		<url-mapping id="gerVisMenu4">
+		    <pattern value="/gerencia/paisli" />
+		    <view-id value="/pages/gg/plan3.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu4">
+		    <pattern value="/gerencia/pais/linea" />
+		    <view-id value="/pages/gg/linea3.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu4">
+		    <pattern value="/gerencia/pais/linea/oficina" />
+		    <view-id value="/pages/gg/oficna3.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="gerVisMenu4">
+		    <pattern value="/gerencia/pais/linea/oficina/especialista" />
+		    <view-id value="/pages/gg/listaVendedores3.xhtml" />
+		</url-mapping>
+		<!-- Fin  -->
+		
+	<!-- Fin  modulo Gerente  -->
+	
+	<!-- Modulo de inventario -->
+	
+	<url-mapping id="inv">
+	    <pattern value="/inventario" />
+	    <view-id value="/pages/iv/inventario.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="mat">
+	    <pattern value="/cargaTrabajo" />
+	    <view-id value="/pages/iv/cargaTrabajo.xhtml" />
+	</url-mapping>	
+		
+	<!-- Fin Modulo de inventario-->
+	
+	<!-- Modulo Jefe Ventas Internas  -->
+	<url-mapping id="jefInt">
+	    <pattern value="/jefeInternos" />
+	    <view-id value="/pages/ji/vistaModulo.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="jefIntEsp">
+	    <pattern value="/jefeInternos/especialista" />
+	    <view-id value="/pages/ji/planji.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="jefIntEspDet">
+	    <pattern value="/jefeInternos/especialista/detalle" />
+	    <view-id value="/pages/ji/detalle.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="jefIntMix">
+	    <pattern value="/jefeInternos/mixlinea" />
+	    <view-id value="/pages/ji/mixLinea.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="jefIntMixDet">
+	    <pattern value="/jefeInternos/mixlinea/detalle" />
+	    <view-id value="/pages/ji/detalleMixLinea.xhtml" />
+	</url-mapping>
+	
+	<!-- Fin Modulo jefe Ventas internas -->
+	
+	<!-- Modulo kpi -->
+	
+	<url-mapping id="kpi">
+	    <pattern value="/kpi" />
+	    <view-id value="/pages/ji/detalleMixLinea.xhtml" />
+	</url-mapping>
+	
+	<!-- Fin Modulo kpi -->
+	
+	<!-- oferta pedido -->
+	
+	<url-mapping id="ofeped">
+	    <pattern value="/ofertapedido" />
+	    <view-id value="/pages/of/ofertapedido2.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="ofeped1">
+	    <pattern value="/ofertaspedidos" />
+	    <view-id value="/pages/of/ofertapedido.xhtml" />
+	</url-mapping>
+	
+	<!-- Fin oferta pedido -->
 	
 	<!-- Modulo Especialista  -->
 	<url-mapping id="esp">
 	    <pattern value="/comercial" />
-	    <view-id value="/pages/ve/vistaModulo.xhtml" />
+	    <view-id value="/pages/ve/vistaModulo2.xhtml" />
 	</url-mapping>
 	
+	<url-mapping id="espinc">
+	    <pattern value="/comercial/incidencia" />
+	    <view-id value="/pages/ve/vistaIncidencia2.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="espregpro">
+	    <pattern value="/comercial/registrarproyecto" />
+	    <view-id value="/pages/ve/registrarProyecto.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="espofeped">
+	    <pattern value="/comercial/ofertapedido" />
+	    <view-id value="/pages/ve/ofertaPedido.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="espdetpro">
+	    <pattern value="/comercial/proyecto" />
+	    <view-id value="/pages/ve/detalleProyectos.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="espdetpedpro">
+	    <pattern value="/comercial/pedidosproyectados" />
+	    <view-id value="/pages/ve/detallePedidosProyectados.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="espdetpro">
+	    <pattern value="/comercial/pedidosperdidos" />
+	    <view-id value="/pages/ve/detallePedidosPerdidos.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="espdetpedenpro">
+	    <pattern value="/comercial/pedidosproceso" />
+	    <view-id value="/pages/ve/detallePedidosEnProceso.xhtml" />
+	</url-mapping>
 	
 	<url-mapping id="esplbr">
 	    <pattern value="/comercial/lbr" />
 	    <view-id value="/pages/ve/bajarotacion.xhtml" />
 	</url-mapping>
 	
+	<!-- Fin Modulo Especialista -->
 	
-	<!-- Fin Director de linea -->
+	<!-- Modulo In -->
 	
+	<url-mapping id="int">
+	    <pattern value="/ingresos" />
+	    <view-id value="/pages/vi/vistaIngresos.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="intdet">
+	    <pattern value="/ingresos/detalleingresos" />
+	    <view-id value="/pages/vi/detalleIngresos.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="intinc">
+	    <pattern value="/incidencia " />
+	    <view-id value="/pages/vi/incidencia.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="intincreg">
+	    <pattern value="/incidencia/registros " />
+	    <view-id value="/pages/vi/vistaIncidencia.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="intvid">
+	    <pattern value="/ayuda/video " />
+	    <view-id value="/pages/vi/video.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="intpedpro">
+	    <pattern value="/pedidosprogramados " />
+	    <view-id value="/pages/vi/registroPedidosProgramados.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="intpedpro">
+	    <pattern value="/oportunidadnegocio" />
+	    <view-id value="/pages/vi/oportunidadnegocio.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="intpedpro">
+	    <pattern value="/oportunidadnegocio" />
+	    <view-id value="/pages/vi/oportunidadnegocio.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="intman">
+	    <pattern value="/manual" />
+	    <view-id value="/pages/vi/manual.xhtml" />
+	</url-mapping>
+	
+	<url-mapping id="intman1">
+	    <pattern value="/ayuda/manual" />
+	    <view-id value="/pages/vi/manual2.xhtml" />
+	</url-mapping>
+	
+	<!-- Fin Modulo In -->	
+	
+	<!--Actualizacion de datos ad  -->
+		<url-mapping id="adAD">
+		    <pattern value="/actualizaciondatos/registro" />
+		    <view-id value="/pages/ad/actualizacionDatos.xhtml" />
+		</url-mapping>
+		
+		<url-mapping id="advi">
+		    <pattern value="/actualizaciondatos/vistaRegistros" />
+		    <view-id value="/pages/ad/vistaIncidencia.xhtml" />
+		</url-mapping>
+	<!-- Fin Actualizacion de datos ad   -->
+	
+	<!--  -->
+	
+	<!--  -->
 	
 </pretty-config>

@@ -41,6 +41,7 @@ public class EsquemaGerentesBean implements Serializable {
 	public void listarEsquemaGerentes(){
 
 		try{
+			
 			GerentesDao daoG = new GerentesDao();
 			gerente =  daoG.buscarCod(codSap);
 			EsquemaGerentesDao dao = new EsquemaGerentesDao();

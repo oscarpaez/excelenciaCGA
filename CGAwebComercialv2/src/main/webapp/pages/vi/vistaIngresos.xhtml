@@ -32,7 +32,8 @@
 				<p:dataTable styleClass="tblPla" id="tblIng" widgetVar="tblIng"
 					emptyMessage="No se encontraron registros"
 					value="#{registro_IngresosBean.listaRegistros}" var="registro"
-					draggableColumns="true" draggableRows="true" scrollRows="40"
+					filteredValue="#{registro_IngresosBean.listaFiltroRegistros}"
+					scrollRows="40"
 					scrollable="true" liveScroll="true" scrollHeight="300"
 					scrollWidth="97%">
 
@@ -42,10 +43,10 @@
 
 					<p:columnGroup type="header">
 						<p:row>
-							<p:column colspan="1" headerText="Cod SAP" width="5%" />
-							<p:column colspan="1" headerText="Nombre" width="10%" />
-							<p:column colspan="1" headerText="Cargo" width="10%" />
-							<p:column colspan="1" headerText="Cantidad Ingresos" width="4%" />
+							<p:column colspan="1" headerText="Cod SAP" sortBy="#{registro.funcionario.id_funcionario}" filterBy="#{registro.funcionario.id_funcionario}"  filterMatchMode="contains" width="5%" filterStyle="width:90%" />
+							<p:column colspan="1" headerText="Nombre" sortBy="#{registro.persona.nombre}" filterBy="#{registro.persona.nombre}"  filterMatchMode="contains" width="10%" filterStyle="width:90%"/>
+							<p:column colspan="1" headerText="Cargo" sortBy="#{registro.funcionario.descripcion}" filterBy="#{registro.funcionario.descripcion}"  filterMatchMode="contains" width="10%" filterStyle="width:90%" />
+							<p:column colspan="1" headerText="Cantidad Ingresos" sortBy="#{registro.id_Registro}" width="4%" />
 							<p:column colspan="1" headerText="Acciones" width="9%"
 								style="text-align:center" />
 						</p:row>

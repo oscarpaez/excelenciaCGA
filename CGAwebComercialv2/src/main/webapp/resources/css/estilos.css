@@ -65,13 +65,19 @@
     background: #333d40;
     text-aling: center;
     
+    
 }
 
 .header .labheader{
 	text-align: center;
 	font-size: 30px !important;
-	padding: 0 31px ;
+	/* padding: 0 31px ; */
 	color: white;
+}
+
+.center{
+	margin-top: 78px; 
+	position: static;
 }
 
 /*////ocultar calendario/////*/

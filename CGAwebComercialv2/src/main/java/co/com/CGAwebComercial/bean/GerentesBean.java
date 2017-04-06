@@ -64,6 +64,9 @@ public class GerentesBean implements Serializable{
 	public void listarGerentes(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			GerentesDao dao = new GerentesDao();
 			listaGerentes = dao.listar();
 		} catch (RuntimeException ex) {
@@ -75,6 +78,9 @@ public class GerentesBean implements Serializable{
 	public void listarDirectores(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = (autenticacion.getFechaBusqueda() == null)? "": autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = (autenticacion.getFechaBusquedaYear() == null)? "": autenticacion.getFechaBusquedaYear();
 			
@@ -198,6 +204,9 @@ public class GerentesBean implements Serializable{
 	public void directorVL(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = (autenticacion.getFechaBusqueda() == null)? "": autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = (autenticacion.getFechaBusquedaYear() == null)? "": autenticacion.getFechaBusquedaYear();
 			
@@ -302,7 +311,9 @@ public class GerentesBean implements Serializable{
 	public void directorRecaudo(){
 		
 		try{
-
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = (autenticacion.getFechaBusqueda() == null)? "": autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = (autenticacion.getFechaBusquedaYear() == null)? "": autenticacion.getFechaBusquedaYear();
 			
@@ -321,6 +332,9 @@ public class GerentesBean implements Serializable{
 	public void directorZC(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = (autenticacion.getFechaBusqueda() == null)? "": autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = (autenticacion.getFechaBusquedaYear() == null)? "": autenticacion.getFechaBusquedaYear();
 			

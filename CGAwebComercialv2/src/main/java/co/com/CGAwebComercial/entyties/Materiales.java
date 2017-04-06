@@ -53,6 +53,21 @@ public class Materiales implements Serializable {
 	@Column (length = 255)
 	private String imagen;
 	
+	@Column(scale = 2)
+	private BigDecimal pedido;
+	
+	@ManyToOne
+	private EstadoMaterial estadoMaterial;	
+	
+	@Column (length = 255)
+	private String ubicacion;
+	
+	@Column(scale = 2)
+	private BigDecimal ordenProducto;
+	
+	@Column(scale = 2)
+	private BigDecimal avance;
+	
 	@Transient
 	private String nombreImagen;
 	
@@ -162,4 +177,74 @@ public class Materiales implements Serializable {
 	public void setRuta(StreamedContent ruta) {
 		this.ruta = ruta;
 	}	
+	
+	public BigDecimal getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(BigDecimal pedido) {
+		this.pedido = pedido;
+	}
+
+	public EstadoMaterial getEstadoMaterial() {
+		return estadoMaterial;
+	}
+
+	public void setEstadoMaterial(EstadoMaterial estadoMaterial) {
+		this.estadoMaterial = estadoMaterial;
+	}
+
+	public String getUbicacion() {
+		return ubicacion;
+	}
+
+	public void setUbicacion(String ubicacion) {
+		this.ubicacion = ubicacion;
+	}	
+
+	public BigDecimal getOrdenProducto() {
+		return ordenProducto;
+	}
+
+	public void setOrdenProducto(BigDecimal ordenProducto) {
+		this.ordenProducto = ordenProducto;
+	}
+
+	public BigDecimal getAvance() {
+		return avance;
+	}
+
+	public void setAvance(BigDecimal avance) {
+		this.avance = avance;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s[id=%d]", getClass().getSimpleName(), getId());
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == 0) ? 0 : id);
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Materiales other = (Materiales) obj;
+		if (id == 0) {
+			if (other.id != 0)
+				return false;			
+		} else if (id != other.id)
+			return false; 
+		return true;
+	}
 }

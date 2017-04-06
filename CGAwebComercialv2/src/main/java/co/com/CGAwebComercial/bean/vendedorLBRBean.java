@@ -96,7 +96,6 @@ public class vendedorLBRBean implements Serializable{
 	
 
 	public vendedorLBRBean(){
-
 		recurso = new Recursos();
 		listaFechas = recurso.cargarFechas();
 	}
@@ -105,6 +104,9 @@ public class vendedorLBRBean implements Serializable{
 	public void vendedorLBR(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			listaVendedores = new ArrayList<>();
 			FuncionarioDao daoF = new FuncionarioDao();
 			Funcionario funcionario = daoF.buscarPersona(indexVIE);
@@ -155,7 +157,9 @@ public class vendedorLBRBean implements Serializable{
 	public void listarContadoAnticipoN(){
 
 		try {
-
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			if(autenticacion.getFechaBusqueda() != null ){
 				fechaBusqueda = autenticacion.getFechaBusqueda();
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
@@ -204,6 +208,9 @@ public class vendedorLBRBean implements Serializable{
 	public void listarFacturasContadoAnticipo(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			if(autenticacion.getFechaBusqueda() != null ){
 				fechaBusqueda = autenticacion.getFechaBusqueda();
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
@@ -224,7 +231,9 @@ public class vendedorLBRBean implements Serializable{
 	public void desempenoVentas(){
 
 		try{
-
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			if(desempenoVentas == null){
 				LineChartModel model = new LineChartModel();
 				LineChartModel model2 = new LineChartModel();

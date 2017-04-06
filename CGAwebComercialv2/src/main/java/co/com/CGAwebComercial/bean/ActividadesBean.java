@@ -35,6 +35,9 @@ public class ActividadesBean implements Serializable{
 	private Actividades activida;
 	private SubActividades subActiva;
 	
+	public ActividadesBean() {
+		autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+	}
 	
 	@PostConstruct
 	public void listaActividadesUsuario(){
@@ -51,7 +54,6 @@ public class ActividadesBean implements Serializable{
 					System.out.println(listS.size() + "QQEE");
 					actividades.setListaSA(listS);
 				}
-				
 			}
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();

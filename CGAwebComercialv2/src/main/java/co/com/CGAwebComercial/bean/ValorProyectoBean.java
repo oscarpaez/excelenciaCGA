@@ -38,6 +38,10 @@ public class ValorProyectoBean implements Serializable{
 	private String totalVM;
 	private String totalVP;
 	
+	public ValorProyectoBean() {
+		
+	}
+	
 	public void listarAsesor(){
 		
 		try{
@@ -76,6 +80,9 @@ public class ValorProyectoBean implements Serializable{
 	public void listarProyectoAsesor(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			ValorProyectoDao daoV = new ValorProyectoDao();
 			listaProyectos = daoV.listarProyectosAsesor(idFun);
 			
@@ -96,6 +103,9 @@ public class ValorProyectoBean implements Serializable{
 	public void listarProyectoOficina(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			listaProyectos = new ArrayList<>();
 			Zona_FuncionarioDao daoF = new Zona_FuncionarioDao();
 			Zona_Funcionario zonaF = daoF.buscarFuncionarioZona(idFun);

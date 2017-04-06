@@ -25,7 +25,7 @@
 			</p:dialog>
 	
 	<p:layout  fullPage="true">
-		<p:layoutUnit position="north" >
+		<p:layoutUnit position="north" style="padding: .0em;" >
 			 <div  class="header">
 			 	<h:form styleClass="salirF" >
 			 	<p:graphicImage library="images"  name="logo-actual.png" />			 	
@@ -47,7 +47,7 @@
 			 	 	<p:button  styleClass="salir" icon="ui-icon-video" value="Video Ayuda" 
 			 	 		outcome="/pages/vi/video.xhtml?faces-redirect=true" 
 			 	 		update="@this"
-			 	 		rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
+			 	 		rendered="#{autenticacionBean.usuarioLogin.persona.cedula == 6  || autenticacionBean.usuarioLogin.persona.cedula == 1 || autenticacionBean.usuarioLogin.persona.cedula == 11  }"/>
 			 	 				
 			 		 <p:commandLink value="Cambiar Contraseña" actionListener="#{autenticacionBean.ventanaContrasena()}" styleClass="salirL"
 			 	 		rendered="#{autenticacionBean.usuarioLogin.persona.cedula != null}"/>
@@ -55,9 +55,9 @@
 			 </div>
 		</p:layoutUnit>		
 		
-		<p:layoutUnit position="center" resizable="true" >	
+		<p:layoutUnit position="center" resizable="true" styleClass="center" >	
 			<ui:insert name="menu" />		
-			<ui:insert name="contenido"/>
+			<ui:insert name="contenido" />
 		</p:layoutUnit>
 		
 		<p:layoutUnit position="south">

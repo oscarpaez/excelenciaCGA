@@ -81,6 +81,9 @@ public class PlanBean implements Serializable {
 	public void inicioVista(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			recurso = new Recursos();
 			listaFechas = recurso.cargarFechas();
 			if(fechaConsulta == null){
@@ -106,6 +109,9 @@ public class PlanBean implements Serializable {
 	public void listarPlan(){
 		
 		try {
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			for (Fechas fecha: listaFechas) {
 				fechaConsulta = (fecha.getValorMes().equals(autenticacion.getFechaBusqueda()))? fecha.getMes() : fechaConsulta;
 			}
@@ -238,6 +244,9 @@ public class PlanBean implements Serializable {
 	public void listarPlanPorFechas(){
 		
 		try {
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			for (Fechas fecha: listaFechas) {
 				fechaConsulta = (fecha.getValorMes().equals(autenticacion.getFechaBusqueda()))? fecha.getMes() : fechaConsulta;
 			}
@@ -413,6 +422,10 @@ public class PlanBean implements Serializable {
 	public void listarDetalle(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
+			
 			if(autenticacion.getFechaBusqueda() != null && autenticacion.getFechaBusquedaYear() != null){
 				DetalleDao dao = new DetalleDao();
 				listaDetalle1 = dao.listarDetallePorFecha(tipo,codigo, idPersona, autenticacion.getFechaBusqueda(), autenticacion.getFechaBusquedaYear());
@@ -444,6 +457,9 @@ public class PlanBean implements Serializable {
 	public void desempenoVentas(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			
 			if(desempenoVentas == null){
 				LineChartModel model = new LineChartModel();

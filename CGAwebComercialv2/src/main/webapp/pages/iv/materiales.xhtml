@@ -8,36 +8,86 @@
 
 <ui:composition template="/templates/modeloGeneral2.xhtml">
 
-	<ui:define name="contenido">
+	<ui:define name="contenido" >
 		
 		<f:metadata>
 
 		</f:metadata>
-	<p:growl id="menssage" />	
+		
+		<f:facet name="header" >
+			<p:outputLabel
+				value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
+			
+			<p:button  icon="ui-icon-person" iconPos="right" styleClass="excel" title="Ingresos" 
+					   value="Ingresos" 	
+					   style="text-align: left; float:right;  height:24px; background:#ff6666; 
+					   		font-size: 12px; "
+							    outcome="/pages/vi/vistaIngresos.xhtml?faces-redirect=true"
+					   rendered="#{autenticacionBean.usuarioLogin.id == 28}"		    />
+					   
+			<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/ve/vistaModulo2.xhtml?faces-redirect=true" 
+						rendered="#{autenticacionBean.usuarioLogin.perfil.id == 1 || autenticacionBean.usuarioLogin.perfil.id == 6}"
+						onclick="showLoading()" />
+						
+			<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/dr/vistaModulo2.xhtml?faces-redirect=true" 
+						rendered="#{autenticacionBean.usuarioLogin.perfil.id == 7 }"
+						onclick="showLoading()" />
+						
+			<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/dcB/vistaModulo2.xhtml?faces-redirect=true" 
+						rendered="#{autenticacionBean.usuarioLogin.perfil.id == 8 }"
+						onclick="showLoading()" />
+			
+			<p:button icon="ui-icon-home" iconPos="right" styleClass="excel" title="Inicio"
+						style="text-align: left; float:right; width:24px; height:24px; background: #ff6666;"
+						outcome="/pages/gg/vistaModulo2.xhtml?faces-redirect=true" 
+						rendered="#{autenticacionBean.usuarioLogin.perfil.id == 11 }"
+						onclick="showLoading()" />											   	
+			
+			<p:link value="Carga de Trabajo" styleClass="excel"
+				style="text-align: left; float:right;  height:24px;  font-size: 12px;
+					    padding-right: 10px;"
+				rendered="#{autenticacionBean.usuarioLogin.perfil.id == 25 || autenticacionBean.usuarioLogin.perfil.id == 6 || autenticacionBean.usuarioLogin.perfil.id == 1
+					|| autenticacionBean.usuarioLogin.perfil.id == 7 || autenticacionBean.usuarioLogin.perfil.id == 8
+					|| autenticacionBean.usuarioLogin.perfil.id == 11 || autenticacionBean.usuarioLogin.perfil.id == 26}"
+				outcome="/pages/iv/cargaTrabajo.xhtmlfaces-redirect=true"/>			   
+		</f:facet>
+		
+	<p:growl id="menssage" widgetVar="menssage"/>	
 	<h:form id="frmPlan" >
-		<p:poll interval="300" listener="#{materialesBean.listarMaterial()}" 
+		<p:poll interval="180" listener="#{materialesBean.cambioPagina()}" 
 				update=":frmPlan:tblPlan  " 
-				rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id != 21}"/>		
+				rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id != 21}"/>	
 		
 		<p:dataTable styleClass="tblPla" id="tblPlan"
 					emptyMessage="No se encontraron registros" scrollRows="40"
-					scrollable="true" liveScroll="true" scrollHeight="410" 
+					scrollable="true" liveScroll="true" scrollHeight="470" 
 					value="#{materialesBean.listaMateriales}" var="mat" 
 					filteredValue="#{materialesBean.filtroMateriales}"
-					scrollWidth="97%">
+					scrollWidth="100%">
 
 			<p:columnGroup type="header">
 				<p:row>					
-					<p:column rowspan="1" headerText="Sucursal" width="60" sortBy="#{mat.sucursal.nombre}" />
-					<p:column rowspan="1" headerText="Codigo" width="60" sortBy="" />
-					<p:column rowspan="1" headerText="Descripción" width="120" />
-					<p:column rowspan="1" headerText="Espesor" width="60" sortBy="#{mat.espesor}"/>
-					<p:column rowspan="1" headerText="Ancho" width="60" sortBy="#{mat.ancho}" />
-					<p:column rowspan="1" headerText="Largo" width="60" sortBy="#{mat.largo}"/>
+					<p:column rowspan="1" headerText="Sucursal" width="60" sortBy="#{mat.sucursal.nombre}" filterBy="#{mat.sucursal.nombre}"  filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column rowspan="1" headerText="Codigo" width="60"  filterBy="#{mat.codigo}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column rowspan="1" headerText="Descripción" width="120" filterBy="#{mat.descripcion}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column rowspan="1" headerText="Espesor" width="60" sortBy="#{mat.espesor}" filterBy="#{mat.espesor}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column rowspan="1" headerText="Ancho" width="60" sortBy="#{mat.ancho}" filterBy="#{mat.ancho}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column rowspan="1" headerText="Largo" width="60" sortBy="#{mat.largo}" filterBy="#{mat.largo}" filterMatchMode="contains" filterStyle="width:90%"/>
 					<p:column rowspan="1" headerText="Unidad" width="60" />
-					<p:column rowspan="1" headerText="Teórico" width="60" sortBy="#{mat.teorico}"/>
+					<p:column rowspan="1" headerText="Teórico" width="60" sortBy="#{mat.teorico}" filterBy="#{mat.teorico}" filterMatchMode="contains" filterStyle="width:90%"/>
 					<p:column rowspan="1" headerText="Imagen" width="60"/>
-					<p:column rowspan="1" headerText="Acciones" width="60" rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id == 21}"/>					
+					<p:column rowspan="1" headerText="Pedido / OC" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column rowspan="1" headerText="Estado" width="60"/>
+					<p:column rowspan="1" headerText="Ubicación" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%" />
+					<p:column rowspan="1" headerText="Orden Producto" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%" />
+					<p:column rowspan="1" headerText="Avance" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column rowspan="1" headerText="Acciones" width="60" rendered="#{autenticacionBean.usuarioLogin.perfil.id == 21 || autenticacionBean.usuarioLogin.perfil.id == 6 || autenticacionBean.usuarioLogin.perfil.id == 1 || autenticacionBean.usuarioLogin.perfil.id == 26}"/>					
 				</p:row>
 
 			</p:columnGroup>
@@ -56,7 +106,7 @@
 				
 				<p:column style="text-align:right">
 						<h:outputText value="#{mat.espesor}" >
-							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+							<f:convertNumber locale="en_US" maxFractionDigits="2" />
 						</h:outputText>
 				</p:column>
 				
@@ -80,7 +130,7 @@
 				
 				<p:column style="text-align:right">
 						<h:outputText value="#{mat.teorico}" >
-							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+							<f:convertNumber locale="en_US" maxFractionDigits="2" />
 						</h:outputText>
 				</p:column>
 				
@@ -92,22 +142,60 @@
 						 	<p:graphicImage library="imagenesMateriales" name="#{mat.imagen}"
 						 		 height="25" width="25" />
 						 </p:commandLink>
-						 	
-						
 				</p:column>
+				
+				<p:column style="text-align:right">
+						<h:outputText value="#{mat.pedido}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>	
+				</p:column>
+				
+				<p:column>
+						<h:outputText value="#{mat.estadoMaterial.descripcion}" >							
+						</h:outputText>
+				</p:column>
+				
+				<p:column style="text-align:right">
+						<h:outputText value="#{mat.ubicacion}" />	
+				</p:column>
+				
+				<p:column style="text-align:right">
+						<h:outputText value="#{mat.ordenProducto}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>		
+				</p:column>
+				
+				<p:column style="text-align:right">
+						<h:outputText value="#{mat.avance}" >
+							<f:convertNumber locale="en_US" maxFractionDigits="0" />
+						</h:outputText>		
+				</p:column>
+				
+				<p:column style="text-align:center" rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id == 6 || materialesBean.autenticacion.usuarioLogin.perfil.id == 1 || materialesBean.autenticacion.usuarioLogin.perfil.id == 26}">
+						<p:commandButton icon="ui-icon-pencil"
+							action="#{materialesBean.editar(mat)}"
+							update=" :frmNueMatE:pnlNueMatE"
+							oncomplete="PF('dlgNueE').show();" title="Editar"
+							disabled="#{mat.estadoMaterial != null and autenticacionBean.usuarioLogin.perfil.id == 1 || mat.estadoMaterial != null and autenticacionBean.usuarioLogin.perfil.id == 7 
+								|| mat.estadoMaterial != null and autenticacionBean.usuarioLogin.perfil.id == 26 || mat.estadoMaterial != null and autenticacionBean.usuarioLogin.perfil.id == 6 }">
+							<f:actionListener
+								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>	
+				</p:column>	
 				
 				<p:column style="text-align:center" rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id == 21}">
 						<p:commandButton icon="ui-icon-pencil"
 							action="#{materialesBean.editar(mat)}"
 							update=" :frmNueMat:pnlNueMat"
-							oncomplete="PF('dlgNue').show();" title="Editar">
+							oncomplete="PF('dlgNue').show();" title="Editar"
+							>
 							<f:actionListener
 								type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 						</p:commandButton>
 						
 					<p:commandButton icon="ui-icon-trash"	
 							actionListener="#{materialesBean.borrarMaterial(mat)}"					    
-							update=":frmPlan:tblPlan :menssage" title="Borrar">							
+							update=":frmPlan:tblPlan " title="Borrar">							
 					</p:commandButton>		
 				</p:column>				
 				
@@ -126,11 +214,11 @@
 		</p:dataTable>
 	</h:form>
 	
-	<p:dialog header="Crear Nuevo Material" widgetVar="dlgNue" draggable="false" 
+	<p:dialog header="Crear Nuevo Material" widgetVar="dlgNue" draggable="true" 
 				resizable="false" closable="true" appendTo="@(body)" modal="true" 
-				styleClass="liquidar" width="600" height="480">
+				styleClass="liquidar" width="600" height="580">
 				
-			<h:form id="frmNueMat" enctype="multipart/form-data" >
+			<h:form id="frmNueMat" enctype="multipart/form-data" onsubmit="return false;" >
 				<h:panelGrid columns="2" id="pnlNueMat" >
 				
 					<p:outputLabel for="sucursal" value="Sucursal: " />
@@ -155,40 +243,74 @@
 						style="width: 90%;"/>
 					
 					<p:outputLabel  value="Espesor" />
-					<p:inputNumber id="Espesor" value="#{materialesBean.materiales.espesor}" 
-							 placeholder="0"  decimalPlaces="0"
-			              	 thousandSeparator=","  required="true" size="31"
-			                 />
-					
+					<p:inputNumber id="Espesor" widgetVar="espesor" value="#{materialesBean.materiales.espesor}" 
+							 placeholder="0"  decimalPlaces="2"
+			              	 thousandSeparator=","  required="true" size="31" onchange="sumaTeorico()" 
+			              	 onkeypress="sumaTeorico()">			              	 
+			        </p:inputNumber>             	 
+			                 
 					<p:outputLabel  value="Ancho" />
-					<p:inputNumber id="Ancho" value="#{materialesBean.materiales.ancho}" 
+					<p:inputNumber id="Ancho" widgetVar="ancho"  value="#{materialesBean.materiales.ancho}" 
 							 placeholder="0"  decimalPlaces="0"
 			              	 thousandSeparator=","  required="true"
-			                 size="31"/>
+			                 size="31" onchange="sumaTeorico()"  onkeypress="sumaTeorico()">
+			        </p:inputNumber>
 			                 
 					<p:outputLabel  value="Largo" />
-					<p:inputNumber id="Largo" value="#{materialesBean.materiales.largo}" 
+					<p:inputNumber id="Largo" widgetVar="largo" value="#{materialesBean.materiales.largo}" 
 							 placeholder="0"  decimalPlaces="0"
 			              	 thousandSeparator=","  required="true"
-			                 size="31" />
+			              	 size="31"
+			              	 onchange="sumaTeorico()" onkeypress="sumaTeorico()">			              	 
+			        </p:inputNumber>
 					
 					<p:outputLabel  value="Unidad" />
-					<p:inputNumber id="Unidad" value="#{materialesBean.materiales.unidad}" 
+					<p:inputNumber id="Unidad" widgetVar="unidad" value="#{materialesBean.materiales.unidad}" 
 							 placeholder="0"  decimalPlaces="0"
 			              	 thousandSeparator=","  required="true"
-			                 size="31" />
+			                 size="31"
+			                 onchange="sumaTeorico()"  onkeypress="sumaTeorico()">
+			         </p:inputNumber>
 			                 
 					<p:outputLabel  value="Teorico" />
-					<p:inputNumber id="Teorico" value="#{materialesBean.materiales.teorico}" 
-							 placeholder="0"  decimalPlaces="0"
-			              	 thousandSeparator=","  required="true"
-			                 size="31" />
+					<p:inputNumber id="Teorico" widgetVar="teorico" value="#{materialesBean.materiales.teorico}" 
+							 placeholder="0"  decimalPlaces="2" 
+			              	 thousandSeparator=","  required="true"  disabled="false"
+			                 size="31" style="color:#0000ff; opacity: .99;"/>
 			                 
 			        <p:outputLabel for="upload" value="Imagen:" />
 						<p:fileUpload id="upload" mode="advanced"
 							fileUploadListener="#{materialesBean.upload}"							
 							update="" auto="false"
 							uploadLabel="Subir" /> 
+					
+					<p:outputLabel  value="Ubicación" />
+					<p:inputText style="width:90%" value="#{materialesBean.materiales.ubicacion}" />
+							
+					
+					<p:outputLabel  value="Orden Producto" />
+					<p:inputNumber id="ordenP" value="#{materialesBean.materiales.ordenProducto}" 
+							 placeholder="0"  decimalPlaces="0"
+			              	 thousandSeparator=","  size="31"
+			                 onchange="sumaTeorico()"  onkeypress="sumaTeorico()">
+			        </p:inputNumber>
+			        
+			        <p:outputLabel for="avance" value="Avance: " />
+					<p:selectOneMenu id="avance" filter="true" style="width:300px"
+						converter="omnifaces.SelectItemsConverter"						
+						value="#{materialesBean.materiales.avance}">
+						<f:selectItem noSelectionOption="true" itemLabel="Seleccione el Estado"/>
+						<f:selectItem itemValue="10" itemLabel="10%"/>
+						<f:selectItem itemValue="20" itemLabel="20%"/>
+						<f:selectItem itemValue="30" itemLabel="30%"/>
+						<f:selectItem itemValue="40" itemLabel="40%"/>
+						<f:selectItem itemValue="50" itemLabel="50%"/>
+						<f:selectItem itemValue="60" itemLabel="60%"/>
+						<f:selectItem itemValue="70" itemLabel="70%"/>
+						<f:selectItem itemValue="80" itemLabel="80%"/>
+						<f:selectItem itemValue="90" itemLabel="90%"/>
+						<f:selectItem itemValue="100" itemLabel="100%"/>
+					</p:selectOneMenu>		
 							       
 				</h:panelGrid>
 				<br />
@@ -197,25 +319,129 @@
 					<p:commandButton value="Salvar" 
 							actionListener="#{materialesBean.editarMaterial()}"
 							update=" :frmNueMat:pnlNueMat  :frmPlan:tblPlan :menssage"
-						/>
+							/>
 					<p:commandButton value="Cerrar" oncomplete="PF('dlgNue').hide();"
 						 />
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>	
 		
-		<p:dialog header="Imagen" widgetVar="dlgIma" draggable="false" 
+		<p:dialog header="Imagen" widgetVar="dlgIma" draggable="true"  
 				resizable="false" closable="true" appendTo="@(body)" modal="true" 
 				styleClass="liquidar" width="600" height="430" position="center"
 				>
 				<h:form id="frmIma" enctype="multipart/form-data" >
 					<h:panelGrid columns="1" id="pnlIma" >
 						<p:graphicImage id="foto" library="imagenesMateriales" name="#{materialesBean.imagen}"
-								width="550" height="400">
+								width="550" height="400" >
 						</p:graphicImage>
 					</h:panelGrid>
 				</h:form>	
-		</p:dialog>			
+		</p:dialog>	
+		
+		<p:dialog header="Crear Nuevo Material" widgetVar="dlgNueE" draggable="true" 
+				resizable="false" closable="true" appendTo="@(body)" modal="true" 
+				styleClass="liquidar" width="600" height="480">
+				
+			<h:form id="frmNueMatE" enctype="multipart/form-data" onsubmit="return false;" >
+				<h:panelGrid columns="2" id="pnlNueMatE" >
+				
+					<p:outputLabel for="sucursal" value="Sucursal: " />
+					<p:selectOneMenu id="sucursal" filter="true" style="width:300px; color:#0000ff; opacity: .90;"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo Estado es obligatorio"
+						value="#{materialesBean.materiales.sucursal}"
+						disabled="true">
+						<f:selectItem noSelectionOption="true" itemLabel="Seleccione el Estado"/>
+						<f:selectItems value="#{materialesBean.listaSucursal}" var="sucursal"
+							itemValue="#{sucursal}" itemLabel="#{sucursal.nombre}" />
+					</p:selectOneMenu>
+					
+					<p:outputLabel  value="Codigo:" />
+					<p:inputNumber  id="codigo" placeholder="0"  decimalPlaces="0"
+			              	thousandSeparator=","  required="true" size="31" 
+							value="#{materialesBean.materiales.codigo}" 
+							requiredMessage="Campo Codigo es obligatorio"
+							disabled="true" inputStyle="color:#0000ff; opacity: .90;"/>
+					
+					<p:outputLabel  value="Descripcion" />
+					<p:inputTextarea  cols="32" rows="3" autoResize="true"
+						value="#{materialesBean.materiales.descripcion}" required="true" requiredMessage="Campo Descripcion es obligatorio"
+						style="width: 90%; color:#0000ff; opacity: .90;"
+						disabled="true" />
+					
+					<p:outputLabel  value="Espesor" />
+					<p:inputNumber id="Espesor" widgetVar="espesor" value="#{materialesBean.materiales.espesor}" 
+							 placeholder="0"  decimalPlaces="2"
+			              	 thousandSeparator=","  required="true" size="31" onchange="sumaTeorico()" 
+			              	 onkeypress="sumaTeorico()"
+			              	 disabled="true" inputStyle="color:#0000ff; opacity: .90;">			              	 
+			        </p:inputNumber>             	 
+			                 
+					<p:outputLabel  value="Ancho" />
+					<p:inputNumber id="Ancho" widgetVar="ancho"  value="#{materialesBean.materiales.ancho}" 
+							 placeholder="0"  decimalPlaces="0"
+			              	 thousandSeparator=","  required="true"
+			                 size="31" onchange="sumaTeorico()"  onkeypress="sumaTeorico()"
+			                 disabled="true" inputStyle="color:#0000ff; opacity: .90;">
+			        </p:inputNumber>
+			                 
+					<p:outputLabel  value="Largo" />
+					<p:inputNumber id="Largo" widgetVar="largo" value="#{materialesBean.materiales.largo}" 
+							 placeholder="0"  decimalPlaces="0"
+			              	 thousandSeparator=","  required="true"
+			              	 size="31"
+			              	 onchange="sumaTeorico()" onkeypress="sumaTeorico()"
+			              	 disabled="true" inputStyle="color:#0000ff; opacity: .90;">			              	 
+			        </p:inputNumber>
+					
+					<p:outputLabel  value="Unidad" />
+					<p:inputNumber id="Unidad" widgetVar="unidad" value="#{materialesBean.materiales.unidad}" 
+							 placeholder="0"  decimalPlaces="0"
+			              	 thousandSeparator=","  required="true"
+			                 size="31"
+			                 onchange="sumaTeorico()"  onkeypress="sumaTeorico()"
+			                 disabled="true" inputStyle="color:#0000ff; opacity: .90;">
+			         </p:inputNumber>
+			                 
+					<p:outputLabel  value="Teorico" />
+					<p:inputNumber id="Teorico" widgetVar="teorico" value="#{materialesBean.materiales.teorico}" 
+							 placeholder="0"  decimalPlaces="2" 
+			              	 thousandSeparator=","  required="true"  disabled="true"
+			                 size="31" inputStyle="color:#0000ff; opacity: .90;"/>
+			                 
+			        <p:outputLabel  value="N° Pedido" />
+					<p:inputNumber id="pedido" widgetVar="pedido" value="#{materialesBean.materiales.pedido}" 
+							 placeholder="0"  decimalPlaces="0" 
+			              	 thousandSeparator=","  required="true"  
+			                 size="31" style="color:#0000ff; opacity: .99;"/>
+			                 
+			        <p:outputLabel  value="Estado" />
+			        <p:selectOneMenu id="estado" filter="true" style="width:300px"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Campo Estado es obligatorio"
+						value="#{materialesBean.materiales.estadoMaterial}">
+						<f:selectItem noSelectionOption="true" itemLabel="Seleccione el Estado"/>
+						<f:selectItems value="#{materialesBean.listaEstado}" var="estado"
+							itemValue="#{estado}" itemLabel="#{estado.descripcion}" />
+					</p:selectOneMenu>        
+			        
+							       
+				</h:panelGrid>
+				<br />
+				
+				<h:panelGrid columns="2">	
+					<p:commandButton value="Salvar" 
+							actionListener="#{materialesBean.editarMaterial()}"
+							update=" :frmNueMatE:pnlNueMatE  :frmPlan:tblPlan :menssage"
+							oncomplete="PF('dlgNueE').hide();"
+							/>
+					<p:commandButton value="Cerrar" oncomplete="PF('dlgNueE').hide();"
+						 />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+				
 	</ui:define>
 </ui:composition>
 </html>

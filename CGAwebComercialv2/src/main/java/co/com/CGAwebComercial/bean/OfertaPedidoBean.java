@@ -87,7 +87,7 @@ public class OfertaPedidoBean implements Serializable{
 	private int funI;
 	private int fun;
 
-	public OfertaPedidoBean (){
+	public OfertaPedidoBean (){			
 		recursos = new Recursos();
 		listaFechas = recursos.cargarFechas();
 	}
@@ -95,13 +95,15 @@ public class OfertaPedidoBean implements Serializable{
 	public void listarOfertaPedidos(){
 
 		try {
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			
 			if(detalleIdFun > 0){
 				idFun = detalleIdFun;
 				tipo = "codEspecialista";
 			}
 			else if(detalleIdFunG > 0){
-				System.out.println(autenticacion.getTipoVendedor()+ "#####");
 				if(autenticacion.getTipoVendedor().equals("E") || autenticacion.getTipoVendedor().equals("")){
 					idFun = detalleIdFunG;
 					tipo = "codEspecialista";
@@ -115,7 +117,6 @@ public class OfertaPedidoBean implements Serializable{
 				tipo = (autenticacion.getUsuarioLogin().getPerfil().getId() == 1)? "codEspecialista" : "codInterno";
 				idFun = autenticacion.getUsuarioLogin().getId();
 			}
-			System.out.println(idFun + " Revision " + tipo);
 			OfertasPedidosDao dao = new OfertasPedidosDao();
 			listaOfertaPedidos = dao.listarOfertaPedidos(tipo, idFun );
 			sumaOfe = new BigDecimal("0");
@@ -137,7 +138,7 @@ public class OfertaPedidoBean implements Serializable{
 
 	public void alistarPedidosLlamadas(){
 
-		try{
+		try{			
 			idCiudad = 0;
 			listarOfertaPedidosOficina();
 		} catch (RuntimeException ex) {
@@ -150,6 +151,10 @@ public class OfertaPedidoBean implements Serializable{
 	public void listarOfertaPedidosOficina(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
+			
 			if(fechaConsulta == null){
 
 				Calendar fechas = Calendar.getInstance();
@@ -244,6 +249,10 @@ public class OfertaPedidoBean implements Serializable{
 	public void listarOfertaPedidosOficina1(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
+			
 			listaOfertaPedidos = new ArrayList<>();
 			sumaOfe = new BigDecimal("0");
 			sumaPed = new BigDecimal("0");
@@ -271,7 +280,6 @@ public class OfertaPedidoBean implements Serializable{
 						if (ofePed.getValorOferta() != null){
 							sumaOfe = sumaOfe.add(ofePed.getValorOferta());
 							sumaPed = sumaPed.add(ofePed.getValorPedido());
-							System.out.println(ofePed.getPresupuesto() + "*****");
 							sumaPre = sumaPre.add(new BigDecimal(ofePed.getPresupuesto().toString()));
 //							sumaVal = sumaVal.add(new BigDecimal(ofePed.getValorNeto().toString()));
 							listaOfertaPedidos.add(ofePed);
@@ -329,6 +337,10 @@ public class OfertaPedidoBean implements Serializable{
 	public void listarOfertaPedidosPais(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
+			
 			listaOfertaPedidos = new ArrayList<>();
 			sumaOfe = new BigDecimal("0");
 			sumaPed = new BigDecimal("0");
@@ -371,6 +383,10 @@ public class OfertaPedidoBean implements Serializable{
 	public void crearGraficaOf(int V){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
+			
 			Recursos recurso = new Recursos();
 			String mesActual = recurso.mesActualG();
 			List<Number> interval = new ArrayList<Number>(){{
@@ -432,6 +448,9 @@ public class OfertaPedidoBean implements Serializable{
 	public void salvarIncidencia(OfertasPedidos  ofe, int porcentaje)  {
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			
 			String tipo = (autenticacion.getUsuarioLogin().getPerfil().getId() == 1)? "funcionario" : "funcionarioI";
 			
@@ -507,9 +526,6 @@ public class OfertaPedidoBean implements Serializable{
 	public void editarIncidenciaPerdida(OfertasPedidos  ofe)  {
 
 		try{
-			
-			
-			
 			//daoI.salvar(incidencia);
 
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " +ofe.getnOferta() + ", New:" );
@@ -525,6 +541,10 @@ public class OfertaPedidoBean implements Serializable{
 	public void cargaDialogo(OfertasPedidos ofe){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
+			
 			String tipo = (autenticacion.getUsuarioLogin().getPerfil().getId() == 1)? "funcionario" : "funcionarioI";
 			OfertasPedidosDao dao = new OfertasPedidosDao();
 			OfertasPedidos oferta = new OfertasPedidos();

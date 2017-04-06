@@ -23,7 +23,13 @@
 					   value="Ingresos" 	
 					   style="text-align: left; float:right;  height:24px; background:#ff6666; font-size: 12px"
 							    outcome="/pages/vi/vistaIngresos.xhtml?faces-redirect=true"
-					   rendered="#{autenticacionBean.usuarioLogin.id == 12}"		    />	
+					   rendered="#{autenticacionBean.usuarioLogin.id == 12}"		    />
+			
+			<p:link value="Materiales" styleClass="excel"
+				style="text-align: left; float:right;  height:24px;  font-size: 12px;
+					    padding-right: 10px;"
+				outcome="/pages/iv/materiales.xhtmlfaces-redirect=true"/>
+						   	
 		</f:facet>
 		<br />
 		<div class="ui-grid ui-grid-responsive">

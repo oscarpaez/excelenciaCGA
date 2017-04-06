@@ -87,6 +87,9 @@ public class directorGBean implements Serializable{
 	public void listarComisionGerente(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
 			ListaComisionGerente = new ArrayList<>();
@@ -135,6 +138,9 @@ public class directorGBean implements Serializable{
 	public void listarCumplimientoZonas(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			ListaComisionGerente = new ArrayList<>();
 			ComisionVendedores comisionDir = new ComisionVendedores();
 			fechaBusqueda = autenticacion.getFechaBusqueda();
@@ -171,6 +177,9 @@ public class directorGBean implements Serializable{
 	public void listarRecaudoDirector(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			for (Fechas fecha: listaFechas) {
 				fechaConsulta = (fecha.getValorMes().equals(autenticacion.getFechaBusqueda()))? fecha.getMes() : fechaConsulta;
 			}
@@ -218,6 +227,9 @@ public class directorGBean implements Serializable{
 	public void listarVendedoresLinea(){
 		
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			for (Fechas fecha: listaFechas) {
 				fechaConsulta = (fecha.getValorMes().equals(autenticacion.getFechaBusqueda()))? fecha.getMes() : fechaConsulta;
 			}
@@ -334,6 +346,9 @@ public class directorGBean implements Serializable{
 	public void listarDetalleVendedoresLinea(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();
 //			BigDecimal totalPresupuesto = new BigDecimal("0");
@@ -376,6 +391,9 @@ public class directorGBean implements Serializable{
 	public void listarVendedores(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			
 			for (Fechas fecha: listaFechas) {
 					fechaConsulta = (fecha.getValorMes().equals(autenticacion.getFechaBusqueda()))? fecha.getMes() : fechaConsulta;
@@ -776,6 +794,9 @@ public class directorGBean implements Serializable{
 	public void listarCiudadPorMixLinea(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			ListaComisionGerente = new ArrayList<>();
 			fechaBusqueda = autenticacion.getFechaBusqueda();
 			fechaBusquedaYear = autenticacion.getFechaBusquedaYear();

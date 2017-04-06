@@ -33,7 +33,7 @@
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://192.168.0.15:3306/copiaexcelenciacga</property>
         <property name="connection.username">excelenciacga</property>
-        <property name="connection.password">E1825cGA*-</property>   -->  
+        <property name="connection.password">E1825cGA*-</property>   --> 
         
 		<!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
@@ -119,10 +119,8 @@
         <mapping class = "co.com.CGAwebComercial.entyties.HistoricaCargaTrabajo" />
         <mapping class = "co.com.CGAwebComercial.entyties.HistoricaMateriales" />
         <mapping class = "co.com.CGAwebComercial.entyties.CargaTrabajo" />
+        <mapping class = "co.com.CGAwebComercial.entyties.EstadoMaterial" />
         
-        
-             
-             
     </session-factory>
 
 </hibernate-configuration>

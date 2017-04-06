@@ -64,9 +64,16 @@ public class AjusteRecaudoBean implements Serializable{
 	private BigDecimal realB;
 	private BigDecimal cumplimiento;
 	
+	public AjusteRecaudoBean() {
+		
+	}
+	
 	@PostConstruct
 	public void listarComisionInternos(){
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			listaCarteraInternos = new ArrayList<>();
 			SucursalDao daoC = new SucursalDao();
 			int numero = 0;

@@ -1,5 +1,6 @@
 package co.com.CGAwebComercial.bean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +11,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 
 import co.com.CGAwebComercial.dao.CargaTrabajoDao;
@@ -41,18 +43,46 @@ public class CargaTrabajoBean implements Serializable {
 
 
 	private CargaTrabajo carga;
+	
+	public CargaTrabajoBean() {
+		
+	}
 
 	@PostConstruct
 	public void listarCarga(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}			
+			
 			team = new ArrayList<Team>();
 
 			TrabajoAreaDao daoT = new TrabajoAreaDao();
 			listaTA = daoT.listar();
-			CargaTrabajoDao dao = new CargaTrabajoDao();
+			CargaTrabajoDao dao = new CargaTrabajoDao();			
+			
+			
+			if(autenticacion.getUsuarioLogin().getId() == 0){
+				for (TrabajoArea ta  : listaTA) {
+					
+					Team t = new Team(ta.getDescripcion());	
+					listaCargaTrabajo = dao.listarCargaPorArea(ta.getId(), (long) 0);
 
-			if (autenticacion.getUsuarioLogin().getPerfil() == null){
+					if(! listaCargaTrabajo.isEmpty()){
+
+						for (CargaTrabajo cargaT : listaCargaTrabajo) {
+							t.getStats().add((CargaTrabajo) cargaT);
+						}
+						team.add(t);
+					}
+				}			
+			}		
+			else if (autenticacion.getUsuarioLogin().getPerfil().getId() == 24 || autenticacion.getUsuarioLogin().getPerfil().getId() == 23
+					|| autenticacion.getUsuarioLogin().getPerfil().getId() == 25 || autenticacion.getUsuarioLogin().getPerfil().getId() == 6
+					|| autenticacion.getUsuarioLogin().getPerfil().getId() == 1 || autenticacion.getUsuarioLogin().getPerfil().getId() == 7
+					|| autenticacion.getUsuarioLogin().getPerfil().getId() == 8 || autenticacion.getUsuarioLogin().getPerfil().getId() == 11
+					|| autenticacion.getUsuarioLogin().getPerfil().getId() == 20 || autenticacion.getUsuarioLogin().getPerfil().getId() == 26){
 				System.out.println("##");
 				for (TrabajoArea ta  : listaTA) {
 				
@@ -67,7 +97,6 @@ public class CargaTrabajoBean implements Serializable {
 						team.add(t);
 					}
 				}
-
 			}
 			else if (autenticacion.getUsuarioLogin().getPerfil().getId() == 22) {
 				Zona_FuncionarioDao daoF = new Zona_FuncionarioDao(); 
@@ -91,7 +120,6 @@ public class CargaTrabajoBean implements Serializable {
 					}
 				}
 			}		
-
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se Cargo la lista de Carga de Trabajo");
@@ -129,8 +157,6 @@ public class CargaTrabajoBean implements Serializable {
 
 			listarCarga();
 			//listaCargaTrabajo = dao.listar();
-
-
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se guardo la carga de trabajo");
@@ -188,8 +214,26 @@ public class CargaTrabajoBean implements Serializable {
 			Messages.addGlobalError("Error no se borro el Material");
 		}
 	}
+	
+	public String cambioPagina1(){
 
-
+		try{
+				//Thread.sleep(4000);
+			if(autenticacion.getUsuarioLogin().getPerfil().getId() == 24){
+				System.out.println(autenticacion.getUsuarioLogin().getPerfil().getId());
+				listarCarga();
+			}
+			else{
+				Faces.redirect("./pages/iv/materiales.xhtml");
+			}			
+			//Faces.redirect("./pages/of/ofertaPedido2.xhtml");
+			return "of/materiales.xhtml?faces-redirect=true";
+		} catch (RuntimeException | IOException  ex) {
+			ex.printStackTrace();
+			Messages.addGlobalError("Error No se realizo la Gráfica de Gestion de llamadas");
+		}
+		return null;
+	}
 
 	public AutenticacionBean getAutenticacion() {
 		return autenticacion;

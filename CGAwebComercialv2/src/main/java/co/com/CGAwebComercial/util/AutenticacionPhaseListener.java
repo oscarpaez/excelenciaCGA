@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -17,6 +18,9 @@ import co.com.CGAwebComercial.entyties.Usuario;
 
 @SuppressWarnings("serial")
 public class AutenticacionPhaseListener implements PhaseListener {
+	
+	@ManagedProperty("#{autenticacionBean}")
+	private AutenticacionBean autenticacion;
 
 	@Override
 	public void afterPhase(PhaseEvent event) {
@@ -31,12 +35,16 @@ public class AutenticacionPhaseListener implements PhaseListener {
 		if(!esPaginaActual )
 			esPaginaActual = paginaActual.contains("ma/kpi.xhtml");
 		
-		if(!esPaginaActual)
-			esPaginaActual = paginaActual.contains("iv/materiales.xhtml");
+		if(!esPaginaActual )
+			esPaginaActual = paginaActual.contains("iv/vistaDashboard.xhtml");
 		
-		if(!esPaginaActual)
-			esPaginaActual = paginaActual.contains("iv/cargaTrabajo.xhtml");
 		
+//		if(!esPaginaActual)
+//			esPaginaActual = paginaActual.contains("iv/materiales.xhtml");
+//		
+//		if(!esPaginaActual)
+//			esPaginaActual = paginaActual.contains("iv/cargaTrabajo.xhtml");
+//		
 		if(!esPaginaActual){
 			   esPaginaActual = paginaActual.contains("login.xhtml");
 		}

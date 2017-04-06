@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -51,6 +52,24 @@ public class HistoricaMateriales implements Serializable {
 	
 	@Column (length = 255)
 	private String imagen;
+	
+	@Column(scale = 2)
+	private BigDecimal pedido;
+	
+	@ManyToOne
+	private EstadoMaterial estadoMaterial;	
+	
+	@Column (length = 255)
+	private String ubicacion;
+	
+	@Column(scale = 2)
+	private BigDecimal ordenProducto;
+	
+	@Column(scale = 2)
+	private BigDecimal avance;
+	
+	@OneToOne
+	private Usuario usuario;
 
 	public int getId() {
 		return id;
@@ -146,6 +165,54 @@ public class HistoricaMateriales implements Serializable {
 
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
+	}
+
+	public BigDecimal getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(BigDecimal pedido) {
+		this.pedido = pedido;
+	}
+
+	public EstadoMaterial getEstadoMaterial() {
+		return estadoMaterial;
+	}
+
+	public void setEstadoMaterial(EstadoMaterial estadoMaterial) {
+		this.estadoMaterial = estadoMaterial;
+	}
+
+	public String getUbicacion() {
+		return ubicacion;
+	}
+
+	public void setUbicacion(String ubicacion) {
+		this.ubicacion = ubicacion;
+	}
+
+	public BigDecimal getOrdenProducto() {
+		return ordenProducto;
+	}
+
+	public void setOrdenProducto(BigDecimal ordenProducto) {
+		this.ordenProducto = ordenProducto;
+	}
+
+	public BigDecimal getAvance() {
+		return avance;
+	}
+
+	public void setAvance(BigDecimal avance) {
+		this.avance = avance;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 }
 

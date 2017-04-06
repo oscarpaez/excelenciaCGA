@@ -26,7 +26,7 @@ public class ComisionPlanBean implements Serializable{
 
 	@ManagedProperty("#{autenticacionBean}")
 	private AutenticacionBean autenticacion;
-	
+
 	private Recursos recurso;
 
 	private List<ComisionVendedores> ListaComisionVendedores;
@@ -48,11 +48,18 @@ public class ComisionPlanBean implements Serializable{
 	private String totalRealUti;
 	private String bajRot;
 	private String tipo;
-	
+
+	public ComisionPlanBean() {
+
+	}
+
 	public void listarPlan(){
 
 		try{
-			
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
+
 			if(autenticacion.getFechaBusquedaYear().equals(null) ){
 				total =  new BigDecimal("0.00");
 				BigDecimal totalPresupuesto = new BigDecimal("0.00");
@@ -73,7 +80,7 @@ public class ComisionPlanBean implements Serializable{
 					funcionario = daoF.buscarPersona(idFuncionario);
 					listaplanV = daoD.listarPlan(funcionario.getId_funcionario());
 				}
-					
+
 				for (Plan planL : listaplanV) {
 					totalPresupuesto = totalPresupuesto.add(planL.getIngreso());
 					totalPresupuestoUtilidad = totalPresupuestoUtilidad.add(planL.getUtilidad()); 
@@ -118,17 +125,18 @@ public class ComisionPlanBean implements Serializable{
 				fechaBusquedaYear = autenticacion.getFechaBusquedaYear();	
 				listarPlanPorFechas();
 			}
-		
+
 		} catch (RuntimeException ex) {
 			ex.printStackTrace();
 			Messages.addGlobalError("Error no se Cargo la lista del Plan");
 		}
 
 	}
-	
-public void listarPlanPorFechas(){
-		
+
+	public void listarPlanPorFechas(){
+
 		try {
+			
 			total =  new BigDecimal("0.00");
 			BigDecimal totalPresupuesto = new BigDecimal("0.00");
 			BigDecimal totalPresupuestoUtilidad = new BigDecimal("0.00");
@@ -137,21 +145,21 @@ public void listarPlanPorFechas(){
 			BigDecimal valorReal = new BigDecimal("0.00");
 			BigDecimal valorUtilidad = new BigDecimal("0.00");
 			int numero = 0;
-			
+
 			FuncionarioDao daoF = new FuncionarioDao();
 			//Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
 			Funcionario funcionario;
-			
+
 			DetalleDao daoD = new DetalleDao();	
 			if(fechaBusqueda != null && fechaBusquedaYear != null){
-				
+
 				if(idFuncionarioSin != 0){
 					funcionario = daoF.buscarPersona(idFuncionarioSin);
 					listaplanV = daoD.listarPlanPorFechasSin(funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
 				}
 				else{
 					if(autenticacion.getTipoVendedor().equals("I") ){
-					   tipo= "funcionarioI";
+						tipo= "funcionarioI";
 					}
 					else{
 						tipo= "funcionario";
@@ -159,9 +167,9 @@ public void listarPlanPorFechas(){
 					funcionario = daoF.buscarPersona(idFuncionario);
 					listaplanV = daoD.listarPlanPorFechas(funcionario.getId_funcionario(), fechaBusqueda, fechaBusquedaYear);
 				}
-					
-				
-				
+
+
+
 				for (Plan plan : listaplanV) {
 					totalPresupuesto = totalPresupuesto.add(plan.getIngreso());
 					totalPresupuestoUtilidad = totalPresupuestoUtilidad.add(plan.getUtilidad()); 
@@ -171,7 +179,7 @@ public void listarPlanPorFechas(){
 					totalPreUti = new DecimalFormat("###,###").format(totalPresupuestoUtilidad);
 					totalRealIng = new DecimalFormat("###,###").format(totalValorReal);
 					totalRealUti = new DecimalFormat("###,###").format(totalValorUtilidad);
-					
+
 					if (plan.getIngreso() == null || plan.getIngreso().compareTo(BigDecimal.ZERO) == 0  ){
 						plan.setIngreso_Real(new BigDecimal("0"));
 						valorReal = plan.getIngreso_Real();
@@ -182,16 +190,16 @@ public void listarPlanPorFechas(){
 					}
 					valorReal = plan.getUtilidad_Real().divide(plan.getUtilidad(), 3, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal("100"));
 					plan.setUtilidad_Cumplimiento(valorReal);
-					
+
 					if(umbral != null){
 						plan.setUmbral(umbral);
 						numero = umbral.compareTo(plan.getUtilidad_Cumplimiento().divide(new BigDecimal("100.00")));
 					}
 					else{
-					    plan.setUmbral(plan.getFuncionario().getComision().getUmbralVenta());
-					    numero = plan.getFuncionario().getComision().getUmbralVenta().compareTo(plan.getUtilidad_Cumplimiento().divide(new BigDecimal("100.00")));
+						plan.setUmbral(plan.getFuncionario().getComision().getUmbralVenta());
+						numero = plan.getFuncionario().getComision().getUmbralVenta().compareTo(plan.getUtilidad_Cumplimiento().divide(new BigDecimal("100.00")));
 					}
-					
+
 					if(numero == 1 ){
 						plan.setValor_Comision_Pagar(new BigDecimal("0.00"));
 						total = total.add(plan.getValor_Comision_Pagar());
@@ -339,6 +347,6 @@ public void listarPlanPorFechas(){
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	
-	
+
+
 }

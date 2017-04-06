@@ -210,7 +210,10 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			for (int i=1; i<meses; i++){
 				String fecInicial = year+"/0"+i+"/01";			
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
+				int diaFin = recurso.ultimoDiaMes(year, i-1);
+				String fecFinal =  year+"/0"+i+"/"+diaFin;
+				//String fecFinal = (i== 2)? year+"/0"+i+"/"+diaFin: (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
+				//String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
 
 				if(tipo.equals("funcionarioI")){

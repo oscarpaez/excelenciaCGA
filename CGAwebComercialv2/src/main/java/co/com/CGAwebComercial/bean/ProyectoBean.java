@@ -36,15 +36,16 @@ public class ProyectoBean implements Serializable {
 	EstadoProyecto estado;
 	PrioridadProyecto prioridad;
 	
-//	public ProyectoBean () {
-////		ProyectoDao daoP = new ProyectoDao();
-////		listaProyecto = daoP.listar();
-//		listar();
-//	}
+	public ProyectoBean () {
+		
+	}
 	 
 	@PostConstruct
 	public void listar(){
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			ProyectoDao daoP = new ProyectoDao();
 			listaProyecto = daoP.listaProyectosInactivos(autenticacion.getUsuarioLogin().getId());
 		} catch (RuntimeException ex) {
@@ -56,6 +57,9 @@ public class ProyectoBean implements Serializable {
 	
 	public void listarA(){
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			ProyectoDao daoP = new ProyectoDao();
 			listaProyecto = daoP.listaProyectosActivos(autenticacion.getUsuarioLogin().getId());
 			

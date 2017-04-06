@@ -210,4 +210,23 @@ public class Recursos {
 		}
 		return periodoM;
 	}
+	
+	public int ultimoDiaMes(int year, int mes){
+			
+		int dia = 0;
+		try{
+			
+			Calendar calendario=Calendar.getInstance();
+			calendario.set(year, mes, 1);
+			dia = calendario.getActualMaximum(Calendar.DAY_OF_MONTH);
+			System.out.println(dia);
+			return dia;
+		} catch (RuntimeException ex) {
+			ex.printStackTrace();
+			System.out.println(ex.getMessage());
+		}
+		return dia;
+		
+		
+	}
 }

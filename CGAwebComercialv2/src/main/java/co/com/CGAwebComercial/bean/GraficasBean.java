@@ -102,13 +102,19 @@ public class GraficasBean implements Serializable{
 	private String nombreSucursal;
 	private String kpiOimagen;
 	private String kpiNimagen;
+	
+	public GraficasBean() {
+		
+	}
 
 	//*Carga la grafica de desempeño de las ventas y recaudo del "DL" *//
 
 	public void desempenoVentas(){
 
 		try{
-
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			if(desempenoVentas == null){
 				LineChartModel model = new LineChartModel();
 				LineChartModel model2 = new LineChartModel();
@@ -254,6 +260,9 @@ public class GraficasBean implements Serializable{
 	public void promedioVentasNacional(){
 
 		try {
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			FuncionarioDao daoF = new FuncionarioDao();
 			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
 
@@ -312,6 +321,9 @@ public class GraficasBean implements Serializable{
 	public void promedioVentasOficina(){
 
 		try {
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			FuncionarioDao daoF = new FuncionarioDao();
 			Funcionario funcionario = daoF.buscarPersona(autenticacion.getUsuarioLogin().getPersona().getCedula());
 
@@ -440,6 +452,9 @@ public class GraficasBean implements Serializable{
 	public void desempenoVentasGerentes(){
 
 		try{
+			if(autenticacion != null){
+				autenticacion.registroIngreso(autenticacion.getUsuarioLogin());
+			}
 			mesActual = mesActualG();
 			mesInicial = "Enero";
 			PresupuestoDao daoPr = new PresupuestoDao();
