@@ -106,6 +106,21 @@
 	background: #eeeeee;
 }
 
+.horasE{
+	background: #eeeeee;
+}
+
+.horasEA{width: 20%; 	height:auto; padding: 1px}
+.horasEB{width: 30%; 	height:auto; padding: 1px}
+.horasEC{width: 20%; 	height:auto; padding: 1px}
+.horasED{width: 30%; 	height:auto; padding: 1px}
+
+.horasEP.ui-panelgrid>*>tr,
+.horasEP.ui-panelgrid .ui-panelgrid-cell {
+    border-style: none;
+	background: #eeeeee;
+}
+
 /*////ocultar calendario/////*/
 .promedio{
 	position:absolute;
@@ -193,6 +208,8 @@ min-width: 0 !important;
 }
 
 
-
+.panel1.ui-panel .ui-panel-content{ 
+	padding: 0;
+}
 
       

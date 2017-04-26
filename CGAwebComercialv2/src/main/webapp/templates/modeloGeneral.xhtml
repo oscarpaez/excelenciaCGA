@@ -17,7 +17,7 @@
 </h:head>
 <h:body>
 	<p:growl id="msgGlobal" />
-	<p:idleMonitor timeout="900000" >
+	<p:idleMonitor timeout="1000000" >
         <p:ajax event="idle" listener="#{autenticacionBean.salir()}" update="msgGlobal" />        
     </p:idleMonitor>
     

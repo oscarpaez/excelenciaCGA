@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral2.xhtml">
+
+	<ui:define name="contenido">
+		<f:metadata>
+			<f:event listener="#{registroHorasEBean.listarDatos()}" type="preRenderView" />
+		</f:metadata>
+
+		<h:form>
+			<p:panel header="Registro Horas Extras" style="margin-bottom:10px;"
+				styleClass="horasE" >
+				
+				<p:panelGrid  columns="4" columnClasses="horasEA,horasEB,horasEC,horasED"
+					style="width:100%" styleClass="horasEP">
+				
+				<p:outputLabel value="Id usuario" />
+				<p:inputText value="#{registroHorasEBean.registroHE.idOperario}" style="width:90%"/>
+
+				<p:outputLabel value="Estado" />
+				<p:selectOneMenu id="linea" filter="true" style="width:81%"
+					value="#{registroHorasEBean.registroHE.estadoH}"
+					converter="omnifaces.SelectItemsConverter" required="true"
+					requiredMessage="Campo Estado es obligatorio">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Seleccione un Item" />
+					<f:selectItems value="#{registroHorasEBean.listaEstadoHE}" var="estado"
+						itemValue="#{estado}" itemLabel="#{estado.descripcion}" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="Fecha Creación" />
+				<p:calendar locale="es" size="31" value="#{registroHorasEBean.registroHE.fechaCreacion}"/>
+				
+				<p:outputLabel value="Fecha Solicitud" />
+				<p:calendar locale="es" size="31" value="#{registroHorasEBean.registroHE.fechaSolicitud}"/>
+				
+				<p:outputLabel value="Regional" />
+				<p:selectOneMenu id="r" filter="true" style="width:81%"
+					value="#{registroHorasEBean.registroHE.sucursal}"
+					converter="omnifaces.SelectItemsConverter" required="true"
+					requiredMessage="Campo Estado es obligatorio">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Seleccione un Item" />
+					<f:selectItems value="#{registroHorasEBean.listaSucursal}" var="sucursal"
+						itemValue="#{sucursal}" itemLabel="#{sucursal.nombre}" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="Proceso" />
+				<p:selectOneMenu id="p" filter="true" style="width:81%"
+					value="#{registroHorasEBean.registroHE.procesoH}"
+					converter="omnifaces.SelectItemsConverter" required="true"
+					requiredMessage="Campo Estado es obligatorio">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Seleccione un Item" />
+					<f:selectItems value="#{registroHorasEBean.listaProcesoHE}" var="proceso"
+						itemValue="#{proceso}" itemLabel="#{proceso.descripcion}" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="N° Pedido" />
+				<p:inputText value="#{registroHorasEBean.registroHE.nPedido}"  style="width:90%" />
+				
+				<p:outputLabel value="Posición" />
+				<p:inputText value="#{registroHorasEBean.registroHE.poscicion}" style="width:90%" />
+				
+				<p:outputLabel value="N° Orden" />
+				<p:inputText value="#{registroHorasEBean.registroHE.nOrden}" style="width:90%"/>
+				
+				<p:outputLabel value="Puesto de trabajo" />
+				<p:selectOneMenu id="pu" filter="true" style="width:81%"
+					value="#{registroHorasEBean.registroHE.puestoT}"
+					converter="omnifaces.SelectItemsConverter" required="true"
+					requiredMessage="Campo Estado es obligatorio">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Seleccione un Item" />
+					<f:selectItems value="#{registroHorasEBean.listaPuestoTrabajo}" var="puestoT"
+						itemValue="#{puestoT}" itemLabel="#{puestoT.descripcion}" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="Motivo" />
+				<p:selectOneMenu id="m" filter="true" style="width:81%"
+					value="#{registroHorasEBean.registroHE.motivoH}"
+					converter="omnifaces.SelectItemsConverter" required="true"
+					requiredMessage="Campo Estado es obligatorio">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Seleccione un Item" />
+					<f:selectItems value="#{registroHorasEBean.listaMotivoHorasE}" var="motivo"
+						itemValue="#{motivo}" itemLabel="#{motivo.descripcion}" />
+				</p:selectOneMenu>
+				
+				<p:outputLabel value="Tipo de Hora Extra" />
+				<p:selectOneMenu id="th" filter="true" style="width:81%"
+					value="#{registroHorasEBean.registroHE.tipoH}"
+					converter="omnifaces.SelectItemsConverter" required="true"
+					requiredMessage="Campo Estado es obligatorio">
+					<f:selectItem noSelectionOption="true"
+						itemLabel="Seleccione un Item" />
+					<f:selectItems value="#{registroHorasEBean.listaTipoHoraE}" var="tipo"
+						itemValue="#{tipo}" itemLabel="#{tipo.descripcion}" />
+				</p:selectOneMenu>
+				
+				</p:panelGrid>
+				
+				<h:panelGrid columns="3">			
+				
+					<p:commandButton value="Salvar" icon="ui-icon-disk"
+									update=""
+									actionListener="#{registroHorasEBean.salvar()}"	/>
+										
+					<p:commandButton value="limpiar" icon="ui-icon-note"
+										update=""/>
+										
+					<p:commandButton value="Volver" icon="ui-icon-arrowreturn-1-w"
+									update=""/>										
+				</h:panelGrid>
+			</p:panel>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

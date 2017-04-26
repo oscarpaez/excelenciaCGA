@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeneral2.xhtml">
+
+	<ui:define name="contenido">
+		
+		<f:metadata>
+			<f:event listener="#{ofertaPedidoBean.alistarPedidosLlamadas()}"
+				type="preRenderView" />
+		</f:metadata>
+		
+		<p:layout >
+ 
+		 	<p:layoutUnit position="west" size="50%">
+		        <p:layout >
+		        	<p:layoutUnit position="north" size="50%"  resizable="true" closable="true" collapsible="true">
+				        <p:growl id="menssage" widgetVar="menssage"/>	
+							<h:form id="frmPlan" >
+								<p:poll interval="180" listener="#{materialesBean.cambioPagina()}" 
+										update=":frmPlan:tblPlan  " 
+										rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id != 21}"/>	
+								
+								<p:dataTable styleClass="tblPla" id="tblPlan"
+											emptyMessage="No se encontraron registros" scrollRows="55"
+											scrollable="true" liveScroll="true" scrollHeight="120" 
+											value="#{materialesBean.listaMateriales}" var="mat" 
+											filteredValue="#{materialesBean.filtroMateriales}"
+											scrollWidth="100%">
+						
+									<p:columnGroup type="header">
+										<p:row>					
+											<p:column rowspan="1" headerText="Sucursal" width="60" sortBy="#{mat.sucursal.nombre}" filterBy="#{mat.sucursal.nombre}"  filterMatchMode="contains" filterStyle="width:90%"/>
+											<p:column rowspan="1" headerText="Codigo" width="60"  filterBy="#{mat.codigo}" filterMatchMode="contains" filterStyle="width:90%"/>
+											<p:column rowspan="1" headerText="Descripción" width="120" filterBy="#{mat.descripcion}" filterMatchMode="contains" filterStyle="width:90%"/>
+											<p:column rowspan="1" headerText="Espesor" width="60" sortBy="#{mat.espesor}" filterBy="#{mat.espesor}" filterMatchMode="contains" filterStyle="width:90%"/>
+											<p:column rowspan="1" headerText="Ancho" width="60" sortBy="#{mat.ancho}" filterBy="#{mat.ancho}" filterMatchMode="contains" filterStyle="width:90%"/>
+											<p:column rowspan="1" headerText="Largo" width="60" sortBy="#{mat.largo}" filterBy="#{mat.largo}" filterMatchMode="contains" filterStyle="width:90%"/>
+											<p:column rowspan="1" headerText="Unidad" width="60" />
+											<p:column rowspan="1" headerText="Teórico" width="60" sortBy="#{mat.teorico}" filterBy="#{mat.teorico}" filterMatchMode="contains" filterStyle="width:90%"/>
+											<p:column rowspan="1" headerText="Imagen" width="60"/>
+											<p:column rowspan="1" headerText="Acciones" width="60" rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id == 21}"/>					
+										</p:row>
+						
+									</p:columnGroup>
+										
+										<p:column style="">
+												<h:outputText value="#{mat.sucursal.nombre}" />
+										</p:column>
+										
+										<p:column style="">
+												<h:outputText value="#{mat.codigo}" />
+										</p:column>
+										
+										<p:column style="">
+												<h:outputText value="#{mat.descripcion}" />
+										</p:column>
+										
+										<p:column style="text-align:right">
+												<h:outputText value="#{mat.espesor}" >
+													<f:convertNumber locale="en_US" maxFractionDigits="2" />
+												</h:outputText>
+										</p:column>
+										
+										<p:column style="text-align:right">
+												<h:outputText value="#{mat.ancho}" >
+													<f:convertNumber locale="en_US" maxFractionDigits="0" />
+												</h:outputText>
+										</p:column>
+										
+										<p:column style="text-align:right">
+												<h:outputText value="#{mat.largo}" >
+													<f:convertNumber locale="en_US" maxFractionDigits="0" />
+												</h:outputText>
+										</p:column>
+										
+										<p:column style="text-align:center">
+												<h:outputText value="#{mat.unidad}" >
+													<f:convertNumber locale="en_US" maxFractionDigits="0" />
+												</h:outputText>
+										</p:column>
+										
+										<p:column style="text-align:right">
+												<h:outputText value="#{mat.teorico}" >
+													<f:convertNumber locale="en_US" maxFractionDigits="2" />
+												</h:outputText>
+										</p:column>
+										
+										<p:column style="text-align:center">
+												 
+												 <p:commandLink  actionListener="#{materialesBean.mostrarImagen(mat.imagen)}"
+												 		update="" >
+												 	<p:graphicImage library="imagenesMateriales" name="#{mat.imagen}"
+												 		 height="25" width="25" />
+												 </p:commandLink>
+												 	
+												
+										</p:column>
+										
+										<p:column style="text-align:center" rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id == 21}">
+												<p:commandButton icon="ui-icon-pencil"
+													action="#{materialesBean.editar(mat)}"
+													update=" :frmNueMat:pnlNueMat"
+													oncomplete="PF('dlgNue').show();" title="Editar">
+													<f:actionListener
+														type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+												</p:commandButton>
+												
+											<p:commandButton icon="ui-icon-trash"	
+													actionListener="#{materialesBean.borrarMaterial(mat)}"					    
+													update=":frmPlan:tblPlan " title="Borrar">							
+											</p:commandButton>		
+										</p:column>				
+										
+									
+									 <f:facet name="footer">
+									 	<p:commandButton value="Nuevo Material" style="height:35px" 
+													oncomplete="PF('dlgNue').show();" 
+													actionListener="#{materialesBean.cargarMaterial()}"
+													update=" :frmNueMat:pnlNueMat" 
+													rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id == 21}">							
+													<f:actionListener
+														type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+										</p:commandButton>
+									 </f:facet>
+						
+								</p:dataTable>
+							</h:form>
+				    </p:layoutUnit>
+				    
+				    <p:layoutUnit position="center"/>
+				 
+				    <p:layoutUnit position="south" size="50%" header="Ventas" resizable="true" closable="true" collapsible="true">
+						<h:form id="frmInc1">
+
+						<p:poll interval="600" update=" :frmInc1:tblPlan" 
+							listener="#{ofertaPedidoBean.cambioPagina1()}"/>
+
+						<p:dataTable styleClass="tblPla" id="tblPlan"
+							emptyMessage="No se encontraron registros"
+							scrollRows="55"	scrollable="true" liveScroll="true" scrollHeight="90"
+							value="#{ofertaPedidoBean.listaOfertaPedidos}" var="oferta"
+							filteredValue="#{ofertaPedidoBean.listaFiltrarOfePed}">
+
+							<f:facet name="header">
+								<p:outputLabel
+									value="Lista de Oferta Pedidos  #{ofertaPedidoBean.fechaConsulta}" />
+							</f:facet>
+
+							<p:columnGroup type="header">
+								<p:row>
+									<p:column colspan="1" headerText="Cod SAP" width="20"
+										filterBy="#{oferta.cliente}" filterMatchMode="contains" filterStyle="width: 90%" />
+									<p:column colspan="1" headerText="Nombre" width="60" />
+									<p:column colspan="1" headerText="Presupuesto" width="60" />
+									<p:column colspan="1" headerText="Total Facturado" width="60"
+										filterBy="" filterMatchMode="contains" />
+									<p:column colspan="1" headerText="Cumplimiento %" width="60" />	
+								</p:row>
+							</p:columnGroup>
+
+							<p:column>
+								<h:outputText value="#{oferta.codEspecialista}" />
+							</p:column>
+
+							<p:column>
+								<h:outputText value="#{oferta.especialista}" />
+							</p:column>
+
+							<p:column style="text-align: right">
+								<h:outputText value="#{oferta.presupuesto}">
+									<f:convertNumber locale="en_US" maxFractionDigits="0" />
+								</h:outputText>
+							</p:column>
+
+							<p:column style="text-align: right">
+								<h:outputText value="#{oferta.valorNeto}">
+									<f:convertNumber locale="en_US" maxFractionDigits="0" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column>
+								<h:outputText value="#{oferta.porcentajeV}">
+									<f:convertNumber locale="en_US" maxFractionDigits="2" />
+								</h:outputText>
+							</p:column>
+
+							<p:column style="text-align: center;">
+								<p:graphicImage library="images" name="#{oferta.imagenA}"
+									height="25" width="25" />
+							</p:column>
+							
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="2" footerText="Totales"
+										style="text-align: right" />
+									<p:column footerText="$ #{ofertaPedidoBean.valorTotalPre}"
+										style="text-align: right" />
+									<p:column footerText="$ #{ofertaPedidoBean.valorTotalF}"
+										style="text-align: right" />
+									<p:column footerText=" #{ofertaPedidoBean.valorPorV} %"
+										style="text-align: right" />				
+								</p:row>
+							</p:columnGroup>
+
+							<f:facet name="footer">
+								
+							</f:facet>
+						</p:dataTable>
+					</h:form>
+										        
+				    </p:layoutUnit>
+		        
+		        </p:layout>
+		    </p:layoutUnit>
+		    
+		    <p:layoutUnit position="east" size="50%" >
+		    	<p:layout >
+		        	<p:layoutUnit position="north" size="50%" header="Oferta vs Pedido" resizable="true" closable="true" collapsible="true">
+				        				        <h:form id="frmInc">
+
+						<p:poll interval="600" update=" :frmInc:tblPlan" 
+							listener="#{ofertaPedidoBean.cambioPagina1()}"/>
+
+						<p:dataTable styleClass="tblPla" id="tblPlan"
+							emptyMessage="No se encontraron registros"
+							scrollRows="55" scrollable="true" liveScroll="true" scrollHeight="98" 
+							value="#{ofertaPedidoBean.listaOfertaPedidos}" var="oferta"
+							filteredValue="#{ofertaPedidoBean.listaFiltrarOfePed}"
+							scrollWidth="100%">
+
+							<f:facet name="header">
+								<p:outputLabel
+									value="Lista de Oferta Pedidos  #{ofertaPedidoBean.fechaConsulta}" />
+							</f:facet>
+
+							<p:columnGroup type="header">
+								<p:row>
+									<p:column colspan="1" headerText="Cod SAP" width="20"
+										filterBy="#{oferta.cliente}" filterMatchMode="contains" filterStyle="width: 90%" />
+									<p:column colspan="1" headerText="Nombre" width="60" />
+									<p:column colspan="1" headerText="Total Oferta" width="60" />
+									<p:column colspan="1" headerText="Total Pedido " width="60"
+										filterBy="" filterMatchMode="contains" />
+									<p:column colspan="1" headerText="Cumplimiento %" width="60" />
+								</p:row>
+							</p:columnGroup>
+
+							<p:column>
+								<h:outputText value="#{oferta.codEspecialista}" />
+							</p:column>
+
+							<p:column>
+								<h:outputText value="#{oferta.especialista}" />
+							</p:column>
+
+							<p:column style="text-align: right">
+								<h:outputText value="#{oferta.valorOferta}">
+									<f:convertNumber locale="en_US" maxFractionDigits="0" />
+								</h:outputText>
+							</p:column>
+
+							<p:column style="text-align: right">
+								<h:outputText value="#{oferta.valorPedido}">
+									<f:convertNumber locale="en_US" maxFractionDigits="0" />
+								</h:outputText>
+							</p:column>
+
+							<p:column>
+								<h:outputText value="#{oferta.porcentaje}">
+									<f:convertNumber locale="en_US" maxFractionDigits="2" />
+								</h:outputText>
+							</p:column>
+
+							<p:column style="text-align: center;">
+								<p:graphicImage library="images" name="#{oferta.imagen}"
+									height="25" width="25" />
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="2" footerText="Totales"
+										style="text-align: right" />
+									<p:column footerText="$ #{ofertaPedidoBean.valorTotal}"
+										style="text-align: right" />
+									<p:column footerText="$ #{ofertaPedidoBean.valorTotalP}"
+										style="text-align: right" />
+									<p:column footerText="#{ofertaPedidoBean.valorPor} %"
+										style="text-align: right" />
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+					</h:form>
+				    </p:layoutUnit>
+				    
+				    <p:layoutUnit position="center"/>
+				 
+				    <p:layoutUnit position="south" size="50%" header="Carga de Trabajo" resizable="true" closable="true" collapsible="true">
+						<h:form id="frmPlanc">
+	
+							<p:poll interval="180" listener="#{cargaTrabajoBean.cambioPagina1()}" 
+									update=":frmPlanc:tblPlan" 
+									rendered="#{autenticacionBean.usuarioLogin.perfil.id != 22}"/>
+									
+							<p:dataTable styleClass="tblPlaC" id="tblPlan"
+										emptyMessage="No se encontraron registros" scrollRows="40"
+										scrollable="true" liveScroll="true" scrollHeight="98" 
+										value="#{cargaTrabajoBean.team}" var="carg"
+										filteredValue="#{cargaTrabajoBean.filtroCargaTrabajo}"
+										scrollWidth="100%"
+										>
+					
+								<p:columnGroup type="header">
+									<p:row>
+										<p:column rowspan="2" headerText="sucursal" width="2" />					
+										<p:column rowspan="1" colspan="2" headerText="Equipo" width="40" />					
+										<p:column rowspan="1" colspan="3" headerText="Tiempos y proceso" width="90" />
+										<p:column rowspan="2" headerText="Observación" width="60" />
+										<p:column rowspan="2" headerText="Acciones" width="10" rendered="#{autenticacionBean.usuarioLogin.perfil.id == 22}" />
+									</p:row>
+									<p:row>
+										<p:column rowspan="1" headerText="Descripción "  />
+										<p:column rowspan="1" headerText="Capacidad " />
+										<p:column rowspan="1" headerText="Fecha Disponibilidad" />
+										<p:column rowspan="1" headerText="Fecha compromiso entrega" />
+										<p:column rowspan="1" headerText="Novedades de proceso" />					
+									</p:row>
+					
+								</p:columnGroup>
+								
+								 <p:subTable var="carga" value="#{carg.stats}" >
+							            <f:facet name="header" >
+							                <h:outputText value="#{carg.name}" />
+							            </f:facet>
+									
+									<p:column style="">
+											<h:outputText value="#{carga.sucursal.nombre}" />
+									</p:column>
+									
+									<p:column style="">
+											<h:outputText value="#{carga.equipo}" />
+									</p:column>
+									
+									<p:column style="">
+											<h:outputText value="#{carga.capacidad}" />
+									</p:column>	
+									
+									<p:column >
+											<h:outputText value="#{carga.fechaContratada}" />
+									</p:column>
+									
+									<p:column >
+											<h:outputText value="#{carga.fechaDisponibilidad}" />
+									</p:column>
+									
+									<p:column style="text-align:center">
+											<h:outputText value="#{carga.horaDisponible}" />
+									</p:column>
+									
+									<p:column style="text-align:center">
+											<h:outputText value="#{carga.observacion}" />
+												
+									</p:column>
+									
+									<p:column style="text-align:center" rendered="#{autenticacionBean.usuarioLogin.perfil.id == 22}">
+											<p:commandButton icon="ui-icon-pencil"
+												action="#{cargaTrabajoBean.editar(carga)}"
+												update=" :frmNueCar:pnlNueCar"
+												oncomplete="PF('dlgNue').show();" title="Editar">
+												<f:actionListener
+													type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+											</p:commandButton>
+											
+										<p:commandButton icon="ui-icon-trash"	
+												actionListener="#{cargaTrabajoBean.borrarCargaTrabajo(carga)}"					    
+												update=":frmPlan:tblPlan " title="Borrar">							
+										</p:commandButton>		
+									</p:column>				
+								</p:subTable>	
+								
+								 <f:facet name="footer">
+								 	<p:commandButton value="Nuevo Equipo" style="height:35px" 
+												oncomplete="PF('dlgNue').show();" 
+												actionListener="#{cargaTrabajoBean.editar(carga)}"
+												update=" :frmNueCar:pnlNueCar" 
+												rendered="#{autenticacionBean.usuarioLogin.perfil.id == 22}">							
+												<f:actionListener
+													type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+									</p:commandButton>
+								 </f:facet>
+							</p:dataTable>
+						</h:form>
+				    </p:layoutUnit>
+		        
+		        </p:layout>
+		        
+		    </p:layoutUnit>			    
+		 
+		    <p:layoutUnit position="center"/>
+		    
+		 
+		</p:layout>
+	
+	</ui:define>
+</ui:composition>
+</html>

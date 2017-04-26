@@ -38,6 +38,15 @@ public class AutenticacionPhaseListener implements PhaseListener {
 		if(!esPaginaActual )
 			esPaginaActual = paginaActual.contains("iv/vistaDashboard.xhtml");
 		
+		if(!esPaginaActual )
+			esPaginaActual = paginaActual.contains("he/CreacionRegistro.xhtml");
+		
+		if(!esPaginaActual )
+			esPaginaActual = paginaActual.contains("he/listadoRegistro.xhtml");
+		
+		if(!esPaginaActual )
+			esPaginaActual = paginaActual.contains("iv/informeFacturado.xhtml");
+		
 		
 //		if(!esPaginaActual)
 //			esPaginaActual = paginaActual.contains("iv/materiales.xhtml");

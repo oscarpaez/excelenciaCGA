@@ -83,9 +83,13 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 				Recaudo recaudoA = new Recaudo();
 				Recursos recurso = new Recursos();
 				int year = recurso.yearActual();
-				String fecInicial = year +"/0"+i+"/01";
+				String fecInicial = year+"/0"+i+"/01";			
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" : year+"/0"+i+"/31";
+				int diaFin = recurso.ultimoDiaMes(year, i-1);
+				String fecFinal =  year+"/0"+i+"/"+diaFin;				
+//				String fecInicial = year +"/0"+i+"/01";
+//				fechaInicial  = formatoFecha.parse(fecInicial);
+//				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" : year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
 			
 				for (Zona_venta zona_venta : zona) {
@@ -167,9 +171,13 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			Recursos recurso = new Recursos();
 			int year = recurso.yearActual();
 			for (int i=1; i<meses; i++){
-				String fecInicial = year+"/0"+i+"/01";
+				String fecInicial = year+"/0"+i+"/01";			
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" : year+"/0"+i+"/31";
+				int diaFin = recurso.ultimoDiaMes(year, i-1);
+				String fecFinal =  year+"/0"+i+"/"+diaFin;				
+//				String fecInicial = year+"/0"+i+"/01";
+//				fechaInicial  = formatoFecha.parse(fecInicial);
+//				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" : year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
 				Criteria consulta = session.createCriteria(Detalle.class);
 				//Criteria consulta = session.createCriteria(Detallesin.class);
@@ -254,9 +262,13 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			Recursos recurso = new Recursos();
 			int year = recurso.yearActual();
 			for (int i=1; i<meses; i++){
-				String fecInicial = year+"/0"+i+"/01";	
+				String fecInicial = year+"/0"+i+"/01";			
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" : year+"/0"+i+"/31";
+				int diaFin = recurso.ultimoDiaMes(year, i-1);
+				String fecFinal =  year+"/0"+i+"/"+diaFin;				
+//				String fecInicial = year+"/0"+i+"/01";	
+//				fechaInicial  = formatoFecha.parse(fecInicial);
+//				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" : year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
 
 				//Criteria consulta = session.createCriteria(Detalle.class);
@@ -293,9 +305,13 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			Recursos recurso = new Recursos();
 			int year = recurso.yearActual();
 			for (int i=1; i<meses; i++){
-				String fecInicial = year+"/0"+i+"/01";
+				String fecInicial = year+"/0"+i+"/01";			
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
+				int diaFin = recurso.ultimoDiaMes(year, i-1);
+				String fecFinal =  year+"/0"+i+"/"+diaFin;				
+//				String fecInicial = year+"/0"+i+"/01";
+//				fechaInicial  = formatoFecha.parse(fecInicial);
+//				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
 				//Criteria consulta = session.createCriteria(Detalle.class);
 				Criteria consulta = session.createCriteria(Detallesin.class);
@@ -471,9 +487,13 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			Recursos recurso = new Recursos();
 			int year = recurso.yearActual();
 			for (int i=1; i<meses; i++){
-				String fecInicial = year+"/0"+i+"/01";
+				String fecInicial = year+"/0"+i+"/01";			
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
+				int diaFin = recurso.ultimoDiaMes(year, i-1);
+				String fecFinal =  year+"/0"+i+"/"+diaFin;				
+//				String fecInicial = year+"/0"+i+"/01";
+//				fechaInicial  = formatoFecha.parse(fecInicial);
+//				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
 				BigDecimal sumaR = new BigDecimal("0.00");
 				BigDecimal sumaP = new BigDecimal("0.00");
@@ -603,9 +623,13 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			Recursos recurso = new Recursos();
 			int year = recurso.yearActual();
 			for (int i=1; i<meses; i++){
-				String fecInicial = year+"/0"+i+"/01";
+				String fecInicial = year+"/0"+i+"/01";			
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
+				int diaFin = recurso.ultimoDiaMes(year, i-1);
+				String fecFinal =  year+"/0"+i+"/"+diaFin;				
+//				String fecInicial = year+"/0"+i+"/01";
+//				fechaInicial  = formatoFecha.parse(fecInicial);
+//				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
 
 				Criteria consulta = session.createCriteria(PresupuestoE.class);
@@ -667,9 +691,13 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			Recursos recurso = new Recursos();
 			int year = recurso.yearActual();
 			for (int i=1; i<meses; i++){
-				String fecInicial = year+"/0"+i+"/01";
+				String fecInicial = year+"/0"+i+"/01";			
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
+				int diaFin = recurso.ultimoDiaMes(year, i-1);
+				String fecFinal =  year+"/0"+i+"/"+diaFin;				
+//				String fecInicial = year+"/0"+i+"/01";
+//				fechaInicial  = formatoFecha.parse(fecInicial);
+//				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
 
 				Criteria consulta = session.createCriteria(PresupuestoE.class);
@@ -769,9 +797,13 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			Recursos recurso = new Recursos();
 			int year = recurso.yearActual();
 			for (int i=1; i<meses; i++){
-				String fecInicial = year+"/0"+i+"/01";
+				String fecInicial = year+"/0"+i+"/01";			
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
+				int diaFin = recurso.ultimoDiaMes(year, i-1);
+				String fecFinal =  year+"/0"+i+"/"+diaFin;				
+//				String fecInicial = year+"/0"+i+"/01";
+//				fechaInicial  = formatoFecha.parse(fecInicial);
+//				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
 				
 				FuncionarioDao daoF = new FuncionarioDao();
@@ -872,9 +904,14 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 			Recursos recurso = new Recursos();
 			int year = recurso.yearActual();
 			for (int i=1; i<meses; i++){
-				String fecInicial = year+"/0"+i+"/01";
+				String fecInicial = year+"/0"+i+"/01";			
 				fechaInicial  = formatoFecha.parse(fecInicial);
-				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
+				int diaFin = recurso.ultimoDiaMes(year, i-1);
+				String fecFinal =  year+"/0"+i+"/"+diaFin;
+				
+//				String fecInicial = year+"/0"+i+"/01";
+//				fechaInicial  = formatoFecha.parse(fecInicial);
+//				String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" :year+"/0"+i+"/31";
 				fechaFinal = formatoFecha.parse(fecFinal);
 
 				Criteria consulta = session.createCriteria(PresupuestoE.class);
@@ -1038,9 +1075,14 @@ public class RecaudoDao extends GenericDao<Recaudo> {
 				int year = recurso.yearActual();
 				int sucursal = recurso.idOficina(idCiudad);
 				for (int i=1; i<meses; i++){
-					String fecInicial = year+"/0"+i+"/01";
+					String fecInicial = year+"/0"+i+"/01";			
 					fechaInicial  = formatoFecha.parse(fecInicial);
-					String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" : year+"/0"+i+"/31";
+					int diaFin = recurso.ultimoDiaMes(year, i-1);
+					String fecFinal =  year+"/0"+i+"/"+diaFin;
+					
+//					String fecInicial = year+"/0"+i+"/01";
+//					fechaInicial  = formatoFecha.parse(fecInicial);
+//					String fecFinal = (i== 2)? year+"/0"+i+"/29": (i== 4 || i==6 || i== 9 || i== 11)? year+"/0"+i+"/30" : year+"/0"+i+"/31";
 					fechaFinal = formatoFecha.parse(fecFinal);
 					
 					Criteria consulta = session.createCriteria(PresupuestoE.class);

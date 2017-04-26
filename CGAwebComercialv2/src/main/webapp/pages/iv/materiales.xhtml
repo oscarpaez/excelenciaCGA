@@ -14,7 +14,10 @@
 
 		</f:metadata>
 		
-		<f:facet name="header" >
+	<p:growl id="menssage" widgetVar="menssage"/>	
+	<h:form id="frmPlan" >
+		<p:panel  styleClass="panel1" >
+			<f:facet name="header" >
 			<p:outputLabel
 				value="Bienvenido #{autenticacionBean.usuarioLogin.persona.nombre}" />
 			
@@ -55,11 +58,22 @@
 				rendered="#{autenticacionBean.usuarioLogin.perfil.id == 25 || autenticacionBean.usuarioLogin.perfil.id == 6 || autenticacionBean.usuarioLogin.perfil.id == 1
 					|| autenticacionBean.usuarioLogin.perfil.id == 7 || autenticacionBean.usuarioLogin.perfil.id == 8
 					|| autenticacionBean.usuarioLogin.perfil.id == 11 || autenticacionBean.usuarioLogin.perfil.id == 26}"
-				outcome="/pages/iv/cargaTrabajo.xhtmlfaces-redirect=true"/>			   
+				outcome="/pages/iv/cargaTrabajo.xhtmlfaces-redirect=true"/>	
+				
+	<!-- 	<p:commandButton value="Print" icon="ui-icon-print" 
+				style="text-align: left; float:right; width:74px; height:24px; background: #ff6666; font-size:9pt"
+				styleClass="excel"
+				type="button">
+			    <p:printer target="frmPlan:tblPlan"  />
+			</p:commandButton>   -->
+				
+			<h:commandLink title="Descargar excel" >
+					<p:graphicImage library="images" name="excel.png" width="24" styleClass="excel"/>
+					<p:dataExporter type="xls" target="tblPlan" fileName="Materiales" />
+			</h:commandLink>
+			
 		</f:facet>
 		
-	<p:growl id="menssage" widgetVar="menssage"/>	
-	<h:form id="frmPlan" >
 		<p:poll interval="180" listener="#{materialesBean.cambioPagina()}" 
 				update=":frmPlan:tblPlan  " 
 				rendered="#{materialesBean.autenticacion.usuarioLogin.perfil.id != 21}"/>	
@@ -69,73 +83,99 @@
 					scrollable="true" liveScroll="true" scrollHeight="470" 
 					value="#{materialesBean.listaMateriales}" var="mat" 
 					filteredValue="#{materialesBean.filtroMateriales}"
-					scrollWidth="100%">
+					scrollWidth="100%">					
 
 			<p:columnGroup type="header">
 				<p:row>					
-					<p:column rowspan="1" headerText="Sucursal" width="60" sortBy="#{mat.sucursal.nombre}" filterBy="#{mat.sucursal.nombre}"  filterMatchMode="contains" filterStyle="width:90%"/>
-					<p:column rowspan="1" headerText="Codigo" width="60"  filterBy="#{mat.codigo}" filterMatchMode="contains" filterStyle="width:90%"/>
-					<p:column rowspan="1" headerText="Descripción" width="120" filterBy="#{mat.descripcion}" filterMatchMode="contains" filterStyle="width:90%"/>
-					<p:column rowspan="1" headerText="Espesor" width="60" sortBy="#{mat.espesor}" filterBy="#{mat.espesor}" filterMatchMode="contains" filterStyle="width:90%"/>
-					<p:column rowspan="1" headerText="Ancho" width="60" sortBy="#{mat.ancho}" filterBy="#{mat.ancho}" filterMatchMode="contains" filterStyle="width:90%"/>
-					<p:column rowspan="1" headerText="Largo" width="60" sortBy="#{mat.largo}" filterBy="#{mat.largo}" filterMatchMode="contains" filterStyle="width:90%"/>
-					<p:column rowspan="1" headerText="Unidad" width="60" />
-					<p:column rowspan="1" headerText="Teórico" width="60" sortBy="#{mat.teorico}" filterBy="#{mat.teorico}" filterMatchMode="contains" filterStyle="width:90%"/>
-					<p:column rowspan="1" headerText="Imagen" width="60"/>
-					<p:column rowspan="1" headerText="Pedido / OC" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%"/>
-					<p:column rowspan="1" headerText="Estado" width="60"/>
-					<p:column rowspan="1" headerText="Ubicación" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%" />
-					<p:column rowspan="1" headerText="Orden Producto" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%" />
-					<p:column rowspan="1" headerText="Avance" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%"/>
-					<p:column rowspan="1" headerText="Acciones" width="60" rendered="#{autenticacionBean.usuarioLogin.perfil.id == 21 || autenticacionBean.usuarioLogin.perfil.id == 6 || autenticacionBean.usuarioLogin.perfil.id == 1 || autenticacionBean.usuarioLogin.perfil.id == 26}"/>					
+					<p:column headerText="Sucursal" width="60" sortBy="#{mat.sucursal.nombre}" filterBy="#{mat.sucursal.nombre}"  filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column headerText="Codigo" width="60"  filterBy="#{mat.codigo}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column headerText="Descripción" width="120" filterBy="#{mat.descripcion}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column headerText="Espesor" width="60" sortBy="#{mat.espesor}" filterBy="#{mat.espesor}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column headerText="Ancho" width="60" sortBy="#{mat.ancho}" filterBy="#{mat.ancho}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column headerText="Largo" width="60" sortBy="#{mat.largo}" filterBy="#{mat.largo}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column headerText="Unidad" width="60" />
+					<p:column headerText="Teórico" width="60" sortBy="#{mat.teorico}" filterBy="#{mat.teorico}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column headerText="Imagen" width="60"/>
+					<p:column headerText="Pedido / OC" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column headerText="Estado" width="60"/>
+					<p:column headerText="Ubicación" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%" />
+					<p:column headerText="Orden Producto" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%" />
+					<p:column headerText="Avance" width="60" filterBy="#{mat.pedido}" filterMatchMode="contains" filterStyle="width:90%"/>
+					<p:column headerText="Acciones" width="60" rendered="#{autenticacionBean.usuarioLogin.perfil.id == 21 || autenticacionBean.usuarioLogin.perfil.id == 6 || autenticacionBean.usuarioLogin.perfil.id == 1 || autenticacionBean.usuarioLogin.perfil.id == 26}"/>					
 				</p:row>
 
 			</p:columnGroup>
 				
 				<p:column style="">
+						<f:facet name="header">
+			                <h:outputText value="Sucursal" />
+			            </f:facet>
 						<h:outputText value="#{mat.sucursal.nombre}" />
 				</p:column>
 				
 				<p:column style="">
+						<f:facet name="header">
+			                <h:outputText value="Codigo" />
+			            </f:facet>
 						<h:outputText value="#{mat.codigo}" />
 				</p:column>
 				
 				<p:column style="">
+						<f:facet name="header">
+			                <h:outputText value="Descripción" />
+			            </f:facet>
 						<h:outputText value="#{mat.descripcion}" />
 				</p:column>
 				
 				<p:column style="text-align:right">
+						<f:facet name="header">
+			                <h:outputText value="Espesor" />
+			            </f:facet>
 						<h:outputText value="#{mat.espesor}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="2" />
 						</h:outputText>
 				</p:column>
 				
 				<p:column style="text-align:right">
+						<f:facet name="header">
+			                <h:outputText value="Ancho" />
+			            </f:facet>
 						<h:outputText value="#{mat.ancho}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="0" />
 						</h:outputText>
 				</p:column>
 				
 				<p:column style="text-align:right">
+						<f:facet name="header">
+			                <h:outputText value="Largo" />
+			            </f:facet>
 						<h:outputText value="#{mat.largo}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="0" />
 						</h:outputText>
 				</p:column>
 				
 				<p:column style="text-align:center">
+						<f:facet name="header">
+			                <h:outputText value="Unidad" />
+			            </f:facet>
 						<h:outputText value="#{mat.unidad}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="0" />
 						</h:outputText>
 				</p:column>
 				
 				<p:column style="text-align:right">
+						<f:facet name="header">
+			                <h:outputText value="Teórico" />
+			            </f:facet>
 						<h:outputText value="#{mat.teorico}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="2" />
 						</h:outputText>
 				</p:column>
 				
 				<p:column style="text-align:center">
-						 
+						 <f:facet name="header">
+			                <h:outputText value="Imagen" />
+			            </f:facet>
 						 <p:commandLink  actionListener="#{materialesBean.mostrarImagen(mat.imagen)}"
 						 		oncomplete="PF('dlgIma').show();" 
 						 		update=" :frmIma:pnlIma">
@@ -145,27 +185,42 @@
 				</p:column>
 				
 				<p:column style="text-align:right">
+						<f:facet name="header">
+			                <h:outputText value="Pedido / OC" />
+			            </f:facet>
 						<h:outputText value="#{mat.pedido}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="0" />
 						</h:outputText>	
 				</p:column>
 				
 				<p:column>
+						<f:facet name="header">
+			                <h:outputText value="Estado" />
+			            </f:facet>
 						<h:outputText value="#{mat.estadoMaterial.descripcion}" >							
 						</h:outputText>
 				</p:column>
 				
 				<p:column style="text-align:right">
+						<f:facet name="header">
+			                <h:outputText value="Ubicación" />
+			            </f:facet>
 						<h:outputText value="#{mat.ubicacion}" />	
 				</p:column>
 				
 				<p:column style="text-align:right">
+						<f:facet name="header">
+			                <h:outputText value="Orden Producto" />
+			            </f:facet>
 						<h:outputText value="#{mat.ordenProducto}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="0" />
 						</h:outputText>		
 				</p:column>
 				
 				<p:column style="text-align:right">
+						<f:facet name="header">
+			                <h:outputText value="Avance" />
+			            </f:facet>
 						<h:outputText value="#{mat.avance}" >
 							<f:convertNumber locale="en_US" maxFractionDigits="0" />
 						</h:outputText>		
@@ -212,6 +267,7 @@
 			 </f:facet>
 
 		</p:dataTable>
+		</p:panel>
 	</h:form>
 	
 	<p:dialog header="Crear Nuevo Material" widgetVar="dlgNue" draggable="true" 

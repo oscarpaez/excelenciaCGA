@@ -119,7 +119,12 @@
         <mapping class = "co.com.CGAwebComercial.entyties.HistoricaCargaTrabajo" />
         <mapping class = "co.com.CGAwebComercial.entyties.HistoricaMateriales" />
         <mapping class = "co.com.CGAwebComercial.entyties.CargaTrabajo" />
-        <mapping class = "co.com.CGAwebComercial.entyties.EstadoMaterial" />
+        <mapping class = "co.com.CGAwebComercial.entyties.EstadoMaterial" />        
+        <mapping class = "co.com.CGAwebComercial.entyties.TipoHoraE" />
+        <mapping class = "co.com.CGAwebComercial.entyties.PuestoTrabajo" />
+        <mapping class = "co.com.CGAwebComercial.entyties.MotivoHorasE" />
+        <mapping class = "co.com.CGAwebComercial.entyties.ProcesoHE" />
+        <mapping class = "co.com.CGAwebComercial.entyties.EstadoHE" />        
         
     </session-factory>
 
