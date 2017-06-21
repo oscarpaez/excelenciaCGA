@@ -82,14 +82,14 @@
 	<dependency>
 		<groupId>org.primefaces</groupId>
 		<artifactId>primefaces</artifactId>
-		<version>6.0</version>
+		<version>6.1</version>
 	</dependency>
 	
 	<!-- Primefaces extensions-->
 	<dependency>
 	    <groupId>org.primefaces.extensions</groupId>
 	    <artifactId>primefaces-extensions</artifactId>
-	    <version>6.0.0</version>
+	    <version>6.1.0</version>
 	</dependency>
 	
 	<!-- Primefaces extensions lang3-->

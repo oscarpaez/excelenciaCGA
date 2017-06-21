@@ -10,7 +10,7 @@
 
         <!-- Database connection settings  
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/CGA</property>
+        <property name="connection.url">jdbc:mysql://127.0.0.1:3306/pruebaASD</property>
         <property name="connection.username">root</property>
         <property name="connection.password"></property> -->
         
@@ -124,7 +124,8 @@
         <mapping class = "co.com.CGAwebComercial.entyties.PuestoTrabajo" />
         <mapping class = "co.com.CGAwebComercial.entyties.MotivoHorasE" />
         <mapping class = "co.com.CGAwebComercial.entyties.ProcesoHE" />
-        <mapping class = "co.com.CGAwebComercial.entyties.EstadoHE" />        
+        <mapping class = "co.com.CGAwebComercial.entyties.EstadoHE" />
+        <mapping class = "co.com.CGAwebComercial.entyties.RegistroHorasE" />        
         
     </session-factory>
 

@@ -9,15 +9,17 @@
 <ui:composition template="/templates/modeloGeneral2.xhtml">
 
 	<ui:define name="contenido">
+		
 		<f:metadata>
+			<f:viewParam name="idItem" value="#{registroHorasEBean.idList}" />
 			<f:event listener="#{registroHorasEBean.listarDatos()}" type="preRenderView" />
 		</f:metadata>
 
-		<h:form>
+		<h:form id="frmHe">
 			<p:panel header="Registro Horas Extras" style="margin-bottom:10px;"
 				styleClass="horasE" >
 				
-				<p:panelGrid  columns="4" columnClasses="horasEA,horasEB,horasEC,horasED"
+				<p:panelGrid  id="pnlHe" columns="4" columnClasses="horasEA,horasEB,horasEC,horasED"
 					style="width:100%" styleClass="horasEP">
 				
 				<p:outputLabel value="Id usuario" />
@@ -71,6 +73,10 @@
 				<p:outputLabel value="N° Orden" />
 				<p:inputText value="#{registroHorasEBean.registroHE.nOrden}" style="width:90%"/>
 				
+				<p:outputLabel value="N° Horas" />
+				<p:inputText value="#{registroHorasEBean.registroHE.nhoras}" style="width:90%"/>
+				
+				
 				<p:outputLabel value="Puesto de trabajo" />
 				<p:selectOneMenu id="pu" filter="true" style="width:81%"
 					value="#{registroHorasEBean.registroHE.puestoT}"
@@ -109,14 +115,15 @@
 				<h:panelGrid columns="3">			
 				
 					<p:commandButton value="Salvar" icon="ui-icon-disk"
-									update=""
+									update=" :frmHe:pnlHe "
 									actionListener="#{registroHorasEBean.salvar()}"	/>
 										
 					<p:commandButton value="limpiar" icon="ui-icon-note"
-										update=""/>
+									 actionListener="#{registroHorasEBean.limpiar()}"
+									 update=" :frmHe:pnlHe " />
 										
-					<p:commandButton value="Volver" icon="ui-icon-arrowreturn-1-w"
-									update=""/>										
+					<p:button value="Volver" icon="ui-icon-arrowreturn-1-w"
+							  outcome="/pages/he/listadoRegistro.xhtml?faces-redirect=true"/>										
 				</h:panelGrid>
 			</p:panel>
 

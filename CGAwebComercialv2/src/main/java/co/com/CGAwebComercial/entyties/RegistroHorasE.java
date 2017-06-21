@@ -3,6 +3,7 @@ package co.com.CGAwebComercial.entyties;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,6 +34,11 @@ public class RegistroHorasE implements Serializable{
 	private int poscicion;
 	
 	private int nOrden;	
+	
+	private int nhoras;	
+	
+	@Column (scale =2)
+	private String estadoHS;
 	
 	@OneToOne
 	private TipoHoraE tipoH;
@@ -165,5 +171,21 @@ public class RegistroHorasE implements Serializable{
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+	
+	public int getNhoras() {
+		return nhoras;
+	}
+
+	public void setNhoras(int nhoras) {
+		this.nhoras = nhoras;
+	}
+
+	public String getEstadoHS() {
+		return estadoHS;
+	}
+
+	public void setEstadoHS(String estadoHS) {
+		this.estadoHS = estadoHS;
 	}	
 }

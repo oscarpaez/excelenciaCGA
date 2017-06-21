@@ -187,8 +187,16 @@ public class UsuarioTest {
 	}
 	
 	@Test
+	@Ignore
 	public void diaMes(){
 		Recursos r = new Recursos();
 		r.ultimoDiaMes(2017, 3);
+	}
+	
+	@Test
+	
+	public void sumeMes(){
+		Recursos r = new Recursos();
+		r.fechaUnMesDespues();
 	}
 }

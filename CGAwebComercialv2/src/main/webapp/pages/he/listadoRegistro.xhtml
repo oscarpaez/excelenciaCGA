@@ -11,54 +11,82 @@
 	
 	<ui:define name="contenido">
 		
+		<f:metadata>
+			<f:event listener="#{registroHorasEBean.listar()}" type="preRenderView" />
+		</f:metadata>		
+		
 		<h:form id="frmPlan">
 			
 			<p:dataTable  styleClass="tblPla" id="tblPlan" emptyMessage="No se encontraron registros" 
-						value="#{incidenciaBean.listaIncidencia}" var="incidencia" rows="15"
+						value="#{registroHorasEBean.listaRegistros}" var="registro" rows="15"
 						filteredValue="#{incidenciaBean.listaFiltrarIncidencia}"
 						scrollRows="40" scrollable="true"  liveScroll="true" scrollHeight="430"
 						scrollWidth="100%"  >
 				
 				<p:columnGroup type="header">
 		            <p:row>
-		            	<p:column headerText="Id solicitante"  width="30" />
+		            	<p:column headerText="solicitante"  width="30" />
 		            	<p:column headerText="Id operario"  width="30" />
 		            	<p:column headerText="N° Pedido"  width="30" />
 		            	<p:column headerText="Pos pedido"  width="30" />
 		            	<p:column headerText="N° orden"  width="30" />
 		            	<p:column headerText="N° Horas"  width="30" />
+		            	<p:column headerText="Fecha Creación"  width="30" />
+		            	<p:column headerText="Fecha Solocitud"  width="30" />
+		            	<p:column headerText="Estado"  width="30" />
+		            	<p:column headerText="Acciones"  width="30" />
 		            	<p:column headerText="Liberar"  width="30" />
 		            </p:row>
 		        </p:columnGroup>    
 		        
 		        <p:column  style="text-align:">
-						<h:outputText value="" />
+						<h:outputText value="#{registro.usuario.persona.nombre}" />
 				</p:column>
 				
 				<p:column  style="text-align:">
-						<h:outputText value="" />
+						<h:outputText value="#{registro.idOperario}" />
 				</p:column>
 				
 				<p:column  style="text-align:">
-						<h:outputText value="" />
+						<h:outputText value="#{registro.nPedido}" />
 				</p:column>
 				
 				<p:column  style="text-align:">
-						<h:outputText value="" />
+						<h:outputText value="#{registro.poscicion}" />
 				</p:column>
 				
 				<p:column  style="text-align:">
-						<h:outputText value="" />
+						<h:outputText value="#{registro.nOrden}" />
 				</p:column>
 				
 				<p:column  style="text-align:">
-						<h:outputText value="" />
+						<h:outputText value="#{registro.nhoras}" />
 				</p:column>
 				
 				<p:column  style="text-align:">
-						<p:selectBooleanCheckbox value="">
-				            <p:ajax  />
-				        </p:selectBooleanCheckbox>
+						<h:outputText value="#{registro.fechaCreacion}" />
+				</p:column>
+				
+				<p:column  style="text-align:">
+						<h:outputText value="#{registro.fechaSolicitud}" />
+				</p:column>
+				
+				<p:column  style="text-align:">
+						<h:outputText value="#{registro.estadoH.descripcion}" />
+				</p:column>
+				<!--Supervisor o director   -->
+				<p:column style="text-align:">
+					<p:button icon="ui-icon-pencil"
+						 outcome="/pages/he/CreacionRegistro.xhtml?faces-redirect=true"
+						 title="Editar">
+						 <f:param name="idItem" value="#{registro.id}" />	
+					</p:button>
+				</p:column>
+				<!-- Rederiza Gerente  o director  -->
+				<p:column  style="text-align:">
+						<p:triStateCheckbox    value="#{registro.estadoHS}" >
+				            <p:ajax update=":frmPlan:tblPlan" event="change" listener="#{registroHorasEBean.liberarHoras(registro)}" />
+				        </p:triStateCheckbox>
 				</p:column>
 				
 				

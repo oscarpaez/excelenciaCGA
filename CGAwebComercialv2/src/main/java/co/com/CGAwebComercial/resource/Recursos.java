@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.exception.DataException;
 import org.omnifaces.util.Messages;
 
 import co.com.CGAwebComercial.dao.GerentesDao;
@@ -226,6 +227,28 @@ public class Recursos {
 			System.out.println(ex.getMessage());
 		}
 		return dia;
+		
+		
+	}
+	
+	public Date fechaUnMesDespues(){
+		
+		Date date = new Date();
+		try{
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date); 
+			cal.add(Calendar.DATE, 30);
+			DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+			String fec = formatoFecha.format(date);
+			date = cal.getTime();			
+			System.out.println(fec  + " -- " + date);
+			return date;
+			
+		} catch (RuntimeException  ex) {
+			ex.printStackTrace();
+			System.out.println(ex.getMessage());
+		}
+		return null;
 		
 		
 	}
